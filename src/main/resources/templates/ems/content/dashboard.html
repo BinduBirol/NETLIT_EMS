@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<div th:fragment="dashboard">
+	<div id="content" class="app-content p-0">
+			<div class="app-content-inner-padding" data-scrollbar="true" data-height="100%" data-skip-mobile="true">
+			<ul class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">LAYOUT</a></li>
+				<li class="breadcrumb-item active">FULL HEIGHT</li>
+			</ul>
+			
+			<h1 class="page-header">
+				Full Height <small>page header description goes here...</small>
+			</h1>
+			
+			<hr class="mb-4" />
+			Logged in all users
+			<ol th:each="user : ${users}">
+				<li th:utext="${user}">user</li>
+			</ol>
+			Logged in user
+			<p th:utext="${cuser}">user</p>
+			
+			
+				
+			</div>
+		</div>
+</div>
+
+</body>
+</html>
