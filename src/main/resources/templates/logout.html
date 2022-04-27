@@ -10,7 +10,7 @@
 </head>
 <body class='pace-top'>		
 	<!-- BEGIN #app -->
-	<div id="app" class="app app-full-height app-without-header text-center">
+	<div id="app" class="app app-without-header text-center">
 		<div class="coming-soon">
 			<div class="flex-1">				
         <h1 id="error" class="alert alert-danger" th:if="${session[SPRING_SECURITY_LAST_EXCEPTION]}" th:utext="#{message.logoutError}">error</h1>
@@ -20,6 +20,7 @@
         </div>
         
         </div>
+        <div th:include="theme/theme_util :: theme_util"></div>	
     </div>
 </body>
 

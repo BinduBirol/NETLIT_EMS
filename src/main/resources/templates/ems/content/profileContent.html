@@ -1,0 +1,49 @@
+<div th:fragment="profileContent">
+
+	<div id="content" class="app-content">
+		<div class="card">
+			<div class="card-body p-0">
+				<!-- BEGIN profile -->
+				<div class="profile">
+					<!-- BEGIN profile-container -->
+					<div class="profile-container">
+						<!-- BEGIN profile-sidebar -->
+							<div class="profile-sidebar">
+								<div class="desktop-sticky-top">
+									<div class="profile-img">
+										<img src="assets/img/user/profile.jpg" alt="" />
+									</div>
+									<!-- profile info -->
+									<h4>John Smith</h4>
+									<div th:text="${session.user.username}" class="mb-3 text-white text-opacity-50 fw-bold mt-n2">@johnsmith</div>
+									<p>
+										The greatest guitar player of all time.
+									</p>
+									<div class="mb-1">
+										<i class="fa fa-map-marker-alt fa-fw text-white text-opacity-50"></i> New York, NY
+									</div>
+									<div class="mb-3">
+										<i class="fa fa-link fa-fw text-white text-opacity-50"></i> seantheme.com/hud
+									</div>
+							
+									<hr class="mt-4 mb-4" />									
+									
+									</div>
+								</div>
+							</div>
+							<!-- END profile-sidebar -->
+					</div>
+				</div>
+				<!-- BEGIN card-arrow -->
+						<div class="card-arrow">
+							<div class="card-arrow-top-left"></div>
+							<div class="card-arrow-top-right"></div>
+							<div class="card-arrow-bottom-left"></div>
+							<div class="card-arrow-bottom-right"></div>
+						</div>
+						<!-- END card-arrow -->
+			</div>
+		</div>
+	</div>
+
+</div>

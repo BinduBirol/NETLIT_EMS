@@ -1,0 +1,82 @@
+<div th:fragment="setting_content">
+	<div id="content" class="app-content">
+		<div class="row justify-content-center">
+
+			<!-- BEGIN col-10 -->
+			<div class="col-xl-10">
+				<!-- BEGIN row -->
+				<div class="row">
+					<!-- BEGIN col-9 -->
+					<div class="col-xl-9">
+
+						<ul class="breadcrumb">
+							<li class="breadcrumb-item active">SETTINGS</li>
+						</ul>
+
+						<h1 class="page-header">Settings</h1>
+
+						<hr class="mb-4" />
+
+						<!-- BEGIN #languages -->
+						<div id="languages" class="mb-5">
+							<h4>
+								<i class="fa fa-language fa-fw text-theme"></i> Languages
+							</h4>
+							<p>Language font support and auto translation enabled</p>
+							<div class="card">
+								<div class="list-group list-group-flush">
+
+									<div class="list-group-item d-flex align-items-center">
+										<div class="flex-1 text-break">
+											<div id="google_translate_element"></div>
+										</div>
+										<div>
+											<div>Auto translation</div>
+											<div
+												class="text-white text-opacity-50 d-flex align-items-center">
+												<i class="fa fa-circle fs-8px fa-fw text-success me-1"></i>
+												Enabled
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="card-arrow">
+									<div class="card-arrow-top-left"></div>
+									<div class="card-arrow-top-right"></div>
+									<div class="card-arrow-bottom-left"></div>
+									<div class="card-arrow-bottom-right"></div>
+								</div>
+							</div>
+						</div>
+						<!-- END #languages -->
+
+
+					</div>
+					
+					<!-- BEGIN col-3 -->
+							<div class="col-xl-3">
+								<!-- BEGIN #sidebar-bootstrap -->
+								<nav id="sidebar-bootstrap" class="navbar navbar-sticky d-none d-xl-block">
+									<nav class="nav">
+										<a class="nav-link" href="#general" data-toggle="scroll-to">General</a>
+										<a class="nav-link" href="#notifications" data-toggle="scroll-to">Notifications</a>
+										<a class="nav-link" href="#privacyAndSecurity" data-toggle="scroll-to">Privacy and security</a>
+										<a class="nav-link" href="#payment" data-toggle="scroll-to">Payment</a>
+										<a class="nav-link" href="#shipping" data-toggle="scroll-to">Shipping</a>
+										<a class="nav-link" href="#mediaAndFiles" data-toggle="scroll-to">Media and Files</a>
+										<a class="nav-link" href="#languages" data-toggle="scroll-to">Languages</a>
+										<a class="nav-link" href="#system" data-toggle="scroll-to">System</a>
+										<a class="nav-link" href="#resetSettings" data-toggle="scroll-to">Reset settings</a>
+									</nav>
+								</nav>
+								<!-- END #sidebar-bootstrap -->
+							</div>
+				</div>		
+				
+			</div>			
+			
+		</div>
+		
+		
+	</div>
+</div>

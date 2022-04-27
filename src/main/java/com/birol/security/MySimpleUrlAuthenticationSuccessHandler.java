@@ -83,7 +83,8 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
     protected String determineTargetUrl(final Authentication authentication) {
         boolean isUser = false;
         boolean isAdmin = false;
-        final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();        
+        
         for (final GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.getAuthority().equals("READ_PRIVILEGE")) {
                 isUser = true;
@@ -102,9 +103,10 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
              	username = authentication.getName();
              }
 
-            return "/homepage.html?user="+username;
+            //return "/homepage.html?user="+username;
+            return "/dashboard";
         } else if (isAdmin) {
-            return "/console";
+            return "/dashboard";
         } else {
             throw new IllegalStateException();
         }

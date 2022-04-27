@@ -7,10 +7,11 @@
 	<meta name="description" content="" />
 	<meta name="author" content="" />
 	
-	<!-- ================== BEGIN core-css ================== -->
+	<!-- ================== BEGIN core-css ================== -->	
 	<link href="assets/css/vendor.min.css" rel="stylesheet" />
 	<link href="assets/css/app.min.css" rel="stylesheet" />
-	<!-- ================== END core-css ================== -->
+	<link href="assets/css/netlit_ems.css" rel="stylesheet" />
+	<!-- ================== END core-css ================== -->	
 </head>
 <body>
 
@@ -39,7 +40,7 @@
 			
 			<!-- BEGIN brand -->
 			<div class="brand">
-				<a href="index.html" class="brand-logo">
+				<a href="/dashboard" class="brand-logo">
 					<span class="brand-img">
 						<span class="brand-img-text text-theme">N</span>
 					</span>
@@ -50,6 +51,10 @@
 			
 			<!-- BEGIN menu -->
 			<div class="menu">
+				
+				<div class="menu-item dropdown">
+					
+				</div>
 				<div class="menu-item dropdown">
 					<a href="#" data-toggle-class="app-header-menu-search-toggled" data-toggle-target=".app" class="menu-link">
 						<div class="menu-icon"><i class="bi bi-search nav-icon"></i></div>
@@ -187,13 +192,13 @@
 						<div class="menu-img online">
 							<img src="assets/img/user/profile.jpg" alt="Profile" height="60" />
 						</div>
-						<div class="menu-text d-sm-block d-none">username@account.com</div>
+						<div  class="menu-text d-sm-block d-none" th:text="${session.user.username}" >username@account.com</div>
 					</a>
 					<div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
-						<a class="dropdown-item d-flex align-items-center" href="profile.html">PROFILE <i class="bi bi-person-circle ms-auto text-theme fs-16px my-n1"></i></a>
+						<a class="dropdown-item d-flex align-items-center" href="/profile">PROFILE <i class="bi bi-person-circle ms-auto text-theme fs-16px my-n1"></i></a>
 						<a class="dropdown-item d-flex align-items-center" href="email_inbox.html">INBOX <i class="bi bi-envelope ms-auto text-theme fs-16px my-n1"></i></a>
-						<a class="dropdown-item d-flex align-items-center" href="calendar.html">CALENDAR <i class="bi bi-calendar ms-auto text-theme fs-16px my-n1"></i></a>
-						<a class="dropdown-item d-flex align-items-center" href="settings.html">SETTINGS <i class="bi bi-gear ms-auto text-theme fs-16px my-n1"></i></a>
+						<a class="dropdown-item d-flex align-items-center" href="/calendar">CALENDAR <i class="bi bi-calendar ms-auto text-theme fs-16px my-n1"></i></a>
+						<a class="dropdown-item d-flex align-items-center" href="/settings">SETTINGS <i class="bi bi-gear ms-auto text-theme fs-16px my-n1"></i></a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item d-flex align-items-center" th:href="@{/logout}">LOGOUT <i class="bi bi-toggle-off ms-auto text-theme fs-16px my-n1"></i></a>
 					</div>

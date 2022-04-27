@@ -1,0 +1,164 @@
+<div th:fragment="addEmpContent">
+<div id="content" class="app-content">
+			<!-- BEGIN container -->
+			<div class="container">
+				<!-- BEGIN row -->
+				<div class="row justify-content-center">
+					<!-- BEGIN col-10 -->
+					<div class="col-xl-10">
+						<!-- BEGIN row -->
+						<div class="row">
+							<!-- BEGIN col-9 -->
+							<div class="col-xl-9">
+								<ul class="breadcrumb">
+									<li class="breadcrumb-item"><a href="#">EMPLOYEE MANAGEMENT</a></li>
+									<li class="breadcrumb-item active">ADD EMPLOYEE</li>
+								</ul>
+								
+								<h1 class="page-header">
+									Insert Employee Information
+								</h1>
+								
+								<hr class="mb-4" />
+								
+								<!-- BEGIN #user_info -->
+								<div id="user_info" class="mb-5">
+									<h4>User Information</h4>									
+									<div class="card">
+										<div class="card-body pb-2">
+											<form>
+												<div class="row">
+													<div class="col-xl-6">
+														<div class="mb-3">
+															<label class="form-label">Default <span class="text-danger">*</span></label>
+															<input type="text" class="form-control" id="datepicker-default" placeholder="dd/mm/yyyy" />
+														</div>
+													</div>
+													<div class="col-xl-6">
+														<div class="mb-3">
+															<label class="form-label">Component <span class="text-danger">*</span></label>
+															<div class="input-group">
+																<input type="text" class="form-control" id="datepicker-component" placeholder="with input group addon" />
+																<label class="input-group-text" for="datepicker-component"><i class="fa fa-calendar"></i></label>
+															</div>
+														</div>
+													</div>
+													<div class="col-xl-6">
+														<div class="mb-3">
+															<label class="form-label">Range <span class="text-danger">*</span></label>
+															<div class="input-group input-daterange" id="datepicker-range">
+																<input type="text" class="form-control" name="start" placeholder="start date" />
+																<span class="input-group-text">to</span>
+																<input type="text" class="form-control" name="end" placeholder="end date" />
+															</div>
+														</div>
+													</div>
+												</div>
+											</form>
+										</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+										<div class="hljs-container rounded-bottom"><pre></pre>
+										</div>
+									</div>
+								</div>
+								
+								<div id="personal" class="mb-5">
+									<h4>Employee Personal Information</h4>									
+									<div class="card">
+										<div class="card-body pb-2">
+											-------
+										</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+										<div class="hljs-container rounded-bottom"><pre></pre>
+										</div>
+									</div>
+								</div>
+								
+								<div id="employment" class="mb-5">
+									<h4>Employment Information</h4>									
+									<div class="card">
+										<div class="card-body pb-2">
+											--------
+										</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+										<div class="hljs-container rounded-bottom"><pre></pre>
+										</div>
+									</div>
+								</div>
+								
+								<div id="account" class="mb-5">
+									<h4>Employee Account Information</h4>									
+									<div class="card">
+										<div class="card-body pb-2">
+											----
+										</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+										<div class="hljs-container rounded-bottom"><pre></pre>
+										</div>
+									</div>
+								</div>
+								
+								<div id="documents" class="mb-5">
+									<h4>Documents</h4>									
+									<div class="card">
+										<div class="card-body pb-2">
+											
+										</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+										<div class="hljs-container rounded-bottom"><pre></pre>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+							<!-- END col-9-->
+							<!-- BEGIN col-3 -->
+							<div class="col-xl-3">
+								<!-- BEGIN #sidebar-bootstrap -->
+								<nav id="sidebar-bootstrap" class="navbar navbar-sticky d-none d-xl-block">
+									<nav class="nav text-nowrap">
+										<a class="nav-link" href="#user_info" data-toggle="scroll-to">User Info</a>
+										<a class="nav-link text-nowrap" href="#personal" data-toggle="scroll-to">Personal Info</a>
+										<a class="nav-link" href="#employment" data-toggle="scroll-to">Employment Info</a>
+										<a class="nav-link" href="#account" data-toggle="scroll-to">Account Info</a>
+										<a class="nav-link" href="#documents" data-toggle="scroll-to">Documents</a>										
+									</nav>
+								</nav>
+								<!-- END #sidebar-bootstrap -->
+							</div>
+							<!-- END col-3 -->
+						</div>
+						<!-- END row -->
+					</div>
+					<!-- END col-10 -->
+				</div>
+				<!-- END row -->
+			</div>
+			<!-- END container -->
+		</div>
+	</div>

@@ -3,13 +3,13 @@
 <head th:include="theme/header :: staticheaderFragment"></head>
 <body>
 	<!-- BEGIN #app -->
-	<div id="app" class="app app-content-full-height">		
+	<div id="app" class="app">		
 		<div th:include="theme/header :: dynamicheaderFragment"></div>
 		<div th:include="theme/sidenav :: sidenav"></div>		
 		<!-- BEGIN #content -->
-		<div th:include="ems/content/dashboard :: dashboard"></div>
+		<div th:include="ems/content/profileContent :: profileContent"></div>
 		<!-- END #content -->
-		<div th:include="theme/theme_util :: theme_util"></div>		
+		<div th:include="theme/theme_util :: theme_util"></div>	
 	</div>
 	<!-- END #app -->	
 	<div th:include="theme/footer::staticFooter"></div>	
