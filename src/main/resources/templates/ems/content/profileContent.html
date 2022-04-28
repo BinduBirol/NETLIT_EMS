@@ -14,8 +14,8 @@
 										<img src="assets/img/user/profile.jpg" alt="" />
 									</div>
 									<!-- profile info -->
-									<h4>John Smith</h4>
-									<div th:text="${session.user.username}" class="mb-3 text-white text-opacity-50 fw-bold mt-n2">@johnsmith</div>
+									<h4>[[${user.firstName}]] [[${user.lastName}]]</h4>
+									<div th:text="${user.email}" class="mb-3 text-white text-opacity-50 fw-bold mt-n2">@johnsmith</div>
 									<p>
 										The greatest guitar player of all time.
 									</p>

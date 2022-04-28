@@ -14,6 +14,7 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import com.birol.persistence.dao.UserRepository;
 import com.birol.persistence.model.User;
 
 //@Component("myAuthenticationSuccessHandler")
@@ -23,6 +24,8 @@ public class MyCustomLoginAuthenticationSuccessHandler implements Authentication
 
     @Autowired
     ActiveUserStore activeUserStore;
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException {
@@ -40,8 +43,8 @@ public class MyCustomLoginAuthenticationSuccessHandler implements Authentication
             	username = authentication.getName();
             }
        
-            LoggedUser user = new LoggedUser(username, activeUserStore);
-            session.setAttribute("user", user);
+            LoggedUser user = new LoggedUser(username, activeUserStore);            
+            session.setAttribute("user", user);            
         }
         clearAuthenticationAttributes(request);
     }

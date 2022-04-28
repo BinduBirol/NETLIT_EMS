@@ -1,11 +1,17 @@
 package com.birol.ems.controller;
 
+import java.security.Principal;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.birol.persistence.model.User;
 import com.birol.security.ActiveUserStore;
 import com.birol.service.IUserService;
 
@@ -15,13 +21,11 @@ public class EMScontroller {
     ActiveUserStore activeUserStore;
 	@Autowired
 	com.birol.security.LoggedUser loggedUser;
-
-    @Autowired
-    IUserService userService;
     
 	@GetMapping("/dashboard")
-	 public ModelAndView dashboard(final ModelMap model) {		
-		model.addAttribute("users", activeUserStore.getUsers());		
+	 public ModelAndView dashboard(final ModelMap model, Authentication auth) {		
+		model.addAttribute("loggedInUsers", activeUserStore.getUsers());	
+		User user = (User)auth.getPrincipal();		
 		return new ModelAndView("homepage", model);		
 	}
 	
@@ -46,7 +50,9 @@ public class EMScontroller {
 	}
 	
 	@GetMapping("/profile")
-	 public ModelAndView profile(final ModelMap model) {		
+	 public ModelAndView profile(final ModelMap model, Authentication auth) {
+		User user = (User)auth.getPrincipal();
+		model.addAttribute("user",user);
 		return new ModelAndView("ems/pages/profile", model);		
 	}
 	

@@ -26,6 +26,7 @@ color:#000;
         <div >
             <h1 class="text-center">Sign Up</h1>
             <p class="text-white text-opacity-50 text-center">One ID is all you need to access the NetLit services.</p>
+            
             <br/>
             <form action="/" method="POST" enctype="utf8" >
                 <div class="mb-3" >
@@ -49,7 +50,7 @@ color:#000;
                 <div class="mb-3">
                     <label for="password" class="col-sm-5" th:utext="#{label.user.password}">password</label>
                     <span class="col-sm-5"><input id="password" class="form-control form-control-lg bg-white bg-opacity-5" name="password" value="" type="password" required="required" autocomplete="new-password"/></span>
-                    <span id="passwordError" class="text-danger col-sm-4" style="display:none"></span>
+                    
                 </div>
                 <div class="mb-3">
                     <label for="matchPassword" class="col-sm-5" th:utext="#{label.user.confirmPass}">confirm</label>
@@ -65,7 +66,7 @@ color:#000;
                 
                 <div class="mb-3">
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="customCheck1" />
+						<input class="form-check-input" required="required" type="checkbox" value="" id="customCheck1" />
 						<label class="form-check-label" for="customCheck1">I have read and agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</label>
 					</div>
 				</div>
@@ -82,7 +83,9 @@ color:#000;
             
         </div>
     </div></div>
-    	<div th:include="theme/theme_util::theme_util"></div> 
+    	<!--  <div th:include="theme/theme_util::theme_util"></div>  -->
+    	
+    	<span id="passwordError" class="text-danger " style="display:none"></span>
     
     </div>	
     </div>
@@ -95,7 +98,7 @@ $(document).ready(function () {
 		register(event);
 	});
 	
-	$(":password").keyup(function(){
+	$(":password").keyup(function(){		
 		if($("#password").val() != $("#matchPassword").val()){
 	        $("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
 	    }else{
@@ -166,7 +169,6 @@ function register(event){
 </script>
 </body>
 <!-- ================== BEGIN core-js ================== -->
-<script th:src="@{/assets/js/vendor.min.js}"></script>
-<script th:src="@{/assets/js/app.min.js}"></script>	
+
 <!-- ================== END core-js ================== -->
 </html>
