@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.birol.persistence.model.NewLocationToken;
 import com.birol.persistence.model.PasswordResetToken;
 import com.birol.persistence.model.User;

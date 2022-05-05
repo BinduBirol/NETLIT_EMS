@@ -8,6 +8,7 @@ import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -35,12 +36,13 @@ public class DeviceService {
 
     private DeviceMetadataRepository deviceMetadataRepository;
     private DatabaseReader databaseReader;
+    
     private Parser parser;
     private JavaMailSender mailSender;
     private MessageSource messages;
 
     public DeviceService(DeviceMetadataRepository deviceMetadataRepository,
-                         @Qualifier("GeoIPCity") DatabaseReader databaseReader,
+                         @Qualifier(value="GeoIPCity") DatabaseReader databaseReader,
                          Parser parser,
                          JavaMailSender mailSender,
                          MessageSource messages) {
@@ -55,8 +57,10 @@ public class DeviceService {
 
         String ip = extractIp(request);
         String location = getIpLocation(ip);
+        //String location = "";
 
         String deviceDetails = getDeviceDetails(request.getHeader("user-agent"));
+        //String deviceDetails="";
 
         DeviceMetadata existingDevice = findExistingDevice(user.getId(), deviceDetails, location);
 
@@ -91,7 +95,7 @@ public class DeviceService {
     private String parseXForwardedHeader(String header) {
         return header.split(" *, *")[0];
     }
-
+    
     private String getDeviceDetails(String userAgent) {
         String deviceDetails = UNKNOWN;
 
@@ -103,6 +107,8 @@ public class DeviceService {
 
         return deviceDetails;
     }
+    
+
 
     private String getIpLocation(String ip) throws IOException, GeoIp2Exception {
 

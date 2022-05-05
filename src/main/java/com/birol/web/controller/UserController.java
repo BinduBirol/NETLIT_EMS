@@ -1,5 +1,6 @@
 package com.birol.web.controller;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,9 @@ public class UserController {
 
     @GetMapping("/loggedUsersFromSessionRegistry")
     public String getLoggedUsersFromSessionRegistry(final Locale locale, final Model model) {
-        model.addAttribute("users", userService.getUsersFromSessionRegistry());
+    	List<String> users= userService.getUsersFromSessionRegistry();
+    	//System.out.println(users);
+        model.addAttribute("users", users);
         return "users";
     }    
    

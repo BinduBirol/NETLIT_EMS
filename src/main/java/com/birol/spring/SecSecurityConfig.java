@@ -10,6 +10,8 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +35,7 @@ import org.springframework.security.web.authentication.rememberme.InMemoryTokenR
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 @ComponentScan(basePackages = { "com.birol.security" })
 // @ImportResource({ "classpath:webSecurityConfig.xml" })
@@ -76,12 +79,15 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authProvider());
     }
 
+    
     @Override
     public void configure(final WebSecurity web) throws Exception {
-        web.ignoring()
+        
+    	web.ignoring()
             .antMatchers("/resources/**")
             .antMatchers("/h2/**");
     }
+    
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -134,11 +140,11 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
         authProvider.setPostAuthenticationChecks(differentLocationChecker);
         return authProvider;
     }
-
+    
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder(11);
-    }
+    }    
 
     @Bean
     public SessionRegistry sessionRegistry() {
@@ -153,7 +159,8 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean(name="GeoIPCountry")
     public DatabaseReader databaseReader() throws IOException, GeoIp2Exception {
-        final File resource = new File("src/main/resources/maxmind/GeoLite2-Country.mmdb");
+        //final File resource = new File("src/main/resources/maxmind/GeoLite2-Country.mmdb");
+    	final InputStream resource= new ClassPathResource("maxmind/GeoLite2-Country.mmdb").getInputStream();
         return new DatabaseReader.Builder(resource).build();
     }
 

@@ -1,5 +1,6 @@
 package com.birol.ems.controller;
 
+import java.io.File;
 import java.security.Principal;
 
 import javax.servlet.http.HttpSession;
@@ -25,7 +26,7 @@ public class EMScontroller {
 	@GetMapping("/dashboard")
 	 public ModelAndView dashboard(final ModelMap model, Authentication auth) {		
 		model.addAttribute("loggedInUsers", activeUserStore.getUsers());	
-		User user = (User)auth.getPrincipal();		
+		User user = (User)auth.getPrincipal();
 		return new ModelAndView("homepage", model);		
 	}
 	
