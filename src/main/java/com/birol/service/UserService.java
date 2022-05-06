@@ -158,6 +158,11 @@ public class UserService implements IUserService {
     public User findUserByEmail(final String email) {
         return userRepository.findByEmail(email);
     }
+    
+    @Override
+    public List<User> findAllUser() {
+        return userRepository.findAll();
+    }
 
     @Override
     public PasswordResetToken getPasswordResetToken(final String token) {

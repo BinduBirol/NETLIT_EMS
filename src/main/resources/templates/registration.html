@@ -73,7 +73,7 @@ color:#000;
                 
                 <br/>                
                 <div class="mb-3">
-					<button type="submit" class="btn btn-outline-theme btn-lg d-block w-100">Sign Up</button>						
+					<button type="submit" id="processview" class="btn btn-outline-theme btn-lg d-block w-100">Sign Up</button>						
 				</div>
 				<div class="text-white text-opacity-50 text-center">
 						Already have an NetLit Account? <a href="page_login.html">Sign In</a>
@@ -95,7 +95,8 @@ var serverContext = [[@{/}]];
 
 $(document).ready(function () {
 	$('form').submit(function(event) {
-		register(event);
+		showprocessview();
+		register(event);		
 	});
 	
 	$(":password").keyup(function(){		
@@ -125,6 +126,22 @@ $(document).ready(function () {
 	 $('#password').pwstrength(options);
 });
 
+function showprocessview(){
+	$("#processview").prop("disabled", true);
+    // add spinner to button
+    $("#processview").html(
+      `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+    );
+}
+
+function hideprocessview(){
+	$("#processview").prop("disabled", false);
+    // add spinner to button
+    $("#processview").html(
+      "Try Submit"
+    );
+}
+
 function register(event){
 	event.preventDefault();
     $(".alert").html("").hide();
@@ -141,6 +158,7 @@ function register(event){
         
     })
     .fail(function(data) {
+    	hideprocessview();
         if(data.responseJSON.error.indexOf("MailError") > -1)
         {
             window.location.href = serverContext + "emailError.html";

@@ -10,7 +10,7 @@
 				<div class="card mb-5 mx-auto" >
 					<div class="card-body">
 						<div class="card">
-							<div class="error-code">Welcome</div>
+							<div class="error-code">Hello!!</div>
 							<div class="card-arrow">
 								<div class="card-arrow-top-left"></div>
 								<div class="card-arrow-top-right"></div>
@@ -27,6 +27,7 @@
 					</div>
 				</div>
 				<h1 th:text="${session.user.username}" >user!</h1> 
+				<h3 th:text="${param.message}">msg</h3>
 				<h3 th:if="${message != null}" th:utext="${message}">msg</h3>
 				<hr />
 				<p class="mb-1">

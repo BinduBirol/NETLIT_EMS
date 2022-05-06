@@ -55,4 +55,6 @@ public interface IUserService {
     String isValidNewLocationToken(String token);
 
     void addUserLocation(User user, String ip);
+
+	List<User> findAllUser();
 }

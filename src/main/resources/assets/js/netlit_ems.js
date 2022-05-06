@@ -1,3 +1,4 @@
+//$(".toast").toast({ autohide: false });
 //setting up active menu
 //alert(window.location.pathname);
 $( "[href='"+window.location.pathname+"']" ).parent().addClass('active');
@@ -10,3 +11,19 @@ function googleTranslateElementInit() {
       layout: google.translate.TranslateElement.InlineLayout.SIMPLE
     }, 'google_translate_element');
   }
+
+function showprocessview(){
+	$("#processview").prop("disabled", true);
+    // add spinner to button
+    $("#processview").html(
+      `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+    );
+}
+
+function hideprocessview(){
+	$("#processview").prop("disabled", false);
+    // add spinner to button
+    $("#processview").html(
+      "Try Submit"
+    );
+}

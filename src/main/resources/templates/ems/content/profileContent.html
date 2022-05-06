@@ -16,9 +16,12 @@
 									<!-- profile info -->
 									<h4>[[${user.firstName}]] [[${user.lastName}]]</h4>
 									<div th:text="${user.email}" class="mb-3 text-white text-opacity-50 fw-bold mt-n2">@johnsmith</div>
-									<p>
+									<p  th:text="${user.roles}">
 										The greatest guitar player of all time.
 									</p>
+									
+									
+									
 									<div class="mb-1">
 										<i class="fa fa-map-marker-alt fa-fw text-white text-opacity-50"></i> New York, NY
 									</div>

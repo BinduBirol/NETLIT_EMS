@@ -2,9 +2,12 @@ package com.birol.ems.controller;
 
 import java.io.File;
 import java.security.Principal;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -22,11 +25,22 @@ public class EMScontroller {
     ActiveUserStore activeUserStore;
 	@Autowired
 	com.birol.security.LoggedUser loggedUser;
+	@Autowired
+    IUserService userService;
+	
+	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
+	  
     
 	@GetMapping("/dashboard")
 	 public ModelAndView dashboard(final ModelMap model, Authentication auth) {		
 		model.addAttribute("loggedInUsers", activeUserStore.getUsers());	
+		List<String> getUsersFromSessionRegistry= userService.getUsersFromSessionRegistry();
+        model.addAttribute("getUsersFromSessionRegistry", getUsersFromSessionRegistry);
+        List<User> getAlluser= userService.findAllUser();
+        model.addAttribute("getAlluser", getAlluser);
+        
 		User user = (User)auth.getPrincipal();
+		logger.error("error testing dashboard");
 		return new ModelAndView("homepage", model);		
 	}
 	

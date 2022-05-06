@@ -1,18 +1,39 @@
-<html>
-<head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
-    <title th:utext="#{label.badUser.title}">bad user</title>
-</head>
-<body>
-<div class="container">
-<h1 class="alert alert-danger" th:utext="${message}">error</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="theme/header :: staticheaderFragment"></head>
+<body class='pace-top'>
+	<!-- BEGIN #app -->
+	<div id="app" class="app app-full-height app-without-header">
+		<!-- BEGIN error -->
+		<div class="error-page">
+			<!-- BEGIN error-page-content -->
+			<div class="error-page-content">
+				<div class="card mb-5 mx-auto" style="">
+					<div class="card-body">
+						<div class="card">
+							<div class="error-code">Oops..!</div>
+							<div class="card-arrow">
+								<div class="card-arrow-top-left"></div>
+								<div class="card-arrow-top-right"></div>
+								<div class="card-arrow-bottom-left"></div>
+								<div class="card-arrow-bottom-right"></div>
+							</div>
+						</div>
+					</div>
+					<div class="card-arrow">
+						<div class="card-arrow-top-left"></div>
+						<div class="card-arrow-top-right"></div>
+						<div class="card-arrow-bottom-left"></div>
+						<div class="card-arrow-bottom-right"></div>
+					</div>
+				</div>
+				<h1  th:utext="#{label.badUser.title}">Oops!</h1> 
+				<h3 th:utext="${message}" >We can't seem to find the page you're looking for</h3>
+				
+				<div th:if="${expired}">
 <br/>
-<a class="btn btn-default" th:href="@{/registration.html}" th:utext="#{label.form.loginSignUp}">signup</a>
 
-<div th:if="${expired}">
-<br/>
-<h1 th:utext="#{label.form.resendRegistrationToken}">resend</h1>
-<button onclick="resendToken()">resend</button>
+<button class="btn btn-outline-theme px-3 rounded-pill" onclick="resendToken()"><i class="fa fa-refresh me-1 ms-n1"></i>Resend Token</button>
 
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -41,6 +62,23 @@ $(document).ajaxStart(function() {
 </script>
 
 </div>
-</div>
+				
+				<hr/>
+				<a th:href="@{/registration.html}" class="btn btn-outline-theme px-3 rounded-pill"><i class="fa fa-arrow-left me-1 ms-n1"></i> Go Back to Registration</a>
+			</div>
+			<!-- END error-page-content -->
+		</div>
+		<!-- END error -->
+		
+		<div th:include="theme/theme_util :: theme_util"></div>
+		
+	</div>
+	<!-- END #app -->
+	
+	
+	
+	
+	<div th:include="theme/footer::staticFooter"></div>	
+	
 </body>
 </html>

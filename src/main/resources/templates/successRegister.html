@@ -10,7 +10,7 @@
 <link th:href="@{/assets/css/app.min.css}" type="text/css" rel="stylesheet" />
 <!-- ================== END core-css ================== -->
 </head>
-<body class='pace-top'>		
+<body >		
 	<!-- BEGIN #app -->
 	<div id="app" class="app app-full-height app-without-header text-center">
 		<div class="coming-soon">
@@ -19,21 +19,19 @@
                 
         <h1 id="success" class="" th:utext="#{message.regSucc}"> success</h1>
         <a  th:href="@{/login}" th:utext="#{label.form.loginLink}">login</a>
+        <div th:insert="theme/theme_util::theme_util"></div>
         </div>
         
-        </div>
+        
+        
     </div>
+    
+    </div>
+        
+    
+    
 </body>
 
-<!-- ================== BEGIN core-js ================== -->
-	<script th:src="@{/assets/js/vendor.min.js}"></script>
-	<script th:src="@{/assets/js/app.min.js}"></script>
-	<!-- ================== END core-js ================== -->
-	
-	<!-- ================== BEGIN page-js ================== -->
-	<script th:src="@{/assets/plugins/kbw-countdown/dist/js/jquery.plugin.js}"></script>
-	<script th:src="@{/assets/plugins/kbw-countdown/dist/js/jquery.countdown.js}"></script>
-	<script th:src="@{/assets/js/demo/page-coming-soon.demo.js}"></script>
-	<!-- ================== END page-js ================== -->
+<div th:include="theme/footer::staticFooter"></div>	
 
 </html>
