@@ -213,9 +213,8 @@
 											<img src="assets/img/user/user.jpg" alt="" class="ms-100 mh-100 rounded-circle" />
 										</div>
 										<div class="flex-fill px-3">
-											<div class="">[[${user.firstName}]] [[${user.lastName}]] <i class="fa fa-user-circle " th:if="${user.email} == ${session.user.username}"></i> <span th:each="luser : ${loggedInUsers}"> <span
-											th:if="${luser} == ${user.email}"
-											class="fa fa-commenting text-success  ms-2"></span>
+											<div class="">[[${user.firstName}]] [[${user.lastName}]] <i class="fa fa-user-circle " th:if="${user.email} == ${session.user.username}"></i> <span th:each="luser : ${loggedInUsers}"> 
+											<span th:if="${luser} == ${user.email}" class="fa fa-commenting text-success  ms-2"></span>
 										</span> </span>	</div>
 											<div class="small text-white text-opacity-50">[[${user.email}]]</div>
 										</div>

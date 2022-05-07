@@ -80,9 +80,10 @@
 														<i
 																class="fa fa-ellipsis-h"></i></a>
 															<div class="dropdown-menu dropdown-menu-end">
-																<a href="#" class="dropdown-item">View</a> <a href="#"
-																	class="dropdown-item">Edit</a> <a href="#"
-																	class="dropdown-item">Delete</a>
+																<a href="#" class="dropdown-item">View</a> 
+																<a th:href="@{/editEmployee(empid=${emp.empid})}"
+																  class="dropdown-item">Edit</a> 
+																<a href="#" class="dropdown-item">Delete</a>
 															</div>
 														
 														</td>

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.birol.ems.dto.EMPLOYEE_BASIC;
@@ -94,10 +100,12 @@ public class EMScontroller {
 			employeeRepository.save(emp);
 		}catch (Exception e) {			
 			e.printStackTrace();
+			//model.addAttribute("response")
 			logger.error(e.getMessage());
 		}
 		
 		return new ModelAndView("redirect:/addEmployee", model);		
+		//return emp;
 	}
 	
 	@GetMapping("/employeeList")
@@ -123,5 +131,35 @@ public class EMScontroller {
 		return new ModelAndView("ems/pages/setting", model);		
 	}
 	
+	@RequestMapping(value="/addEmployeeDoAjaxd", method = RequestMethod.POST)
+	public @ResponseBody EMPLOYEE_BASIC addEmployeeDoAjaxd(@RequestBody EMPLOYEE_BASIC emp) {
+	    try {
+	    	emp.setAdded_by("bindu");
+		    employeeRepository.save(emp);
+		    System.out.println(emp.getEmail()+" added!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	    return emp;
+	}
+	
+	@GetMapping("/employeeListx/editEmployeex")
+	 public ModelAndView editEmployeex(String empid,final ModelMap model) {		
+		System.out.println(empid);
+		return new ModelAndView("ems/pages/editEmployee", model);		
+	}
+	
+	@GetMapping("/editEmployee")
+	public ModelAndView editEmployee(@RequestParam("empid") Long empid, final ModelMap model){
+		model.addAttribute("roles",roleRepository.findAll());
+		EMPLOYEE_BASIC empinfo= employeeRepository.findbyEmpid(empid);
+		if(empinfo.getEmp_image()!=null) {
+			String imageencode = Base64.getEncoder().encodeToString(empinfo.getEmp_image());
+			empinfo.setEmp_image_encoded(imageencode);			    	
+		}
+		model.addAttribute("empinfo",empinfo);
+		return new ModelAndView("ems/pages/editEmployee", model);	
+	}
 	
 }

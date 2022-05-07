@@ -79,7 +79,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authProvider());
     }
 
-    
+    /*
     @Override
     public void configure(final WebSecurity web) throws Exception {
         
@@ -87,7 +87,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/resources/**")
             .antMatchers("/h2/**");
     }
-    
+    */
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
