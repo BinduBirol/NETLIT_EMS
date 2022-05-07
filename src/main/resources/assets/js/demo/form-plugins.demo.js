@@ -6,7 +6,8 @@ Website: http://www.seantheme.com/hud/
 */
 
 var handleRenderDatepicker = function() {
-	$('#datepicker-default').datepicker({
+	$('.datepicker-default').datepicker({
+		format: 'yyyy-mm-dd',
 		autoclose: true
 	});
 	$('#datepicker-component').datepicker({
