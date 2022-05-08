@@ -22,57 +22,7 @@
 								<hr class="mb-4" />
 								
 								<!-- BEGIN #user_info -->
-								<div id="user_info" class="mb-5">
-									<h4>User Information <i class="fa-solid fa-star text-danger"></i></h4>									
-									<div class="card">
-										<div class="card-body pb-2">
-											
-												<div class="row mb-3">
-													<div class="col-12 col-sm-6">
-										                <div class="form-group">
-															<label>Employee Image</label>							
-															<div class="text-center">
-																<img   class="rounded mx-auto d-block img-thumbnail" id="previewImg"  src="" alt="Select an Image">
-															</div>
-															
-															
-															<input accept="image/*" name="emp_image_m" required="required" class="form-control" type="file" onchange="previewFile(this);"/>
-																 
-															
-										                </div>   
-										                <!-- /.form-group -->
-										              </div> 
-													
-													
-													<div class="col-xl-6">
-														 <div class="form-group">
-											                  <label>Select Role</label>
-											                        <select name="roleid" required="required" class="form-select"  id="slct_role">
-																	    <option value="">Select Role</option>
-																	    <option th:each="roles : ${roles}" th:value="${roles.id}" th:text="${roles.name}"></option>
-																    </select>
-																   
-														</div>
-													</div>
-													
-													
-												
-												</div>
-												
-												
-											
-										</div>
-										<div class="card-arrow">
-											<div class="card-arrow-top-left"></div>
-											<div class="card-arrow-top-right"></div>
-											<div class="card-arrow-bottom-left"></div>
-											<div class="card-arrow-bottom-right"></div>
-										</div>
-										<div class="hljs-container rounded-bottom"><small>Set role of the employee to access the software permissions</small>
-											                
-										</div>
-									</div>
-								</div>
+								
 								
 								
 								
@@ -186,11 +136,62 @@
 										</div>
 									</div>
 								</div>
+								<div id="user_info" class="mb-5">
+									<h4>EMS Info <i class="fa-solid fa-star text-danger"></i></h4>									
+									<div class="card">
+										<div class="card-body pb-2">
+											<div class="row mb-3">													
+													
+													
+													
+													<div class="col-xl-6">
+														 <div class="form-group">
+											                  <label>Select Role</label>
+											                        <select name="roleid" required="required" class="form-select"  id="slct_role">
+																	    <option value="">Select Role</option>
+																	    <option th:each="roles : ${roles}" th:value="${roles.id}" th:text="${roles.name}"></option>
+																    </select>																   
+														</div>
+													</div>	
+												</div>
+												
+										</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+										<div class="hljs-container rounded-bottom"><small>Set role of the employee to access the software permissions</small>
+											                
+										</div>
+									</div>
+								</div>
+								
 								
 								<div id="documents" class="mb-5">
 									<h4>Documents </h4>									
 									<div class="card">
 										<div class="card-body pb-2">
+										
+										<div class="row mb-3">
+													
+													<div class="col-12 col-sm-12">
+										                <div class="form-group">
+															<label>Employee Image</label>							
+															<div class="text-center">
+																<img   class="rounded mx-auto d-block img-thumbnail" id="previewImg"  src="" alt="Select an Image">
+															</div>															
+															
+															<input accept="image/*" name="emp_image_m"  class="form-control" type="file" onchange="previewFile(this);"/>															 
+															
+										                </div>   
+										                 
+										              </div>								
+													
+														
+												</div>
+										
 										<div class="row mb-3">
 											<div class="col-12 col-sm-6">
 												<div class="form-group">
@@ -250,7 +251,12 @@
 									<h4>Employee Personal Information</h4>									
 									<div class="card">
 										<div class="card-body pb-2">
-											<div class="row mb-3">
+										
+										
+										
+										
+										
+		<div class="row mb-3">
               <div class="col-12 col-sm-6">
                 <div class="form-group">
                   <label>First Name</label>
@@ -425,8 +431,9 @@
 								<!-- BEGIN #sidebar-bootstrap -->
 								<nav id="sidebar-bootstrap" class="navbar navbar-sticky d-none d-xl-block">
 									<nav class="nav text-nowrap">
-										<a class="nav-link" href="#user_info" data-toggle="scroll-to">User Info</a>
+										
 										<a class="nav-link" href="#employment" data-toggle="scroll-to">Employment Info</a>
+										<a class="nav-link" href="#user_info" data-toggle="scroll-to">EMS Info</a>
 										<a class="nav-link" href="#documents" data-toggle="scroll-to">Documents</a>
 										<a class="nav-link text-nowrap" href="#personal" data-toggle="scroll-to">Personal Info</a>										
 										<a class="nav-link" href="#account" data-toggle="scroll-to">Account Info</a>
