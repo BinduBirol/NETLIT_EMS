@@ -72,7 +72,7 @@
 														<td th:text="${iterator.index+1}">57</td>
 														<td th:text="${emp.full_name}"></td>
 														<td th:text="${emp.designation}">Customer Support</td>
-														<td th:text="${emp.email}"></td>
+														<td class="text-white" ><a class="text-white" th:href="'mailto:' + ${emp.email}" th:text="${emp.email}"></a></td>
 														<td th:text="${emp.phone}">27</td>
 														<td th:class="${emp.contact_status_str}" th:text=${emp.contact_remaining_period}>2011/01/25</td>
 														<td>

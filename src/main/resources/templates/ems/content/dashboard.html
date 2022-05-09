@@ -210,7 +210,8 @@
 									<div class="list-group-item d-flex align-items-center">
 										<div
 											class="w-40px h-40px d-flex align-items-center justify-content-center  text-white rounded-2 ms-n1">
-											<img src="assets/img/user/user.jpg" alt="" class="ms-100 mh-100 rounded-circle" />
+											<!-- <img alt="" class="ms-100 mh-100 rounded-circle" /> -->
+											<i class="fa fa-user"></i>
 										</div>
 										<div class="flex-fill px-3">
 											<div class="">[[${user.firstName}]] [[${user.lastName}]] <i class="fa fa-user-circle " th:if="${user.email} == ${session.user.username}"></i> <span th:each="luser : ${loggedInUsers}"> 

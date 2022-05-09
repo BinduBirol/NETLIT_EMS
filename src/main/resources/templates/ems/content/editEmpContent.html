@@ -36,7 +36,7 @@
 										                <div class="form-group">
 															<label>Employee Image</label>							
 															<div class="text-center">
-																<img  th:src="*{'data:image/jpeg;base64,'+{empinfo.emp_image_encoded}}"  class="rounded-circle mx-auto d-block " id="previewImg"  src="" alt="Select an Image">
+																<img  th:src="*{'data:image/jpeg;base64,'+{empinfo.emp_image_encoded}}"  class="rounded-circle mx-auto d-block col-12 col-sm-6" id="previewImg"  src="" alt="Select an Image">
 															</div>
 															<hr/>
 															<input accept="image/*" name="emp_image_m" required="required" class="form-control" type="file" onchange="previewFile(this);"/>	

@@ -9,12 +9,16 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.repository.query.Param;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,6 +55,10 @@ public class EMScontroller {
 	EmployeeRepository employeeRepository;
 	@Autowired
 	EmployeeService employeeService;
+	@Autowired
+    private JavaMailSender mailSender;
+	@Autowired
+    private Environment env;
 	
 	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
 	  
@@ -80,7 +88,7 @@ public class EMScontroller {
 		return new ModelAndView("ems/pages/addEmployee", model);		
 	}
 	@PostMapping("/addEmployeeDo")	
-	 public ModelAndView addEmployeeDo(@ModelAttribute EMPLOYEE_BASIC emp,ModelMap model, Authentication auth) {
+	 public ModelAndView addEmployeeDo(@ModelAttribute EMPLOYEE_BASIC emp,ModelMap model, Authentication auth,final HttpServletRequest request) {
 		//model.addAttribute("roles",roleRepository.findAll());
 		try {
 			if(emp.getEmp_image_m().getSize()>0) {
@@ -98,6 +106,18 @@ public class EMScontroller {
 			User empCreator = (User)auth.getPrincipal();
 			emp.setAdded_by(empCreator.getEmail());
 			employeeRepository.save(emp);
+			//send mail
+			SimpleMailMessage email= new SimpleMailMessage();
+			email.setTo(emp.getEmail());
+			email.setSubject("Information added");
+			final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+			String emailText="Dear "+emp.getFull_name()
+					+",\nYour employment information succesfully added to NETLIT EMS system"
+					+ "\nGo to the link to create your account:"
+					+ "\n"+appUrl+"/registration.html";
+			email.setText(emailText);
+			email.setFrom(env.getProperty("support.email"));
+			mailSender.send(email);
 		}catch (Exception e) {			
 			e.printStackTrace();
 			//model.addAttribute("response")
@@ -122,7 +142,13 @@ public class EMScontroller {
 	@GetMapping("/profile")
 	 public ModelAndView profile(final ModelMap model, Authentication auth) {
 		User user = (User)auth.getPrincipal();
+		EMPLOYEE_BASIC empdtl= employeeRepository.findbyEmpid(user.getId());
+		if(empdtl.getEmp_image()!=null) {
+			String imageencode = Base64.getEncoder().encodeToString(empdtl.getEmp_image());
+			empdtl.setEmp_image_encoded(imageencode);			    	
+		}
 		model.addAttribute("user",user);
+		model.addAttribute("userdtl",empdtl);
 		return new ModelAndView("ems/pages/profile", model);		
 	}
 	

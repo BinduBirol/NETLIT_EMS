@@ -1,5 +1,6 @@
 package com.birol.web.controller;
 
+import org.hibernate.LazyInitializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,19 +58,23 @@ public class RegistrationController {
     }
 
     @GetMapping("/registrationConfirm")
-    public ModelAndView confirmRegistration(final HttpServletRequest request, final ModelMap model, @RequestParam("token") final String token) throws UnsupportedEncodingException {
+    public ModelAndView confirmRegistration(final HttpServletRequest request, final ModelMap model, @RequestParam("token") final String token) throws UnsupportedEncodingException, LazyInitializationException {
         Locale locale = request.getLocale();
         model.addAttribute("lang", locale.getLanguage());
         final String result = userService.validateVerificationToken(token);
         if (result.equals("valid")) {
-            final User user = userService.getUser(token);
-            // if (user.isUsing2FA()) {
-            // model.addAttribute("qr", userService.generateQRUrl(user));
-            // return "redirect:/qrcode.html?lang=" + locale.getLanguage();
-            // }
-            authWithoutPassword(user);
-            model.addAttribute("messageKey", "message.accountVerified");
-            return new ModelAndView("redirect:/console", model);
+			final User user = userService.getUser(token);
+			/*
+			if (user.isUsing2FA()) {
+				String qrimage=userService.generateQRUrl(user);
+				System.out.println("QR: "+qrimage);
+				model.addAttribute("qr", qrimage);
+				return new ModelAndView("redirect:/qrcode.html?lang=" + locale.getLanguage(), model);
+			}
+			*/
+			authWithoutPassword(user);			
+			model.addAttribute("messageKey", "message.accountVerified");
+			return new ModelAndView("redirect:/login", model);
         }
 
         model.addAttribute("messageKey", "auth.message." + result);

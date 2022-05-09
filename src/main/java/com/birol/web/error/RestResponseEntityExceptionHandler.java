@@ -74,6 +74,14 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         final GenericResponse bodyOfResponse = new GenericResponse(messages.getMessage("message.regError", null, request.getLocale()), "UserAlreadyExist");
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
+    
+    // 411
+    @ExceptionHandler({ EmployeeNotFoundException.class })
+    public ResponseEntity<Object> handleEmployeeNotFound(final RuntimeException ex, final WebRequest request) {
+        logger.error("411 Status Code", ex);
+        final GenericResponse bodyOfResponse = new GenericResponse(messages.getMessage("message.regErrorEmpnf", null, request.getLocale()), "EmployeeNotFound");
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
 
     // 500
     @ExceptionHandler({ MailAuthenticationException.class })

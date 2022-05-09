@@ -159,13 +159,16 @@ function register(event){
         }
         
     })
-    .fail(function(data) {
+    .fail(function(data) {    	
     	hideprocessview();
         if(data.responseJSON.error.indexOf("MailError") > -1)
         {
             window.location.href = serverContext + "emailError.html";
         }
         else if(data.responseJSON.error == "UserAlreadyExist"){
+            $("#emailError").show().html(data.responseJSON.message);
+        }
+        else if(data.responseJSON.error == "EmployeeNotFound"){
             $("#emailError").show().html(data.responseJSON.message);
         }
         else if(data.responseJSON.error.indexOf("InternalError") > -1){

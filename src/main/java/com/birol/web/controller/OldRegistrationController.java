@@ -30,7 +30,9 @@ import com.birol.persistence.model.VerificationToken;
 import com.birol.registration.OnRegistrationCompleteEvent;
 import com.birol.service.IUserService;
 import com.birol.web.dto.UserDto;
+import com.birol.web.error.EmployeeNotFoundException;
 import com.birol.web.error.UserAlreadyExistException;
+import com.birol.web.error.UserNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -112,13 +114,21 @@ public class OldRegistrationController {
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
         } catch (final UserAlreadyExistException uaeEx) {
             ModelAndView mav = new ModelAndView("registration", "user", userDto);
-            String errMessage = messages.getMessage("message.regError", null, request.getLocale());
+            //String errMessage = messages.getMessage("message.regError", null, request.getLocale());
+            String errMessage = messages.getMessage(uaeEx.getMessage(), null, request.getLocale());
+            mav.addObject("message", errMessage);
+            return mav;
+        }catch (final UserNotFoundException unfEx) {
+            ModelAndView mav = new ModelAndView("registration", "user", userDto);
+            //String errMessage = messages.getMessage("message.regError", null, request.getLocale());
+            String errMessage = messages.getMessage(unfEx.getMessage(), null, request.getLocale());
             mav.addObject("message", errMessage);
             return mav;
         } catch (final RuntimeException ex) {
             LOGGER.warn("Unable to register user", ex);
             return new ModelAndView("emailError", "user", userDto);
-        }
+        } 
+        
         return new ModelAndView("successRegister", "user", userDto);
     }
 

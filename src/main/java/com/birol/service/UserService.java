@@ -22,6 +22,8 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.birol.ems.dto.EMPLOYEE_BASIC;
+import com.birol.ems.repo.EmployeeRepository;
 import com.birol.persistence.dao.NewLocationTokenRepository;
 import com.birol.persistence.dao.PasswordResetTokenRepository;
 import com.birol.persistence.dao.RoleRepository;
@@ -30,11 +32,14 @@ import com.birol.persistence.dao.UserRepository;
 import com.birol.persistence.dao.VerificationTokenRepository;
 import com.birol.persistence.model.NewLocationToken;
 import com.birol.persistence.model.PasswordResetToken;
+import com.birol.persistence.model.Role;
 import com.birol.persistence.model.User;
 import com.birol.persistence.model.UserLocation;
 import com.birol.persistence.model.VerificationToken;
 import com.birol.web.dto.UserDto;
+import com.birol.web.error.EmployeeNotFoundException;
 import com.birol.web.error.UserAlreadyExistException;
+import com.birol.web.error.UserNotFoundException;
 import com.maxmind.geoip2.DatabaseReader;
 
 @Service
@@ -43,6 +48,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     @Autowired
     private VerificationTokenRepository tokenRepository;
@@ -77,23 +85,30 @@ public class UserService implements IUserService {
     public static final String TOKEN_VALID = "valid";
 
     public static String QR_PREFIX = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
-    public static String APP_NAME = "SpringRegistration";
+    public static String APP_NAME = "NETLIT_EMS_Application";
 
     // API
 
     @Override
     public User registerNewUserAccount(final UserDto accountDto) {
+    	final User user = new User();
         if (emailExists(accountDto.getEmail())) {
             throw new UserAlreadyExistException("There is an account with that email address: " + accountDto.getEmail());
         }
-        final User user = new User();
-
+        if (!employeeExists(accountDto.getEmail())) {
+            throw new EmployeeNotFoundException("Can't find your employment information with that email address: " + accountDto.getEmail());
+        }else {
+        	EMPLOYEE_BASIC empinfo = employeeRepository.findbyWorkMail(accountDto.getEmail());
+        	user.setId(empinfo.getEmpid());
+        	Role empRole= roleRepository.getById((long) empinfo.getRoleid());        	
+        	user.setRoles(Arrays.asList(roleRepository.findByName(empRole.getName())));
+        }
         user.setFirstName(accountDto.getFirstName());
         user.setLastName(accountDto.getLastName());
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
         user.setUsing2FA(accountDto.isUsing2FA());
-        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+        //user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
         return userRepository.save(user);
     }
 
@@ -234,6 +249,9 @@ public class UserService implements IUserService {
         return userRepository.findByEmail(email) != null;
     }
 
+    private boolean employeeExists(final String email) {
+        return employeeRepository.findbyWorkMail(email) != null;
+    }
     @Override
     public List<String> getUsersFromSessionRegistry() {
         return sessionRegistry.getAllPrincipals()

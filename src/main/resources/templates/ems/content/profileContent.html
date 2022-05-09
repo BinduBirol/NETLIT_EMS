@@ -8,45 +8,213 @@
 					<!-- BEGIN profile-container -->
 					<div class="profile-container">
 						<!-- BEGIN profile-sidebar -->
-							<div class="profile-sidebar">
-								<div class="desktop-sticky-top">
-									<div class="profile-img">
-										<img src="assets/img/user/profile.jpg" alt="" />
-									</div>
-									<!-- profile info -->
-									<h4>[[${user.firstName}]] [[${user.lastName}]]</h4>
-									<div th:text="${user.email}" class="mb-3 text-white text-opacity-50 fw-bold mt-n2">@johnsmith</div>
-									<p  th:text="${user.roles}">
-										The greatest guitar player of all time.
-									</p>
-									
-									
-									
-									<div class="mb-1">
-										<i class="fa fa-map-marker-alt fa-fw text-white text-opacity-50"></i> New York, NY
-									</div>
-									<div class="mb-3">
-										<i class="fa fa-link fa-fw text-white text-opacity-50"></i> seantheme.com/hud
-									</div>
+						<div class="profile-sidebar">
+							<div class="desktop-sticky-top">
+								<div class="">
+									<img class="profile-img "
+										th:src="*{'data:image/jpeg;base64,'+{userdtl.emp_image_encoded}}"
+										alt="User Image" />
+								</div>
+								<!-- profile info -->
+								<h4>[[${user.firstName}]] [[${user.lastName}]]</h4>
+								<div th:text="${userdtl.designation}"
+									class="mb-3 text-white text-opacity-50 fw-bold mt-n2">@johnsmith</div>
+								<p>aaaa</p>
+								
+								<div class="mb-1">
+									<i class="fa fa-id-card fa-fw text-white text-opacity-50"></i> <span
+										th:text="${userdtl.empid}"></span>
+								</div>
+
+								<div class="mb-1">
+									<i class="fa fa-envelope fa-fw text-white text-opacity-50"></i>
+									<span th:text="${user.email}"></span>
+								</div>
+								<div class="mb-1">
+									<i class="fa fa-phone fa-fw text-white text-opacity-50"></i> <span
+										th:text="${userdtl.phone}"></span>
+								</div>
+
+								<div class="mb-3">
+									<i
+										class="fa fa-map-marker-alt fa-fw text-white text-opacity-50"></i>
+									<span th:text="${userdtl.address_full}"></span>
+								</div>
+
+
+								<hr class="mt-4 mb-4" />
+
+							</div>
+						</div>
+
+						<!-- BEGIN profile-content -->
+						<div class="profile-content">
+							<ul class="nav nav-tabs">
+								<li class="nav-item me-1"><a href="#home"
+									class="nav-link active" data-bs-toggle="tab">Employment Info</a></li>
+								<li class="nav-item me-1"><a href="#personal"
+									class="nav-link" data-bs-toggle="tab">Personal Info</a></li>
+								<li class="nav-item me-1"><a href="#docs"
+									class="nav-link active" data-bs-toggle="tab">Documents</a></li>
+								<li class="nav-item me-1 dropdown"><a href="#"
+									class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+										Dropdown </a>
+									<div class="dropdown-menu">
+										<a href="#dropdown1" class="dropdown-item"
+											data-bs-toggle="tab">@fat</a> <a href="#dropdown2"
+											class="dropdown-item" data-bs-toggle="tab">@mdo</a>
+									</div></li>
+							</ul>
 							
-									<hr class="mt-4 mb-4" />									
+								<div class="tab-content pt-3">
+									<div class="tab-pane fade show active" id="home">
+										<div class="profile-content-container">
+											<table class="table">
+												<tr>
+													<td>Full Name:</td>
+													<td th:text="${userdtl.full_name}"></td>
+												</tr>
+												
+												<tr>
+													<td>Work Phone Number:</td>
+													<td th:text="${userdtl.phone}"></td>
+												</tr>
+												
+												<tr>
+													<td>Work Email:</td>
+													<td th:text="${userdtl.email}"></td>
+												</tr>
+												
+												<tr>
+													<td>Designation:</td>
+													<td th:text="${userdtl.designation}"></td>
+												</tr>
+												
+												<tr>
+													<td>Contract Start:</td>
+													<td th:text="${userdtl.contract_start}"></td>
+												</tr>
+												
+												<tr>
+													<td>Contract End:</td>
+													<td th:text="${userdtl.contract_end}"></td>
+												</tr>												
+												
+												
+												<tr>
+													<td>Workspace:</td>
+													<td th:text="${userdtl.workspace}" ></td>
+												</tr>									
+												
+												
+												<tr>
+													<td>Nearest Chief:</td>
+													<td th:text="${userdtl.nearest_chief}"></td>
+												</tr>
+												
+												<tr>
+													<td>Employee Type:</td>
+													<td th:text="${userdtl.employee_Type}"></td>
+												</tr>
+											</table>
+										
+										</div>
+	
+									</div>
+									<div class="tab-pane fade" id="personal">
+										
+										<div class="profile-content-container">
+											<form action="">
+												<table class="table">
+													<tr>
+														<td>First Name</td>
+														<td><input class="form-control" name="first_name" th:value="${userdtl.first_name}"/></td>
+													</tr>
+													
+													<tr>
+														<td>Last Name</td>
+														<td><input class="form-control" name="last_name" th:value="${userdtl.last_name}"/></td>
+													</tr>
+													
+													<tr>
+														<td>Private Email</td>
+														<td><input name="private_email" class="form-control" th:value="${userdtl.private_email}"/></td>
+													</tr>
+													
+													<tr>
+														<td>Closest Relative Full Description</td>
+														<td><input name="closest_relative_full" class="form-control" th:value="${userdtl.closest_relative_full}"/></td>
+													</tr>
+													
+													<tr>
+														<td>Full Address</td>
+														<td><input name="address_full" class="form-control" th:value="${userdtl.address_full}"/></td>
+													</tr>
+													
+													<tr>
+														<td>Evening Phone</td>
+														<td><input name="phone_eve" class="form-control" th:value="${userdtl.phone_eve}"/></td>
+													</tr>
+													
+													<tr>
+														<td>Social Security Number</td>
+														<td><input name="social_security_number" class="form-control" th:value="${userdtl.social_security_number}"/></td>
+													</tr>
+													
+													<tr>
+														<td>Gender</td>
+														<td><input name="sex" class="form-control" th:value="${userdtl.sex}"/></td>
+													</tr>
+												</table>
+											</form>
+										</div>
 									
+										
+									</div>
+									<div class="tab-pane fade" id="docs">
+										<div class="profile-content-container">
+											
+										</div>
+									</div>
+									<div class="tab-pane fade" id="dropdown2">
+										<div class="profile-content-container">dddddd</div>
 									</div>
 								</div>
-							</div>
-							<!-- END profile-sidebar -->
-					</div>
-				</div>
-				<!-- BEGIN card-arrow -->
-						<div class="card-arrow">
-							<div class="card-arrow-top-left"></div>
-							<div class="card-arrow-top-right"></div>
-							<div class="card-arrow-bottom-left"></div>
-							<div class="card-arrow-bottom-right"></div>
+							
 						</div>
-						<!-- END card-arrow -->
+
+					</div>
+					<!-- END profile-sidebar -->
+
+
+
+				</div>
 			</div>
+			<!-- BEGIN card-arrow -->
+			<div class="card-arrow">
+				<div class="card-arrow-top-left"></div>
+				<div class="card-arrow-top-right"></div>
+				<div class="card-arrow-bottom-left"></div>
+				<div class="card-arrow-bottom-right"></div>
+			</div>
+			<!-- END card-arrow -->
 		</div>
 	</div>
-
 </div>
+
+<script type="text/javascript">
+	function previewFile(input){
+        var file = $("input[type=file]").get(0).files[0];
+ 
+        if(file){
+            var reader = new FileReader();
+ 
+            reader.onload = function(){
+                $("#previewImg").attr("src", reader.result);
+            }
+ 
+            reader.readAsDataURL(file);
+        }
+    }
+			
+	</script>

@@ -1,9 +1,11 @@
 package com.birol.registration.listener;
 
 
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 import com.birol.service.IUserService;
+import com.birol.service.UserService;
 import com.birol.persistence.model.User;
 import com.birol.registration.OnRegistrationCompleteEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +29,23 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
     @Autowired
     private Environment env;
+    
+    @Autowired
+    private UserService userService;
 
     // API
 
     @Override
     public void onApplicationEvent(final OnRegistrationCompleteEvent event) {
-        this.confirmRegistration(event);
+        try {
+			this.confirmRegistration(event);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
-    private void confirmRegistration(final OnRegistrationCompleteEvent event) {
+    private void confirmRegistration(final OnRegistrationCompleteEvent event) throws UnsupportedEncodingException {
         final User user = event.getUser();
         final String token = UUID.randomUUID().toString();
         service.createVerificationTokenForUser(user, token);
@@ -46,12 +56,16 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
     //
 
-    private SimpleMailMessage constructEmailMessage(final OnRegistrationCompleteEvent event, final User user, final String token) {
+    private SimpleMailMessage constructEmailMessage(final OnRegistrationCompleteEvent event, final User user, final String token) throws UnsupportedEncodingException {
         final String recipientAddress = user.getEmail();
         final String subject = "Registration Confirmation";
         final String confirmationUrl = event.getAppUrl() + "/registrationConfirm?token=" + token;
-        String message= "Your SECRET for Google Authenticator: "+user.getSecret()+"\n";
-        message+= messages.getMessage("message.regSuccLink", null, "You registered successfully. To confirm your registration, please click on the below link.", event.getLocale());
+        String message= "Dear "+user.getFirstName()+" "+user.getLastName()+",\n";
+        message="You registered successfully!\n\n";
+        message+= "Your SECRET for Google Authenticator: "+user.getSecret()+"\n";
+        String qrimage=userService.generateQRUrl(user);
+        message+= "You will find the QR code to this link:\n"+qrimage+"\n\n";
+        message+= messages.getMessage("message.regSuccLink", null, "To confirm your registration, please click on the below link.", event.getLocale());
         final SimpleMailMessage email = new SimpleMailMessage();       
         email.setTo(recipientAddress);
         email.setSubject(subject);
