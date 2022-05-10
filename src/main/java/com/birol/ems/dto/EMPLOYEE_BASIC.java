@@ -37,6 +37,7 @@ public class EMPLOYEE_BASIC {
 	@Lob
 	private  byte [] emp_image;
 	private int roleid;
+	@Column(unique=true)
 	private String email;
 	private String first_name;
 	private String last_name;

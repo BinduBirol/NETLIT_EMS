@@ -18,7 +18,7 @@
 								<h1 class="page-header">
 									Insert Employee Information
 								</h1>
-								<form id="insertform" action="addEmployeeDo" method="post" enctype='multipart/form-data'>
+								<form id="addEmployeeForm" action="addEmployeeDo" method="post" enctype='multipart/form-data'>
 								<hr class="mb-4" />
 								
 								<!-- BEGIN #user_info -->
@@ -412,13 +412,13 @@
 
 								<div class="row mb-3">
 								<div class="col-12 col-sm-3">
-										<input class="btn btn-warning d-block w-100 fw-500 mb-3" onclick="doToast();" value="Draft" type="button"/>
+										<button class="btn btn-warning d-block w-100 fw-500 mb-3 "  onclick="doToast();" disabled="disabled"  type="button">Draft</button>
 									</div>
 									<div class="col-12 col-sm-6">
-										<input class="btn btn-success d-block w-100 fw-500 mb-3" value="Save Information" type="submit"/>
+										<button  class="btn btn-success d-block w-100 fw-500 mb-3 processview"  type="submit">Save Information</button>
 									</div>
 									<div class="col-12 col-sm-3">
-										<input class="btn btn-danger d-block w-100 fw-500 mb-3" type="reset"/>
+										<input class="btn btn-danger d-block w-100 fw-500 mb-3" type="reset"/>										
 									</div>
 								</div>
 
@@ -454,40 +454,7 @@
 		</div>
 		
 	<script>
-		function doToast() {
-			//$('#toast').toast('show');
-			var formData = new FormData(document.querySelector('#insertform'))
-			 //event.preventDefault();
-			 alert(formData);
-			    $.ajax({
-			        //url: $("#insertform").attr("action"),
-			        url: "controller",
-			        type: $("#insertform").attr("method"),
-			        //dataType: "JSON",
-			        data: formData,
-			        //data: JSON.stringify($("#insertform").serialize()),
-			        //data: $("#insertform").serialize(),
-			        processData: false,
-			        //contentType: false,
-			        contentType:'application/json',
-			        success: function (data, status)
-			        {
-			          	alert(status);
-			        	//ajaxResponse(data);
-			        	//if(data.indexOf("Successfully") != -1){
-			        	//	pagereload();
-			        	//}
-			        	
-			        },
-			        error: function (xhr, desc, err)
-			        {
-			        	alert(desc);
-			        	//ajaxResponse(err);
-			        	//pagereload();
-
-			        }
-			    });      
-		}
+		
 	</script>
 </div>
 	

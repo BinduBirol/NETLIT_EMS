@@ -13,17 +13,20 @@ function googleTranslateElementInit() {
   }
 
 function showprocessview(){
-	$("#processview").prop("disabled", true);
+	$(".processview").prop("disabled", true);
     // add spinner to button
-    $("#processview").html(
-      `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+    $(".processview").html(
+      "<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> Loading..."
     );
 }
 
 function hideprocessview(){
-	$("#processview").prop("disabled", false);
-    // add spinner to button
-    $("#processview").html(
+	$(".processview").prop("disabled", false);
+    $(".processview").html(
       "Try Submit"
     );
 }
+
+$("#toast-reload-btn").click(function() {
+	location.reload();
+})

@@ -87,10 +87,18 @@ public class EMScontroller {
 		
 		return new ModelAndView("ems/pages/addEmployee", model);		
 	}
-	@PostMapping("/addEmployeeDo")	
+	@RequestMapping(value="/addEmployeeDo",method=RequestMethod.POST)	
 	 public ModelAndView addEmployeeDo(@ModelAttribute EMPLOYEE_BASIC emp,ModelMap model, Authentication auth,final HttpServletRequest request) {
 		//model.addAttribute("roles",roleRepository.findAll());
 		try {
+			//check for mail existence
+			
+			EMPLOYEE_BASIC checkEmp=employeeRepository.findbyWorkMail(emp.getEmail());
+			if(checkEmp!=null) {
+				model.addAttribute("message","Already exists an employee with email: "+emp.getEmail()+"\nPlease try another work email.");
+				return new ModelAndView("theme/ajaxResponse", model);			
+			}
+			
 			if(emp.getEmp_image_m().getSize()>0) {
 				emp.setEmp_image(emp.getEmp_image_m().getBytes());
 			}
@@ -105,7 +113,7 @@ public class EMScontroller {
 			}
 			User empCreator = (User)auth.getPrincipal();
 			emp.setAdded_by(empCreator.getEmail());
-			employeeRepository.save(emp);
+			employeeRepository.save(emp);			
 			//send mail
 			SimpleMailMessage email= new SimpleMailMessage();
 			email.setTo(emp.getEmail());
@@ -118,14 +126,16 @@ public class EMScontroller {
 			email.setText(emailText);
 			email.setFrom(env.getProperty("support.email"));
 			mailSender.send(email);
-		}catch (Exception e) {			
+			
+			model.addAttribute("message","Successfully Added Info For "+emp.getEmail());
+			model.addAttribute("class","alert alert-success");
+		}catch (Exception e) {		
 			e.printStackTrace();
-			//model.addAttribute("response")
+			model.addAttribute("message",e.getMessage());
+			model.addAttribute("class","alert alert-success");
 			logger.error(e.getMessage());
-		}
-		
-		return new ModelAndView("redirect:/addEmployee", model);		
-		//return emp;
+		}		
+		return new ModelAndView("theme/ajaxResponse", model);
 	}
 	
 	@GetMapping("/employeeList")
@@ -147,9 +157,74 @@ public class EMScontroller {
 			String imageencode = Base64.getEncoder().encodeToString(empdtl.getEmp_image());
 			empdtl.setEmp_image_encoded(imageencode);			    	
 		}
+		try {
+			Period p = Period.between(LocalDate.now(),LocalDate.parse(empdtl.getContract_end().replace("/", "-")));				
+			String format_p=p.toString().replace("P", "").replace("Y", "Years ").replace("M", "Months ").replace("D", "Days");				
+			empdtl.setContact_status_str("align-middle");
+			if(format_p.startsWith("-"))empdtl.setContact_status_str("text-danger");
+			empdtl.setContact_remaining_period(format_p);
+		} catch (Exception e2) {
+			empdtl.setContact_remaining_period("Not spacified");
+		}
 		model.addAttribute("user",user);
 		model.addAttribute("userdtl",empdtl);
 		return new ModelAndView("ems/pages/profile", model);		
+	}
+	
+	@RequestMapping(value = "/savePersonalInfo", method=RequestMethod.POST)
+	 public ModelAndView savePersonalInfo(@ModelAttribute EMPLOYEE_BASIC personal, final ModelMap model) {		
+		EMPLOYEE_BASIC empbasic= new EMPLOYEE_BASIC();
+		empbasic= employeeRepository.findbyEmpid(personal.getEmpid());		
+		try {
+			if (personal.getEmp_image_m().getSize() > 0) {
+				empbasic.setEmp_image(personal.getEmp_image_m().getBytes());
+			}
+		} catch (Exception e) {
+			model.addAttribute("message",e.getMessage());
+			logger.error(e.getMessage());			
+		}
+		empbasic.setFirst_name(personal.getFirst_name());
+		empbasic.setLast_name(personal.getLast_name());
+		empbasic.setPrivate_email(personal.getPrivate_email());
+		empbasic.setClosest_relative_full(personal.getClosest_relative_full());
+		empbasic.setAddress_full(personal.getAddress_full());
+		empbasic.setSocial_security_number(personal.getSocial_security_number());
+		empbasic.setPhone_eve(personal.getPhone_eve());
+		empbasic.setSex(personal.getSex());
+		//set bank info
+		empbasic.setBank_name(personal.getBank_name());
+		empbasic.setAccount_number(personal.getAccount_number());
+		empbasic.setClearing_number(personal.getClearing_number());
+		empbasic.setTable_tax(personal.getTable_tax());
+		//documents
+		try {
+			if (personal.getDoc_m_cv().getSize() > 0) {
+				empbasic.setDoc_cv(personal.getDoc_m_cv().getBytes());
+			}
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			logger.error(e.getMessage());
+		}
+		try {
+			if (personal.getDoc_m_crt().getSize() > 0) {
+				empbasic.setDoc_certificate(personal.getDoc_m_crt().getBytes());
+			}
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			logger.error(e.getMessage());
+		} 
+		try {
+			if (personal.getDoc_m_id().getSize() > 0) {
+				empbasic.setDoc_id(personal.getDoc_m_id().getBytes());
+			}
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			logger.error(e.getMessage());
+		}		
+		employeeRepository.save(empbasic);
+		model.addAttribute("message","Succesfully Updated Info For "+empbasic.getFirst_name());
+		model.addAttribute("class","alert alert-success");
+		return new ModelAndView("theme/ajaxResponse", model);		
 	}
 	
 	@GetMapping("/settings")

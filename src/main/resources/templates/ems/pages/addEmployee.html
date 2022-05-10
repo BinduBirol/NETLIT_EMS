@@ -57,42 +57,66 @@
 	<script src="assets/plugins/bootstrap-slider/dist/bootstrap-slider.min.js"></script>
 	<script src="assets/plugins/jquery-typeahead/dist/jquery.typeahead.min.js"></script>
 	<script src="assets/plugins/jquery.maskedinput/src/jquery.maskedinput.js"></script>
-	<script src="assets/plugins/tag-it/js/tag-it.min.js"></script>
-	<script src="assets/plugins/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
-	<script src="assets/plugins/blueimp-tmpl/js/tmpl.min.js"></script>
-	<script src="assets/plugins/blueimp-load-image/js/load-image.all.min.js"></script>
-	<script src="assets/plugins/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"></script>
-	<script src="assets/plugins/blueimp-gallery/js/jquery.blueimp-gallery.min.js"></script>
-	<script src="assets/plugins/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
-	<script src="assets/plugins/blueimp-file-upload/js/jquery.fileupload.js"></script>
-	<script src="assets/plugins/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
-	<script src="assets/plugins/blueimp-file-upload/js/jquery.fileupload-image.js"></script>
-	<script src="assets/plugins/blueimp-file-upload/js/jquery.fileupload-audio.js"></script>
-	<script src="assets/plugins/blueimp-file-upload/js/jquery.fileupload-video.js"></script>
-	<script src="assets/plugins/blueimp-file-upload/js/jquery.fileupload-validate.js"></script>
-	<script src="assets/plugins/blueimp-file-upload/js/jquery.fileupload-ui.js"></script>
-	<script src="assets/plugins/summernote/dist/summernote-lite.min.js"></script>
-	<script src="assets/plugins/spectrum-colorpicker2/dist/spectrum.min.js"></script>
 	<script src="assets/plugins/select-picker/dist/picker.min.js"></script>
 	<script src="assets/plugins/@highlightjs/cdn-assets/highlight.min.js"></script>
 	<script src="assets/js/demo/highlightjs.demo.js"></script>
 	<script src="assets/js/demo/form-plugins.demo.js"></script>
 	<script src="assets/js/demo/sidebar-scrollspy.demo.js"></script>
-	<!-- ================== END page-js ================== -->
+	<!-- ================== END page-js ================== -->	
+	<script src="assets/js/netlit_ems.js"></script>
 	<script type="text/javascript">
+	function doToast(){
+		showprocessview();
+	}
+	
+	$("#addEmployeeForm").submit(function(event) {
+		showprocessview();
+		event.preventDefault();		
+		$.ajax({
+			url : $(this).attr("action"),
+			type : $(this).attr("method"),			
+			data : new FormData(this),
+			processData : false,
+			contentType : false,
+			success : function(data, status) {
+				hideprocessview();
+				$('.toast-header .title').html("Response");
+				$('.toast-body .toast-message').html(data);					
+				$('.toast').toast('show');					
+				if(data.includes("Successfully")==true){
+					$(':input','#addEmployeeForm')
+					  .not(':button, :submit, :reset, :hidden')
+					  .val('')
+					  .prop('checked', false)
+					  .prop('selected', false);
+				}
+				$("html, body").animate({ scrollTop: 0 }, "slow");
+				return false;
+			},
+			error : function(xhr, desc, err) {
+				hideprocessview();
+				$('.toast-header .title').html("Error");
+				$('.toast-body .toast-message').html(xhr.responseText);					
+				$('.toast').toast('show');
+				$("html, body").animate({ scrollTop: 0 }, "slow");
+				 return false;
+
+			}
+		});
+
+	});
+	
 	function previewFile(input){
-        var file = $("input[type=file]").get(0).files[0];
- 
+        var file = $("input[type=file]").get(0).files[0]; 
         if(file){
-            var reader = new FileReader();
- 
+            var reader = new FileReader(); 
             reader.onload = function(){
                 $("#previewImg").attr("src", reader.result);
-            }
- 
+            } 
             reader.readAsDataURL(file);
         }
     }
+	
 			
 	</script>
 </body>
