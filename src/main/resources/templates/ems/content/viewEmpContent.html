@@ -1,9 +1,4 @@
 <div th:fragment="viewEmpContent">
-
-	
-		
-			
-			
 				<!-- BEGIN profile -->
 				<div class="profile">
 				
@@ -134,6 +129,16 @@
 												<tr>
 													<td>Added By:</td>
 													<td th:text="${userdtl.added_by}"></td>
+												</tr>
+												
+												<tr>
+													<td>Created on:</td>
+													<td th:text="${userdtl.created}"></td>
+												</tr>
+												
+												<tr>
+													<td>Updated on:</td>
+													<td th:text="${userdtl.updated}"></td>
 												</tr>
 												
 											</table>

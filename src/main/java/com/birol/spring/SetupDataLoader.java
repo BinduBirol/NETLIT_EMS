@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.birol.ems.dto.EMPLOYEE_BASIC;
+import com.birol.ems.repo.EmployeeRepository;
 import com.birol.persistence.dao.PrivilegeRepository;
 import com.birol.persistence.dao.RoleRepository;
 import com.birol.persistence.dao.UserRepository;
@@ -35,7 +37,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    
+    @Autowired
+    private EmployeeRepository employeeRepository;
     // API
 
     @Override
@@ -89,7 +93,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Transactional
     User createUserIfNotFound(final int id,final String email, final String firstName, final String lastName, final String password, final Collection<Role> roles) {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);      
+        
         if (user == null) {
             user = new User();
             user.setId((long) id);
@@ -99,6 +104,18 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setEmail(email);
             user.setEnabled(true);
         }
+        EMPLOYEE_BASIC empexists = employeeRepository.findbyEmpid((long)id);
+        if(empexists==null) {
+        	EMPLOYEE_BASIC emp = new EMPLOYEE_BASIC();
+        	emp.setEmpid((long)id);
+        	emp.setEmail(email);
+        	emp.setFirst_name(firstName);
+        	emp.setLast_name(lastName);
+        	emp.setRoleid(4);
+        	emp.setStatus(true);
+        	employeeRepository.save(emp);
+        }
+        
         user.setRoles(roles);
         user = userRepository.save(user);
         return user;

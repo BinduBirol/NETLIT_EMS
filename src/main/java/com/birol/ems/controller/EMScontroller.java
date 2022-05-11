@@ -1,6 +1,6 @@
 package com.birol.ems.controller;
 
-import static org.assertj.core.api.Assertions.catchThrowable;
+//import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -45,10 +45,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.birol.ems.dao.ComplaintsRepo;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmployeeService;
 import com.birol.persistence.dao.RoleRepository;
+import com.birol.persistence.model.Complaints;
 import com.birol.persistence.model.Role;
 import com.birol.persistence.model.User;
 import com.birol.security.ActiveUserStore;
@@ -72,6 +74,8 @@ public class EMScontroller {
     private JavaMailSender mailSender;
 	@Autowired
     private Environment env;
+	@Autowired
+	ComplaintsRepo complaintsRepo;
 	
 	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
 	  
@@ -224,6 +228,30 @@ public class EMScontroller {
 		model.addAttribute("employees",employeeService.getEmployeeList());
 		return new ModelAndView("ems/pages/employeeList", model);		
 	}
+	
+	@GetMapping("/complaints")
+	 public ModelAndView complaints(final ModelMap model) {
+		model.addAttribute("roles",roleRepository.findAll());
+		model.addAttribute("employees",employeeService.getEmployeeList());
+		model.addAttribute("complaints",complaintsRepo.findAll());		
+		return new ModelAndView("ems/pages/complaints", model);		
+	}
+	
+	@RequestMapping(value="/doComplaints",method=RequestMethod.POST)	
+	 public ModelAndView complaints(@ModelAttribute com.birol.persistence.model.Complaints cmp,ModelMap model, Authentication auth,final HttpServletRequest request) {
+		try {
+			User creator = (User)auth.getPrincipal();
+			cmp.setEmpid(creator.getId());
+			cmp.setEmpname(creator.getFirstName()+" "+creator.getLastName());
+			if(cmp.getImage_m().getSize()>0)cmp.setImage(cmp.getImage_m().getBytes());
+			complaintsRepo.save(cmp);
+			//System.out.println(cmp);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new ModelAndView("redirect:/complaints", model);	
+	}
 
 	@GetMapping("/changePassword")
 	 public ModelAndView changePassword(final ModelMap model) {		
@@ -347,6 +375,16 @@ public class EMScontroller {
 		model.addAttribute("userdtl",empdtl);
 		//return new ModelAndView("ems/pages/profile", model);	
 		return new ModelAndView("ems/ajaxResponse/viewEmployee", model);
+	}
+	@GetMapping("/viewcomplaint")
+	public ModelAndView viewcomplaint(@RequestParam("cmpid") int cmpid, final ModelMap model){
+		Complaints cmp= complaintsRepo.findCmpById(cmpid);
+		if(cmp.getImage()!=null) {
+			String imageencode = Base64.getEncoder().encodeToString(cmp.getImage());
+			cmp.setImage_encoded(imageencode);			    	
+		}
+		model.addAttribute("cmp",cmp);
+		return new ModelAndView("ems/ajaxResponse/viewComplaint", model);
 	}
 	
 	@GetMapping("/deleteEmployee")

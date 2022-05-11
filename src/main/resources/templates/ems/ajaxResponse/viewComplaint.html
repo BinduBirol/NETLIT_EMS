@@ -1,0 +1,55 @@
+<div class="modal-header">
+		<h3 class="modal-title">Complain #<span th:text="${cmp.id}"></span></h3>
+		<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+	<table class="table">
+		<tr>
+			<td>Title</td>
+			<td th:text="${cmp.title}"></td>
+		</tr>
+		
+		<tr>
+			<td>Description</td>
+			<td th:text="${cmp.description}"></td>
+		</tr>
+		
+		<tr>
+			<td>Assigned To</td>
+			<td th:text="${cmp.assign_to}"></td>
+		</tr>
+		
+		<tr>
+			<td>Complained By</td>
+			<td th:text="${cmp.empname}"></td>
+		</tr>
+		
+		<tr>
+			<td>Created On</td>
+			<td th:text="${cmp.created}"></td>
+		</tr>
+		
+		<tr>
+			<td>Updated on</td>
+			<td th:text="${cmp.updated}"></td>
+		</tr>
+		
+		<tr>
+			<td>Status</td>
+			<td th:text="${cmp.status}"></td>
+		</tr>
+
+		<tr>
+			<td colspan="2"><div class="text-center">
+					<img
+						th:src="*{'data:image/jpeg;base64,'+{cmp.image_encoded}}"
+						class=" mx-auto d-block col-12 col-sm-6"
+						id="previewImg" src="" alt="Select an Image">
+				</div></td>
+		</tr>
+
+
+	</table>
+</div>
+<div class="modal-footer">
+</div>
