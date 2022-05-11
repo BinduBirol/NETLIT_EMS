@@ -80,20 +80,58 @@
 	<script src="assets/js/demo/sidebar-scrollspy.demo.js"></script>
 	<!-- ================== END page-js ================== -->
 	<script type="text/javascript">
-	function previewFile(input){
-        var file = $("input[type=file]").get(0).files[0];
- 
-        if(file){
-            var reader = new FileReader();
- 
-            reader.onload = function(){
-                $("#previewImg").attr("src", reader.result);
-            }
- 
-            reader.readAsDataURL(file);
-        }
-    }
-			
+	
+		function previewFile(input) {
+			var file = $("input[type=file]").get(0).files[0];
+
+			if (file) {
+				var reader = new FileReader();
+
+				reader.onload = function() {
+					$("#previewImg").attr("src", reader.result);
+				}
+
+				reader.readAsDataURL(file);
+			}
+		}
+		
+		$("#editEmployeeForm").submit(function(event) {
+			showprocessview();
+			event.preventDefault();		
+			$.ajax({
+				url : $(this).attr("action"),
+				type : $(this).attr("method"),			
+				data : new FormData(this),
+				processData : false,
+				contentType : false,
+				success : function(data, status) {
+					hideprocessview();
+					$('.toast-header .title').html("Response");
+					$('.toast-body .toast-message').html(data);					
+					$('.toast').toast('show');					
+					if(data.includes("Successfully")==true){
+						$(':input','#addEmployeeForm')
+						  .not(':button, :submit, :reset, :hidden')
+						  .val('')
+						  .prop('checked', false)
+						  .prop('selected', false);
+					}
+					$("html, body").animate({ scrollTop: 0 }, "slow");
+					return false;
+				},
+				error : function(xhr, desc, err) {
+					hideprocessview();
+					$('.toast-header .title').html("Error");
+					$('.toast-body .toast-message').html(xhr.responseText);					
+					$('.toast').toast('show');
+					$("html, body").animate({ scrollTop: 0 }, "slow");
+					 return false;
+
+				}
+			});
+
+		});
+		
 	</script>
 </body>
 </html>

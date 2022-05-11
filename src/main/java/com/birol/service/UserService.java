@@ -102,6 +102,10 @@ public class UserService implements IUserService {
         	user.setId(empinfo.getEmpid());
         	Role empRole= roleRepository.getById((long) empinfo.getRoleid());        	
         	user.setRoles(Arrays.asList(roleRepository.findByName(empRole.getName())));
+        	empinfo.setFirst_name(accountDto.getFirstName());
+        	empinfo.setLast_name(accountDto.getLastName());
+        	empinfo.setStatus(true);
+        	employeeRepository.save(empinfo);
         }
         user.setFirstName(accountDto.getFirstName());
         user.setLastName(accountDto.getLastName());
@@ -197,6 +201,12 @@ public class UserService implements IUserService {
     @Override
     public void changeUserPassword(final User user, final String password) {
         user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+    
+    @Override
+    public void updateUserInfo(final User user) {
+        //user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
     }
 

@@ -23,7 +23,7 @@
 															
 								
 								<!-- profile info -->
-								<h4>[[${user.firstName}]] [[${user.lastName}]]</h4>
+								<h4>[[${userdtl.full_name}]]</h4>
 								<div th:text="${userdtl.designation}"
 									class="mb-3 text-white text-opacity-50 fw-bold mt-n2">@johnsmith</div>
 									</div>
@@ -75,11 +75,11 @@
 								<li class="nav-item me-1"><a href="#personal"
 									class="nav-link" data-bs-toggle="tab">Personal Info</a></li>
 								<li class="nav-item me-1"><a href="#bank"
-									class="nav-link active" data-bs-toggle="tab">Account Info</a></li>
+									class="nav-link " data-bs-toggle="tab">Account Info</a></li>
 								<li class="nav-item me-1"><a href="#docs"
-									class="nav-link active" data-bs-toggle="tab">Documents</a></li>
+									class="nav-link " data-bs-toggle="tab">Documents</a></li>
 								<li class="nav-item me-1"><a href="#edit"
-									class="nav-link active" data-bs-toggle="tab">Edit</a></li>
+									class="nav-link " data-bs-toggle="tab">Edit</a></li>
 								<!-- 
 								<li class="nav-item me-1 dropdown"><a href="#"
 									class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
@@ -161,11 +161,11 @@
 											<table class="table">
 												<tr>
 													<td>First Name:</td>
-													<td th:text="${user.firstName}"></td>
+													<td th:text="${userdtl.first_name}"></td>
 												</tr>
 												<tr>
 													<td>Last Name:</td>
-													<td th:text="${user.lastName}"></td>
+													<td th:text="${userdtl.last_name}"></td>
 												</tr>
 												<tr>
 													<td>Address:</td>
@@ -256,14 +256,14 @@
 													<tr>
 														<td>First Name</td>
 														<td>
-															<input class="form-control" name="first_name" th:value="${user.firstName}"/>
+															<input class="form-control" name="first_name" th:value="${userdtl.first_name}"/>
 															<input type="hidden" class="form-control" readonly="readonly" name="empid" th:value="${userdtl.empid}"/>
 														</td>
 													</tr>
 													
 													<tr>
 														<td>Last Name</td>
-														<td><input class="form-control" name="last_name" th:value="${user.lastName}"/></td>
+														<td><input class="form-control" name="last_name" th:value="${userdtl.last_name}"/></td>
 													</tr>
 													
 													<tr>

@@ -12,6 +12,8 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.birol.ems.dto.EMPLOYEE_BASIC;
+import com.birol.ems.repo.EmployeeRepository;
 import com.birol.persistence.model.User;
 import com.birol.service.DeviceService;
 
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Collection;
 
 @Component("myAuthenticationSuccessHandler")
@@ -35,6 +38,9 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 
     @Autowired
     private Environment env;
+    
+    @Autowired
+    EmployeeRepository employeeRepository;
 
     @Override
     public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException {
@@ -51,6 +57,12 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
             	username = authentication.getName();
             }
             LoggedUser user = new LoggedUser(username, activeUserStore);
+            EMPLOYEE_BASIC userdtl= employeeRepository.findbyWorkMail(user.getUsername());
+            if(userdtl.getEmp_image()!=null) {
+    			String imageencode = Base64.getEncoder().encodeToString(userdtl.getEmp_image());
+    			userdtl.setEmp_image_encoded(imageencode);			    	
+    		}
+            session.setAttribute("userdtl", userdtl);
             session.setAttribute("user", user);
         }
         clearAuthenticationAttributes(request);

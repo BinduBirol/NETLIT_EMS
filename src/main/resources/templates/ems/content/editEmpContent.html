@@ -19,12 +19,12 @@
 								<h1 class="page-header">
 									Update Employee Information
 								</h1>
-								<form id="insertform" action="addEmployeeDo" method="post" enctype='multipart/form-data'>
+								<form id="editEmployeeForm" action="editEmployeeDo" method="post" enctype='multipart/form-data'>
 								<hr class="mb-4" />
 								
 								<!-- BEGIN #user_info -->
 								<div id="user_info" class="mb-5">
-									<h2><i class="fa-solid fa-user text-info"></i>  [[${empinfo.full_name}]]</h2>	
+									<h2><i class="fa-solid fa-id-card text-info"></i>  [[${empinfo.full_name}]]</h2>	
 									<hr class="mb-4" />
 									<h4>User Information </h4>									
 									<div class="card">
@@ -37,7 +37,7 @@
 																<img  th:src="*{'data:image/jpeg;base64,'+{empinfo.emp_image_encoded}}"  class="rounded-circle mx-auto d-block col-12 col-sm-6" id="previewImg"  src="" alt="Select an Image">
 															</div>
 															<hr/>
-															<input accept="image/*" name="emp_image_m" required="required" class="form-control" type="file" onchange="previewFile(this);"/>	
+															<input accept="image/*" name="emp_image_m"  class="form-control" type="file" onchange="previewFile(this);"/>	
 															
 																 
 															
@@ -54,7 +54,7 @@
 																	    <option value="">Select Role</option>
 																	    <option th:selected="(${roles.id} == *{empinfo.roleid})" th:each="roles : ${roles}" th:value="${roles.id}" th:text="${roles.name}"></option>
 																    </select>
-																   
+																   <input type="hidden" th:value="${empinfo.empid}" name="empid" />
 														</div>
 													</div>
 													
@@ -445,40 +445,7 @@
 		</div>
 		
 	<script>
-		function doToast() {
-			//$('#toast').toast('show');
-			var formData = new FormData(document.querySelector('#insertform'))
-			 //event.preventDefault();
-			 alert(formData);
-			    $.ajax({
-			        //url: $("#insertform").attr("action"),
-			        url: "controller",
-			        type: $("#insertform").attr("method"),
-			        //dataType: "JSON",
-			        data: formData,
-			        //data: JSON.stringify($("#insertform").serialize()),
-			        //data: $("#insertform").serialize(),
-			        processData: false,
-			        //contentType: false,
-			        contentType:'application/json',
-			        success: function (data, status)
-			        {
-			          	alert(status);
-			        	//ajaxResponse(data);
-			        	//if(data.indexOf("Successfully") != -1){
-			        	//	pagereload();
-			        	//}
-			        	
-			        },
-			        error: function (xhr, desc, err)
-			        {
-			        	alert(desc);
-			        	//ajaxResponse(err);
-			        	//pagereload();
-
-			        }
-			    });      
-		}
+		
 	</script>
 </div>
 	

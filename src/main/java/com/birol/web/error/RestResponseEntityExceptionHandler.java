@@ -75,6 +75,14 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
     
+    // 500
+    @ExceptionHandler({ org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException.class })
+    public ResponseEntity<Object> fileSizeLimitExceededException(final RuntimeException ex, final WebRequest request) {
+        logger.error("500 Status Code", ex);
+        final GenericResponse bodyOfResponse = new GenericResponse(messages.getMessage(ex.getMessage(), null, request.getLocale()), "FileUploadLimitExceed");
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
+    
     // 411
     @ExceptionHandler({ EmployeeNotFoundException.class })
     public ResponseEntity<Object> handleEmployeeNotFound(final RuntimeException ex, final WebRequest request) {

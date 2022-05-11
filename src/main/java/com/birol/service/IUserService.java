@@ -37,6 +37,7 @@ public interface IUserService {
     Optional<User> getUserByPasswordResetToken(String token);
 
     Optional<User> getUserByID(long id);
+    
 
     void changeUserPassword(User user, String password);
 
@@ -57,4 +58,6 @@ public interface IUserService {
     void addUserLocation(User user, String ip);
 
 	List<User> findAllUser();
+
+	void updateUserInfo(User user);
 }

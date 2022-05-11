@@ -1,19 +1,37 @@
 package com.birol.registration.listener;
 
 
+import java.awt.Image;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.UUID;
+
+import javax.imageio.ImageIO;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.servlet.http.HttpSession;
 
 import com.birol.service.IUserService;
 import com.birol.service.UserService;
+import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
 import com.birol.persistence.model.User;
 import com.birol.registration.OnRegistrationCompleteEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.MailParseException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -61,7 +79,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         final String subject = "Registration Confirmation";
         final String confirmationUrl = event.getAppUrl() + "/registrationConfirm?token=" + token;
         String message= "Dear "+user.getFirstName()+" "+user.getLastName()+",\n";
-        message="You registered successfully!\n\n";
+        message+="You registered successfully!\n\n";
         message+= "Your SECRET for Google Authenticator: "+user.getSecret()+"\n";
         String qrimage=userService.generateQRUrl(user);
         message+= "You will find the QR code to this link:\n"+qrimage+"\n\n";
@@ -73,6 +91,4 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         email.setFrom(env.getProperty("support.email"));
         return email;
     }
-    
-
 }
