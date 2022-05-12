@@ -110,7 +110,7 @@
 																class="fa fa-ellipsis-h"></i></a>
 															<div class="dropdown-menu dropdown-menu-end">
 																<a href="#" th:cmp-id="${cmp.id}" onclick="viewcomplaint(this);"  class="dropdown-item">View</a> 
-																<a th:href="@{/editEmployee(cmpid=${cmp.id})}"
+																<a onclick="editcomplaint(this);" th:cmp-id="${cmp.id}" href="#"
 																  class="dropdown-item">Edit</a> 
 																<a href="#" class="dropdown-item">Report</a>
 															</div>
@@ -146,7 +146,7 @@
 
 			<div class="modal fade" id="viewEmployee">
 				<div class="modal-dialog modal-xl">
-					<div class="modal-content">...</div>
+					<div class="modal-content m-cnt">...</div>
 				</div>
 			</div>
 
@@ -168,11 +168,11 @@
 					url : "viewEmployee?empid=" + $empid,
 					type : 'GET',
 					success : function(data) {
-						$('.modal-content').html(data);
+						$('.m-cnt').html(data);
 						$('#viewEmployee').modal('show');
 					},
 					error : function(xhr, desc, err) {
-						$('.modal-content').html(xhr.responseText);
+						$('.m-cnt').html(xhr.responseText);
 						$('#viewEmployee').modal('show');
 
 					}
@@ -188,11 +188,32 @@
 					url : "viewcomplaint?cmpid=" + $cmpid,
 					type : 'GET',
 					success : function(data) {
-						$('.modal-content').html(data);
+						$('.m-cnt').html(data);
 						$('#viewEmployee').modal('show');
 					},
 					error : function(xhr, desc, err) {
-						$('.modal-content').html(xhr.responseText);
+						$('.m-cnt').html(xhr.responseText);
+						$('#viewEmployee').modal('show');
+
+					}
+				});
+				//alert($empid);
+
+			}
+			
+			function editcomplaint(z) {
+				$cmpid = $(z).attr("cmp-id");
+				//$('#viewEmployee').modal('show');
+
+				$.ajax({
+					url : "editcomplaint?cmpid=" + $cmpid,
+					type : 'GET',
+					success : function(data) {
+						$('.m-cnt').html(data);
+						$('#viewEmployee').modal('show');
+					},
+					error : function(xhr, desc, err) {
+						$('.m-cnt').html(xhr.responseText);
 						$('#viewEmployee').modal('show');
 
 					}
