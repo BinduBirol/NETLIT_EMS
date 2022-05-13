@@ -70,8 +70,10 @@ function showGreeting(senderid,sender,message,time,rcvr,rcvrid,color) {
 			+ "</div>" 
 			+ "</div>" + "</div>" + "</div>";
 	    */
-	$content="<tr><td class='text-muted'>"+time+"</td>" +
-			"<td class='text-justify'><a href='#' emp-id='"+senderid+"' onclick='viewEmlpoyee(this);'  style='color: "+color+"'>"+sender+"</a>: "+message+"</td></tr>";
+	$content = "<tr>" + "<td class='text-justify'><a href='#' emp-id='"
+			+ senderid + "' onclick='viewEmlpoyee(this);'  style='color: "
+			+ color + "'>" + sender + "</a>: " + message + "</td>" +
+			"<td class='text-muted col-sm-3 text-center'>" + time + "</td></tr>";
 	
 	
     //alert($content);
