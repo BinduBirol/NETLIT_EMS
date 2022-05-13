@@ -16,11 +16,17 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.util.HtmlUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +42,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +54,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.birol.ems.dao.ComplaintsRepo;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
+import com.birol.ems.dto.GetChatMessage;
+import com.birol.ems.dto.SendMessage;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmployeeService;
 import com.birol.persistence.dao.RoleRepository;
@@ -341,6 +350,11 @@ public class EMScontroller {
 		return new ModelAndView("ems/pages/setting", model);		
 	}
 	
+	@GetMapping("/messaging")
+	 public ModelAndView messaging(final ModelMap model) {		
+		return new ModelAndView("ems/pages/messaging", model);		
+	}
+	
 	
 	
 	@GetMapping("/editEmployee")
@@ -434,5 +448,21 @@ public class EMScontroller {
             os.close();
         }
     }
+	
+	@MessageMapping("/hello")
+	  @SendTo("/topic/greetings")
+	  public SendMessage greeting(GetChatMessage getmessage,Authentication auth ) throws Exception {
+	    Thread.sleep(1000); // simulated delay
+	    User user = (User)auth.getPrincipal();
+	    EMPLOYEE_BASIC emp = employeeRepository.findbyEmpid(user.getId());
+	    SendMessage sendmsg= new SendMessage();
+	    sendmsg.setSender(emp.getFull_name());
+	    sendmsg.setContent(getmessage.getMessage());
+	    sendmsg.setTimeStamp(new SimpleDateFormat("hh.mm.ss a").format(new Date()));
+	    sendmsg.setSenderid(String.valueOf(user.getId()));
+	    sendmsg.setColor(getmessage.getColor());
+	    //return new Greeting(HtmlUtils.htmlEscape(message.getName()));
+	    return sendmsg;
+	  }
 	
 }
