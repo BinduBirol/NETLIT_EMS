@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Complaints</title>
+	<title>Issues</title>
 	<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="description" content="" />
@@ -43,11 +43,12 @@
 							<!-- BEGIN col-9 -->
 							
 								<ul class="breadcrumb">									
-									<li class="breadcrumb-item">COMPLAINTS</li>
+									<li class="breadcrumb-item"><a href="#">INTERNAL COMMUNICATION</a></li>
+									<li class="breadcrumb-item active">ISSUES</li>
 								</ul>
 								
 								<h1 class="page-header">
-									Complaints
+									Issues
 								</h1>
 								
 								<hr class="mb-4" />								
@@ -56,7 +57,7 @@
 								  <div class="modal-dialog modal-xl">
 								    <div class="modal-content">
 								    <div class="modal-header">
-								        <h5 class="modal-title">CREATE A NEW COMPLAINT</h5>
+								        <h5 class="modal-title">CREATE A NEW ISSUE</h5>
 								        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 								      </div>
 								      <div th:include="ems/content/addComlaintsContent :: addComlaintsContent"></div>
@@ -78,7 +79,7 @@
 								<div id="datatable" class="mb-5">
 									<div class="card">
 									<div class="card-header">
-										<button type="button" class="btn btn-outline-theme me-2" data-bs-toggle="modal" data-bs-target="#docomplaint">New Complain</button>
+										<button type="button" class="btn btn-outline-theme me-2" data-bs-toggle="modal" data-bs-target="#docomplaint">Create A New Issue</button>
 									</div>
 										<div class="card-body">
 											<table id="datatableDefault" class="table text-nowrap w-100">
@@ -90,7 +91,8 @@
 														<th>Created</th>
 														<th>Updated</th>
 														<th>Assigned TO</th>
-														<th>Status</th>
+														<th>Status</th>	
+														<th><i class="fa fa-comment"></i></th>													
 														<th>Options</th>																											
 													</tr>
 												</thead>
@@ -99,11 +101,12 @@
 													<tr th:each="cmp,iterator : ${complaints}">
 														<td th:text="${iterator.index+1}">57</td>
 														<td ><a class="text-white" href="#" th:emp-id="${cmp.empid}" th:text="${cmp.empname}" onclick="viewEmlpoyee(this);"></a></td>
-														<td th:text="${cmp.title}"></td>
+														<td><a th:text="${cmp.title}" href="#" th:cmp-id="${cmp.id}" onclick="viewcomplaint(this);" ></a></td>
 														<td th:text="${cmp.created}"></td>
 														<td th:text="${cmp.updated}"></td>
 														<td th:text="${cmp.assign_to}"></td>
-														<td th:text="${cmp.status}">27</td>														
+														<td th:text="${cmp.status}">27</td>	
+														<th th:text="${cmp.comments.size}"></th>													
 														<td>
 														<a href="#" data-bs-toggle="dropdown" class=" text-opacity-50">
 														<i
@@ -112,7 +115,7 @@
 																<a href="#" th:cmp-id="${cmp.id}" onclick="viewcomplaint(this);"  class="dropdown-item">View</a> 
 																<a onclick="editcomplaint(this);" th:cmp-id="${cmp.id}" href="#"
 																  class="dropdown-item">Edit</a> 
-																<a href="#" class="dropdown-item">Report</a>
+																<a th:href="@{/deleteIssue(cmpid=${cmp.id})}" class="dropdown-item">Delete</a>
 															</div>
 														
 														</td>
@@ -227,6 +230,17 @@
 		            var reader = new FileReader(); 
 		            reader.onload = function(){
 		                $("#previewImg").attr("src", reader.result);
+		            } 
+		            reader.readAsDataURL(file);
+		        }
+		    }
+			
+			function previewCommentFile(input){
+		        var file = $("#commentImage").get(0).files[0]; 
+		        if(file){
+		            var reader = new FileReader(); 
+		            reader.onload = function(){
+		                $("#previewCommentImg").attr("src", reader.result);
 		            } 
 		            reader.readAsDataURL(file);
 		        }

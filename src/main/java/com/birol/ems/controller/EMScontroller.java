@@ -53,6 +53,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.birol.ems.dao.ComplaintsRepo;
+import com.birol.ems.dto.Comments;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.dto.GetChatMessage;
 import com.birol.ems.dto.SendMessage;
@@ -85,6 +86,8 @@ public class EMScontroller {
     private Environment env;
 	@Autowired
 	ComplaintsRepo complaintsRepo;
+	@Autowired
+	com.birol.ems.dao.CommentRepo commentRepo;
 	
 	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
 	  
@@ -393,12 +396,36 @@ public class EMScontroller {
 	@GetMapping("/viewcomplaint")
 	public ModelAndView viewcomplaint(@RequestParam("cmpid") int cmpid, final ModelMap model){
 		Complaints cmp= complaintsRepo.findCmpById(cmpid);
+		//System.out.println(Arrays.toString(cmp.getComments().toArray()));
 		if(cmp.getImage()!=null) {
 			String imageencode = Base64.getEncoder().encodeToString(cmp.getImage());
 			cmp.setImage_encoded(imageencode);			    	
 		}
+		for (Comments c: cmp.getComments() ) {
+			if(c.getImage()!=null) {
+				String imageencode = Base64.getEncoder().encodeToString(c.getImage());
+				c.setImage_encoded(imageencode);		    	
+			}
+		}
 		model.addAttribute("cmp",cmp);
 		return new ModelAndView("ems/ajaxResponse/viewComplaint", model);
+	}
+	@RequestMapping(value = "/doComment", method=RequestMethod.POST)
+	public ModelAndView doComment(@ModelAttribute Comments comment,final ModelMap model, Authentication auth) {
+		if(comment.getImage_m().getSize()>0) {
+			try {
+				comment.setImage(comment.getImage_m().getBytes());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		User user = (User)auth.getPrincipal();
+	    EMPLOYEE_BASIC emp = employeeRepository.findbyEmpid(user.getId());
+	    comment.setEmpid(emp.getEmpid());
+	    comment.setEmpname(emp.getFull_name());
+		commentRepo.save(comment);
+		return new ModelAndView("redirect:/complaints", model);
 	}
 	
 	@GetMapping("/deleteEmployee")
@@ -413,6 +440,16 @@ public class EMScontroller {
 			e.printStackTrace();
 		}
 		return new ModelAndView("redirect:/employeeList", model);
+	}
+	
+	@GetMapping("/deleteIssue")
+	public ModelAndView deleteIssue(@RequestParam("cmpid") int cmpid, final ModelMap model){		
+		Complaints cmp= complaintsRepo.findCmpById(cmpid);
+		complaintsRepo.delete(cmp);
+		for(Comments x: cmp.getComments()) {
+			commentRepo.delete(x);
+		}		
+		return new ModelAndView("redirect:/complaints", model);
 	}
 	
 	@GetMapping("/download/user")
@@ -450,8 +487,8 @@ public class EMScontroller {
     }
 	
 	@MessageMapping("/hello")
-	  @SendTo("/topic/greetings")
-	  public SendMessage greeting(GetChatMessage getmessage,Authentication auth ) throws Exception {
+	@SendTo("/topic/greetings")
+	public SendMessage greeting(GetChatMessage getmessage,Authentication auth ) throws Exception {
 	    Thread.sleep(1000); // simulated delay
 	    User user = (User)auth.getPrincipal();
 	    EMPLOYEE_BASIC emp = employeeRepository.findbyEmpid(user.getId());

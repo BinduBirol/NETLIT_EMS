@@ -1,14 +1,20 @@
 package com.birol.persistence.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -17,21 +23,26 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GeneratorType;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.birol.ems.dto.Comments;
+
 @Entity
 @Table(name = "complaints")
 public class Complaints {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	private String title;	
+	private String title;
 	private String description;
 	private String empname;
 	private long empid;
-	@Column(name="status", columnDefinition="varchar(50) default 'REQUESTED'")
+	@Column(name = "status", columnDefinition = "varchar(50) default 'REQUESTED'")
 	private String status;
-	private String assign_to;	
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cmpid")
+	private Collection<Comments> comments;
+	private String assign_to;
 	@Lob
-	private  byte [] image;
+	private byte[] image;
 	@Transient
 	private MultipartFile image_m;
 	@Transient
@@ -65,8 +76,6 @@ public class Complaints {
 		this.title = title;
 	}
 
-	
-
 	public String getEmpname() {
 		return empname;
 	}
@@ -74,8 +83,6 @@ public class Complaints {
 	public void setEmpname(String empname) {
 		this.empname = empname;
 	}
-
-	
 
 	public long getEmpid() {
 		return empid;
@@ -154,21 +161,28 @@ public class Complaints {
 		this.description = description;
 	}
 
+	public Collection<Comments> getComments() {
+		return comments;
+	}
+
+	public void setComments(ArrayList<Comments> comments) {
+		this.comments = comments;
+	}
+
 	@Override
 	public String toString() {
 		return "Complaints [id=" + id + ", title=" + title + ", description=" + description + ", empname=" + empname
-				+ ", empid=" + empid + ", status=" + status + ", assign_to=" + assign_to + ", image="
-				+ Arrays.toString(image) + ", image_m=" + image_m + ", image_encoded=" + image_encoded + ", created="
-				+ created + ", updated=" + updated + ", getId()=" + getId() + ", getTitle()=" + getTitle()
-				+ ", getEmpname()=" + getEmpname() + ", getEmpid()=" + getEmpid() + ", getStatus()=" + getStatus()
-				+ ", getAssign_to()=" + getAssign_to() + ", getImage()=" + Arrays.toString(getImage())
+				+ ", empid=" + empid + ", status=" + status + ", comments=" + comments + ", assign_to=" + assign_to
+				+ ", image=" + Arrays.toString(image) + ", image_m=" + image_m + ", image_encoded=" + image_encoded
+				+ ", created=" + created + ", updated=" + updated + ", getId()=" + getId() + ", getTitle()="
+				+ getTitle() + ", getEmpname()=" + getEmpname() + ", getEmpid()=" + getEmpid() + ", getStatus()="
+				+ getStatus() + ", getAssign_to()=" + getAssign_to() + ", getImage()=" + Arrays.toString(getImage())
 				+ ", getImage_m()=" + getImage_m() + ", getImage_encoded()=" + getImage_encoded() + ", getCreated()="
 				+ getCreated() + ", getUpdated()=" + getUpdated() + ", getDescription()=" + getDescription()
-				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
-				+ "]";
+				+ ", getComments()=" + getComments() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+				+ ", toString()=" + super.toString() + "]";
 	}
 
 	
 
-	
 }
