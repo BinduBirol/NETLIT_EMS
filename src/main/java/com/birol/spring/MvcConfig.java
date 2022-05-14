@@ -70,7 +70,9 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {    	
     	if (!registry.hasMappingForPattern("/assets/**")) {
-    	     registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/assets/");
+    	     registry.addResourceHandler("/assets/**")
+    	     .addResourceLocations("classpath:/assets/")
+    	     .addResourceLocations("/webjars/");
     	  }
     	//registry.addResourceHandler("/resources/**").addResourceLocations("/", "/resources/");
     }

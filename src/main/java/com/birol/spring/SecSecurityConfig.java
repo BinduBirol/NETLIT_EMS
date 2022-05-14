@@ -102,6 +102,8 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/invalidSession*").anonymous()
                 .antMatchers("/assets/**").permitAll()
                 .antMatchers("/user/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
+                .antMatchers("/gs-guide-websocket/info","/gs-guide-websocket/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
                 .anyRequest().hasAuthority("READ_PRIVILEGE")
                 .and()
             .formLogin()
