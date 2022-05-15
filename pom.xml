@@ -176,10 +176,16 @@
 		</dependency>
 		
 		
-		<!-- webjars -->
+		<!-- websocket -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
 		</dependency>
 		
 	</dependencies>
@@ -200,6 +206,7 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					
 				</configuration>
 			</plugin>
 
