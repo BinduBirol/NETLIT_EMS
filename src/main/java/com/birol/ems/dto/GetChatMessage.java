@@ -1,12 +1,6 @@
 package com.birol.ems.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class GetChatMessage {
 
 	private String message;

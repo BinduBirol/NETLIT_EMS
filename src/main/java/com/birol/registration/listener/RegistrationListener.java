@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import com.birol.service.IUserService;
 import com.birol.service.UserService;
 import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
+import com.birol.ems.service.EmailService;
 import com.birol.persistence.model.User;
 import com.birol.registration.OnRegistrationCompleteEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,9 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     
     @Autowired
     private UserService userService;
+    
+	@Autowired
+    private EmailService emailService;
 
     // API
 
@@ -67,9 +71,17 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         final User user = event.getUser();
         final String token = UUID.randomUUID().toString();
         service.createVerificationTokenForUser(user, token);
-
-        final SimpleMailMessage email = constructEmailMessage(event, user, token);
-        mailSender.send(email);
+        try {
+			emailService.sendRegMailMessage(event, user, token);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (javax.mail.MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        //final SimpleMailMessage email = constructEmailMessage(event, user, token);
+        //mailSender.send(email);
     }
 
     //

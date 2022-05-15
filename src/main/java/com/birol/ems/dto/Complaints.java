@@ -1,4 +1,4 @@
-package com.birol.persistence.model;
+package com.birol.ems.dto;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,8 +22,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GeneratorType;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.birol.ems.dto.Comments;
 
 @Entity
 @Table(name = "complaints")

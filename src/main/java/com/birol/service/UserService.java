@@ -85,7 +85,7 @@ public class UserService implements IUserService {
     public static final String TOKEN_VALID = "valid";
 
     public static String QR_PREFIX = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
-    public static String APP_NAME = "NETLIT_EMS_Application";
+    public static String APP_NAME = "NETLIT_EMS";
 
     // API
 
