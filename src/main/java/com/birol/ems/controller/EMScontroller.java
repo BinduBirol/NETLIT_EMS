@@ -92,12 +92,12 @@ public class EMScontroller {
 
 	@GetMapping("/dashboard")
 	public ModelAndView dashboard(final ModelMap model, Authentication auth) {
-		model.addAttribute("loggedInUsers", activeUserStore.getUsers());
+		List<String> getUsersFromActiveStore= activeUserStore.getUsers();
+		model.addAttribute("loggedInUsers", getUsersFromActiveStore);
 		List<String> getUsersFromSessionRegistry = userService.getUsersFromSessionRegistry();
 		model.addAttribute("getUsersFromSessionRegistry", getUsersFromSessionRegistry);
 		List<User> getAlluser = userService.findAllUser();
 		model.addAttribute("getAlluser", getAlluser);
-
 		User user = (User) auth.getPrincipal();
 		return new ModelAndView("homepage", model);
 	}
