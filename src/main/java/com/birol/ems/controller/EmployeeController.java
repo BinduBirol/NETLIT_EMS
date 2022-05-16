@@ -103,7 +103,7 @@ public class EmployeeController {
 			email.setFrom(env.getProperty("support.email"));
 			mailSender.send(email);
 
-			model.addAttribute("message", "Successfully Added Info For " + emp.getEmail());
+			model.addAttribute("message", "Successfully Added Info For " + emp.getFull_name());
 			model.addAttribute("class", "text-success");
 		} catch (FileAlreadyExistsException fe) {
 			fe.printStackTrace();
@@ -182,7 +182,7 @@ public class EmployeeController {
 				logger.error(e.getMessage());
 			}
 			employeeRepository.save(emp);
-			model.addAttribute("message", "Successfully Updated Info For " + emp.getEmail());
+			model.addAttribute("message", "Successfully Updated Info For " + emp.getFull_name());
 			model.addAttribute("class", "text-success");
 		} catch (Exception e) {
 			e.printStackTrace();

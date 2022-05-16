@@ -85,7 +85,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     }
 
     //
-
     private SimpleMailMessage constructEmailMessage(final OnRegistrationCompleteEvent event, final User user, final String token) throws UnsupportedEncodingException {
         final String recipientAddress = user.getEmail();
         final String subject = "Registration Confirmation";

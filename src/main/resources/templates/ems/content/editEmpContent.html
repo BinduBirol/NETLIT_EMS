@@ -131,7 +131,7 @@
 							              <div class="col-12 col-sm-6">
 							                <div class="form-group">
 							                  <label>Work Email</label>
-							                 <input name="email" th:value="${empinfo.email}" type="email" class="form-control"  required="required" placeholder="Enter Work Email">
+							                 <input name="email" readonly="readonly" th:value="${empinfo.email}" type="email" class="form-control"  required="required" placeholder="Enter Work Email">
 							                </div>
 							                <!-- /.form-group -->
 							              </div>
@@ -240,8 +240,7 @@
 											<div class="card-arrow-bottom-right"></div>
 										</div>
 										<div class="hljs-container rounded-bottom">
-										<small class="">Documents are required to add employee.</small><br/>
-											<small class="img_size_warning">Maximum permitted size of 1048576 bytes (1MB)</small><br/>
+										<small class="">Documents are required to add employee.</small><br/>											
 											<small class="img_size_warning">Only .pdf file allowed for CV and Certificates. Photo can be uploaded as ID copy.</small>
 											         
 										</div>

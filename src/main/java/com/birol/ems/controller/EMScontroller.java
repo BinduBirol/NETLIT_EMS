@@ -87,8 +87,6 @@ public class EMScontroller {
 	ComplaintsRepo complaintsRepo;
 	@Autowired
 	com.birol.ems.dao.CommentRepo commentRepo;
-	@Autowired
-    private EmailService emailService;
 
 	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
 
@@ -123,17 +121,14 @@ public class EMScontroller {
 	public ModelAndView messaging(final ModelMap model) {
 		return new ModelAndView("ems/pages/messaging", model);
 	}
-	
+
 	@GetMapping("/test")
 	public ModelAndView test(final ModelMap model) throws MessagingException {
-		
-		//logger.info("Spring Mail - Sending Email with Inline Attachment Example");
-        model.addAttribute("message","Success");
+
+		// logger.info("Spring Mail - Sending Email with Inline Attachment Example");
+		model.addAttribute("message", "Success");
 		return new ModelAndView("theme/ajaxResponse", model);
 	}
-	
-	
-	
 
 	@GetMapping("/download/user")
 	public void downloadUsersFile(@RequestParam String fileId, @RequestParam Long userid, HttpServletResponse resp,

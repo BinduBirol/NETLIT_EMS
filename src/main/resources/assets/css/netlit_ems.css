@@ -18,3 +18,7 @@
 .goog-text-highlight { background: none !important; box-shadow: none !important;}
  
  body{top:0!important;}
+ 
+ input[readonly]{
+  cursor: no-drop;
+}
