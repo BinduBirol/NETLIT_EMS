@@ -48,14 +48,15 @@ public class MyCustomLoginAuthenticationSuccessHandler implements Authentication
             	username = authentication.getName();
             }
        
-            LoggedUser user = new LoggedUser(username, activeUserStore);
-            EMPLOYEE_BASIC userdtl= employeeRepository.findbyWorkMail(user.getUsername());
+            LoggedUser luser = new LoggedUser(username, activeUserStore);
+            User user= userRepository.findByEmail(luser.getUsername());
+            EMPLOYEE_BASIC userdtl= employeeRepository.findbyWorkMail(luser.getUsername());
             if(userdtl.getEmp_image()!=null) {
     			String imageencode = Base64.getEncoder().encodeToString(userdtl.getEmp_image());
     			userdtl.setEmp_image_encoded(imageencode);			    	
     		}
-            session.setAttribute("userdtl", userdtl);   
-            session.setAttribute("user", user);            
+            session.setAttribute("userdtl", userdtl);
+            session.setAttribute("user", user);           
         }
         clearAuthenticationAttributes(request);
     }

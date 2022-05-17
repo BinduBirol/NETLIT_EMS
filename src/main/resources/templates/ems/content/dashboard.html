@@ -195,7 +195,7 @@
 		<div class="col-xl-6 col-lg-6">
 	
 
-
+			<div sec:authorize="hasRole('SUPER ADMIN')"> Super Admin</div>
 			
 
 
@@ -220,7 +220,7 @@
 											<i class="fa fa-user"></i>
 										</div>
 										<div class="flex-fill px-3">
-											<div class="">[[${user.firstName}]] [[${user.lastName}]] <i class="fa fa-user-circle " th:if="${user.email} == ${session.user.username}"></i> <span th:each="luser : ${loggedInUsers}"> 
+											<div class="">[[${user.firstName}]] [[${user.lastName}]] <i class="fa fa-user-circle " th:if="${user.email} == ${session.user.email}"></i> <span th:each="luser : ${loggedInUsers}"> 
 											<span th:if="${luser} == ${user.email}" class="fa fa-commenting text-success  ms-2"></span>
 										</span> </span>	</div>
 											<div class="small text-white text-opacity-50">[[${user.email}]]</div>
@@ -232,7 +232,7 @@
 											
 										</div>
 										
-										<div th:if="${user.email} != ${session.user.username}" class="dropdown">
+										<div th:if="${user.email} != ${session.user.email}" class="dropdown">
 											<a href="#" data-bs-toggle="dropdown"
 												class="text-white text-opacity-50"><i
 												class="fa fa-ellipsis-h"></i></a>

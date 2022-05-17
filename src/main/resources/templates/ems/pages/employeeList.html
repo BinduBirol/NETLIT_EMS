@@ -53,6 +53,9 @@
 								<!-- BEGIN #datatable -->
 								<div id="datatable" class="mb-5">
 									<div class="card">
+										<div class="card-header">
+										<a href="/addEmployee" class="btn btn-outline-theme btn-sm">Add Employee</a>
+										</div>
 										<div class="card-body">
 											<table id="datatableDefault" class="table text-nowrap w-100">
 												<thead>
@@ -70,7 +73,7 @@
 													
 													<tr th:each="emp,iterator : ${employees}">
 														<td th:text="${iterator.index+1}">57</td>
-														<td th:text="${emp.full_name}"></td>
+														<td><a th:text="${emp.full_name}" href="#" class="text-white" th:emp-id="${emp.empid}" onclick="viewEmlpoyee(this);"></a></td>
 														<td th:text="${emp.designation}">Customer Support</td>
 														<td class="text-white" ><a class="text-white" th:href="'mailto:' + ${emp.email}" th:text="${emp.email}"></a></td>
 														<td th:text="${emp.phone}">27</td>

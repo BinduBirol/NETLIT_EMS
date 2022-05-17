@@ -8,7 +8,7 @@
 		<div th:include="ems/content/viewEmpContent :: viewEmpContent"></div>
 	</div>
 	<div class="modal-footer">
-		<button type="button" th:if="${userdtl.email} != ${session.user.username}" onclick="deleteEmployee()" class="btn btn-link text-danger">Delete this Employee?</button>    
+		<button type="button"  th:if="${userdtl.email} != ${session.user.email}" onclick="deleteEmployee()" class="btn btn-link text-danger">Delete this Employee?</button>    
         <span style="display: none" id="finaldelete">
         Are you Sure?
         <a  type="button" th:href="@{/deleteEmployee(empid=${userdtl.empid})}" class="btn btn-outline-danger">Yes</a>

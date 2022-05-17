@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.repo.EmployeeRepository;
+import com.birol.persistence.dao.UserRepository;
 import com.birol.persistence.model.User;
 import com.birol.service.DeviceService;
 
@@ -42,6 +43,9 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
     @Autowired
     EmployeeRepository employeeRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @Override
     public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException {
         handle(request, response, authentication);
@@ -56,8 +60,9 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
             else {
             	username = authentication.getName();
             }
-            LoggedUser user = new LoggedUser(username, activeUserStore);
-            EMPLOYEE_BASIC userdtl= employeeRepository.findbyWorkMail(user.getUsername());
+            LoggedUser luser = new LoggedUser(username, activeUserStore);
+            User user= userRepository.findByEmail(luser.getUsername());
+            EMPLOYEE_BASIC userdtl= employeeRepository.findbyWorkMail(luser.getUsername());
             if(userdtl.getEmp_image()!=null) {
     			String imageencode = Base64.getEncoder().encodeToString(userdtl.getEmp_image());
     			userdtl.setEmp_image_encoded(imageencode);			    	

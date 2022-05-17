@@ -41,18 +41,18 @@ public class EmailService {
         final String recipientAddress = user.getEmail();
         final String subject = "Registration Confirmation";
         final String confirmationUrl = event.getAppUrl() + "/registrationConfirm?token=" + token;
-        String text= "Dear "+user.getFirstName()+" "+user.getLastName()+",";
-        text+="<br/>You registered successfully!<br/>";
-        text+= messagesSource.getMessage("message.regSuccLink", null, "To confirm your registration, please click on the below link.<br/>"+confirmationUrl, event.getLocale());
+        String text= "Dear "+user.getFirstName()+" "+user.getLastName()+",<br/>";
+        text+= messagesSource.getMessage("message.regSuccLink", null, "To confirm your registration, please click on the below link.", event.getLocale());
+        text+="<br/>"+confirmationUrl;
         text+= "<br/>Your SECRET for Google Authenticator: "+user.getSecret();
         //text+= "\nYour QR code for Google Authenticator is Attached.";
         text+= "<br/>Scan this QR code using Google Authenticator app on your Android or iPhone device";
         
         //helper.addAttachment("favicon.ico", new ClassPathResource("favicon.ico"));        
-        String qrlink="https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2FNETLIT_EMS_Application%3Abirolkarmaker%40gmail.com%3Fsecret%3D3HPBJIBV6UPCIIYZ%26issuer%3DNETLIT_EMS_Application";
+        //String qrlink="https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2FNETLIT_EMS_Application%3Abirolkarmaker%40gmail.com%3Fsecret%3D3HPBJIBV6UPCIIYZ%26issuer%3DNETLIT_EMS_Application";
         String qrimage=userService.generateQRUrl(user);
-        String inlineImage = "<div style=\"text-align: left\"><img  src=\""+qrlink+"\"></img></div>";
-        String qrcode_link= "You can also find the QR code to this link:<br/>"+qrimage+"<br/>";
+        String inlineImage = "<div style=\"text-align: left\"><img  src=\""+qrimage+"\"></img></div>";
+        String qrcode_link= "You can also find the QR code to this link: <a href='"+qrimage+"'>QR Image</a>";
 
         helper.setText(text+inlineImage+qrcode_link, true);
         helper.setSubject(subject);
