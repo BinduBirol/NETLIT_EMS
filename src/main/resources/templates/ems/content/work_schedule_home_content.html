@@ -1,0 +1,164 @@
+<div th:fragment="work_schedule_home_content">
+	<div id="content" class="app-content">
+		<!-- BEGIN container -->
+		<div class="container">
+			<!-- BEGIN row -->
+			<div class="row justify-content-center">
+				<!-- BEGIN col-10 -->
+				<div>
+					<!-- BEGIN row -->
+					<div class="row">
+						<!-- BEGIN col-9 -->
+
+						<ul class="breadcrumb">
+							<li class="breadcrumb-item"><a href="#">WORK SCHEDULE</a></li>
+							<li class="breadcrumb-item active">SET WORK SCHEDULE</li>
+						</ul>
+
+						<h1 class="page-header">Set Work Schedule</h1>
+
+						<hr class="mb-4" />
+
+						<!-- BEGIN #datatable -->
+						<div class="row">
+
+							<div class="col-sm-6 small">
+								<div id="datatable" class="mb-5">
+
+									<div class="card">
+										<div class="card-header">
+											<h4>Employee List</h4>
+										</div>
+										<div class="card-body">
+
+											<table class="table" data-toggle="table"
+												data-sort-class="table-active" data-sortable="true"
+												data-search="true" data-pagination="true"
+												data-show-columns="true">
+												<thead>
+													<tr>
+														<th>#</th>
+														<th><i class="fa fa-clock"></i></th>
+														<th><i class="fa fa-list"></i></th>
+														<th>Name</th>														
+														<th>Contract Status</th>
+														<th>Info</th>
+													</tr>
+												</thead>
+												<tbody>
+
+													<tr th:each="emp,iterator : ${employees}">
+														<td th:text="${iterator.index+1}">57</td>
+														<td >
+															<a th:emp-id="${emp.empid}" onclick="workschedule(this);" class="set-wsh-cl"
+															style="cursor: pointer"><i class="fa fa-plus"></i></a>
+															</td>
+														<td th:emp-id="${emp.empid}"
+															><a th:emp-id="${emp.empid}" onclick="historytablecontent(this);" class="set-wsh-cl"
+															style="cursor: pointer"><i class="fa fa-history"></i></a></td>
+														<td><a th:text="${emp.full_name}" href="#"
+															class="text-white" th:emp-id="${emp.empid}"
+															onclick="viewEmlpoyee(this);"></a></td>
+														
+														<td th:class="${emp.contact_status_str}"
+															th:text=${emp.contact_remaining_period}>2011/01/25</td>
+														<td><a href="#" data-bs-toggle="dropdown"
+															class=" text-opacity-50"> <i class="fa fa-ellipsis-h"></i></a>
+															<div class="dropdown-menu dropdown-menu-end">
+																<a href="#" th:emp-id="${emp.empid}"
+																	onclick="viewEmlpoyee(this);" class="dropdown-item">View</a>
+																<a th:href="@{/editEmployee(empid=${emp.empid})}"
+																	class="dropdown-item">Edit</a> <a href="#"
+																	class="dropdown-item">Report</a>
+															</div></td>
+													</tr>
+													
+													
+													
+												</tbody>
+											</table>
+
+										</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+
+									</div>
+								</div>
+
+
+
+							</div>
+
+							<div class="col-sm-6 ">
+								<div id="datatable2" class="mb-5 small">
+
+									<div class="card">
+										<div class="card-header">
+											<h4>History</h4>
+										</div>
+										<div class="card-body">
+										<span id="historytablecontent" class="" >
+										
+										
+										
+										</span>
+
+											
+
+										</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+
+									</div>
+								</div>
+
+
+
+							</div>
+
+						</div>
+						<!-- END #datatable -->
+
+
+					</div>
+					<!-- END col-9-->
+					<!-- BEGIN col-3 -->
+
+					<!-- END col-3 -->
+				</div>
+				<!-- END row -->
+			</div>
+			<!-- END col-10 -->
+		</div>
+		<!-- END row -->
+
+		<div class="modal fade" id="viewEmployee">
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content empContent">...</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="workschedule">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content wschcontent">...</div>
+			</div>
+		</div>
+
+		<!-- END container -->
+		<!-- END #content -->
+
+
+
+
+	</div>
+	<!-- END #app -->
+
+</div>

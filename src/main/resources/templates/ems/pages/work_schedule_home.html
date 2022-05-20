@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>SET WORK SCHEDULE</title>
+<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+
+<!-- ================== BEGIN core-css ================== -->
+<link href="assets/css/vendor.min.css" rel="stylesheet" />
+<link href="assets/css/app.min.css" rel="stylesheet" />
+<link href="assets/css/netlit_ems.css" rel="stylesheet" />
+<!-- ================== END core-css ================== -->
+<!-- ================== BEGIN page-css ================== -->
+<link
+	href="assets/plugins/datatables.net-bs5/css/dataTables.bootstrap5.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css"
+	rel="stylesheet" />
+<link href="assets/plugins/bootstrap-table/dist/bootstrap-table.min.css"
+	rel="stylesheet" />
+	
+<!-- ================== BEGIN page-css ================== -->
+<link href="assets/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-daterangepicker/daterangepicker.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-slider/dist/css/bootstrap-slider.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/blueimp-file-upload/css/jquery.fileupload.css"
+	rel="stylesheet" />
+<link href="assets/plugins/summernote/dist/summernote-lite.css"
+	rel="stylesheet" />
+<link href="assets/plugins/spectrum-colorpicker2/dist/spectrum.min.css"
+	rel="stylesheet" />
+<link href="assets/plugins/select-picker/dist/picker.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/jquery-typeahead/dist/jquery.typeahead.min.css"
+	rel="stylesheet" />
+<!-- ================== END page-css ================== -->
+
+</head>
+<body>
+	<!-- BEGIN #app -->
+	<div id="app" class="app">
+		<div th:include="theme/header :: dynamicheaderFragment"></div>
+		<div th:include="theme/sidenav :: sidenav"></div>
+		<!-- BEGIN #content -->
+		
+		<div
+			th:include="ems/content/work_schedule_home_content :: work_schedule_home_content"></div>
+		<!-- END #content -->
+		<div th:include="theme/theme_util :: theme_util"></div>
+	</div>
+	<!-- END #app -->
+	<div th:include="theme/footer::staticFooter"></div>
+	<!-- ================== BEGIN page-js ================== -->
+	<script src="assets/plugins/@highlightjs/cdn-assets/highlight.min.js"></script>
+	<script src="assets/js/demo/highlightjs.demo.js"></script>
+	<script src="assets/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script
+		src="assets/plugins/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+	<script
+		src="assets/plugins/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+	<script
+		src="assets/plugins/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+	<script
+		src="assets/plugins/datatables.net-buttons/js/buttons.flash.min.js"></script>
+	<script
+		src="assets/plugins/datatables.net-buttons/js/buttons.html5.min.js"></script>
+	<script
+		src="assets/plugins/datatables.net-buttons/js/buttons.print.min.js"></script>
+	<script
+		src="assets/plugins/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+	<script
+		src="assets/plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+	<script
+		src="assets/plugins/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+	<script
+		src="assets/plugins/bootstrap-table/dist/bootstrap-table.min.js"></script>
+	<script src="assets/js/demo/table-plugins.demo.js"></script>
+	<script src="assets/js/demo/sidebar-scrollspy.demo.js"></script>
+	
+	<!-- ================== END page-js ================== -->
+	<!-- ================== BEGIN page-js ================== -->
+	<script src="assets/plugins/jquery-migrate/dist/jquery-migrate.min.js"></script>
+	<script
+		src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	<script src="assets/plugins/moment/min/moment.min.js"></script>
+	<script
+		src="assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script
+		src="assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+	<script
+		src="assets/plugins/bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+	<script
+		src="assets/plugins/jquery-typeahead/dist/jquery.typeahead.min.js"></script>
+	<script
+		src="assets/plugins/jquery.maskedinput/src/jquery.maskedinput.js"></script>
+	<script src="assets/plugins/select-picker/dist/picker.min.js"></script>
+	<script src="assets/plugins/@highlightjs/cdn-assets/highlight.min.js"></script>
+	<script src="assets/js/demo/highlightjs.demo.js"></script>
+	<script src="assets/js/demo/form-plugins.demo.js"></script>
+	<script src="assets/js/demo/sidebar-scrollspy.demo.js"></script>
+	<!-- ================== END page-js ================== -->
+
+	<script type="text/javascript">
+		function viewEmlpoyee(z) {
+			$("tr").removeClass("table-primary");
+			$(z).closest("tr").addClass("table-primary");
+			$empid = $(z).attr("emp-id");
+			//$('#viewEmployee').modal('show');
+
+			$.ajax({
+				url : "viewEmployee?empid=" + $empid,
+				type : 'GET',
+				success : function(data) {
+					$('.empContent').html(data);
+					$('#viewEmployee').modal('show');
+					historytablecontent(z);
+				},
+				error : function(xhr, desc, err) {
+					$('.empContent').html(xhr.responseText);
+					$('#viewEmployee').modal('show');
+
+				}
+			});
+			//alert($empid);
+
+		}
+
+		function workschedule(z) {
+			$("tr").removeClass("table-primary");
+			$(z).closest("tr").addClass("table-primary");
+			$empid = $(z).attr("emp-id");
+			//$('#viewEmployee').modal('show');
+
+			$.ajax({
+				url : "workschedule?empid=" + $empid,
+				type : 'GET',
+				success : function(data) {
+					//setModalData();
+					$('.wschcontent').html(data);
+					$('#workschedule').modal('show');
+					historytablecontent(z);
+				},
+				error : function(xhr, desc, err) {
+					$('.wschcontent').html(xhr.responseText);
+					$('#workschedule').modal('show');
+
+				}
+			});
+			//alert($empid);
+
+		}
+		
+		function historytablecontent(z) {
+			//$(z).addClass("table-active");
+			$("tr").removeClass("table-primary");
+			$(z).closest("tr").addClass("table-primary");
+			$empid = $(z).attr("emp-id");
+			//$('#viewEmployee').modal('show');
+
+			$.ajax({
+				url : "workschedulehistory?empid=" + $empid,
+				type : 'GET',
+				success : function(data) {
+					$('#historytablecontent').html("");
+					$('#historytablecontent').html(data);					
+					//$('#workschedule').modal('show');
+					reloadHistorytable();
+				},
+				error : function(xhr, desc, err) {
+					$('#historytablecontent').html("");
+					$('#historytablecontent').html(xhr.responseText);
+					reloadHistorytable();
+					//$('#workschedule').modal('show');
+
+				}
+			});
+			//alert($empid);
+
+		}
+	
+		function reloadHistorytable() {
+			
+			//$('#historytable').DataTable().ajax.reload();
+			$('#historytable').DataTable({
+			    dom: "<'row mb-3'<'col-sm-4'l><'col-sm-8 text-end'<'d-flex justify-content-end'fB>>>t<'d-flex align-items-center'<'me-auto'i><'mb-0'p>>",
+			    lengthMenu: [ 10, 20, 30, 40, 50 ],
+			    responsive: true,
+			    buttons: [ 
+			      
+			      { extend: 'csv', className: 'btn btn-outline-theme btn-sm' }
+			    ]
+			  });
+			
+		}
+		
+		
+		
+		
+		
+	</script>
+
+
+</body>
+
+</html>

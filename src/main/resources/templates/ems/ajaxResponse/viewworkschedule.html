@@ -1,0 +1,165 @@
+
+<div class="modal-header">
+	<div class="d-flex align-items-start">
+		<a href="#"> <img
+			th:src="*{'data:image/jpeg;base64,'+{userdtl.emp_image_encoded}}"
+			alt="" width="100" class="rounded" />
+		</a>
+		<div class="ms-3">
+		
+			<span><span class="modal-title" th:text="${userdtl.full_name}"></span>&nbsp;<a type="button" th:href="@{/editEmployee(empid=${userdtl.empid})}"><i
+				class="fa fa-edit"></i></a></span>
+			
+		
+		</div>
+	</div>
+
+	<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+
+	<div class="card">
+		<div id="modal-bg" class="card-header bg-success">
+
+
+
+
+
+
+			<div class="form-check form-switch">
+
+				<p>
+					<i class="fas fa-calendar-week"></i> <span id="week_no"></span>
+				</p>
+
+
+
+
+			</div>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-12 col-sm-6">
+					<div
+						class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+						<label class="custom-control-label" for="availablity">Attend</label>
+						<input type="checkbox" id="availablity" value="1"
+							class="form-control form-check-input">
+
+					</div>
+				</div>
+				<div class="col-12 col-sm-6">
+					<div class="form-group">
+						<label>Date Range</label>
+						<div class="input-group " id="">
+							<input id="from_date" name="from_date" required="required"
+								type="date" class="form-control datepicker-default"
+								placeholder="start date" /> <span class="input-group-text">to</span>
+							<input id="to_date" name="to_date" type="date"
+								class="form-control datepicker-default" placeholder="end date" />
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+			<hr>
+
+			<div class="row">
+				<div class="col-4">
+					<label>Work Start</label> <input type="time" value="08:00"
+						class="form-control text-center absent">
+				</div>
+				<div class="col-4">
+					<label>Lunch Time (minute)</label> <input value=45 type="number"
+						class="form-control text-center absent">
+				</div>
+				<div class="col-4">
+					<label>Work End</label> <input value="17:00" type="time"
+						class="form-control text-center absent">
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-12">
+					<label>Description</label> <input id="desc" type="text"
+						class="form-control">
+				</div>
+			</div>
+
+		</div>
+		<!-- /.card-body -->
+		<div class="card-arrow">
+			<div class="card-arrow-top-left"></div>
+			<div class="card-arrow-top-right"></div>
+			<div class="card-arrow-bottom-left"></div>
+			<div class="card-arrow-bottom-right"></div>
+		</div>
+	</div>
+
+
+
+</div>
+
+
+
+
+<div class="modal-footer">
+	<button type="button" class="btn btn-outline-default"
+		data-bs-dismiss="modal">Close</button>
+</div>
+<script src="assets/js/netlit_ems.js"></script>
+<script>
+$('#availablity').prop('checked', true);
+setModalData();
+
+function setModalData() {
+	let today = new Date().toISOString().substr(0, 10);
+	document.querySelector("#from_date").value = today;
+	document.querySelector("#to_date").value = today;
+	
+	var currentdate = new Date();
+	var oneJan = new Date(currentdate.getFullYear(),0,1);
+	var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
+	var result = Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);		
+	$("#week_no").html("  "+result);
+}
+
+$('#availablity').on('change', function() {
+	if ($(this).prop('checked') === true) {
+		$("#emp_name").css("color", "Green");
+		$('.absent').prop('required', true);
+		$('.absent').prop('disabled', false);			
+		$("#attnd").val(1);	
+		$("#modal-bg").removeClass("bg-dark");
+		$("#modal-bg").addClass("bg-success");
+		$(".custom-control-label").html("Attend");
+		
+		
+	} else {
+		// $('#attendance').html("Absent");
+		$("#emp_name").css("color", "red");
+		$(".absent").removeAttr("required");
+		$('.absent').prop('disabled', true);			
+		$("#attnd").val(0);
+		$("#modal-bg").removeClass("bg-success");
+		$("#modal-bg").addClass("bg-dark");
+		$(".custom-control-label").html("Absent");
+	}
+
+});
+
+$('#from_date').on('change', function() {
+	$("#to_date").val($("#from_date").val());
+	
+	var currentdate = new Date($("#from_date").val());
+	var oneJan = new Date(currentdate.getFullYear(),0,1);
+	var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
+	var result =Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);		
+	$("#week_no").html("  "+result);
+
+});
+
+</script>
+

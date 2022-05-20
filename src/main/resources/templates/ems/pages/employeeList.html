@@ -57,7 +57,7 @@
 										<a href="/addEmployee" class="btn btn-outline-theme btn-sm">Add Employee</a>
 										</div>
 										<div class="card-body">
-											<table id="datatableDefault" class="table text-nowrap w-100">
+											<table  id="datatableDefault" class="table text-nowrap w-100">
 												<thead>
 													<tr>
 														<th>#</th>
@@ -71,7 +71,7 @@
 												</thead>
 												<tbody>				
 													
-													<tr th:each="emp,iterator : ${employees}">
+													<tr th:emp-id="${emp.empid}" th:each="emp,iterator : ${employees}">
 														<td th:text="${iterator.index+1}">57</td>
 														<td><a th:text="${emp.full_name}" href="#" class="text-white" th:emp-id="${emp.empid}" onclick="viewEmlpoyee(this);"></a></td>
 														<td th:text="${emp.designation}">Customer Support</td>
@@ -135,6 +135,8 @@
 	<!-- END #app -->
 		<script type="text/javascript">
 			function viewEmlpoyee(z) {
+				$("tr").removeClass("table-primary");
+				$(z).closest("tr").addClass("table-primary");
 				$empid = $(z).attr("emp-id");
 				//$('#viewEmployee').modal('show');
 
