@@ -18,7 +18,7 @@
 
 <div class="container">
     <h1>Role Hierarchy</h1>
-    <p sec:authorize="hasRole('ADMIN')" th:utext="${adminMessage}">Access to ADMIN section</p>
+    <p sec:authorize="hasRole('SUPER ADMIN')" th:utext="${adminMessage}">Access to ADMIN section</p>
     <p sec:authorize="hasRole('STAFF')" th:utext="${staffMessage}">Access to STAFF section</p>
     <p sec:authorize="hasRole('USER')" th:utext="${userMessage}">Access to USER section</p>
 </div>

@@ -193,14 +193,7 @@
 		
 		<div class="row">
 		<div class="col-xl-6 col-lg-6">
-	
-
-			<div sec:authorize="hasRole('SUPER ADMIN')"> Super Admin</div>
-			
-
-
-
-
+			[[${#request.userPrincipal.principal.roles}]]
 		</div>
 				<!-- BEGIN col-3 -->
 				<div class="col-xl-6 col-lg-6">

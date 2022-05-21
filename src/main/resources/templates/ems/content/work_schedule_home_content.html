@@ -21,15 +21,15 @@
 
 						<!-- BEGIN #datatable -->
 						<div class="row">
-						
-						
+
+
 
 							<div class="col-sm-6 small">
 								<div id="datatable" class="mb-5">
 
 									<div class="card">
 										<div class="card-header">
-											<h4>Employee List</h4>
+											<h5>Employee List</h5>
 										</div>
 										<div class="card-body">
 
@@ -42,27 +42,27 @@
 														<th>#</th>
 														<th><i class="fa fa-clock"></i></th>
 														<th><i class="fa fa-list"></i></th>
-														<th>Name</th>														
+														<th>Name</th>
 														<th>Contract Status</th>
 														<th>Info</th>
-														
+
 													</tr>
 												</thead>
 												<tbody>
 
 													<tr th:each="emp,iterator : ${employees}">
 														<td th:text="${iterator.index+1}">57</td>
-														<td >
-															<a th:emp-id="${emp.empid}" onclick="workschedule(this);" class="set-wsh-cl"
-															style="cursor: pointer"><i class="fa fa-plus"></i></a>
-															</td>
-														<td th:emp-id="${emp.empid}"
-															><a th:id="${emp.empid}" th:emp-id="${emp.empid}" onclick="historytablecontent(this);" class="set-wsh-cl"
+														<td><a th:emp-id="${emp.empid}"
+															onclick="workschedule(this);" class="set-wsh-cl"
+															style="cursor: pointer"><i class="fa fa-plus"></i></a></td>
+														<td th:emp-id="${emp.empid}"><a
+															th:id="${emp.empid}" th:emp-id="${emp.empid}"
+															onclick="historytablecontent(this);" class="set-wsh-cl"
 															style="cursor: pointer"><i class="fa fa-history"></i></a></td>
 														<td><a th:text="${emp.full_name}" href="#"
 															class="text-white" th:emp-id="${emp.empid}"
 															onclick="viewEmlpoyee(this);"></a></td>
-														
+
 														<td th:class="${emp.contact_status_str}"
 															th:text=${emp.contact_remaining_period}>2011/01/25</td>
 														<td><a href="#" data-bs-toggle="dropdown"
@@ -75,9 +75,9 @@
 																	class="dropdown-item">Report</a>
 															</div></td>
 													</tr>
-													
-													
-													
+
+
+
 												</tbody>
 											</table>
 
@@ -101,20 +101,19 @@
 
 									<div class="card">
 										<div class="card-header">
-											<div class="d-flex fw-bold small mb-3">
-								<span class="flex-grow-1">History</span>
-								<a href="#" data-toggle="card-expand" class="text-white text-opacity-50 text-decoration-none"><i class="bi bi-fullscreen"></i></a>
-							</div>
+											<div class="d-flex fw-bold small ">
+												<h5 class="flex-grow-1">History</h5>
+												<a href="#" data-toggle="card-expand"
+													class="text-white text-opacity-50 text-decoration-none"><i
+													class="bi bi-fullscreen"></i></a>
+											</div>
 										</div>
 										<div class="card-body">
-										<span id="historytablecontent" class="" >
-										
-										
-										
-										</span>
-
-											
-
+											<span id="historytablecontent" class="">
+												<hr/>
+												<p>Click on the history <i class="fa fa-history"></i> icon to view work schedule history</p>
+												<hr/>
+											</span>
 										</div>
 										<div class="card-arrow">
 											<div class="card-arrow-top-left"></div>
