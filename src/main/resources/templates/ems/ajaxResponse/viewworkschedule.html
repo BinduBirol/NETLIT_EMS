@@ -1,4 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>SET WORK SCHEDULE</title>
+<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="" />
+<meta name="author" content="" />
 
+<!-- ================== BEGIN core-css ================== -->
+<link href="assets/css/vendor.min.css" rel="stylesheet" />
+<link href="assets/css/app.min.css" rel="stylesheet" />
+<link href="assets/css/netlit_ems.css" rel="stylesheet" />
+<!-- ================== END core-css ================== -->
+<!-- ================== BEGIN page-css ================== -->
+
+<!-- ================== BEGIN page-css ================== -->
+<link href="assets/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-daterangepicker/daterangepicker.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"
+	rel="stylesheet" />
+
+<link href="assets/plugins/select-picker/dist/picker.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/jquery-typeahead/dist/jquery.typeahead.min.css"
+	rel="stylesheet" />
+<!-- ================== END page-css ================== -->
+
+</head>
+<form onsubmit="return mySubmitFunction(event)" id="wshform" action="saveWSH" method="post" >
 <div class="modal-header">
 	<div class="d-flex align-items-start">
 		<a href="#"> <img
@@ -6,160 +43,200 @@
 			alt="" width="100" class="rounded" />
 		</a>
 		<div class="ms-3">
-		
-			<span><span class="modal-title" th:text="${userdtl.full_name}"></span>&nbsp;<a type="button" th:href="@{/editEmployee(empid=${userdtl.empid})}"><i
-				class="fa fa-edit"></i></a></span>
-			
-		
+
+			<span><span class="modal-title" th:text="${userdtl.full_name}"></span>&nbsp;<a
+				type="button" th:href="@{/editEmployee(empid=${userdtl.empid})}"><i
+					class="fa fa-edit"></i></a></span> <br /> <i class="fas fa-calendar-week"></i>
+			<span id="week_no"></span>
+			<p id="wshmessage"></p>
 		</div>
 	</div>
 
-	<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
 </div>
 <div class="modal-body">
 
-	<div class="card">
-		<div id="modal-bg" class="card-header bg-success">
 
-
-
-
-
-
-			<div class="form-check form-switch">
-
-				<p>
-					<i class="fas fa-calendar-week"></i> <span id="week_no"></span>
-				</p>
-
-
-
-
+	<div class="row">
+		<div class="col-12 col-sm-6">
+			<label class="custom-control-label ">Availability</label> <select
+				id="availability" onc name="status" class="form-select border border-success">
+				<option value="1">Attend</option>
+				<option value="0">Absent</option>
+			</select>
+			<input type="hidden" id="userid" name="userid" th:value="${userdtl.empid}" />
+			<input type="hidden" name="full_name" th:value="${userdtl.full_name}">
+		</div>
+		<div class="col-12 col-sm-6">
+			<div class="form-group">
+				<label>Date Range</label>
+				<div class="input-group " id="">
+					<input id="from_date" name="from_date" required="required"
+						type="text" class="form-control datepicker-default"
+						placeholder="start date" /> <span class="input-group-text ">to</span>
+					<input id="to_date" name="to_date" type="text" required="required"
+						class="form-control datepicker-default" placeholder="end date" />
+				</div>
 			</div>
 		</div>
-		<div class="card-body">
-			<div class="row">
-				<div class="col-12 col-sm-6">
-					<div
-						class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-						<label class="custom-control-label" for="availablity">Attend</label>
-						<input type="checkbox" id="availablity" value="1"
-							class="form-control form-check-input">
 
-					</div>
-				</div>
-				<div class="col-12 col-sm-6">
-					<div class="form-group">
-						<label>Date Range</label>
-						<div class="input-group " id="">
-							<input id="from_date" name="from_date" required="required"
-								type="date" class="form-control datepicker-default"
-								placeholder="start date" /> <span class="input-group-text">to</span>
-							<input id="to_date" name="to_date" type="date"
-								class="form-control datepicker-default" placeholder="end date" />
-						</div>
-					</div>
-				</div>
-
-			</div>
-
-
-			<hr>
-
-			<div class="row">
-				<div class="col-4">
-					<label>Work Start</label> <input type="time" value="08:00"
-						class="form-control text-center absent">
-				</div>
-				<div class="col-4">
-					<label>Lunch Time (minute)</label> <input value=45 type="number"
-						class="form-control text-center absent">
-				</div>
-				<div class="col-4">
-					<label>Work End</label> <input value="17:00" type="time"
-						class="form-control text-center absent">
-				</div>
-			</div>
-			<hr>
-			<div class="row">
-				<div class="col-12">
-					<label>Description</label> <input id="desc" type="text"
-						class="form-control">
-				</div>
-			</div>
-
-		</div>
-		<!-- /.card-body -->
-		<div class="card-arrow">
-			<div class="card-arrow-top-left"></div>
-			<div class="card-arrow-top-right"></div>
-			<div class="card-arrow-bottom-left"></div>
-			<div class="card-arrow-bottom-right"></div>
-		</div>
 	</div>
 
 
+	<hr>
+
+	<div class="row">
+		<div class="col-4">
+			<label>Work Start</label> <input type="time" value="08:00" name="work_start"
+				class="form-control text-center absent">
+		</div>
+		<div class="col-4">
+			<label>Lunch Time (minute)</label> <input value=45 type="number" name="lunch_hour"
+				class="form-control text-center absent">
+		</div>
+		<div class="col-4">
+			<label>Work End</label> <input value="17:00" type="time" name="work_end"
+				class="form-control text-center absent">
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-12">
+			<label>Description</label> <input id="desc" type="text" name="work_desc"
+				class="form-control">
+		</div>
+	</div>
+	
+	
 
 </div>
-
-
-
 
 <div class="modal-footer">
-	<button type="button" class="btn btn-outline-default"
-		data-bs-dismiss="modal">Close</button>
+	<div class="row">
+		<input type="submit" class="form-control btn btn-outline-theme"/>
+		
+	</div>
 </div>
-<script src="assets/js/netlit_ems.js"></script>
+
+</form>
+<div class="toasts-container">
+			<div class="toast fade hide mb-3" data-autohide="false" id="toast">
+				<div class="toast-header">
+					<i class="far fa-bell text-muted me-2"></i> 
+					<strong class="me-auto title">Title</strong>
+					<button type="button" id="toast-reload-btn" class="btn btn-link">Reload Page</button>					
+					<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+					
+				</div>
+				<div class="toast-body">
+					<div class="toast-message">
+					</div>					
+				</div>
+			</div>
+
+
+
+		</div>
+		<!-- ================== BEGIN core-js ================== -->
+	
+	<!-- ================== END core-js ================== -->
+<!-- ================== BEGIN page-js ================== -->
+<script src="assets/plugins/jquery-migrate/dist/jquery-migrate.min.js"></script>
+<script
+	src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="assets/plugins/moment/min/moment.min.js"></script>
+<script
+	src="assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script
+	src="assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+<script
+	src="assets/plugins/bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+<script
+	src="assets/plugins/jquery-typeahead/dist/jquery.typeahead.min.js"></script>
+<script
+	src="assets/plugins/jquery.maskedinput/src/jquery.maskedinput.js"></script>
+<script src="assets/plugins/select-picker/dist/picker.min.js"></script>
+<script src="assets/plugins/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="assets/js/demo/highlightjs.demo.js"></script>
+<script src="assets/js/demo/form-plugins.demo.js"></script>
+<script src="assets/js/demo/sidebar-scrollspy.demo.js"></script>
+<!-- ================== END page-js ================== -->
+
+
 <script>
-$('#availablity').prop('checked', true);
 setModalData();
 
 function setModalData() {
+	$('#availability option[value="1"]').attr("selected", "selected");
+	$('.absent').addClass("border-success");
 	let today = new Date().toISOString().substr(0, 10);
-	document.querySelector("#from_date").value = today;
-	document.querySelector("#to_date").value = today;
-	
-	var currentdate = new Date();
-	var oneJan = new Date(currentdate.getFullYear(),0,1);
-	var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
-	var result = Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);		
-	$("#week_no").html("  "+result);
+	$("#from_date").val(today);
+	$("#to_date").val(today);
+	getWeekNo();
 }
 
-$('#availablity').on('change', function() {
-	if ($(this).prop('checked') === true) {
-		$("#emp_name").css("color", "Green");
+$('#availability').change( function() {	
+	if ($(this).val() == 1) {		
 		$('.absent').prop('required', true);
-		$('.absent').prop('disabled', false);			
-		$("#attnd").val(1);	
-		$("#modal-bg").removeClass("bg-dark");
-		$("#modal-bg").addClass("bg-success");
-		$(".custom-control-label").html("Attend");
-		
-		
-	} else {
-		// $('#attendance').html("Absent");
-		$("#emp_name").css("color", "red");
+		$('.absent').prop('disabled', false);
+		$(this).removeClass("border-danger");
+		$(this).addClass("border-success");
+		$('.absent').removeClass("border-danger");
+		$('.absent').addClass("border-success");
+	} else {		
 		$(".absent").removeAttr("required");
-		$('.absent').prop('disabled', true);			
-		$("#attnd").val(0);
-		$("#modal-bg").removeClass("bg-success");
-		$("#modal-bg").addClass("bg-dark");
-		$(".custom-control-label").html("Absent");
+		$('.absent').prop('disabled', true);
+		$(".absent").removeClass("border-success");
+		$(".absent").addClass("border-danger");		
+		$(this).removeClass("border-success");
+		$(this).addClass("border-danger");		
 	}
-
 });
 
 $('#from_date').on('change', function() {
-	$("#to_date").val($("#from_date").val());
-	
+	$("#wshmessage").html("");
+	$("#to_date").val($("#from_date").val());	
+	getWeekNo();
+});
+
+
+function getWeekNo() {
 	var currentdate = new Date($("#from_date").val());
 	var oneJan = new Date(currentdate.getFullYear(),0,1);
 	var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
 	var result =Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);		
 	$("#week_no").html("  "+result);
+}
 
-});
+function mySubmitFunction(e) {
+	  e.preventDefault();
+	  $form=$("#wshform");	
+	  $.ajax({
+			url : $("#wshform").attr("action"),
+			type : $("#wshform").attr("method"),
+			data : $form.serialize(),			
+			success : function(data, status) {
+				//alert(data);				
+				$('.modal').modal('hide');
+				$('.toast-header .title').html("Response");
+				$('.toast-body .toast-message').html(data);
+				$('.toast').toast('show');
+				if (data.includes("Successfully") == true) {
+					$userid=$("#userid").val();
+					$("#"+$userid).click();
+				}
+				
+				
+			},
+			error : function(xhr, desc, err) {
+				
+				hideprocessview();
+								
+				
+			}
+		});
+	  return false;
+	}
+
 
 </script>
-

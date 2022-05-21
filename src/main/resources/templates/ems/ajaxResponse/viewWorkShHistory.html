@@ -2,60 +2,73 @@
 <span><img th:src="*{'data:image/jpeg;base64,'+{emp.emp_image_encoded}}" alt=" " width="50" height="50" class="rounded-circle" /> 
 </span>
  -->
-<table class="table" data-toggle="table" id="historytable">
+<div class="">
+	<table class="table text-nowrap w-100" id="historytable">
 
-	<thead>
-		<tr>
+		<thead>
+			<tr>
 
-			<th class="table-active" colspan="5">
-				<div class="row">
-					<div class="widget-user-list">
-					
-						<div class="widget-user-list-item">
-							<a href="#" class="widget-user-list-link"><img
+				<th class="" colspan="10">
+					<div class="row">
+						<div class="widget-user-list">
+
+
+							<img height="30" width="30"
 								th:src="*{'data:image/jpeg;base64,'+{emp.emp_image_encoded}}"
-								alt="" /></a>
-							<a class="" th:text="${emp.full_name}">Bindu</a>	
-								
+								alt="" /> &nbsp; <a class="" th:text="${emp.full_name}">Bindu</a>
+
+
 						</div>
+
 					</div>
-					
-				</div>
 
-			</th>
+				</th>
 
-		</tr>
-		<tr>
-			<th>#</th>
-			<th>Name</th>
-			<th>Designation</th>
+			</tr>
+			<tr>
+				<th>P/A</th>
+				<th>Date</th>
+				<th>Hour</th>
+				<th>Start</th>
+				<th>End</th>
+				<th>Break</th>
+				<th>Assgn By</th>
+				<th>Desc</th>
+				<th>Assgn Date</th>
+				<th>info</th>
 
-			<th>Contract</th>
-			<th>Info</th>
-		</tr>
-	</thead>
-	<tbody id="">
-		<tr th:each="emp,iterator : ${employees}">
-			<td th:text="${iterator.index+1}">57</td>
+			</tr>
+		</thead>
+		<tbody id="">
+			<tr th:classappend="${wsh.status}==0 ? text-danger : text-success"
+				th:each="wsh,iterator : ${wsh}">
 
-			<td><a th:text="${emp.full_name}" href="#" class="text-white"
-				th:emp-id="${emp.empid}" onclick="viewEmlpoyee(this);"></a></td>
-			<td th:text="${emp.designation}">Customer Support</td>
+				<td th:text="${wsh.status}==0 ? A : P">P/A</td>
+				<td th:text="${wsh.date}">Date</td>
+				<td th:text="${wsh.work_minute}">Hour</td>
+				<td th:text="${wsh.work_start}">Start</td>
+				<td th:text="${wsh.work_end}">End</td>
+				<td th:text="${wsh.lunch_hour}">Break</td>
 
-			<td th:class="${emp.contact_status_str}"
-				th:text=${emp.contact_remaining_period}>2011/01/25</td>
-			<td><a href="#" data-bs-toggle="dropdown"
-				class=" text-opacity-50"> <i class="fa fa-ellipsis-h"></i></a>
-				<div class="dropdown-menu dropdown-menu-end">
-					<a href="#" th:emp-id="${emp.empid}" onclick="viewEmlpoyee(this);"
-						class="dropdown-item">View</a> <a
-						th:href="@{/editEmployee(empid=${emp.empid})}"
-						class="dropdown-item">Edit</a> <a href="#" class="dropdown-item">Report</a>
-				</div></td>
-		</tr>
-	</tbody>
-
-</table>
+				<td th:text="${wsh.assigned_by_full_name}">Assgn By</td>
+				<td th:text="${wsh.work_desc}">Desc</td>
+				<td th:text="${wsh.updated}">date</td>
 
 
+				<td><a href="#" data-bs-toggle="dropdown"
+					class=" text-opacity-50"> <i class="fa fa-ellipsis-h"></i></a>
+					<div class="dropdown-menu dropdown-menu-end">
+						<a href="#" th:emp-id="${wsh.userid}" onclick="viewEmlpoyee(this);"
+							class="dropdown-item">View</a> <a
+							th:href="@{/editEmployee(empid=${wsh.userid})}"
+							class="dropdown-item">Edit</a> <a href="#" class="dropdown-item">Report</a>
+					</div></td>
+
+
+			</tr>
+		</tbody>
+
+	</table>
+
+</div>
 

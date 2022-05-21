@@ -21,6 +21,8 @@
 
 						<!-- BEGIN #datatable -->
 						<div class="row">
+						
+						
 
 							<div class="col-sm-6 small">
 								<div id="datatable" class="mb-5">
@@ -43,6 +45,7 @@
 														<th>Name</th>														
 														<th>Contract Status</th>
 														<th>Info</th>
+														
 													</tr>
 												</thead>
 												<tbody>
@@ -54,7 +57,7 @@
 															style="cursor: pointer"><i class="fa fa-plus"></i></a>
 															</td>
 														<td th:emp-id="${emp.empid}"
-															><a th:emp-id="${emp.empid}" onclick="historytablecontent(this);" class="set-wsh-cl"
+															><a th:id="${emp.empid}" th:emp-id="${emp.empid}" onclick="historytablecontent(this);" class="set-wsh-cl"
 															style="cursor: pointer"><i class="fa fa-history"></i></a></td>
 														<td><a th:text="${emp.full_name}" href="#"
 															class="text-white" th:emp-id="${emp.empid}"
@@ -98,7 +101,10 @@
 
 									<div class="card">
 										<div class="card-header">
-											<h4>History</h4>
+											<div class="d-flex fw-bold small mb-3">
+								<span class="flex-grow-1">History</span>
+								<a href="#" data-toggle="card-expand" class="text-white text-opacity-50 text-decoration-none"><i class="bi bi-fullscreen"></i></a>
+							</div>
 										</div>
 										<div class="card-body">
 										<span id="historytablecontent" class="" >

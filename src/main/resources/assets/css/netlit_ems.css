@@ -19,6 +19,6 @@
  
  body{top:0!important;}
  
- input[readonly]{
+ input[readonly], input[disabled] {
   cursor: no-drop;
 }
