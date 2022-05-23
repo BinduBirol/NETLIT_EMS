@@ -1,0 +1,6 @@
+<label>Users <span th:text="${users.size}"></span></label>
+<select class="form-select" required="true" name="email" id="users" onchange="$('#submitbuttondiv').show();">
+	<option> Select User </option>
+	<option th:each="users : ${users}" th:value="${users.email}"
+		th:text="${users.email}"></option>
+</select>

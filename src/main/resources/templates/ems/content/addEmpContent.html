@@ -36,9 +36,9 @@
 												<div class="form-group">
 												<label>Contact</label>
 												<div class="input-group " id="">
-																<input  name="contract_start" required="required"  type="text" class="form-control datepicker-default"  placeholder="start date" />
+																<input autocomplete="off"  name="contract_start" required="required"  type="text" class="form-control datepicker-default"  placeholder="start date" />
 																<span class="input-group-text">to</span>
-																<input name="contract_end" type="text" class="form-control datepicker-default"  placeholder="end date" />
+																<input autocomplete="off" name="contract_end" type="text" class="form-control datepicker-default"  placeholder="end date" />
 															</div>
 												</div>
 											</div>
@@ -147,7 +147,7 @@
 													<div class="col-xl-6">
 														 <div class="form-group">
 											                  <label>Select Role</label>
-											                        <select name="roleid" required="required" class="form-select"  id="slct_role">
+											                        <select name="roleid" required="required" class="form-select"  id="slct_role" >
 																	    <option value="">Select Role</option>
 																	    <option th:each="roles : ${roles}" th:value="${roles.id}" th:text="${roles.name}"></option>
 																    </select>																   

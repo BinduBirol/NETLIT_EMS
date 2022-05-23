@@ -47,7 +47,7 @@
 										              </div>
 													<div class="row mb-3">
 													
-													<div class="col-xl-12">
+													<div class="col-xl-6">
 														 <div class="form-group mb-3">
 											                  <label>Select Role</label>
 											                        <select name="roleid" required="required" class="form-select"  id="slct_role">
@@ -57,9 +57,20 @@
 																   <input type="hidden" th:value="${empinfo.empid}" name="empid" />
 														</div>
 													</div>
-													
-												
+
+												<div class="col-xl-6">
+													<div class="form-group mb-3">
+														<label>Two factor Authentication</label>
+														
+														<div class="form-check form-switch">
+														  <input th:checked="${user.Using2FA}" name="Using2FA" type="checkbox" class="form-check-input" id="customSwitch1">
+														  <label  class="form-check-label" for="customSwitch1">Toggle this switch to enable/disable</label>
+														</div>
+														
+													</div>
 												</div>
+
+											</div>
 												
 												
 											
@@ -88,9 +99,9 @@
 												<div class="form-group">
 												<label>Contact</label>
 												<div class="input-group " id="">
-																<input th:value="${empinfo.contract_start}" name="contract_start" required="required"  type="text" class="form-control datepicker-default"  placeholder="start date" />
+																<input th:value="${empinfo.contract_start}" name="contract_start" required="required"  type="text" class="form-control datepicker-default"  autocomplete="off" placeholder="start date" />
 																<span class="input-group-text">to</span>
-																<input th:value="${empinfo.contract_end}" name="contract_end" type="text" class="form-control datepicker-default"  placeholder="end date" />
+																<input th:value="${empinfo.contract_end}" name="contract_end" type="text" class="form-control datepicker-default" autocomplete="off"  placeholder="end date" />
 															</div>
 												</div>
 											</div>

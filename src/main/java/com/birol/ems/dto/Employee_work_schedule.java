@@ -1,5 +1,6 @@
 package com.birol.ems.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -25,7 +26,7 @@ public class Employee_work_schedule {
 	private String work_desc;
 	private int week;
 	private String day;
-	private String date;
+	private LocalDate date;
 	private long work_minute;
 	@Transient
 	private String work_hour;
@@ -163,11 +164,11 @@ public class Employee_work_schedule {
 		this.to_date = to_date;
 	}
 
-	public String getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
@@ -195,5 +196,4 @@ public class Employee_work_schedule {
 		this.work_hour = work_hour;
 	}
 
-	
 }

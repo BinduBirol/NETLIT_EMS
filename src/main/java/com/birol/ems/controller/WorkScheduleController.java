@@ -74,7 +74,7 @@ public class WorkScheduleController {
 			empdtl.setEmp_image_encoded(imageencode);
 		}
 		ArrayList<Employee_work_schedule> empwsh= new ArrayList<Employee_work_schedule>();
-		empwsh=(ArrayList<Employee_work_schedule>) empWSHrepo.findByUserid(empid);		
+		empwsh=(ArrayList<Employee_work_schedule>) empWSHrepo.findByUseridOrderByDateAsc(empid);		
 		model.addAttribute("emp", empdtl);
 		model.addAttribute("wsh", empwsh);
 		return new ModelAndView("ems/ajaxResponse/viewWorkShHistory", model);
@@ -100,12 +100,12 @@ public class WorkScheduleController {
 			
 			WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
 			for(LocalDate d:dates) {
-				wsh.setDate(d.toString());
+				wsh.setDate(d);
 				wsh.setWork_sh_id(wSHservice.generateWShID(wsh));
 				wsh.setAssigned_by_id(creator.getId());
 				wsh.setAssigned_by_full_name(creator.getFirstName()+" "+creator.getLastName());
 				try{wsh.setWork_minute((Duration.between(l1, l2).toMinutes())-wsh.getLunch_hour());}catch (Exception e) {wsh.setWork_minute(0);}
-				Date xdate = new SimpleDateFormat("yyyy-M-d").parse(wsh.getDate());
+				Date xdate = new SimpleDateFormat("yyyy-M-d").parse(wsh.getDate().toString());
 				wsh.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
 				wsh.setWeek(d.get(weekFields.weekOfWeekBasedYear()));
 				empWSHrepo.save(wsh);

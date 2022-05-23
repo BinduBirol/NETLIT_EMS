@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -127,6 +128,7 @@ public class EmployeeController {
 			if (user != null) {
 				Role role = roleRepository.getById((long) emp.getRoleid());
 				user.setRoles(Arrays.asList(role));
+				user.setUsing2FA(emp.isUsing2FA());
 				userService.updateUserInfo(user);
 			}
 
@@ -239,13 +241,15 @@ public class EmployeeController {
 
 	@GetMapping("/editEmployee")
 	public ModelAndView editEmployee(@RequestParam("empid") Long empid, final ModelMap model) {
-		model.addAttribute("roles", roleRepository.findAll());
+		model.addAttribute("roles", roleRepository.findAll());		
 		EMPLOYEE_BASIC empinfo = employeeRepository.findbyEmpid(empid);
 		if (empinfo.getEmp_image() != null) {
 			String imageencode = Base64.getEncoder().encodeToString(empinfo.getEmp_image());
 			empinfo.setEmp_image_encoded(imageencode);
 		}
 		model.addAttribute("empinfo", empinfo);
+		User getuser= userService.findUserByEmail(empinfo.getEmail());
+		model.addAttribute("user",getuser);
 		return new ModelAndView("ems/pages/editEmployee", model);
 	}
 

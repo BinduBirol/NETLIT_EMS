@@ -57,7 +57,7 @@
 					<div class="menu-item has-sub">
 						<a href="#" class="menu-link">
 							<span class="menu-icon">								
-								<i class="fab  fa-rocketchat"></i>
+								<i class="far  fa-comments"></i>
 							</span>
 							<span class="menu-text">Internal Communication</span>
 							<span class="menu-caret"><b class="caret"></b></span>
@@ -81,6 +81,24 @@
 							<span class="menu-icon"><i class="bi bi-calendar4"></i></span>
 							<span class="menu-text">Calendar</span>
 						</a>
+					</div>
+					
+					<div  class="menu-item has-sub">
+						
+						<a href="#" class="menu-link">
+							<span class="menu-icon">								
+								<i class="far  fa-clock"></i>
+							</span>
+							<span class="menu-text">Time Report</span>
+							<span class="menu-caret"><b class="caret"></b></span>
+						</a>
+						<div class="menu-submenu">
+							<div class="menu-item">
+								<a href="/work_schedule_home" class="menu-link">
+									<span class="menu-text">Work Schedule</span>
+								</a>
+							</div>												
+						</div>
 					</div>
 					
 					<div class="menu-header">Components</div>					
@@ -112,39 +130,23 @@
 						</div>
 					</div>
 					
-					<div  class="menu-item has-sub">
-						
-						<a href="#" class="menu-link">
-							<span class="menu-icon">								
-								<i class="fa  fa-tasks"></i>
-							</span>
-							<span class="menu-text">Work Schedule</span>
-							<span class="menu-caret"><b class="caret"></b></span>
-						</a>
-						<div class="menu-submenu">
-							<div class="menu-item">
-								<a href="/work_schedule_home" class="menu-link">
-									<span class="menu-text">Set Work Schedule</span>
-								</a>
-							</div>												
-						</div>
-					</div>
+					
 					
 					
 					
 					<div class="menu-divider"></div>
 					<div class="menu-header">Users</div>
-					<div sec:authorize="hasRole('SUPER ADMIN')" class="menu-item has-sub">						
+					<div class="menu-item has-sub">						
 						<a href="#" class="menu-link">
 							<span class="menu-icon">								
 								<i class="fab  fa-superpowers"></i>
 							</span>
-							<span class="menu-text">Super Administration</span>
+							<span class="menu-text">Administration</span>
 							<span class="menu-caret"><b class="caret"></b></span>
 						</a>
 						<div class="menu-submenu">
 							<div class="menu-item">
-								<a href="/loginas" class="menu-link">
+								<a href="/loginasHome" class="menu-link">
 									<span class="menu-text">Login As</span>
 								</a>
 							</div>												

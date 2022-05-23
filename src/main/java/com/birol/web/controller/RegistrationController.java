@@ -82,7 +82,16 @@ public class RegistrationController {
         model.addAttribute("token", token);
         return new ModelAndView("redirect:/badUser", model);
     }
-
+    
+    /*
+    @GetMapping("/loginas")
+    public ModelAndView loginas(final HttpServletRequest request, final ModelMap model, @RequestParam("email") final String email) throws UnsupportedEncodingException, LazyInitializationException {
+    	System.out.println(email);
+    	User user = userService.findUserByEmail(email);
+    	authWithoutPassword(user);
+    	return new ModelAndView("redirect:/dashboard", model);
+    }
+	*/
     @GetMapping("/console")
     public ModelAndView console(final HttpServletRequest request, final ModelMap model, @RequestParam("messageKey") final Optional<String> messageKey) {
 

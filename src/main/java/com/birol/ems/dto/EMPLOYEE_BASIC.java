@@ -97,7 +97,9 @@ public class EMPLOYEE_BASIC {
 	@Transient
 	private String contract_start_persent;
 	@Transient
-	private String contract_end_persent;	
+	private String contract_end_persent;
+	@Transient
+	private boolean isUsing2FA;
 	
 	private Date created;
 	private Date updated;
@@ -127,6 +129,14 @@ public class EMPLOYEE_BASIC {
 
 	public void setUpdated(Date updated) {
 		this.updated = updated;
+	}
+
+	public boolean isUsing2FA() {
+		return isUsing2FA;
+	}
+
+	public void setUsing2FA(boolean isUsing2FA) {
+		this.isUsing2FA = isUsing2FA;
 	}
 
 	public String getSex() {

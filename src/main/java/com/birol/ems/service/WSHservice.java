@@ -22,7 +22,7 @@ public class WSHservice {
 	}
 
 	public String generateWShID(Employee_work_schedule ewsh) {
-		String id = ewsh.getUserid() + ewsh.getDate().replace("-", "");
+		String id = ewsh.getUserid() + ewsh.getDate().toString().replace("-", "");
 		return id;
 	}
 

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="theme/header :: staticheaderFragment"></head>
+<body>
+	<!-- BEGIN #app -->
+	<div id="app" class="app app-content-full-height">
+		<div th:include="theme/header :: dynamicheaderFragment"></div>
+		<div th:include="theme/sidenav :: sidenav"></div>
+		<!-- BEGIN #content -->
+		<div th:include="ems/content/loginasContent :: loginasContent"></div>
+		<!-- END #content -->
+		<div th:include="theme/theme_util :: theme_util"></div>
+	</div>
+	<!-- END #app -->
+	<div th:include="theme/footer::staticFooter"></div>
+	<script type="text/javascript">
+		function getrole(z) {
+			$url = "getuserlistbyrole?role=" + $(z).val();
+			$.get($url, function(data, status) {				
+				$("#userlist").html(data);
+				$("#submitbuttondiv").hide();
+			});
+		}		
+	</script>
+</body>
+</html>

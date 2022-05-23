@@ -71,7 +71,7 @@
 												</thead>
 												<tbody>				
 													
-													<tr th:emp-id="${emp.empid}" th:each="emp,iterator : ${employees}">
+													<tr th:classappend="${emp.status} ? normal: text-muted"  th:emp-id="${emp.empid}" th:each="emp,iterator : ${employees}">
 														<td th:text="${iterator.index+1}">57</td>
 														<td><a th:text="${emp.full_name}" href="#" class="text-white" th:emp-id="${emp.empid}" onclick="viewEmlpoyee(this);"></a></td>
 														<td th:text="${emp.designation}">Customer Support</td>

@@ -1,0 +1,60 @@
+<div th:fragment="loginasContent">
+	<div id="content" class="app-content">
+		<div class="container">
+			<div class="row justify-content-center">
+				<!-- BEGIN col-10 -->
+				<div class="col-xl-10">
+					<!-- BEGIN row -->
+					<div class="row">
+						<!-- BEGIN col-9 -->
+						<div class="col-xl-9">
+							<ul class="breadcrumb">
+								<li class="breadcrumb-item"><a href="#">ADMINISTRATION</a></li>
+								<li class="breadcrumb-item active">LOGIN AS</li>
+							</ul>
+
+							<h1 class="page-header">Login as any user</h1>
+
+							<hr class="mb-4" />
+
+							<div id="errormsg" class="alert alert-danger"
+								style="display: none"></div>
+
+							<div class="card">
+								<div class="card-body">
+									<form>
+										<div class="mb-3">
+											<div class="form-group">
+												<label>Select Role</label> <select name="roleid" onchange="getrole(this)"
+													required="required" class="form-select" id="slct_role">
+													<option value="">Select Role</option>
+													<option th:each="roles : ${roles}" th:value="${roles.name}"
+														th:text="${roles.name}"></option>
+												</select>
+											</div>
+										</div>
+										
+										<div id="userlist" class=" form-group mb-3">
+										</div>
+
+										<div id="submitbuttondiv" style="display: none" class=" form-group mb-3">
+											<input type="submit" value="Log In" class="form-control btn btn-outline-theme"/>
+										</div>
+									
+
+									</form>
+								</div>
+								<div class="card-arrow">
+									<div class="card-arrow-top-left"></div>
+									<div class="card-arrow-top-right"></div>
+									<div class="card-arrow-bottom-left"></div>
+									<div class="card-arrow-bottom-right"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

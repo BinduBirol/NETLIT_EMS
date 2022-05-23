@@ -1,6 +1,7 @@
 package com.birol.spring;
 
 import com.birol.persistence.dao.UserRepository;
+import com.birol.security.CustomAuthenticationFailureHandler;
 import com.birol.security.CustomRememberMeServices;
 import com.birol.security.google2fa.CustomAuthenticationProvider;
 import com.birol.security.google2fa.CustomWebAuthenticationDetailsSource;
@@ -30,6 +31,7 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 
@@ -114,7 +116,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(authenticationFailureHandler)
                 .authenticationDetailsSource(authenticationDetailsSource)
             .permitAll()
-                .and()
+                .and()                
             .sessionManagement()
                 .invalidSessionUrl("/invalidSession.html")
                 .maximumSessions(1).sessionRegistry(sessionRegistry()).and()
@@ -180,5 +182,6 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
         expressionHandler.setRoleHierarchy(roleHierarchy());
         return expressionHandler;
     }
+    
 
 }
