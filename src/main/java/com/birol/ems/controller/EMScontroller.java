@@ -97,8 +97,9 @@ public class EMScontroller {
 
 	@GetMapping("/dashboard")
 	public ModelAndView dashboard(final ModelMap model, Authentication auth) {
-		List<String> getUsersFromActiveStore= activeUserStore.getUsers();		
-		//System.out.println(loggedinUserDTO.getEmail());
+		List<String> getUsersFromActiveStore= activeUserStore.getUsers();
+		ArrayList<LoggedinUserDTO> luserlist= (ArrayList<LoggedinUserDTO>) activeUserStore.getLoggedusers();		
+		model.addAttribute("luserlist", luserlist);
 		model.addAttribute("loggedInUsers", getUsersFromActiveStore);
 		List<String> getUsersFromSessionRegistry = userService.getUsersFromSessionRegistry();
 		model.addAttribute("getUsersFromSessionRegistry", getUsersFromSessionRegistry);

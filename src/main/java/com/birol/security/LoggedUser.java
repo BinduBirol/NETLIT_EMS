@@ -1,5 +1,7 @@
 package com.birol.security;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpSessionBindingEvent;
@@ -7,6 +9,8 @@ import javax.servlet.http.HttpSessionBindingListener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.birol.ems.dto.LoggedinUserDTO;
 import com.birol.ems.service.EMSservice;
 
 
@@ -29,11 +33,25 @@ public class LoggedUser implements HttpSessionBindingListener {
     }
 
     @Override
-    public void valueBound(HttpSessionBindingEvent event) {
-        List<String> users = activeUserStore.getUsers();
+    public void valueBound(HttpSessionBindingEvent event) {    	
+        List<String> users = activeUserStore.getUsers();        
         LoggedUser user = (LoggedUser) event.getValue();
         if (!users.contains(user.getUsername())) {
-            users.add(user.getUsername());        
+            users.add(user.getUsername()); 
+        }
+        
+        List<LoggedinUserDTO> loggedusers= activeUserStore.getLoggedusers(); 
+        boolean v = false;
+        for(LoggedinUserDTO u: loggedusers) {        	
+        	if(u.getEmail().contains(user.getUsername())) v=true;
+        }
+        if(!v) {
+        	Date now = new Date();            
+            LoggedinUserDTO l = new  LoggedinUserDTO();
+            l.setEmail(user.getUsername());
+            l.setLoggedin(now);
+            l.setIsloggedin(true);
+            loggedusers.add(l);
         }
     }
 
@@ -43,6 +61,19 @@ public class LoggedUser implements HttpSessionBindingListener {
         LoggedUser user = (LoggedUser) event.getValue();        
         users.remove(user.getUsername());
         
+        List<LoggedinUserDTO> loggedusers= activeUserStore.getLoggedusers();  
+        /*
+        for (Iterator<LoggedinUserDTO> it = loggedusers.iterator(); it.hasNext(); ) {
+        	LoggedinUserDTO lobj = it.next();
+            if (lobj.getEmail().contains(user.getUsername())) {
+                it.remove();
+            }
+        }*/
+        for(LoggedinUserDTO u: loggedusers) {
+        	if(u.getEmail().contains(user.getUsername())) {
+        		u.setIsloggedin(false);
+        	}
+        }
     }
     
     
