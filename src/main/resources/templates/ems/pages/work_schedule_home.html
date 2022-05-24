@@ -120,29 +120,6 @@
 	<!-- ================== END page-js ================== -->
 
 	<script type="text/javascript">
-		function viewEmlpoyee(z) {
-			$("tr").removeClass("table-primary");
-			$(z).closest("tr").addClass("table-primary");
-			$empid = $(z).attr("emp-id");
-			//$('#viewEmployee').modal('show');
-
-			$.ajax({
-				url : "viewEmployee?empid=" + $empid,
-				type : 'GET',
-				success : function(data) {
-					$('.empContent').html(data);
-					$('#viewEmployee').modal('show');
-					historytablecontent(z);
-				},
-				error : function(xhr, desc, err) {
-					$('.empContent').html(xhr.responseText);
-					$('#viewEmployee').modal('show');
-
-				}
-			});
-			//alert($empid);
-
-		}
 
 		function workschedule(z) {
 			$("tr").removeClass("table-primary");

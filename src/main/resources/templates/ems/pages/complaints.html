@@ -51,7 +51,7 @@
 									Issues
 								</h1>
 								
-								<hr class="mb-4" />								
+								<div th:if="${error!=null}" class="alert alert-danger"><p th:text="${error}"></p></div>							
 
 								<div class="modal fade" id="docomplaint">
 								  <div class="modal-dialog modal-xl">
@@ -149,6 +149,12 @@
 
 			<div class="modal fade" id="viewEmployee">
 				<div class="modal-dialog modal-xl">
+					<div class="modal-content empContent">...</div>
+				</div>
+			</div>
+			
+			<div class="modal fade" id="viewComp">
+				<div class="modal-dialog modal-xl">
 					<div class="modal-content m-cnt">...</div>
 				</div>
 			</div>
@@ -163,26 +169,7 @@
 	</div>
 	<!-- END #app -->
 		<script type="text/javascript">
-			function viewEmlpoyee(z) {
-				$empid = $(z).attr("emp-id");
-				//$('#viewEmployee').modal('show');
-
-				$.ajax({
-					url : "viewEmployee?empid=" + $empid,
-					type : 'GET',
-					success : function(data) {
-						$('.m-cnt').html(data);
-						$('#viewEmployee').modal('show');
-					},
-					error : function(xhr, desc, err) {
-						$('.m-cnt').html(xhr.responseText);
-						$('#viewEmployee').modal('show');
-
-					}
-				});
-				//alert($empid);
-
-			}
+			
 			function viewcomplaint(z) {
 				$cmpid = $(z).attr("cmp-id");
 				//$('#viewEmployee').modal('show');
@@ -192,11 +179,11 @@
 					type : 'GET',
 					success : function(data) {
 						$('.m-cnt').html(data);
-						$('#viewEmployee').modal('show');
+						$('#viewComp').modal('show');
 					},
 					error : function(xhr, desc, err) {
 						$('.m-cnt').html(xhr.responseText);
-						$('#viewEmployee').modal('show');
+						$('#viewComp').modal('show');
 
 					}
 				});
@@ -213,11 +200,11 @@
 					type : 'GET',
 					success : function(data) {
 						$('.m-cnt').html(data);
-						$('#viewEmployee').modal('show');
+						$('#viewComp').modal('show');
 					},
 					error : function(xhr, desc, err) {
 						$('.m-cnt').html(xhr.responseText);
-						$('#viewEmployee').modal('show');
+						$('#viewComp').modal('show');
 
 					}
 				});

@@ -120,7 +120,7 @@
 
 			<div class="modal fade" id="viewEmployee">
 				<div class="modal-dialog modal-xl">
-					<div class="modal-content">...</div>
+					<div class="modal-content empContent">...</div>
 				</div>
 			</div>
 
@@ -133,30 +133,7 @@
 		
 	</div>
 	<!-- END #app -->
-		<script type="text/javascript">
-			function viewEmlpoyee(z) {
-				$("tr").removeClass("table-primary");
-				$(z).closest("tr").addClass("table-primary");
-				$empid = $(z).attr("emp-id");
-				//$('#viewEmployee').modal('show');
-
-				$.ajax({
-					url : "viewEmployee?empid=" + $empid,
-					type : 'GET',
-					success : function(data) {
-						$('.modal-content').html(data);
-						$('#viewEmployee').modal('show');
-					},
-					error : function(xhr, desc, err) {
-						$('.modal-content').html(xhr.responseText);
-						$('#viewEmployee').modal('show');
-
-					}
-				});
-				//alert($empid);
-
-			}
-		</script>
+		
 
 		<!-- ================== BEGIN core-js ================== -->
 	<div th:include="theme/footer::staticFooter"></div>

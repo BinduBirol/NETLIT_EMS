@@ -60,15 +60,16 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
             else {
             	username = authentication.getName();
             }
-            LoggedUser luser = new LoggedUser(username, activeUserStore);
-            User user= userRepository.findByEmail(luser.getUsername());
-            EMPLOYEE_BASIC userdtl= employeeRepository.findbyWorkMail(luser.getUsername());
+            LoggedUser user = new LoggedUser(username, activeUserStore);
+            User thisuser= userRepository.findByEmail(user.getUsername());
+            EMPLOYEE_BASIC userdtl= employeeRepository.findbyWorkMail(user.getUsername());
             if(userdtl.getEmp_image()!=null) {
     			String imageencode = Base64.getEncoder().encodeToString(userdtl.getEmp_image());
     			userdtl.setEmp_image_encoded(imageencode);			    	
     		}
             session.setAttribute("userdtl", userdtl);
             session.setAttribute("user", user);
+            session.setAttribute("thisuser", thisuser);
         }
         clearAuthenticationAttributes(request);
 

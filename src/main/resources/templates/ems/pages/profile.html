@@ -15,12 +15,12 @@
 	<div th:include="theme/footer::staticFooter"></div>
 	<script>
 		
-		$("#personalinfoform").submit(function(event) {
+	/*	
+	$("#personalinfoform").submit(function(event) {
 			event.preventDefault();
 			$.ajax({
 				url : $(this).attr("action"),
-				type : $(this).attr("method"),
-				//dataType: "JSON",
+				type : $(this).attr("method"),				
 				data : new FormData(this),
 				processData : false,
 				contentType : false,
@@ -29,7 +29,7 @@
 					$('.toast-body .toast-message').html(data);					
 					$('.toast').toast('show');					
 					if (data.indexOf("Successfully") == -1) {
-						//location.reload();
+						
 					}
 				},
 				error : function(xhr, desc, err) {
@@ -41,7 +41,7 @@
 			});
 
 		});
-
+		*/
 		function previewFile(input) {
 			var file = $("input[type=file]").get(0).files[0];
 			if (file) {

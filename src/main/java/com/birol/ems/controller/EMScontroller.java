@@ -12,6 +12,7 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
 import java.security.Principal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
@@ -59,7 +60,9 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.birol.ems.dao.ComplaintsRepo;
+import com.birol.ems.dao.LoggedinUserRepo;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
+import com.birol.ems.dto.LoggedinUserDTO;
 import com.birol.ems.dto.Mail;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmailService;
@@ -87,12 +90,15 @@ public class EMScontroller {
 	ComplaintsRepo complaintsRepo;
 	@Autowired
 	com.birol.ems.dao.CommentRepo commentRepo;
+	@Autowired
+	LoggedinUserRepo loggedinUserRepo;
 
 	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
 
 	@GetMapping("/dashboard")
 	public ModelAndView dashboard(final ModelMap model, Authentication auth) {
-		List<String> getUsersFromActiveStore= activeUserStore.getUsers();
+		List<String> getUsersFromActiveStore= activeUserStore.getUsers();		
+		//System.out.println(loggedinUserDTO.getEmail());
 		model.addAttribute("loggedInUsers", getUsersFromActiveStore);
 		List<String> getUsersFromSessionRegistry = userService.getUsersFromSessionRegistry();
 		model.addAttribute("getUsersFromSessionRegistry", getUsersFromSessionRegistry);

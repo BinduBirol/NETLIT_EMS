@@ -7,6 +7,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.exception.GenericJDBCException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,13 +129,17 @@ public class InternalCommunicationController {
 			cmp.setEmpid(creator.getId());
 			cmp.setEmpname(creator.getFirstName() + " " + creator.getLastName());
 			if (cmp.getImage_m().getSize() > 0)
-				cmp.setImage(cmp.getImage_m().getBytes());
+				try {
+					cmp.setImage(cmp.getImage_m().getBytes());
+				} catch (IOException e) {
+					e.printStackTrace();
+					model.addAttribute("error", e.getMessage());
+				}
 			complaintsRepo.save(cmp);
-			// System.out.println(cmp);
-		} catch (Exception e) {
+		} catch (GenericJDBCException e) {
 			e.printStackTrace();
+			model.addAttribute("error", e.getMessage());
 		}
-
 		return new ModelAndView("redirect:/complaints", model);
 	}
 

@@ -55,24 +55,14 @@ public class WorkScheduleController {
 
 	@GetMapping("/workschedule")
 	public ModelAndView workschedule(@RequestParam("empid") Long empid, final ModelMap model) {
-		EMPLOYEE_BASIC empdtl = employeeRepository.findbyEmpid(empid);
-		if (empdtl.getEmp_image() != null) {
-			String imageencode = Base64.getEncoder().encodeToString(empdtl.getEmp_image());
-			empdtl.setEmp_image_encoded(imageencode);
-		}
-		// model.addAttribute("user",user);
-		model.addAttribute("userdtl", empdtl);
-		// return new ModelAndView("ems/pages/profile", model);
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
+		model.addAttribute("userdtl", empdtl);		
 		return new ModelAndView("ems/ajaxResponse/viewworkschedule", model);
 	}
 	
 	@GetMapping("/workschedulehistory")
 	public ModelAndView workschedulehistory(@RequestParam("empid") Long empid, final ModelMap model) {
-		EMPLOYEE_BASIC empdtl = employeeRepository.findbyEmpid(empid);
-		if (empdtl.getEmp_image() != null) {
-			String imageencode = Base64.getEncoder().encodeToString(empdtl.getEmp_image());
-			empdtl.setEmp_image_encoded(imageencode);
-		}
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
 		ArrayList<Employee_work_schedule> empwsh= new ArrayList<Employee_work_schedule>();
 		empwsh=(ArrayList<Employee_work_schedule>) empWSHrepo.findByUseridOrderByDateAsc(empid);		
 		model.addAttribute("emp", empdtl);

@@ -49,22 +49,7 @@ public class ProfileController {
 	@GetMapping("/profile")
 	public ModelAndView profile(final ModelMap model, Authentication auth) {
 		User user = (User) auth.getPrincipal();
-		EMPLOYEE_BASIC empdtl = employeeRepository.findbyEmpid(user.getId());
-		if (empdtl.getEmp_image() != null) {
-			String imageencode = Base64.getEncoder().encodeToString(empdtl.getEmp_image());
-			empdtl.setEmp_image_encoded(imageencode);
-		}
-		try {
-			Period p = Period.between(LocalDate.now(), LocalDate.parse(empdtl.getContract_end().replace("/", "-")));
-			String format_p = p.toString().replace("P", "").replace("Y", "Years ").replace("M", "Months ").replace("D",
-					"Days");
-			empdtl.setContact_status_str("align-middle");
-			if (format_p.startsWith("-"))
-				empdtl.setContact_status_str("text-danger");
-			empdtl.setContact_remaining_period(format_p);
-		} catch (Exception e2) {
-			empdtl.setContact_remaining_period("Not spacified");
-		}
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
 		model.addAttribute("user", user);
 		model.addAttribute("userdtl", empdtl);
 		return new ModelAndView("ems/pages/profile", model);
@@ -122,7 +107,8 @@ public class ProfileController {
 		}
 		employeeRepository.save(empbasic);
 		model.addAttribute("message", "Succesfully Updated Info For " + empbasic.getFirst_name());
-		model.addAttribute("class", "alert alert-success");
-		return new ModelAndView("theme/ajaxResponse", model);
+		model.addAttribute("class", "text-success");
+		//return new ModelAndView("theme/ajaxResponse", model);
+		return new ModelAndView("redirect:/profile", model);
 	}
 }

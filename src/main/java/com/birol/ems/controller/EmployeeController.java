@@ -1,6 +1,7 @@
 package com.birol.ems.controller;
 
 import java.nio.file.FileAlreadyExistsException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
@@ -9,6 +10,8 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
+import org.hibernate.exception.GenericJDBCException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,11 +189,11 @@ public class EmployeeController {
 			employeeRepository.save(emp);
 			model.addAttribute("message", "Successfully Updated Info For " + emp.getFull_name());
 			model.addAttribute("class", "text-success");
-		} catch (Exception e) {
+		} catch (GenericJDBCException e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
-			logger.error(e.getMessage());
-		}
+			logger.error("JDBC: "+e.getMessage());
+		} 
 		return new ModelAndView("theme/ajaxResponse", model);
 	}
 
@@ -217,36 +220,15 @@ public class EmployeeController {
 
 	@GetMapping("/viewEmployee")
 	public ModelAndView viewEmployee(@RequestParam("empid") Long empid, final ModelMap model) {
-		EMPLOYEE_BASIC empdtl = employeeRepository.findbyEmpid(empid);
-		if (empdtl.getEmp_image() != null) {
-			String imageencode = Base64.getEncoder().encodeToString(empdtl.getEmp_image());
-			empdtl.setEmp_image_encoded(imageencode);
-		}
-		try {
-			Period p = Period.between(LocalDate.now(), LocalDate.parse(empdtl.getContract_end().replace("/", "-")));
-			String format_p = p.toString().replace("P", "").replace("Y", "Years ").replace("M", "Months ").replace("D",
-					"Days");
-			empdtl.setContact_status_str("align-middle");
-			if (format_p.startsWith("-"))
-				empdtl.setContact_status_str("text-danger");
-			empdtl.setContact_remaining_period(format_p);
-		} catch (Exception e2) {
-			empdtl.setContact_remaining_period("Not spacified");
-		}
-		// model.addAttribute("user",user);
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
 		model.addAttribute("userdtl", empdtl);
-		// return new ModelAndView("ems/pages/profile", model);
 		return new ModelAndView("ems/ajaxResponse/viewEmployee", model);
 	}
 
 	@GetMapping("/editEmployee")
 	public ModelAndView editEmployee(@RequestParam("empid") Long empid, final ModelMap model) {
 		model.addAttribute("roles", roleRepository.findAll());		
-		EMPLOYEE_BASIC empinfo = employeeRepository.findbyEmpid(empid);
-		if (empinfo.getEmp_image() != null) {
-			String imageencode = Base64.getEncoder().encodeToString(empinfo.getEmp_image());
-			empinfo.setEmp_image_encoded(imageencode);
-		}
+		EMPLOYEE_BASIC empinfo = employeeService.getEmployeebyID(empid);
 		model.addAttribute("empinfo", empinfo);
 		User getuser= userService.findUserByEmail(empinfo.getEmail());
 		model.addAttribute("user",getuser);
