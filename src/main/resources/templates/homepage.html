@@ -3,15 +3,39 @@
 <head th:include="theme/header :: staticheaderFragment"></head>
 <body>
 	<!-- BEGIN #app -->
-	<div id="app" class="app app-content-full-height">		
+	<div id="app" class="app app-content-full-height">
 		<div th:include="theme/header :: dynamicheaderFragment"></div>
-		<div th:include="theme/sidenav :: sidenav"></div>		
+		<div th:include="theme/sidenav :: sidenav"></div>
 		<!-- BEGIN #content -->
 		<div th:include="ems/content/dashboard :: dashboard"></div>
 		<!-- END #content -->
-		<div th:include="theme/theme_util :: theme_util"></div>		
+		<div th:include="theme/theme_util :: theme_util"></div>
 	</div>
-	<!-- END #app -->	
-	<div th:include="theme/footer::staticFooter"></div>	
+	<!-- END #app -->
+	<div th:include="theme/footer::staticFooter"></div>
+	<script type="text/javascript">
+		viewToday();
+		getloggeinusers();		
+		
+		window.setInterval(function() {
+			getloggeinusers();
+		}, 300000);
+		
+		function getloggeinusers() {
+			$.get("getLoggedInUsers", function(data, status) {
+				$("#luserdiv").html(data);
+			});
+		}
+		function viewToday() {
+			var today = new Date();
+			var dd = String(today.getDate()).padStart(2, '0');
+			var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+			var yyyy = today.getFullYear();
+			today = mm + '/' + dd + '/' + yyyy;			
+			var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+			var date = new Date(today);
+			$("#date").html(weekday[date.getDay()].toUpperCase()+", "+ dd + '/' + mm + '/' + yyyy);
+		}
+	</script>
 </body>
 </html>

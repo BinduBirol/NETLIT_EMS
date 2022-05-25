@@ -13,21 +13,21 @@
 				<!-- BEGIN col-3 -->
 				<div class="col-xl-3 col-lg-6">
 					<!-- BEGIN card -->
-					<div class="card mb-3">
+					<div th:if="${wsh!=null}" th:classappend="${wsh.status}==0 ? text-muted : normal" class="card mb-3 ">
 						<!-- BEGIN card-body -->
 						<div class="card-body">
 							<!-- BEGIN title -->
 							<div class="d-flex fw-bold small mb-3">
-								<span class="flex-grow-1">SITE VISITORS</span> <a href="#"
+								<span class="flex-grow-1" id="date"></span> <a href="#"
 									data-toggle="card-expand"
-									class="text-white text-opacity-50 text-decoration-none"><i
+									class=" text-white text-opacity-50 text-decoration-none"><i
 									class="bi bi-fullscreen"></i></a>
 							</div>
 							<!-- END title -->
 							<!-- BEGIN stat-lg -->
 							<div class="row align-items-center mb-2">
 								<div class="col-7">
-									<h3 class="mb-0">4.2m</h3>
+									<h3 class="mb-0">[[${wsh.work_minute}]]min</h3>
 								</div>
 								<div class="col-5">
 									<div class="mt-n2" data-render="apexchart" data-type="bar"
@@ -36,11 +36,14 @@
 							</div>
 							<!-- END stat-lg -->
 							<!-- BEGIN stat-sm -->
-							<div class="small text-white text-opacity-50 text-truncate">
-								<i class="fa fa-chevron-up fa-fw me-1"></i> 33.3% more than last
-								week<br /> <i class="far fa-user fa-fw me-1"></i> 45.5% new
-								visitors<br /> <i class="far fa-times-circle fa-fw me-1"></i>
-								3.25% bounce rate
+							<div class="small  text-opacity-50 text-truncate">
+								<i class="fa fa-play fa-fw me-1"></i> Starts at [[${wsh.work_start}]]<br /> <i class="fa fa-hourglass-start fa-fw me-1"></i> Lunch Break [[${wsh.lunch_hour}]]m<br /> <i class="fa fa-stop fa-fw me-1"></i>
+								Ends at [[${wsh.work_end}]]
+								<br /> <i class="fa fa-hand-point-right fa-fw me-1"></i>
+								Assigned By [[${wsh.assigned_by_full_name}]]
+								<br /> <i class="far fa-comment-alt fa-fw me-1"></i>
+								[[${wsh.work_desc}]]
+								
 							</div>
 							<!-- END stat-sm -->
 						</div>
@@ -88,6 +91,8 @@
 							<div class="small text-white text-opacity-50 text-truncate">
 								<i class="fa fa-chevron-up fa-fw me-1"></i> 20.4% more than last
 								week<br /> <i class="fa fa-shopping-bag fa-fw me-1"></i> 33.5%
+								new orders<br /> <i class="fa fa-dollar-sign fa-fw me-1"></i>
+								6.21% conversion rate<br /> <i class="fa fa-shopping-bag fa-fw me-1"></i> 33.5%
 								new orders<br /> <i class="fa fa-dollar-sign fa-fw me-1"></i>
 								6.21% conversion rate
 							</div>
@@ -138,7 +143,9 @@
 								<i class="fa fa-chevron-up fa-fw me-1"></i> 59.5% more than last
 								week<br /> <i class="fab fa-facebook-f fa-fw me-1"></i> 45.5%
 								from facebook<br /> <i class="fab fa-youtube fa-fw me-1"></i>
-								15.25% from youtube
+								15.25% from youtube<br /> <i class="fa fa-shopping-bag fa-fw me-1"></i> 33.5%
+								new orders<br /> <i class="fa fa-dollar-sign fa-fw me-1"></i>
+								6.21% conversion rate
 							</div>
 							<!-- END stat-sm -->
 						</div>
@@ -187,7 +194,9 @@
 								<i class="fa fa-chevron-up fa-fw me-1"></i> 5.3% more than last
 								week<br /> <i class="far fa-hdd fa-fw me-1"></i> 10.5% from
 								total usage<br /> <i class="far fa-hand-point-up fa-fw me-1"></i>
-								2MB per visit
+								2MB per visit<br /> <i class="fa fa-shopping-bag fa-fw me-1"></i> 33.5%
+								new orders<br /> <i class="fa fa-dollar-sign fa-fw me-1"></i>
+								6.21% conversion rate
 							</div>
 							<!-- END stat-sm -->
 						</div>
@@ -214,8 +223,8 @@
 				<div class="col-xl-6 col-lg-6">
 					<div class="card">
 						<div class="card-header fw-bold small d-flex">
-							<span class="flex-grow-1">Currently Logged In <span
-								class="text-success">[[${luserlist.size}]]</span><span>/[[${getAlluser.size}]]</span></span>
+							<span class="flex-grow-1">User Login Activity</span>
+							<a class=" text-opacity-50 text-decoration-none" onclick="getloggeinusers()" href="#"> <i class="fa fa-refresh"></i></a> &nbsp;
 							<a href="#" data-toggle="card-expand"
 								class="text-white text-opacity-50 text-decoration-none"><i
 								class="fa fa-fw fa-expand"></i></a>
@@ -223,7 +232,11 @@
 						<div class="card-body">
 							
 
-
+							<div id="luserdiv">
+								
+  
+							
+							</div>
 
 
 
@@ -240,6 +253,12 @@
 
 				</div>
 				<!-- END col-3 -->
+			</div>
+			
+			<div class="modal fade" id="viewEmployee">
+				<div class="modal-dialog modal-xl">
+					<div class="modal-content empContent">...</div>
+				</div>
 			</div>
 		</div>
 </body>

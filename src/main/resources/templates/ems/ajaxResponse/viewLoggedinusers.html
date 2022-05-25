@@ -1,0 +1,19 @@
+<div class="list-group">
+  <!-- with icon -->
+  <div th:each="users : ${luserlist}"  class="list-group-item d-flex align-items-center">
+    <div class="w-40px h-40px d-flex align-items-center justify-content-center  rounded-2 ms-n1">
+      <img class="ms-100 mh-100 rounded" th:src="*{'data:image/jpeg;base64,'+{users.image_encoded}}"/>
+    </div>
+    <div class="flex-fill px-3">
+      <div class="">[[${users.fullname}]]
+      <i th:classappend="${users.isloggedin} ? text-success : text-muted" class="fa fa-circle"></i>
+      <span th:if="${users.email==session.user.username}">[You]</span> 
+      
+      </div>
+      <div class="small text-white text-opacity-50">[[${#dates.format(users.loggedin, 'dd MMM yyyy hh:mm:ss a')}]]</div>
+    </div>
+    <div class="dropdown">
+      <a href="#" th:emp-id="${users.id}" onclick="viewEmlpoyee(this);"  class=""><i class="fa fa-eye"></i></a>      
+    </div>
+  </div>
+  </div>

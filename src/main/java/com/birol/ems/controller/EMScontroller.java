@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -60,11 +62,14 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.birol.ems.dao.ComplaintsRepo;
+import com.birol.ems.dao.EmpWSHrepo;
 import com.birol.ems.dao.LoggedinUserRepo;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
+import com.birol.ems.dto.Employee_work_schedule;
 import com.birol.ems.dto.LoggedinUserDTO;
 import com.birol.ems.dto.Mail;
 import com.birol.ems.repo.EmployeeRepository;
+import com.birol.ems.service.EMSservice;
 import com.birol.ems.service.EmailService;
 import com.birol.ems.service.EmployeeService;
 import com.birol.persistence.dao.RoleRepository;
@@ -92,21 +97,50 @@ public class EMScontroller {
 	com.birol.ems.dao.CommentRepo commentRepo;
 	@Autowired
 	LoggedinUserRepo loggedinUserRepo;
+	@Autowired
+	EMSservice emsService;
+	@Autowired
+	EmpWSHrepo empWSHrepo;
 
 	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
 
 	@GetMapping("/dashboard")
-	public ModelAndView dashboard(final ModelMap model, Authentication auth) {
-		List<String> getUsersFromActiveStore= activeUserStore.getUsers();
-		ArrayList<LoggedinUserDTO> luserlist= (ArrayList<LoggedinUserDTO>) activeUserStore.getLoggedusers();		
-		model.addAttribute("luserlist", luserlist);
-		model.addAttribute("loggedInUsers", getUsersFromActiveStore);
-		List<String> getUsersFromSessionRegistry = userService.getUsersFromSessionRegistry();
-		model.addAttribute("getUsersFromSessionRegistry", getUsersFromSessionRegistry);
-		List<User> getAlluser = userService.findAllUser();
-		model.addAttribute("getAlluser", getAlluser);
+	public ModelAndView dashboard(final ModelMap model, Authentication auth) {		
 		User user = (User) auth.getPrincipal();
+		String pattern = "yyyyMMdd";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		String date = simpleDateFormat.format(new Date());
+		
+		Optional<Employee_work_schedule> ws= null;
+		Employee_work_schedule obj = new Employee_work_schedule();
+		try {
+			ws =empWSHrepo.findById(user.getId()+date);
+			model.addAttribute("wsh",ws.get());			
+		} catch (NoSuchElementException e) {
+			obj.setWork_minute(0);
+			obj.setWork_start("N/A");
+			obj.setWork_end("N/A");
+			model.addAttribute("wsh",obj);			
+		}		
 		return new ModelAndView("homepage", model);
+	}
+	
+	@GetMapping("/getLoggedInUsers")
+	public ModelAndView getLoggedInUsers(final ModelMap model) {
+		ArrayList<LoggedinUserDTO> luserlist= (ArrayList<LoggedinUserDTO>) activeUserStore.getLoggedusers();
+		
+		for(LoggedinUserDTO u: luserlist) {
+			EMPLOYEE_BASIC emp= new EMPLOYEE_BASIC();
+			emp= employeeRepository.findbyWorkMail(u.getEmail());
+			u.setId(emp.getEmpid());
+			u.setFullname(emp.getFull_name());
+			if (emp.getEmp_image() != null) {
+				String imageencode = Base64.getEncoder().encodeToString(emp.getEmp_image());				
+				u.setImage_encoded(imageencode);
+			}			
+		}
+		model.addAttribute("luserlist", luserlist);
+		return new ModelAndView("ems/ajaxResponse/viewLoggedinusers", model);
 	}
 
 	@GetMapping("/calendar")

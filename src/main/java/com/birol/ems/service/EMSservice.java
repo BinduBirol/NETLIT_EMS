@@ -1,5 +1,6 @@
 package com.birol.ems.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,13 +9,21 @@ import org.springframework.stereotype.Service;
 
 import com.birol.ems.dao.LoggedinUserRepo;
 import com.birol.ems.dto.LoggedinUserDTO;
+import com.birol.security.ActiveUserStore;
 import com.birol.security.LoggedUser;
 
 @Service
 public class EMSservice {
 	@Autowired
 	public LoggedinUserRepo loggedinUserRepo;
+	@Autowired
+	ActiveUserStore activeUserStore;
 
+	public ArrayList<LoggedinUserDTO> getloggedinusers(){
+		ArrayList<LoggedinUserDTO> users = (ArrayList<LoggedinUserDTO>) activeUserStore.getLoggedusers();
+		return users;
+	}
+	
 	public void saveloggedininfo(LoggedUser user) {
 		Date date = new Date();
 		LoggedinUserDTO l = new LoggedinUserDTO();
