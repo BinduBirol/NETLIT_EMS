@@ -13,7 +13,7 @@
 						<div class="widget-user-list">
 
 
-							<img height="30" width="30"
+							<img height="30" width="30" onerror="this.onerror=null; this.src='assets/img/user/user.png'"
 								th:src="*{'data:image/jpeg;base64,'+{emp.emp_image_encoded}}"
 								alt="" /> &nbsp; <a class="" th:text="${emp.full_name}">Bindu</a>
 
@@ -26,7 +26,7 @@
 
 			</tr>
 			<tr>
-				<th>P/A</th>
+				
 				<th>Date</th>
 				<th>Hour</th>
 				<th>Start</th>
@@ -35,6 +35,7 @@
 				<th>Assgn By</th>
 				<th>Desc</th>
 				<th>Assgn Date</th>
+				<th>P/A</th>
 				<th>info</th>
 
 			</tr>
@@ -43,7 +44,7 @@
 			<tr th:classappend="${wsh.status}==0 ? text-danger : text-success"
 				th:each="wsh,iterator : ${wsh}">
 
-				<td th:text="${wsh.status}==0 ? A : P">P/A</td>
+				
 				<td th:text="${wsh.date}">Date</td>
 				<td th:text="${wsh.work_minute}">Hour</td>
 				<td th:text="${wsh.work_start}">Start</td>
@@ -52,7 +53,8 @@
 
 				<td th:text="${wsh.assigned_by_full_name}">Assgn By</td>
 				<td th:text="${wsh.work_desc}">Desc</td>
-				<td th:text="${wsh.updated}">date</td>
+				<td th:text="${wsh.created}">date</td>
+				<td th:text="${wsh.status}==0 ? A : P">P/A</td>
 
 
 				<td><a href="#" data-bs-toggle="dropdown"

@@ -32,4 +32,8 @@ public interface EmployeeRepository extends CrudRepository<EMPLOYEE_BASIC, Strin
 	String getbyStatusQ= "SELECT * FROM employee_basic WHERE status = ?1  ";
 	@Query(value =getbyStatusQ,nativeQuery = true)
 	ArrayList<EMPLOYEE_BASIC> findbyStatus(int s);
+	
+	String getlatestQ= "SELECT * FROM employee_basic order by created desc limit 5 ";
+	@Query(value =getlatestQ,nativeQuery = true)
+	ArrayList<EMPLOYEE_BASIC> findlatest();
 }

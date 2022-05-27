@@ -44,7 +44,7 @@ public class LoggedUser implements HttpSessionBindingListener {
 		for (LoggedinUserDTO u : loggedusers) {
 			if (u.getEmail().contains(user.getUsername())) {
 				u.setIsloggedin(true);
-				;
+				u.setLoggedin(new Date());
 				v = true;
 			}
 		}

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>EMPLOYEE LIST</title>
+	<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	
+	<!-- ================== BEGIN core-css ================== -->
+	<link href="assets/css/vendor.min.css" rel="stylesheet" />
+	<link href="assets/css/app.min.css" rel="stylesheet" />
+	<link href="assets/css/netlit_ems.css" rel="stylesheet" />
+	<!-- ================== END core-css ================== -->
+	
+	<!-- ================== BEGIN page-css ================== -->
+	<link href="assets/plugins/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+	<link href="assets/plugins/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" />
+	<link href="assets/plugins/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
+	<link href="assets/plugins/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet" />
+	<!-- ================== END page-css ================== -->
+	<link href="/assets/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+
+	
+
+</head>
+<body>
+	<!-- BEGIN #app -->
+	<div id="app" class="app">
+		<div th:include="theme/header :: dynamicheaderFragment"></div>
+		<div th:include="theme/sidenav :: sidenav"></div>		
+		<!-- BEGIN #content -->
+		<div id="content" class="app-content">
+			<!-- BEGIN container -->
+			<div class="container">
+				<!-- BEGIN row -->
+				<div class="row justify-content-center">
+					<!-- BEGIN col-10 -->
+					<div >
+						<!-- BEGIN row -->
+						<div class="row">
+							<!-- BEGIN col-9 -->
+							
+								<ul class="breadcrumb">
+									<li class="breadcrumb-item"><a href="#">WORK SCHEDULE</a></li>
+									<li class="breadcrumb-item active">TIME REPORT</li>
+								</ul>
+								
+								<h1 class="page-header">
+									Time Report
+								</h1>
+								
+								<hr class="mb-4" />
+								
+								<!-- BEGIN #datatable -->
+								<div id="datatable" class="mb-5">
+									<div class="card border-theme">
+										<div class="card-header fw-bold small d-flex">
+									    <div class="flex-grow-1">
+									    
+												<div class="row">
+													<form id="searchform" action="timeReport" method="get">													
+														<div class="col-sm-6">
+															<div class="">																
+																<div id="advance-daterange" class="btn btn-outline-theme d-flex align-items-center text-start">
+																	<span class="text-truncate">&nbsp;</span>
+																	<i class="fa fa-caret-down ms-auto"></i>
+																</div>
+															</div>
+															<input type="hidden" name="daterange" id="daterangeinput"/>
+															<input type="hidden" name="userid" th:value="${session.userdtl.empid}" />
+															<input type="hidden"/>
+														</div>														
+													</form>
+																								
+													
+													</div>
+													
+													</div>
+									    
+									    </span>
+									    <a href="#" data-toggle="card-expand" class="text-white text-opacity-50 text-decoration-none"><i class="fa fa-fw fa-expand"></i></a>
+									  </div>
+										<div class="card-body">
+											<table  id="datatableDefault" class="table text-nowrap w-100">
+												<thead>
+													<tr>
+														<th>Date</th>														
+														<th>Week</th>
+														<th>Day</th>														
+														<th>Hour</th>
+														<th>Start</th>
+														<th>End</th>
+														<th>Break</th>
+														<th>Assgn By</th>
+														<th>Desc</th>
+														<th>Assgn Date</th>		
+														<th>P/A</th>
+													</tr>
+												</thead>
+												<tbody>	
+												
+													
+													
+													<tr th:classappend="${wsh.status}==0 ? text-muted : normal"
+														th:each="wsh,iterator : ${wsh}">														
+														<td th:text="${wsh.date}">Date</td>										
+														
+														<td th:text="${wsh.week}">Date</td>
+														<td th:text="${wsh.day}">Date</td>
+														
+														<td th:text="${wsh.work_minute}">Hour</td>
+														<td th:text="${wsh.work_start}">Start</td>
+														<td th:text="${wsh.work_end}">End</td>
+														<td th:text="${wsh.lunch_hour}">Break</td>										
+														<td th:text="${wsh.assigned_by_full_name}">Assgn By</td>
+														<td th:text="${wsh.work_desc}">Desc</td>
+														<td th:text="${wsh.created}">date</td>
+														<td th:text="${wsh.status}==0 ? ABSENT : PRESENT">P/A</td>
+													</tr>
+													
+													
+												</tbody>
+											</table>
+										</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+										
+									</div>
+								</div>
+								<!-- END #datatable -->
+								
+								
+							</div>
+							<!-- END col-9-->
+							<!-- BEGIN col-3 -->
+							
+							<!-- END col-3 -->
+						</div>
+						<!-- END row -->
+					</div>
+					<!-- END col-10 -->
+				</div>
+				<!-- END row -->				
+
+			<div class="modal fade" id="viewEmployee">
+				<div class="modal-dialog modal-xl">
+					<div class="modal-content empContent">...</div>
+				</div>
+			</div>
+
+			<!-- END container -->
+		<!-- END #content -->
+		
+		<div th:include="theme/theme_util :: theme_util"></div>	
+		
+		
+		
+	</div>
+	<!-- END #app -->
+	
+		
+
+		<!-- ================== BEGIN core-js ================== -->
+	<div th:include="theme/footer::staticFooter"></div>
+	<!-- ================== END core-js ================== -->
+	
+	<!-- ================== BEGIN page-js ================== -->
+	<script src="assets/plugins/@highlightjs/cdn-assets/highlight.min.js"></script>
+	<script src="assets/js/demo/highlightjs.demo.js"></script>
+	<script src="assets/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="assets/plugins/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+	<script src="assets/plugins/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="assets/plugins/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+	<script src="assets/plugins/datatables.net-buttons/js/buttons.flash.min.js"></script>
+	<script src="assets/plugins/datatables.net-buttons/js/buttons.html5.min.js"></script>
+	<script src="assets/plugins/datatables.net-buttons/js/buttons.print.min.js"></script>
+	<script src="assets/plugins/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+	<script src="assets/plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="assets/plugins/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+	<script src="assets/plugins/bootstrap-table/dist/bootstrap-table.min.js"></script>
+	<script src="assets/js/demo/table-plugins.demo.js"></script>
+	<script src="assets/js/demo/sidebar-scrollspy.demo.js"></script>
+	<!-- ================== END page-js ================== -->
+	<script src="assets/js/demo/form-plugins.demo.js"></script>
+	<script src="/assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	<script src="assets/plugins/moment/min/moment.min.js"></script>
+	<script src="assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+	
+	<script>
+	$("li").removeClass("active");
+	var urlParams = new URLSearchParams(window.location.search); //get all parameters
+	var daterange = urlParams.get('daterange'); //extract the foo parameter - this will return NULL if foo isn't a parameter
+	if(daterange){
+		$('#daterangeinput').val(daterange);
+		const dates= daterange.split("A");
+		$('#advance-daterange span').html(moment(dates[0], 'YYYY-MM-DD').format('MMMM D, YYYY') + ' - ' + moment(dates[1], 'YYYY-MM-DD').format('MMMM D, YYYY'));
+	}else{
+		$('#advance-daterange span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+		$('#daterangeinput').val(moment().subtract('days', 29).format('YYYY-MM-DD') + 'A' + moment().format('YYYY-MM-DD'));
+		
+	}
+	
+	</script>
+</body>
+</html>

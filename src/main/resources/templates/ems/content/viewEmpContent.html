@@ -10,6 +10,7 @@
 								<div class="text-center">
 									<img class="profile-img img-thumbnail"
 										th:src="*{'data:image/jpeg;base64,'+{userdtl.emp_image_encoded}}"
+										onerror="this.onerror=null; this.src='assets/img/user/user.png'"										
 										alt="User Image" />			
 															
 								

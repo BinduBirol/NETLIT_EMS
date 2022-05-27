@@ -15,11 +15,7 @@
 	<div th:include="theme/footer::staticFooter"></div>
 	<script type="text/javascript">
 		viewToday();
-		getloggeinusers();		
-		
-		window.setInterval(function() {
-			getloggeinusers();
-		}, 300000);
+		getloggeinusers();	
 		
 		function getloggeinusers() {
 			$.get("getLoggedInUsers", function(data, status) {

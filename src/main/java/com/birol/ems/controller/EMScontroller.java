@@ -121,7 +121,9 @@ public class EMScontroller {
 			obj.setWork_start("N/A");
 			obj.setWork_end("N/A");
 			model.addAttribute("wsh",obj);			
-		}		
+		}
+		model.addAttribute("latest",employeeService.getLatestEmployeeList());
+		model.addAttribute("user",employeeService.getEmployeebyID(user.getId()));	
 		return new ModelAndView("homepage", model);
 	}
 	

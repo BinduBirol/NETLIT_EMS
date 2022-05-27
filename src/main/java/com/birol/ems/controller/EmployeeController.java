@@ -134,7 +134,8 @@ public class EmployeeController {
 				user.setUsing2FA(emp.isUsing2FA());
 				userService.updateUserInfo(user);
 			}
-
+			emp.setStatus(empbasic.isStatus());
+			emp.setCreated(empbasic.getCreated());
 			try {
 				if (emp.getEmp_image_m().getSize() > 0) {
 					emp.setEmp_image(emp.getEmp_image_m().getBytes());

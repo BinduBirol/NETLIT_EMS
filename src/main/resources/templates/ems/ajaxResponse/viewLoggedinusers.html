@@ -2,11 +2,11 @@
   <!-- with icon -->
   <div th:each="users : ${luserlist}"  class="list-group-item d-flex align-items-center">
     <div class="w-40px h-40px d-flex align-items-center justify-content-center  rounded-2 ms-n1">
-      <img class="ms-100 mh-100 rounded" th:src="*{'data:image/jpeg;base64,'+{users.image_encoded}}"/>
+      <img class="ms-100 mh-100 rounded-circle" onerror="this.onerror=null; this.src='assets/img/user/user.png'" th:src="*{'data:image/jpeg;base64,'+{users.image_encoded}}"/>
     </div>
     <div class="flex-fill px-3">
       <div class="">[[${users.fullname}]]
-      <i th:classappend="${users.isloggedin} ? text-success : text-muted" class="fa fa-circle"></i>
+      <i th:classappend="${users.isloggedin} ? text-success : text-muted" class="small fa fa-circle"></i>
       <span th:if="${users.email==session.user.username}">[You]</span> 
       
       </div>

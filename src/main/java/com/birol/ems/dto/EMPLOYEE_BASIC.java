@@ -101,6 +101,7 @@ public class EMPLOYEE_BASIC {
 	@Transient
 	private boolean isUsing2FA;
 	
+	@Column(nullable = false)
 	private Date created;
 	private Date updated;
 

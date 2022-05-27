@@ -34,14 +34,14 @@ var handleDateRangePicker = function() {
 		$('#default-daterange input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
 	});
 
-	$('#advance-daterange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+	//$('#advance-daterange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
 
 	$('#advance-daterange').daterangepicker({
-		format: 'MM/DD/YYYY',
+		format: 'YYYY-MM-DD',
 		startDate: moment().subtract(29, 'days'),
 		endDate: moment(),
-		minDate: '01/01/2012',
-		maxDate: '12/31/2015',
+		minDate: '2022-01-01',
+		maxDate: moment().add(29, 'd'),
 		dateLimit: { days: 60 },
 		showDropdowns: true,
 		showWeekNumbers: true,
@@ -74,6 +74,8 @@ var handleDateRangePicker = function() {
 		}
 	}, function(start, end, label) {
 		$('#advance-daterange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+		$('#daterangeinput').val(start.format('YYYY-MM-DD') + 'A' + end.format('YYYY-MM-DD'));
+		$("#searchform").submit();
 	});
 };
 

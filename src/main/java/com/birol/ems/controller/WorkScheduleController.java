@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -64,7 +65,7 @@ public class WorkScheduleController {
 	public ModelAndView workschedulehistory(@RequestParam("empid") Long empid, final ModelMap model) {
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
 		ArrayList<Employee_work_schedule> empwsh= new ArrayList<Employee_work_schedule>();
-		empwsh=(ArrayList<Employee_work_schedule>) empWSHrepo.findByUseridOrderByDateAsc(empid);		
+		empwsh=(ArrayList<Employee_work_schedule>) empWSHrepo.findByUserid(empid);		
 		model.addAttribute("emp", empdtl);
 		model.addAttribute("wsh", empwsh);
 		return new ModelAndView("ems/ajaxResponse/viewWorkShHistory", model);
@@ -116,5 +117,31 @@ public class WorkScheduleController {
 			final ModelMap model) {
 		
 		return new ModelAndView("theme/ajaxResponse.html", model);
+	}
+	
+	@GetMapping("/timeReport")
+	public ModelAndView timeReport(@RequestParam(required = false) String daterange,
+			@RequestParam(required = false) String empid,
+			Authentication auth,final ModelMap model) {
+		User user = (User) auth.getPrincipal();
+		long userid = 0;		
+		if(empid==null)userid=user.getId();		
+		
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(userid);
+		model.addAttribute("emp", empdtl);
+		
+		String fromdate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String todate =fromdate;
+		
+		if(daterange!=null) {
+			String[] split= daterange.split("A");
+			fromdate= split[0];
+			todate= split[1];
+		}		
+		ArrayList<Employee_work_schedule> ewsh = null;
+		ewsh= empWSHrepo.getAllBetweenDates(userid,fromdate,todate);		;
+		model.addAttribute("wsh", ewsh);
+		//model.addAttribute("employees", employeeService.getEmployeeList());
+		return new ModelAndView("ems/pages/timeReport", model);
 	}
 }

@@ -38,7 +38,7 @@
 <form onsubmit="return mySubmitFunction(event)" id="wshform" action="saveWSH" method="post" >
 <div class="modal-header">
 	<div class="d-flex align-items-start">
-		<a href="#"> <img
+		<a href="#"> <img onerror="this.onerror=null; this.src='assets/img/user/user.png'"
 			th:src="*{'data:image/jpeg;base64,'+{userdtl.emp_image_encoded}}"
 			alt="" width="100" class="rounded" />
 		</a>

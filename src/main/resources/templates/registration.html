@@ -8,7 +8,7 @@
 color:#000;
 }
 </style>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="assets/js/demo/jquery.min.js"></script>
 <script th:src="@{/resources/pwstrength.js}"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII"/>
 <title th:utext="#{label.form.title}">form</title>
@@ -25,7 +25,7 @@ color:#000;
 			<!-- BEGIN register-content -->
 			<div class="register-content">				
     
-        <div >
+        
             <h1 class="text-center">Sign Up</h1>
             <p class="text-white text-opacity-50 text-center">One ID is all you need to access the NetLit services.</p>
             
@@ -33,35 +33,35 @@ color:#000;
             <form action="/" method="POST" enctype="utf8" >
                 <div class="mb-3" >
                     <label for="firstName" class="col-sm-5" th:utext="#{label.user.firstName}">first</label>
-                    <span class="col-sm-5"><input id="firstName" class="form-control form-control-lg bg-white bg-opacity-5" name="firstName" value="" required="required"/></span>
+                    <input id="firstName" class="form-control form-control-lg bg-white bg-opacity-5" name="firstName" value="" required="required"/>
                     <span id="firstNameError" class="alert alert-danger col-sm-4" style="display:none"></span>
                     
                 </div>
                 <div class="mb-3">
                     <label for="lastName" class="col-sm-5" th:utext="#{label.user.lastName}">last</label>
-                    <span class="col-sm-5"><input id="lastName" class="form-control form-control-lg bg-white bg-opacity-5" name="lastName" value="" required="required"/></span>
+                    <input id="lastName" class="form-control form-control-lg bg-white bg-opacity-5" name="lastName" value="" required="required"/>
                     <span id="lastNameError" class="alert alert-danger col-sm-4" style="display:none"></span>
                     
                 </div>
                 <div class="mb-3">
                     <label for="email" class="col-sm-5" th:utext="#{label.user.email}">email</label>
-                    <span class="col-sm-5"><input id="email" type="email" class="form-control form-control-lg bg-white bg-opacity-5" name="email" value="" required="required"/></span>
+                    <input id="email" type="email" class="form-control form-control-lg bg-white bg-opacity-5" name="email" value="" required="required"/>
                     <span id="emailError" class="text-danger col-sm-4" style="display:none"></span>
                     
                 </div>
                 <div class="mb-3">
                     <label for="password" class="col-sm-5" th:utext="#{label.user.password}">password</label>
-                    <span class="col-sm-5"><input id="password" class="form-control form-control-lg bg-white bg-opacity-5" name="password" value="" type="password" required="required" autocomplete="new-password"/></span>
+                    <input id="password" class="form-control form-control-lg bg-white bg-opacity-5" name="password" value="" type="password" required="required" autocomplete="new-password"/>
                     
                 </div>
                 <div class="mb-3">
                     <label for="matchPassword" class="col-sm-5" th:utext="#{label.user.confirmPass}">confirm</label>
-                    <span class="col-sm-5"><input id="matchPassword" class="form-control form-control-lg bg-white bg-opacity-5" name="matchingPassword" value="" type="password" required="required" autocomplete="new-password"/></span>
+                    <input id="matchPassword" class="form-control form-control-lg bg-white bg-opacity-5" name="matchingPassword" value="" type="password" required="required" autocomplete="new-password"/>
                     <span id="globalError" class="text-danger col-sm-5" style="display:none"></span>
                 </div>
                 <div class="mb-3">
                 	<div class="form-check">                                      
-	                    <span class="col-sm-5"><input class="form-check-input"  id="using2FA" type="checkbox" name="using2FA" checked onclick="alert('You must Use Two Steps Verification');return false;" value="true"/></span>
+	                    <input class="form-check-input"  id="using2FA" type="checkbox" name="using2FA" checked onclick="alert('You must Use Two Steps Verification');return false;" value="true"/>
 	                	<label for="using2FA" class="form-check-label" th:utext="#{label.user.2fa}">Use Two Steps Verification</label>  
                 	</div>
                 </div>
@@ -89,8 +89,7 @@ color:#000;
     	
     	<span id="passwordError" class="text-danger " style="display:none"></span>
     
-    </div>	
-    </div>
+    </div>	F
 
 <script th:inline="javascript">
 var serverContext = [[@{/}]];

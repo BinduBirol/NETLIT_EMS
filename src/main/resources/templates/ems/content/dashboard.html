@@ -13,7 +13,9 @@
 				<!-- BEGIN col-3 -->
 				<div class="col-xl-3 col-lg-6">
 					<!-- BEGIN card -->
-					<div th:if="${wsh!=null}" th:classappend="${wsh.status}==0 ? text-muted : normal" class="card mb-3 ">
+					<div th:if="${wsh!=null}"
+						th:classappend="${wsh.status}==0 ? bg-danger : bg-theme"
+						class="card mb-3  border-theme bg-opacity-25">
 						<!-- BEGIN card-body -->
 						<div class="card-body">
 							<!-- BEGIN title -->
@@ -37,13 +39,15 @@
 							<!-- END stat-lg -->
 							<!-- BEGIN stat-sm -->
 							<div class="small  text-opacity-50 text-truncate">
-								<i class="fa fa-play fa-fw me-1"></i> Starts at [[${wsh.work_start}]]<br /> <i class="fa fa-hourglass-start fa-fw me-1"></i> Lunch Break [[${wsh.lunch_hour}]]m<br /> <i class="fa fa-stop fa-fw me-1"></i>
-								Ends at [[${wsh.work_end}]]
-								<br /> <i class="fa fa-hand-point-right fa-fw me-1"></i>
-								Assigned By [[${wsh.assigned_by_full_name}]]
-								<br /> <i class="far fa-comment-alt fa-fw me-1"></i>
-								[[${wsh.work_desc}]]
-								
+								<i class="fa fa-play fa-fw me-1"></i> Starts at
+								[[${wsh.work_start}]]<br /> <i
+									class="fa fa-hourglass-start fa-fw me-1"></i> Lunch Break
+								[[${wsh.lunch_hour}]]m<br /> <i class="fa fa-stop fa-fw me-1"></i>
+								Ends at [[${wsh.work_end}]] <br /> <i
+									class="fa fa-hand-point-right fa-fw me-1"></i> Assigned By
+								[[${wsh.assigned_by_full_name}]] <br /> <i
+									class="far fa-comment-alt fa-fw me-1"></i> [[${wsh.work_desc}]]
+
 							</div>
 							<!-- END stat-sm -->
 						</div>
@@ -65,12 +69,12 @@
 				<!-- BEGIN col-3 -->
 				<div class="col-xl-3 col-lg-6">
 					<!-- BEGIN card -->
-					<div class="card mb-3">
+					<div class="card border-theme mb-3">
 						<!-- BEGIN card-body -->
 						<div class="card-body">
 							<!-- BEGIN title -->
 							<div class="d-flex fw-bold small mb-3">
-								<span class="flex-grow-1">STORE SALES</span> <a href="#"
+								<span class="flex-grow-1">CONTRACT</span> <a href="#"
 									data-toggle="card-expand"
 									class="text-white text-opacity-50 text-decoration-none"><i
 									class="bi bi-fullscreen"></i></a>
@@ -89,12 +93,13 @@
 							<!-- END stat-lg -->
 							<!-- BEGIN stat-sm -->
 							<div class="small text-white text-opacity-50 text-truncate">
-								<i class="fa fa-chevron-up fa-fw me-1"></i> 20.4% more than last
-								week<br /> <i class="fa fa-shopping-bag fa-fw me-1"></i> 33.5%
-								new orders<br /> <i class="fa fa-dollar-sign fa-fw me-1"></i>
-								6.21% conversion rate<br /> <i class="fa fa-shopping-bag fa-fw me-1"></i> 33.5%
-								new orders<br /> <i class="fa fa-dollar-sign fa-fw me-1"></i>
-								6.21% conversion rate
+								<i class="fa fa-shopping-bag fa-fw me-1"></i> [[${user.employee_Type}]] employee<br />
+								<i class="far fa-calendar fa-fw me-1"></i> Started [[${user.contract_start}]]<br /> 
+								<i class="far fa-calendar fa-fw me-1"></i> End Date: [[${user.contract_end}]]<br /> 
+								<i class="fa fa-dollar-sign fa-fw me-1"></i>
+								Remains: [[${user.Contact_remaining_period}]]<br /> 
+								
+								 <a class="text-decoration-none" href="profile"><i class="fa fa-chevron-right fa-fw me-1"></i>Go to profile</a>
 							</div>
 							<!-- END stat-sm -->
 						</div>
@@ -143,9 +148,10 @@
 								<i class="fa fa-chevron-up fa-fw me-1"></i> 59.5% more than last
 								week<br /> <i class="fab fa-facebook-f fa-fw me-1"></i> 45.5%
 								from facebook<br /> <i class="fab fa-youtube fa-fw me-1"></i>
-								15.25% from youtube<br /> <i class="fa fa-shopping-bag fa-fw me-1"></i> 33.5%
-								new orders<br /> <i class="fa fa-dollar-sign fa-fw me-1"></i>
-								6.21% conversion rate
+								15.25% from youtube<br /> <i
+									class="fa fa-shopping-bag fa-fw me-1"></i> 33.5% new orders<br />
+								<i class="fa fa-dollar-sign fa-fw me-1"></i> 6.21% conversion
+								rate
 							</div>
 							<!-- END stat-sm -->
 						</div>
@@ -194,8 +200,8 @@
 								<i class="fa fa-chevron-up fa-fw me-1"></i> 5.3% more than last
 								week<br /> <i class="far fa-hdd fa-fw me-1"></i> 10.5% from
 								total usage<br /> <i class="far fa-hand-point-up fa-fw me-1"></i>
-								2MB per visit<br /> <i class="fa fa-shopping-bag fa-fw me-1"></i> 33.5%
-								new orders<br /> <i class="fa fa-dollar-sign fa-fw me-1"></i>
+								2MB per visit<br /> <i class="fa fa-shopping-bag fa-fw me-1"></i>
+								33.5% new orders<br /> <i class="fa fa-dollar-sign fa-fw me-1"></i>
 								6.21% conversion rate
 							</div>
 							<!-- END stat-sm -->
@@ -218,25 +224,71 @@
 
 			<div class="row">
 				<div class="col-xl-6 col-lg-6">
-					[[${#request.userPrincipal.principal.roles}]]</div>
-				<!-- BEGIN col-3 -->
-				<div class="col-xl-6 col-lg-6">
 					<div class="card">
 						<div class="card-header fw-bold small d-flex">
-							<span class="flex-grow-1">User Login Activity</span>
-							<a class=" text-opacity-50 text-decoration-none" onclick="getloggeinusers()" href="#"> <i class="fa fa-refresh"></i></a> &nbsp;
-							<a href="#" data-toggle="card-expand"
+							<span class="flex-grow-1">New Members</span> <a href="#"
+								data-toggle="card-expand"
+								class="text-white text-opacity-50 text-decoration-none"><i
+								class="fa fa-fw fa-expand"></i></a>
+						</div>
+						<div class="card-body ">
+							
+							<div class="list-group">
+							  <!-- with icon -->
+							  <div th:each="users : ${latest}"  class="list-group-item d-flex align-items-center">
+							    <div class="w-40px h-40px d-flex align-items-center justify-content-center  rounded-2 ms-n1">
+							      <img class="ms-100 mh-100 rounded-circle" onerror="this.onerror=null; this.src='assets/img/user/user.png'" th:src="*{'data:image/jpeg;base64,'+{users.emp_image_encoded}}"/>
+							    </div>
+							    <div class="flex-fill px-3">
+							      <div class="">[[${users.full_name}]]
+							      <i th:classappend="${users.status} ? fa-user-check : fa-user-slash" class=" text-muted small fa"></i>
+							      <span th:if="${users.email==session.user.username}">[You]</span> 
+							      
+							      </div>
+							      <div class="small text-white text-opacity-50">[[${#dates.format(users.created, 'dd MMM yyyy')}]]</div>
+							    </div>
+							    <div class="dropdown">
+							         
+							    	<a href="#" data-bs-toggle="dropdown" class=" text-opacity-50">
+														<i
+																class="fa fa-ellipsis-h"></i></a>
+															<div class="dropdown-menu dropdown-menu-end">
+																<a href="#" th:emp-id="${users.empid}" onclick="viewEmlpoyee(this);" class="dropdown-item">View</a> 
+																<a th:href="@{/editEmployee(empid=${users.empid})}"
+																  class="dropdown-item">Edit</a> 
+																<a href="#" class="dropdown-item">Report</a>
+															</div>
+							    </div>
+							  </div>
+							  </div>
+						</div>
+
+						<div class="card-arrow">
+							<div class="card-arrow-top-left"></div>
+							<div class="card-arrow-top-right"></div>
+							<div class="card-arrow-bottom-left"></div>
+							<div class="card-arrow-bottom-right"></div>
+						</div>
+
+					</div>
+				</div>
+				<!-- BEGIN col-3 -->
+				<div class="col-xl-6 col-lg-6">
+
+					<div class="card">
+						<div class="card-header fw-bold small d-flex">
+							<span class="flex-grow-1">User Login Activity</span> <a
+								class=" text-opacity-50 text-decoration-none"
+								onclick="getloggeinusers()" href="#"> <i
+								class="fa fa-refresh"></i></a> &nbsp; <a href="#"
+								data-toggle="card-expand"
 								class="text-white text-opacity-50 text-decoration-none"><i
 								class="fa fa-fw fa-expand"></i></a>
 						</div>
 						<div class="card-body">
-							
 
-							<div id="luserdiv">
-								
-  
-							
-							</div>
+
+							<div id="luserdiv"></div>
 
 
 
@@ -254,12 +306,13 @@
 				</div>
 				<!-- END col-3 -->
 			</div>
-			
+
 			<div class="modal fade" id="viewEmployee">
 				<div class="modal-dialog modal-xl">
 					<div class="modal-content empContent">...</div>
 				</div>
 			</div>
 		</div>
+		
 </body>
 </html>
