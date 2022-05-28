@@ -36,5 +36,11 @@ public class WSHservice {
 		empwsh=(ArrayList<Employee_work_schedule>) empWSHrepo.findByUserid(empid);
 		return empwsh;
 	}
+	
+	public String mintsTOHmConvert(long t) {
+		long hours = t / 60;
+		long minutes = t % 60;		
+		return new String().format("%d Hours %02d Minutes", hours, minutes);
+	}
 
 }

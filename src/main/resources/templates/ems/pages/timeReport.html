@@ -21,6 +21,9 @@
 	<link href="assets/plugins/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet" />
 	<!-- ================== END page-css ================== -->
 	<link href="/assets/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+	<link href="/assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+	
+	
 
 	
 
@@ -59,23 +62,43 @@
 										<div class="card-header fw-bold small d-flex">
 									    <div class="flex-grow-1">
 									    
-												<div class="row">
+												<div class="row small">
 													<form id="searchform" action="timeReport" method="get">													
-														<div class="col-sm-6">
-															<div class="">																
-																<div id="advance-daterange" class="btn btn-outline-theme d-flex align-items-center text-start">
-																	<span class="text-truncate">&nbsp;</span>
-																	<i class="fa fa-caret-down ms-auto"></i>
-																</div>
+														<div class="col-sm-9">
+															<div class="input-group " id="">
+																<span class="input-group-text"><i class="fa fa-filter"></i></span>
+																<select name="empid" id="empidselect" class="form-select form-select-sm">																	
+																	<option th:value="${session.userdtl.empid}"> Myself </option>
+																	<option th:each="emps : ${emps}" th:value="${emps.empid}">[[${emps.full_name}]]</option>																	
+																</select>
+																
+																<select name="c" id="daterangeselect" class="form-select form-select-sm">
+																	<option value="">Date Range</option>
+																	<option value="t">Today</option>
+																	<option value="y">Yesterday</option>
+																	<option value="lw">Last Week</option>
+																	<option value="tw">This Week</option>
+																	<option value="nw">Next Week</option>
+																	<option value="lm">Last month</option>
+																	<option value="tm">This month</option>
+																	<option value="nm">Next month</option>
+																	<option value="c">Custom</option>
+																</select>
+																<input autocomplete="off"  name="from_date" id="from_date" required="required"  type="text" class="form-control form-control-sm datepicker-default"  placeholder="From date" />
+																<span class="input-group-text">to</span>
+																<input autocomplete="off" name="to_date" id="to_date" type="text" class="form-control form-control-sm datepicker-default"  placeholder="To date" />
+																
+																<button type="submit" class="btn btn-outline-theme"><i class="fa fa-search"></i></button>
 															</div>
-															<input type="hidden" name="daterange" id="daterangeinput"/>
-															<input type="hidden" name="userid" th:value="${session.userdtl.empid}" />
-															<input type="hidden"/>
+															
+															<input type="hidden" name="useridx" th:value="${session.userdtl.empid}" />
+															
 														</div>														
 													</form>
 																								
 													
 													</div>
+													
 													
 													</div>
 									    
@@ -83,6 +106,26 @@
 									    <a href="#" data-toggle="card-expand" class="text-white text-opacity-50 text-decoration-none"><i class="fa fa-fw fa-expand"></i></a>
 									  </div>
 										<div class="card-body">
+										
+										<div class="d-flex align-items-start mb-3">
+											<a href="#"> <img onerror="this.onerror=null; this.src='assets/img/user/user.png'"
+												th:src="*{'data:image/jpeg;base64,'+{emp.emp_image_encoded}}" alt=""
+												width="64" class="rounded" />
+											</a>
+											<div class="ms-3">
+												<h5 class="mt-0 mb-1">
+													<a class="text-decoration-none" href="#" th:emp-id="${emp.empid}" onclick="viewEmlpoyee(this);" th:text="${emp.full_name}"></a> 
+												</h5>
+												<ul class="small list-unstyled">
+													<li><span id="daterangehtml"></span> [ [[${total_days}]] ]</li>													
+													<li>Total work hour: [[${total_work}]]</li>
+													
+												</ul>
+																					
+											</div>
+										</div>
+										
+										
 											<table  id="datatableDefault" class="table text-nowrap w-100">
 												<thead>
 													<tr>
@@ -189,24 +232,73 @@
 	<!-- ================== END page-js ================== -->
 	<script src="assets/js/demo/form-plugins.demo.js"></script>
 	<script src="/assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
-	<script src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	<script src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>	
+	
 	<script src="assets/plugins/moment/min/moment.min.js"></script>
 	<script src="assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
 	
-	<script>
-	$("li").removeClass("active");
-	var urlParams = new URLSearchParams(window.location.search); //get all parameters
-	var daterange = urlParams.get('daterange'); //extract the foo parameter - this will return NULL if foo isn't a parameter
-	if(daterange){
-		$('#daterangeinput').val(daterange);
-		const dates= daterange.split("A");
-		$('#advance-daterange span').html(moment(dates[0], 'YYYY-MM-DD').format('MMMM D, YYYY') + ' - ' + moment(dates[1], 'YYYY-MM-DD').format('MMMM D, YYYY'));
-	}else{
-		$('#advance-daterange span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
-		$('#daterangeinput').val(moment().subtract('days', 29).format('YYYY-MM-DD') + 'A' + moment().format('YYYY-MM-DD'));
-		
-	}
 	
+	<script>
+		$("#daterangeselect").change(function() {
+			$c = $(this).val();
+
+			if ($c == "t") {
+				$("#from_date").val(moment().format('YYYY-MM-DD'));
+				$("#to_date").val(moment().format('YYYY-MM-DD'));
+
+			} else if ($c == "y") {
+				$("#from_date").val(moment().subtract(1, 'days').format('YYYY-MM-DD'));
+				$("#to_date").val(moment().subtract(1, 'days').format('YYYY-MM-DD'));
+
+			} else if ($c == "tm") {
+				$("#from_date").val(moment().startOf('month').format('YYYY-MM-DD'));
+				$("#to_date").val(moment().endOf('month').format('YYYY-MM-DD'));
+
+			} else if ($c == "lm") {
+				$("#from_date").val(moment().subtract(1, 'month').startOf('month').format('YYYY-MM-DD'));
+				$("#to_date").val(moment().subtract(1, 'month').endOf('month').format('YYYY-MM-DD'));
+
+			} else if ($c == "nm") {
+				$("#from_date").val(moment().add(1, 'month').startOf('month').format('YYYY-MM-DD'));
+				$("#to_date").val(moment().add(1, 'month').endOf('month').format('YYYY-MM-DD'));
+
+			} else if ($c == "tw") {
+				$("#from_date").val(moment().startOf('week').format('YYYY-MM-DD'));
+				$("#to_date").val(moment().endOf('week').format('YYYY-MM-DD'));
+
+			} else if ($c == "lw") {
+				$("#from_date").val(moment().subtract(1, 'week').startOf('week').format('YYYY-MM-DD'));
+				$("#to_date").val(moment().subtract(1, 'week').endOf('week').format('YYYY-MM-DD'));
+
+			} else if ($c == "nw") {
+				$("#from_date").val(moment().add(1, 'week').startOf('week').format('YYYY-MM-DD'));
+				$("#to_date").val(moment().add(1, 'week').endOf('week').format('YYYY-MM-DD'));
+			}
+			
+			if ($c != "c") {
+				$("#searchform").submit();
+			}		
+		})
+
+		
+		var urlParams = new URLSearchParams(window.location.search); //get all parameters
+		var c = urlParams.get('c'); //extract the foo parameter - this will return NULL if foo isn't a parameter
+		var from_date = urlParams.get('from_date');
+		var to_date = urlParams.get('to_date');
+		var empid = urlParams.get('empid');
+		
+		if(c){			
+			$('#empidselect option[value="'+empid+'"]').attr("selected", "selected");
+			$('#daterangeselect option[value="'+c+'"]').attr("selected", "selected");
+			$("#from_date").val(from_date);
+			$("#to_date").val(to_date);
+			$('#daterangehtml').html(moment(from_date, 'YYYY-MM-DD').format('MMMM D, YYYY') + ' - ' + moment(to_date, 'YYYY-MM-DD').format('MMMM D, YYYY'));
+		}else{
+			//$('#advance-daterange span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+			//$('#daterangeinput').val(moment().subtract('days', 29).format('YYYY-MM-DD') + 'A' + moment().format('YYYY-MM-DD'));
+			
+		}
+		 
 	</script>
 </body>
 </html>
