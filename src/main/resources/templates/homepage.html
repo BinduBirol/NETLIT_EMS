@@ -32,6 +32,24 @@
 			var date = new Date(today);
 			$("#date").html(weekday[date.getDay()].toUpperCase()+", "+ dd + '/' + mm + '/' + yyyy);
 		}
+		
+		function availablity(z) {			
+			$empid = $(z).attr("emp-id");
+			$.ajax({
+				url : "setavailablity?empid=" + $empid,
+				type : 'GET',
+				success : function(data) {					
+					$('.availablitymodalcontent').html(data);
+					$('#availablitymodal').modal('show');
+					historytablecontent(z);
+				},
+				error : function(xhr, desc, err) {
+					$('.availablitymodalcontent').html(xhr.responseText);
+					$('#availablitymodal').modal('show');
+
+				}
+			});
+		}
 	</script>
 </body>
 </html>

@@ -31,6 +31,7 @@ import com.birol.ems.dto.Complaints;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.dto.GetChatMessage;
 import com.birol.ems.dto.SendMessage;
+import com.birol.ems.repo.ChatRepo;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmployeeService;
 import com.birol.persistence.dao.RoleRepository;
@@ -56,9 +57,17 @@ public class InternalCommunicationController {
 	ComplaintsRepo complaintsRepo;
 	@Autowired
 	com.birol.ems.dao.CommentRepo commentRepo;
+	@Autowired
+	ChatRepo chatrepo;
 
 	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
 
+	@GetMapping("/messaging")
+	public ModelAndView messaging(final ModelMap model) {
+		model.addAttribute("chats", chatrepo.findAll());
+		return new ModelAndView("ems/pages/messaging", model);
+	}
+	
 	@MessageMapping("/hello")
 	@SendTo("/topic/greetings")
 	public SendMessage greeting(GetChatMessage getmessage, Authentication auth) throws Exception {
@@ -71,7 +80,7 @@ public class InternalCommunicationController {
 		sendmsg.setTimeStamp(new SimpleDateFormat("hh.mm.ss a").format(new Date()));
 		sendmsg.setSenderid(String.valueOf(user.getId()));
 		sendmsg.setColor(getmessage.getColor());
-		// return new Greeting(HtmlUtils.htmlEscape(message.getName()));
+		if(!getmessage.getMessage().startsWith("<b"))chatrepo.save(sendmsg);		
 		return sendmsg;
 	}
 

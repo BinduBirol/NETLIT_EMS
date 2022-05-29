@@ -160,10 +160,7 @@ public class EMScontroller {
 		return new ModelAndView("ems/pages/setting", model);
 	}
 
-	@GetMapping("/messaging")
-	public ModelAndView messaging(final ModelMap model) {
-		return new ModelAndView("ems/pages/messaging", model);
-	}
+	
 
 	@GetMapping("/test")
 	public ModelAndView test(final ModelMap model) throws MessagingException {

@@ -53,12 +53,25 @@ public class WorkScheduleController {
 		model.addAttribute("employees", employeeService.getEmployeeList());
 		return new ModelAndView("ems/pages/work_schedule_home", model);
 	}
+	
+	@GetMapping("/work_schedule_new")
+	public ModelAndView work_schedule_new(final ModelMap model) {		
+		model.addAttribute("employees", employeeService.getEmployeeList());
+		return new ModelAndView("ems/pages/work_schedule_new", model);
+	}
 
 	@GetMapping("/workschedule")
 	public ModelAndView workschedule(@RequestParam("empid") Long empid, final ModelMap model) {
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
 		model.addAttribute("userdtl", empdtl);		
 		return new ModelAndView("ems/ajaxResponse/viewworkschedule", model);
+	}
+	
+	@GetMapping("/setavailablity")
+	public ModelAndView setavailablity(@RequestParam("empid") Long empid, final ModelMap model) {
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
+		model.addAttribute("userdtl", empdtl);		
+		return new ModelAndView("ems/ajaxResponse/setavailablitymodal", model);
 	}
 	
 	@GetMapping("/workschedulehistory")

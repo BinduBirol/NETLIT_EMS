@@ -61,9 +61,18 @@
   </div>
   <div  class="card-body bg-white bg-opacity-15" data-scrollbar="true" data-height="350px">
   <table id="conversation" class="table">
-		<tr></tr>
-						
-</table>
+						<tr></tr>
+						<tr th:each="chat : ${chats}">
+							
+							<td class='text-justify'><a href='#' th:emp-id='${chat.senderid}'
+							th:style="|color: ${chat.color}|"
+							class="text-decoration-none"
+								onclick='viewEmlpoyee(this);'> <span th:text="${chat.sender}"></span> </a>
+								: <span th:text="${chat.content}">message </span></td> 
+							<td class='text-muted col-sm-3 text-center' th:text="${chat.timeStamp}">time</td>
+						</tr>
+
+					</table>
   
   
   
