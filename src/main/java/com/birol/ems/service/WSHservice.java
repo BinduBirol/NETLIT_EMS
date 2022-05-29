@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.birol.ems.dao.EmpWSHrepo;
+import com.birol.ems.dto.Availability;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.dto.Employee_work_schedule;
 
@@ -28,6 +29,11 @@ public class WSHservice {
 
 	public String generateWShID(Employee_work_schedule ewsh) {
 		String id = ewsh.getUserid() + ewsh.getDate().toString().replace("-", "");
+		return id;
+	}
+	
+	public String generateWavID(Availability ewsh) {
+		String id = "AV"+ewsh.getUserid() + ewsh.getDate().toString().replace("-", "");
 		return id;
 	}
 	

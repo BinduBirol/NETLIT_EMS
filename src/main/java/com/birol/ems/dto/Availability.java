@@ -12,7 +12,7 @@ import javax.persistence.Transient;
 @Entity
 public class Availability {
 	@Id
-	private String work_sh_id;
+	private String av_id;
 	private long userid;
 	private String full_name;
 	private String from_date;
@@ -21,8 +21,6 @@ public class Availability {
 	private String work_start;
 	private String work_end;
 	private int status;
-	private long assigned_by_id;
-	private String assigned_by_full_name;
 	private String work_desc;
 	private int week;
 	private String day;
@@ -30,6 +28,8 @@ public class Availability {
 	private long work_minute;
 	@Transient
 	private String work_hour;
+	
+	private boolean isapproved;
 
 	private Date created;
 	private Date updated;
@@ -42,18 +42,19 @@ public class Availability {
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date();
-	}
-
-	public String getWork_sh_id() {
-		return work_sh_id;
-	}
-
-	public void setWork_sh_id(String work_sh_id) {
-		this.work_sh_id = work_sh_id;
-	}
+	}	
 
 	public String getFull_name() {
 		return full_name;
+	}
+
+	
+	public boolean isIsapproved() {
+		return isapproved;
+	}
+
+	public void setIsapproved(boolean isapproved) {
+		this.isapproved = isapproved;
 	}
 
 	public void setFull_name(String full_name) {
@@ -100,20 +101,13 @@ public class Availability {
 		this.userid = userid;
 	}
 
-	public long getAssigned_by_id() {
-		return assigned_by_id;
+	
+	public String getAv_id() {
+		return av_id;
 	}
 
-	public void setAssigned_by_id(long assigned_by_id) {
-		this.assigned_by_id = assigned_by_id;
-	}
-
-	public String getAssigned_by_full_name() {
-		return assigned_by_full_name;
-	}
-
-	public void setAssigned_by_full_name(String assigned_by_full_name) {
-		this.assigned_by_full_name = assigned_by_full_name;
+	public void setAv_id(String av_id) {
+		this.av_id = av_id;
 	}
 
 	public String getWork_desc() {

@@ -1,0 +1,38 @@
+
+<div class="">
+	<table class="table text-nowrap w-100" id="avtable">
+
+		<thead>
+			<tr>
+				
+				<th>Date</th>
+				<th>Hour</th>
+				<th>Start</th>
+				<th>End</th>
+				<th>Break</th>				
+				<th>Desc</th>
+				<th>Approved</th>			
+
+			</tr>
+		</thead>
+		<tbody id="">
+			<tr th:classappend="${wsh.status}==0 ? text-danger : text-success"
+				th:each="wsh,iterator : ${avlist}">
+
+				
+				<td th:text="${wsh.date}">Date</td>
+				<td th:text="${wsh.work_minute}">Hour</td>
+				<td th:text="${wsh.work_start}">Start</td>
+				<td th:text="${wsh.work_end}">End</td>
+				<td th:text="${wsh.lunch_hour}">Break</td>				
+				<td th:text="${wsh.work_desc}">Desc</td>
+				<td th:text="${wsh.status}==0 ? nA : a">P/A</td>
+
+
+			</tr>
+		</tbody>
+
+	</table>
+
+</div>
+

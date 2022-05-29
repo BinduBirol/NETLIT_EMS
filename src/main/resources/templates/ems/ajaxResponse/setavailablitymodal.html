@@ -35,7 +35,7 @@
 <!-- ================== END page-css ================== -->
 
 </head>
-<form onsubmit="return mySubmitFunction(event)" id="wshform" action="saveWSH" method="post" >
+<form onsubmit="return mySubmitFunction(event)" id="wshform" action="saveWAV" method="post" >
 <div class="modal-header">
 	<div class="d-flex align-items-start">
 		<a href="#"> <img onerror="this.onerror=null; this.src='assets/img/user/user.png'"
@@ -46,9 +46,9 @@
 
 			<span><span class="modal-title" th:text="${userdtl.full_name}"></span>&nbsp;<a
 				type="button" th:href="@{/editEmployee(empid=${userdtl.empid})}"><i
-					class="fa fa-edit"></i></a></span> <br /> <i class="fas fa-calendar-week"></i>
-			<span id="week_no"></span>
-			<p id="wshmessage"></p>
+					class="fa fa-edit"></i></a></span> <br /> 
+			Week #<span id="week_no"></span>
+			<p id="avmessage"></p>
 		</div>
 	</div>
 	
@@ -72,7 +72,8 @@
 		<div class="col-12 col-sm-4">
 			<label class="custom-control-label ">Date Range</label> 
 			<select id="daterangeselect" onc name="status" class="form-select">
-					<option value="">Date Range</option>								
+					<option value="t">Today</option>	
+					<option value="tw">This Week</option>								
 					<option value="nw">Next Week</option>					
 					<option value="tm">This month</option>
 					<option value="nm">Next month</option>
@@ -87,7 +88,7 @@
 				<label>From Date to Date</label>
 				<div class="input-group " id="">
 					<input  id="from_date" name="from_date" required="required" autocomplete="off"
-						type="text" class="form-control datepicker-defaultz" readonly="readonly"
+						type="text" class="form-control datepicker-default" 
 						placeholder="start date" /> <span class="input-group-text ">to</span>
 					<input id="to_date" name="to_date" type="text" required="required" autocomplete="off"
 						class="form-control datepicker-default" placeholder="end date" />
@@ -185,12 +186,11 @@ setModalData();
 function setModalData() {
 	$('#availability option[value="1"]').attr("selected", "selected");
 	$('.absent').addClass("border-success");
-	//let today = new Date().toISOString().substr(0, 10);
-	//$("#from_date").val(today);
-	//$("#to_date").val(today);
-	//$("#from_date").val(moment().add(1, 'week').startOf('week').format('YYYY-MM-DD'));
-	//$("#to_date").val(moment().add(1, 'week').endOf('week').format('YYYY-MM-DD'));
+	let today = new Date().toISOString().substr(0, 10);
+	$("#from_date").val(today);
+	$("#to_date").val(today);	
 	getWeekNo();
+	setDateRangeString();
 }
 
 $('#availability').change( function() {	
@@ -213,7 +213,6 @@ $('#availability').change( function() {
 
 $("#daterangeselect").change(function() {
 	$c = $(this).val();
-
 	if ($c == "tm") {
 		$("#from_date").val(moment().add(1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
 		$("#to_date").val(moment().endOf('month').format('YYYY-MM-DD'));
@@ -225,7 +224,17 @@ $("#daterangeselect").change(function() {
 	}  else if ($c == "nw") {
 		$("#from_date").val(moment().add(1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
 		$("#to_date").val(moment().add(1, 'week').endOf('isoWeek').format('YYYY-MM-DD'));
+	} else if ($c == "t") {
+		$("#from_date").val(moment().format('YYYY-MM-DD'));
+		$("#to_date").val(moment().format('YYYY-MM-DD'));
+
+	}  else if ($c == "tw") {
+		$("#from_date").val(moment().format('YYYY-MM-DD'));
+		$("#to_date").val(moment().endOf('week').format('YYYY-MM-DD'));
+
 	}
+	setDateRangeString();
+	getWeekNo();
 })
 
 $('#from_date').on('change', function() {
@@ -236,11 +245,19 @@ $('#from_date').on('change', function() {
 
 
 function getWeekNo() {
+	/*
 	var currentdate = new Date($("#from_date").val());
 	var oneJan = new Date(currentdate.getFullYear(),0,1);
 	var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
 	var result =Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);		
 	$("#week_no").html("  "+result);
+	*/
+	var weekno= moment($("#from_date").val(), 'YYYY-MM-DD').format('WW')
+	$("#week_no").html(weekno);
+}
+
+function setDateRangeString() {
+	$('#avmessage').html(moment($("#from_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY') + ' - ' + moment($("#to_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY'));
 }
 
 function mySubmitFunction(e) {
@@ -260,13 +277,14 @@ function mySubmitFunction(e) {
 				if (data.includes("Successfully") == true) {
 					$userid=$("#userid").val();
 					$("#"+$userid).click();
+					getAvailablity();
 				}
 				
 				
 			},
 			error : function(xhr, desc, err) {
 				
-				hideprocessview();
+				hideprocessview();				
 								
 				
 			}

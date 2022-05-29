@@ -226,13 +226,16 @@
 						<div class="card-header fw-bold small d-flex">
 							<span class="flex-grow-1">AVAILABLITY 
 							<a th:emp-id="${user.empid}" onclick="availablity(this);" class="set-wsh-cl" style="cursor: pointer"><i class="fa fa-plus"></i></a>
-							</span> <a href="#"
+							</span> <a
+								class=" text-opacity-50 text-decoration-none"
+								onclick="getAvailablity()" href="#"> <i
+								class="fa fa-refresh"></i></a> &nbsp;  <a href="#"
 								data-toggle="card-expand"
 								class="text-white text-opacity-50 text-decoration-none"><i
 								class="fa fa-fw fa-expand"></i></a>
 						</div>
 						<div class="card-body ">
-							
+							<div id="getAvailablityDiv"></div>
 							
 						</div>
 

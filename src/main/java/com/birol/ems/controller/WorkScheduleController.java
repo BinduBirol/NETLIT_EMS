@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.IsoFields;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -29,9 +30,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.birol.ems.dao.AvailablityRepo;
 import com.birol.ems.dao.EmpWSHrepo;
+import com.birol.ems.dto.Availability;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.dto.Employee_work_schedule;
+import com.birol.ems.dto.LoggedinUserDTO;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmployeeService;
 import com.birol.ems.service.WSHservice;
@@ -47,6 +51,8 @@ public class WorkScheduleController {
 	WSHservice wSHservice;
 	@Autowired
 	EmpWSHrepo empWSHrepo;
+	@Autowired
+	AvailablityRepo avrepo;
 	
 	@GetMapping("/work_schedule_home")
 	public ModelAndView work_schedule_home(final ModelMap model) {		
@@ -99,10 +105,8 @@ public class WorkScheduleController {
 			if(wsh.getStatus()==1) {
 				l1 = LocalTime.parse(wsh.getWork_start());
 				l2 = LocalTime.parse(wsh.getWork_end());
-			}
-			
-			
-			WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
+			}			
+	
 			for(LocalDate d:dates) {
 				wsh.setDate(d);
 				wsh.setWork_sh_id(wSHservice.generateWShID(wsh));
@@ -111,10 +115,42 @@ public class WorkScheduleController {
 				try{wsh.setWork_minute((Duration.between(l1, l2).toMinutes())-wsh.getLunch_hour());}catch (Exception e) {wsh.setWork_minute(0);}
 				Date xdate = new SimpleDateFormat("yyyy-M-d").parse(wsh.getDate().toString());
 				wsh.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
-				wsh.setWeek(d.get(weekFields.weekOfWeekBasedYear()));
+				wsh.setWeek(d.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
 				empWSHrepo.save(wsh);
 			}
 			model.addAttribute("message", "Successfully added work schedule for "+wsh.getFull_name());
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+		}
+		
+		return new ModelAndView("theme/ajaxResponse.html", model);
+	}
+	
+	@RequestMapping(value = "/saveWAV", method = RequestMethod.POST)
+	public ModelAndView saveWAV(@ModelAttribute Availability av, ModelMap model, Authentication auth,
+			final HttpServletRequest request)  {
+		try {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	        LocalDate fromLocalDate = LocalDate.parse(av.getFrom_date(), formatter);
+	        LocalDate toLocalDate = LocalDate.parse(av.getTo_date(), formatter);
+			List<LocalDate> dates= wSHservice.getDatesBetween(fromLocalDate,toLocalDate);
+			
+			LocalTime l1 = null, l2 = null;
+			if(av.getStatus()==1) {
+				l1 = LocalTime.parse(av.getWork_start());
+				l2 = LocalTime.parse(av.getWork_end());
+			}
+			
+			for(LocalDate d:dates) {
+				av.setDate(d);
+				av.setAv_id(wSHservice.generateWavID(av));				
+				try{av.setWork_minute((Duration.between(l1, l2).toMinutes())-av.getLunch_hour());}catch (Exception e) {av.setWork_minute(0);}
+				Date xdate = new SimpleDateFormat("yyyy-M-d").parse(av.getDate().toString());
+				av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
+				av.setWeek(d.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
+				avrepo.save(av);
+			}
+			model.addAttribute("message", "Successfully added availablity for "+av.getFull_name());
 		} catch (Exception e) {
 			model.addAttribute("message", e.getMessage());
 		}
@@ -156,6 +192,16 @@ public class WorkScheduleController {
 		model.addAttribute("total_work", wSHservice.mintsTOHmConvert(total_wh));
 		model.addAttribute("emps", employeeService.getEmployeeList());
 		return new ModelAndView("ems/pages/timeReport", model);
+	}
+	
+	@GetMapping("/getAvailablity")
+	public ModelAndView getAvailablity(final ModelMap model,Authentication auth) {
+		User user = (User) auth.getPrincipal();
+		String todate;
+		ArrayList<Availability> avlist= avrepo.getAvailablityByuseridandDategraterthanToday(user.getId());
+		
+		model.addAttribute("avlist", avlist);
+		return new ModelAndView("ems/ajaxResponse/getAvailablity", model);
 	}
 	
 	
