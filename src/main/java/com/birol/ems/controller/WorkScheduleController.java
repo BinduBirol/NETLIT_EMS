@@ -62,7 +62,7 @@ public class WorkScheduleController {
 		return new ModelAndView("ems/pages/work_schedule_home", model);
 	}
 	
-	@GetMapping("/work_schedule_new")
+	@GetMapping("/empsAvailability")
 	public ModelAndView work_schedule_new(@RequestParam(required = false) String from_date,
 			@RequestParam(required = false) String to_date,
 			@RequestParam(required = false) String c,
@@ -70,7 +70,7 @@ public class WorkScheduleController {
 			Authentication auth,final ModelMap model) {	
 		User user = (User) auth.getPrincipal();
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
-		model.addAttribute("employees", employeeService.getEmployeeList());
+		model.addAttribute("emps", employeeService.getEmployeeList());
 		model.addAttribute("emp",empdtl);
 		
 		ArrayList<Availability> availist= new ArrayList<Availability>();
@@ -79,6 +79,8 @@ public class WorkScheduleController {
 			availist=avrepo.getAvailablityAllandDategraterthanToday();
 		}else if(empid.isEmpty() & from_date!=null) {
 			availist=avrepo.getAllusersBetweenDates(from_date, to_date);
+		}else if(!empid.isEmpty() && empid!=null) {
+			availist=avrepo.getAllBetweenDates(Long.parseLong(empid),from_date, to_date);
 		}
 		
 		model.addAttribute("wsh",availist);		
@@ -272,8 +274,13 @@ public class WorkScheduleController {
 		wsh.setFull_name(av.getFull_name());
 		wsh.setAvailability_id(av.getAv_id());
 		String wshid= wSHservice.generateWShID(wsh);
+		wsh.setStatus(av.getStatus());
 		wsh.setWork_sh_id(wshid);
 		
+		av.setWork_start(start);
+		av.setWork_end(end);
+		av.setLunch_hour(lbreak);
+		av.setWork_minute(minutes);
 		av.setIsapproved(approve);
 		avrepo.save(av);
 		if (approve) {

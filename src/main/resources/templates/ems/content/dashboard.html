@@ -14,7 +14,7 @@
 				<div class="col-xl-3 col-lg-6">
 					<!-- BEGIN card -->
 					<div th:if="${wsh!=null}"
-						th:classappend="${wsh.status}==3 ? bg-danger : bg-theme"
+						th:classappend="${wsh.status}==3 ? bg-danger : normal"
 						class="card mb-3  border-theme bg-opacity-25">
 						<!-- BEGIN card-body -->
 						<div class="card-body">
@@ -31,13 +31,13 @@
 								<div class="">
 									<th:block th:switch="${wsh.status}">
 									    <div th:case="0">
-									        <h3 class="mb-0">Not Working</h3>
+									        <h3 class="mb-0 text-warning">Not Working</h3>
 									    </div>
 									    <div th:case="1">
-									        <h3 class="mb-0">Working</h3>
+									        <h3 class="mb-0 text-success">Working</h3>
 									    </div>
 									    <div th:case="3">
-									        <h3 class="mb-0">Not Specified</h3>
+									        <h3 class="mb-0 text-danger">Not Specified</h3>
 									    </div>
 									</th:block>
 									
@@ -80,7 +80,7 @@
 				<div class="col-xl-3 col-lg-6">
 					<!-- BEGIN card -->
 					<div th:if="${av!=null}"
-						th:classappend="${av.status}==3 ? bg-danger : bg-theme"
+						th:classappend="${av.status}==3 ? bg-danger : normal"
 						class="card mb-3  border-theme bg-opacity-25">
 						<!-- BEGIN card-body -->
 						<div class="card-body">
@@ -97,10 +97,10 @@
 								<div class="">
 									<th:block th:switch="${av.status}">
 									    <div th:case="0">
-									        <h3 class="mb-0">Unavailable</h3>
+									        <h3 class="mb-0 text-warning">Unavailable</h3>
 									    </div>
 									    <div th:case="1">
-									        <h3 class="mb-0">Available</h3>
+									        <h3 class="mb-0 text-success">Available</h3>
 									    </div>
 									    <div th:case="3">
 									        <h3 class="mb-0 text-danger">Not Specified</h3>
