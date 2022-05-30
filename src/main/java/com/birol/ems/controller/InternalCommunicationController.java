@@ -77,7 +77,7 @@ public class InternalCommunicationController {
 		SendMessage sendmsg = new SendMessage();
 		sendmsg.setSender(emp.getFull_name());
 		sendmsg.setContent(getmessage.getMessage());
-		sendmsg.setTimeStamp(new SimpleDateFormat("hh.mm.ss a").format(new Date()));
+		sendmsg.setTimeStamp(new SimpleDateFormat("dd MMM yyyy, hh.mm.ss a").format(new Date()));
 		sendmsg.setSenderid(String.valueOf(user.getId()));
 		sendmsg.setColor(getmessage.getColor());
 		if(!getmessage.getMessage().startsWith("<b"))chatrepo.save(sendmsg);		

@@ -18,6 +18,8 @@
 						<h1 class="page-header">Set Work Schedule</h1>
 
 						<hr class="mb-4" />
+						
+						
 
 						<!-- BEGIN #datatable -->
 						<div class="row">
@@ -189,65 +191,136 @@
 
 						<hr class="mb-4" />
 						<div class="row">
-							
-						</div>
-
-						<!-- BEGIN #datatable -->
-						<div class="row">
-							<table class="table text-nowrap w-100"  id="availtable">
+							<div id="datatable" class="mb-5">
+									<div class="card border-theme">
+										<div class="card-header fw-bold small d-flex">
+									    <div class="flex-grow-1">
+									    
+												<div class="row small">
+													<form id="searchform" action="work_schedule_new" method="get">													
+														<div class="row ">
+															
+																
+															
+															<div class="input-group " id="">
+																
+																<button type="button" th:emp-id="${session.userdtl.empid}" onclick="availablity(this);" class="btn btn-outline-theme">Add <i class="fa fa-plus"></i></button>
+																<span class="input-group-text"><i class="fa fa-filter"></i></span>
+																<select name="empid" id="empidselect" class="form-select form-select-sm">																	
+																	<option value=""> All Employees </option>
+																	<option th:each="emps : ${emps}" th:value="${emps.empid}">[[${emps.full_name}]]</option>																	
+																</select>
+																
+																<select name="c" id="daterangeselect" class="form-select form-select-sm">
+																	<option value="">Date Range</option>
+																	<option value="t">Today</option>
+																	<option value="y">Yesterday</option>
+																	<option value="lw">Last Week</option>
+																	<option value="tw">This Week</option>
+																	<option value="nw">Next Week</option>
+																	<option value="lm">Last month</option>
+																	<option value="tm">This month</option>
+																	<option value="nm">Next month</option>
+																	<option value="c">Custom</option>
+																</select>
+																<input autocomplete="off"  name="from_date" id="from_date" required="required"  type="text" class="form-control form-control-sm datepicker-default"  placeholder="From date" />
+																<span class="input-group-text">to</span>
+																<input autocomplete="off" name="to_date" id="to_date" type="text" class="form-control form-control-sm datepicker-default"  placeholder="To date" />
+																
+																<button type="submit" class="btn btn-outline-theme"><i class="fa fa-search"></i></button>
+															</div>
+															
+															
+															
+														</div>														
+													</form>
+																								
+													
+													</div>
+													
+													
+													</div>
+									    
+									    </span>
+									    <!-- <a href="#" data-toggle="card-expand" class="text-white text-opacity-50 text-decoration-none"><i class="fa fa-fw fa-expand"></i></a> -->
+									  </div>
+										<div class="card-body">
+										
+										<div class="d-flex align-items-start mb-3">
+											<a href="#"> <img onerror="this.onerror=null; this.src='assets/img/user/user.png'"
+												th:src="*{'data:image/jpeg;base64,'+{emp.emp_image_encoded}}" alt=""
+												width="64" class="rounded" />
+											</a>
+											<div class="ms-3">
+												<h5 class="mt-0 mb-1">
+													<a class="text-decoration-none" href="#" th:emp-id="${emp.empid}" onclick="viewEmlpoyee(this);" th:text="${emp.full_name}"></a> 
+												</h5>
+												<ul class="small list-unstyled">
+													<li><span id="daterangehtml"></span> [ [[${total_days}]] ]</li>													
+													<li>Total available hours: [[${total_work}]]</li>
+													
+												</ul>
+																					
+											</div>
+										</div>
+										
+										
+										
+										
+											<table  id="datatableDefault" class="table text-nowrap w-100">
 												<thead>
 													<tr>
-														<th>#</th>
-														<th><i class="fa fa-clock"></i></th>
-														<th><i class="fa fa-list"></i></th>
-														<th>Name</th>
-														<th>Contract Status</th>
-														<th>Info</th>
-
+														<th>Employee</th>
+														<th><input id="checkAll" class="form-check-input" type="hidden"/> <i class="fa fa-thumbs-up"></i> </th>
+														<th>Date</th>														
+														<th>Week</th>
+														<th>Day</th>														
+														<th>Minute</th>
+														<th>Start</th>
+														<th>End</th>
+														<th>Break</th>														
+														<th>Desc</th>
+														<th>Created on</th>		
+														<th>P/A</th>
 													</tr>
 												</thead>
-												<tbody>
-
-													<tr th:each="emp,iterator : ${employees}">
-														<td th:text="${iterator.index+1}">57</td>
-														<td><a th:emp-id="${emp.empid}"
-															onclick="workschedule(this);" class="set-wsh-cl"
-															style="cursor: pointer"><i class="fa fa-plus"></i></a></td>
-														<td th:emp-id="${emp.empid}"><a
-															th:id="${emp.empid}" th:emp-id="${emp.empid}"
-															onclick="historytablecontent(this);" class="set-wsh-cl"
-															style="cursor: pointer"><i class="fa fa-history"></i></a></td>
-														<td><a th:text="${emp.full_name}" href="#"
-															class="text-white" th:emp-id="${emp.empid}"
-															onclick="viewEmlpoyee(this);"></a></td>
-
-														<td th:class="${emp.contact_status_str}"
-															th:text=${emp.contact_remaining_period}>2011/01/25</td>
-														<td><a href="#" data-bs-toggle="dropdown"
-															class=" text-opacity-50"> <i class="fa fa-ellipsis-h"></i></a>
-															<div class="dropdown-menu dropdown-menu-end">
-																<a href="#" th:emp-id="${emp.empid}"
-																	onclick="viewEmlpoyee(this);" class="dropdown-item">View</a>
-																<a th:href="@{/editEmployee(empid=${emp.empid})}"
-																	class="dropdown-item">Edit</a> <a th:href="@{/timeReport(empid=${emp.empid})}"
-																	class="dropdown-item">Time Report</a>
-															</div></td>
+												<tbody>	
+												
+													
+													
+													<tr th:classappend="${wsh.status}==0 ? text-danger : normal"
+														th:each="wsh,iterator : ${wsh}">														
+														<td><a href="#" class="text-decoration-none" th:emp-id="${wsh.userid}" onclick="viewEmlpoyee(this);"   th:text="${wsh.full_name}"></a></td>	
+														<td ><input th:id="${wsh.av_id}" th:checked="${wsh.isapproved}" class="form-check-input avidcheckbox" type="checkbox"/></td>	
+														<td th:text="${wsh.date}">Date</td>									
+														
+														<td th:text="${wsh.week}">Date</td>
+														<td th:text="${wsh.day}">Date</td>
+														
+														<td><input type="number" class="form-control wmint" readonly="readonly" th:value="${wsh.work_minute}"/></td>
+														<td><input type="time" class="form-control cal start" th:value="${wsh.work_start}"/></td>
+														<td><input type="time" class="form-control cal end" th:value="${wsh.work_end}"/></td>
+														<td><input type="number" class="form-control cal lbreak" th:value="${wsh.lunch_hour}"/></td>								
+														
+														<td th:text="${wsh.work_desc}">Desc</td>
+														<td th:text="${wsh.created==null}? ${wsh.updated} : ${wsh.created}" >date</td>
+														<td th:text="${wsh.status}==0 ? ABSENT : PRESENT">P/A</td>
 													</tr>
-
-
-
+													
+													
 												</tbody>
 											</table>
-
-
-							
-
-							
-
+										</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+										
+									</div>
+								</div>
 						</div>
-						<!-- END #datatable -->
-
-
 					</div>
 					<!-- END col-9-->
 					<!-- BEGIN col-3 -->

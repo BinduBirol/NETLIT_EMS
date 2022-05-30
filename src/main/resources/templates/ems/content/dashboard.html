@@ -14,13 +14,13 @@
 				<div class="col-xl-3 col-lg-6">
 					<!-- BEGIN card -->
 					<div th:if="${wsh!=null}"
-						th:classappend="${wsh.status}==0 ? bg-danger : bg-theme"
+						th:classappend="${wsh.status}==3 ? bg-danger : bg-theme"
 						class="card mb-3  border-theme bg-opacity-25">
 						<!-- BEGIN card-body -->
 						<div class="card-body">
 							<!-- BEGIN title -->
 							<div class="d-flex fw-bold small mb-3">
-								<span class="flex-grow-1" id="date"></span> <a href="#"
+								<span class="flex-grow-1">TODAY'S WORK SCHEDULE </span> <a href="#"
 									data-toggle="card-expand"
 									class=" text-white text-opacity-50 text-decoration-none"><i
 									class="bi bi-fullscreen"></i></a>
@@ -28,8 +28,20 @@
 							<!-- END title -->
 							<!-- BEGIN stat-lg -->
 							<div class="row align-items-center mb-2">
-								<div class="col-7">
-									<h3 class="mb-0">[[${wsh.work_minute}]]min</h3>
+								<div class="">
+									<th:block th:switch="${wsh.status}">
+									    <div th:case="0">
+									        <h3 class="mb-0">Not Working</h3>
+									    </div>
+									    <div th:case="1">
+									        <h3 class="mb-0">Working</h3>
+									    </div>
+									    <div th:case="3">
+									        <h3 class="mb-0">Not Specified</h3>
+									    </div>
+									</th:block>
+									
+									
 								</div>
 								<div class="col-5">
 									<div class="mt-n2" data-render="apexchart" data-type="bar"
@@ -64,6 +76,69 @@
 					<!-- END card -->
 				</div>
 				<!-- END col-3 -->
+				
+				<div class="col-xl-3 col-lg-6">
+					<!-- BEGIN card -->
+					<div th:if="${av!=null}"
+						th:classappend="${av.status}==3 ? bg-danger : bg-theme"
+						class="card mb-3  border-theme bg-opacity-25">
+						<!-- BEGIN card-body -->
+						<div class="card-body">
+							<!-- BEGIN title -->
+							<div class="d-flex fw-bold small mb-3">
+								<span class="flex-grow-1" >TODAY'S AVAILABILITY</span> <a href="#"
+									data-toggle="card-expand"
+									class=" text-white text-opacity-50 text-decoration-none"><i
+									class="bi bi-fullscreen"></i></a>
+							</div>
+							<!-- END title -->
+							<!-- BEGIN stat-lg -->
+							<div class="row align-items-center mb-2">
+								<div class="">
+									<th:block th:switch="${av.status}">
+									    <div th:case="0">
+									        <h3 class="mb-0">Unavailable</h3>
+									    </div>
+									    <div th:case="1">
+									        <h3 class="mb-0">Available</h3>
+									    </div>
+									    <div th:case="3">
+									        <h3 class="mb-0 text-danger">Not Specified</h3>
+									    </div>
+									</th:block>
+								</div>
+								<div class="col-5">
+									<div class="mt-n2" data-render="apexchart" data-type="bar"
+										data-title="Visitors" data-height="30"></div>
+								</div>
+							</div>
+							<!-- END stat-lg -->
+							<!-- BEGIN stat-sm -->
+							<div class="small  text-opacity-50 text-truncate">
+								<i class="fa fa-play fa-fw me-1"></i> Starts at
+								[[${av.work_start}]]<br /> <i
+									class="fa fa-hourglass-start fa-fw me-1"></i> Lunch Break
+								[[${av.lunch_hour}]]m<br /> <i class="fa fa-stop fa-fw me-1"></i>
+								Ends at [[${av.work_end}]] <br />  <i
+									class="far fa-comment-alt fa-fw me-1"></i> [[${av.work_desc}]]<br />
+									<a class="text-decoration-none" href="availabilityHome"><i class="fa fa-chevron-right fa-fw me-1"></i>Go to Availability</a>
+
+							</div>
+							<!-- END stat-sm -->
+						</div>
+						<!-- END card-body -->
+
+						<!-- BEGIN card-arrow -->
+						<div class="card-arrow">
+							<div class="card-arrow-top-left"></div>
+							<div class="card-arrow-top-right"></div>
+							<div class="card-arrow-bottom-left"></div>
+							<div class="card-arrow-bottom-right"></div>
+						</div>
+						<!-- END card-arrow -->
+					</div>
+					<!-- END card -->
+				</div>
 
 				<!-- BEGIN col-3 -->
 				<div class="col-xl-3 col-lg-6">
@@ -118,55 +193,7 @@
 				<!-- END col-3 -->
 
 				<!-- BEGIN col-3 -->
-				<div class="col-xl-3 col-lg-6">
-					<!-- BEGIN card -->
-					<div class="card mb-3">
-						<!-- BEGIN card-body -->
-						<div class="card-body">
-							<!-- BEGIN title -->
-							<div class="d-flex fw-bold small mb-3">
-								<span class="flex-grow-1">AVAILABLITY</span> <a href="#"
-									data-toggle="card-expand"
-									class="text-white text-opacity-50 text-decoration-none"><i
-									class="bi bi-fullscreen"></i></a>
-							</div>
-							<!-- END title -->
-							<!-- BEGIN stat-lg -->
-							<div class="row align-items-center mb-2">
-								<div class="col-7">
-									<h3 class="mb-0">4,490</h3>
-								</div>
-								<div class="col-5">
-									<div class="mt-n3 mb-n2" data-render="apexchart"
-										data-type="pie" data-title="Visitors" data-height="45"></div>
-								</div>
-							</div>
-							<!-- END stat-lg -->
-							<!-- BEGIN stat-sm -->
-							<div class="small text-white text-opacity-50 text-truncate">
-								<i class="fa fa-chevron-up fa-fw me-1"></i> 59.5% more than last
-								week<br /> <i class="fab fa-facebook-f fa-fw me-1"></i> 45.5%
-								from facebook<br /> <i class="fab fa-youtube fa-fw me-1"></i>
-								15.25% from youtube<br /> <i
-									class="fa fa-shopping-bag fa-fw me-1"></i> 33.5% new orders<br />
-								<i class="fa fa-dollar-sign fa-fw me-1"></i> 6.21% conversion
-								rate
-							</div>
-							<!-- END stat-sm -->
-						</div>
-						<!-- END card-body -->
-
-						<!-- BEGIN card-arrow -->
-						<div class="card-arrow">
-							<div class="card-arrow-top-left"></div>
-							<div class="card-arrow-top-right"></div>
-							<div class="card-arrow-bottom-left"></div>
-							<div class="card-arrow-bottom-right"></div>
-						</div>
-						<!-- END card-arrow -->
-					</div>
-					<!-- END card -->
-				</div>
+				
 				<!-- END col-3 -->
 
 				<!-- BEGIN col-3 -->
@@ -220,59 +247,7 @@
 				</div>
 				<!-- END col-3 -->
 			</div>
-			<div class="row mb-3">
-				<div class="col-xl-6 col-lg-6">
-					<div class="card">
-						<div class="card-header fw-bold small d-flex">
-							<span class="flex-grow-1">AVAILABLITY 
-							<a th:emp-id="${user.empid}" onclick="availablity(this);" class="set-wsh-cl" style="cursor: pointer"><i class="fa fa-plus"></i></a>
-							</span> <a
-								class=" text-opacity-50 text-decoration-none"
-								onclick="getAvailablity()" href="#"> <i
-								class="fa fa-refresh"></i></a> &nbsp;  <a href="#"
-								data-toggle="card-expand"
-								class="text-white text-opacity-50 text-decoration-none"><i
-								class="fa fa-fw fa-expand"></i></a>
-						</div>
-						<div class="card-body ">
-							<div id="getAvailablityDiv"></div>
-							
-						</div>
-
-						<div class="card-arrow">
-							<div class="card-arrow-top-left"></div>
-							<div class="card-arrow-top-right"></div>
-							<div class="card-arrow-bottom-left"></div>
-							<div class="card-arrow-bottom-right"></div>
-						</div>
-
-					</div>
-				</div>
-				
-				<div class="col-xl-6 col-lg-6">
-					<div class="card">
-						<div class="card-header fw-bold small d-flex">
-							<span class="flex-grow-1">Test</span> <a href="#"
-								data-toggle="card-expand"
-								class="text-white text-opacity-50 text-decoration-none"><i
-								class="fa fa-fw fa-expand"></i></a>
-						</div>
-						<div class="card-body ">
-							
-							
-						</div>
-
-						<div class="card-arrow">
-							<div class="card-arrow-top-left"></div>
-							<div class="card-arrow-top-right"></div>
-							<div class="card-arrow-bottom-left"></div>
-							<div class="card-arrow-bottom-right"></div>
-						</div>
-
-					</div>
-				</div>
 			
-			</div>
 
 			<div class="row">
 				<div class="col-xl-6 col-lg-6">
@@ -363,13 +338,8 @@
 				<div class="modal-dialog modal-xl">
 					<div class="modal-content empContent">...</div>
 				</div>
-			</div>
+			</div>			
 			
-			<div class="modal fade" id="availablitymodal">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content availablitymodalcontent">...</div>
-				</div>
-			</div>
 		</div>
 		
 </body>

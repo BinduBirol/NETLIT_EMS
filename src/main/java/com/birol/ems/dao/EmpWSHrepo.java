@@ -24,4 +24,8 @@ public interface EmpWSHrepo extends JpaRepository<Employee_work_schedule, String
 	
 	@Query(value = "SELECT * from employee_work_schedule  where userId = :userid AND  date BETWEEN STR_TO_DATE(:startDate, '%Y-%m-%d')  AND STR_TO_DATE(:endDate, '%Y-%m-%d')",nativeQuery = true)
 	public ArrayList<Employee_work_schedule> getAllBetweenDates(@Param("userid")long userid, @Param("startDate")String startDate,@Param("endDate")String endDate);
+	
+	String deleteByAvid= "DELETE FROM employee_work_schedule WHERE availability_id = ?1 ";
+	@Query(value =deleteByAvid,nativeQuery = true)
+	String deleteByAvid(String availability_id);
 }

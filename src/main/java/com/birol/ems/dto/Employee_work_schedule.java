@@ -28,6 +28,7 @@ public class Employee_work_schedule {
 	private String day;
 	private LocalDate date;
 	private long work_minute;
+	private String availability_id;
 	@Transient
 	private String work_hour;
 
@@ -42,6 +43,15 @@ public class Employee_work_schedule {
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date();
+	}
+
+	
+	public String getAvailability_id() {
+		return availability_id;
+	}
+
+	public void setAvailability_id(String availability_id) {
+		this.availability_id = availability_id;
 	}
 
 	public String getWork_sh_id() {

@@ -61,9 +61,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.birol.ems.dao.AvailablityRepo;
 import com.birol.ems.dao.ComplaintsRepo;
 import com.birol.ems.dao.EmpWSHrepo;
 import com.birol.ems.dao.LoggedinUserRepo;
+import com.birol.ems.dto.Availability;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.dto.Employee_work_schedule;
 import com.birol.ems.dto.LoggedinUserDTO;
@@ -101,7 +103,9 @@ public class EMScontroller {
 	EMSservice emsService;
 	@Autowired
 	EmpWSHrepo empWSHrepo;
-
+	@Autowired
+	AvailablityRepo avrepo;
+	
 	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
 
 	@GetMapping("/dashboard")
@@ -112,15 +116,30 @@ public class EMScontroller {
 		String date = simpleDateFormat.format(new Date());
 		
 		Optional<Employee_work_schedule> ws= null;
+		Optional<Availability> avlist= null;
 		Employee_work_schedule obj = new Employee_work_schedule();
 		try {
-			ws =empWSHrepo.findById(user.getId()+date);
-			model.addAttribute("wsh",ws.get());			
+			ws =empWSHrepo.findById(user.getId()+date);			
+			model.addAttribute("wsh",ws.get());
+			
 		} catch (NoSuchElementException e) {
 			obj.setWork_minute(0);
 			obj.setWork_start("N/A");
 			obj.setWork_end("N/A");
+			obj.setStatus(3);
 			model.addAttribute("wsh",obj);			
+		}
+		
+		Availability avObj= new Availability();
+		try {
+			avlist= avrepo.findById("AV"+user.getId()+date);
+			model.addAttribute("av",avlist.get());
+		} catch (Exception e) {
+			avObj.setWork_minute(0);
+			avObj.setWork_start("N/A");
+			avObj.setWork_end("N/A");
+			avObj.setStatus(3);
+			model.addAttribute("av",avObj);
 		}
 		model.addAttribute("latest",employeeService.getLatestEmployeeList());
 		model.addAttribute("user",employeeService.getEmployeebyID(user.getId()));	

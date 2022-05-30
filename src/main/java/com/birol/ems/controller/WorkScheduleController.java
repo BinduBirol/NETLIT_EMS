@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.birol.ems.dao.AvailablityRepo;
@@ -61,8 +63,26 @@ public class WorkScheduleController {
 	}
 	
 	@GetMapping("/work_schedule_new")
-	public ModelAndView work_schedule_new(final ModelMap model) {		
+	public ModelAndView work_schedule_new(@RequestParam(required = false) String from_date,
+			@RequestParam(required = false) String to_date,
+			@RequestParam(required = false) String c,
+			@RequestParam(required = false) String empid,
+			Authentication auth,final ModelMap model) {	
+		User user = (User) auth.getPrincipal();
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
 		model.addAttribute("employees", employeeService.getEmployeeList());
+		model.addAttribute("emp",empdtl);
+		
+		ArrayList<Availability> availist= new ArrayList<Availability>();
+		
+		if(empid==null & from_date==null) {
+			availist=avrepo.getAvailablityAllandDategraterthanToday();
+		}else if(empid.isEmpty() & from_date!=null) {
+			availist=avrepo.getAllusersBetweenDates(from_date, to_date);
+		}
+		
+		model.addAttribute("wsh",availist);		
+		
 		return new ModelAndView("ems/pages/work_schedule_new", model);
 	}
 
@@ -194,15 +214,75 @@ public class WorkScheduleController {
 		return new ModelAndView("ems/pages/timeReport", model);
 	}
 	
-	@GetMapping("/getAvailablity")
-	public ModelAndView getAvailablity(final ModelMap model,Authentication auth) {
-		User user = (User) auth.getPrincipal();
-		String todate;
-		ArrayList<Availability> avlist= avrepo.getAvailablityByuseridandDategraterthanToday(user.getId());
+	@GetMapping("/availabilityHome")
+	public ModelAndView availabilityHome(@RequestParam(required = false) String from_date,
+			@RequestParam(required = false) String to_date,			
+			@RequestParam(required = false) String empid,
+			Authentication auth,final ModelMap model) {
 		
-		model.addAttribute("avlist", avlist);
-		return new ModelAndView("ems/ajaxResponse/getAvailablity", model);
+		User user = (User) auth.getPrincipal();
+		long userid = 0;	
+		if(empid==null) {userid=user.getId();}else{userid=Long.parseLong(empid);}	
+		
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(userid);
+		model.addAttribute("emp", empdtl);
+				
+		ArrayList<Availability> ewsh = null;
+		if(from_date == null) {ewsh= avrepo.getAvailablityByuseridandDategraterthanToday(userid);}
+		else {ewsh= avrepo.getAllBetweenDates(userid,from_date, to_date);}
+		
+		long total_wh= 0;
+		for(Availability w: ewsh) {
+			total_wh+= w.getWork_minute();
+		}
+		model.addAttribute("wsh", ewsh);
+		model.addAttribute("total_days", ewsh.size());
+		model.addAttribute("total_work", wSHservice.mintsTOHmConvert(total_wh));
+		model.addAttribute("emps", employeeService.getEmployeeList());
+		return new ModelAndView("ems/pages/availabilityHome", model);
 	}
 	
+	@GetMapping("/approveAvailablity")
+	@ResponseBody
+	public String ApproveAvailablity(
+			Authentication auth, 
+			@RequestParam String av_id,
+			@RequestParam String start,
+			@RequestParam String end,
+			@RequestParam int lbreak,
+			@RequestParam int minutes,
+			@RequestParam boolean approve,
+			final ModelMap model) {
+		
+		User creator = (User) auth.getPrincipal();
+		Availability av = avrepo.findById(av_id).get();
+		Employee_work_schedule wsh= new Employee_work_schedule();		
+		
+		wsh.setAssigned_by_full_name(creator.getFirstName()+" "+creator.getLastName());
+		wsh.setAssigned_by_id(creator.getId());
+		
+		wsh.setDate(av.getDate());
+		wsh.setDay(av.getDay());		
+		wsh.setWeek(av.getWeek());
+		wsh.setWork_start(start);
+		wsh.setWork_end(end);
+		wsh.setLunch_hour(lbreak);
+		wsh.setWork_minute(minutes);
+		wsh.setUserid(av.getUserid());
+		wsh.setFull_name(av.getFull_name());
+		wsh.setAvailability_id(av.getAv_id());
+		String wshid= wSHservice.generateWShID(wsh);
+		wsh.setWork_sh_id(wshid);
+		
+		av.setIsapproved(approve);
+		avrepo.save(av);
+		if (approve) {
+			empWSHrepo.save(wsh);
+		} else {
+			empWSHrepo.deleteById(wshid);			
+		}	
+		model.addAttribute("message",approve);
+		return av_id;
+	}
 	
 }

@@ -67,11 +67,11 @@
 				<option value="0">Absent</option>
 			</select>
 			<input type="hidden" id="userid" name="userid" th:value="${userdtl.empid}" />
-			<input type="hidden" name="full_name" th:value="${userdtl.full_name}">
+			
 		</div>
 		<div class="col-12 col-sm-4">
 			<label class="custom-control-label ">Date Range</label> 
-			<select id="daterangeselect" onc name="status" class="form-select">
+			<select id="avdaterangeselect" onc name="status" class="form-select">
 					<option value="t">Today</option>	
 					<option value="tw">This Week</option>								
 					<option value="nw">Next Week</option>					
@@ -87,10 +87,10 @@
 			<div class="form-group">
 				<label>From Date to Date</label>
 				<div class="input-group " id="">
-					<input  id="from_date" name="from_date" required="required" autocomplete="off"
+					<input  id="av_from_date" name="from_date" required="required" autocomplete="off"
 						type="text" class="form-control datepicker-default" 
 						placeholder="start date" /> <span class="input-group-text ">to</span>
-					<input id="to_date" name="to_date" type="text" required="required" autocomplete="off"
+					<input id="av_to_date" name="to_date" type="text" required="required" autocomplete="off"
 						class="form-control datepicker-default" placeholder="end date" />
 				</div>
 			</div>
@@ -187,8 +187,8 @@ function setModalData() {
 	$('#availability option[value="1"]').attr("selected", "selected");
 	$('.absent').addClass("border-success");
 	let today = new Date().toISOString().substr(0, 10);
-	$("#from_date").val(today);
-	$("#to_date").val(today);	
+	$("#av_from_date").val(today);
+	$("#av_to_date").val(today);	
 	getWeekNo();
 	setDateRangeString();
 }
@@ -211,35 +211,35 @@ $('#availability').change( function() {
 	}
 });
 
-$("#daterangeselect").change(function() {
+$("#avdaterangeselect").change(function() {
 	$c = $(this).val();
 	if ($c == "tm") {
-		$("#from_date").val(moment().add(1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
-		$("#to_date").val(moment().endOf('month').format('YYYY-MM-DD'));
+		$("#av_from_date").val(moment().add(1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
+		$("#av_to_date").val(moment().endOf('month').format('YYYY-MM-DD'));
 
 	} else if ($c == "nm") {
-		$("#from_date").val(moment().add(1, 'month').startOf('month').format('YYYY-MM-DD'));
-		$("#to_date").val(moment().add(1, 'month').endOf('month').format('YYYY-MM-DD'));
+		$("#av_from_date").val(moment().add(1, 'month').startOf('month').format('YYYY-MM-DD'));
+		$("#av_to_date").val(moment().add(1, 'month').endOf('month').format('YYYY-MM-DD'));
 
 	}  else if ($c == "nw") {
-		$("#from_date").val(moment().add(1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
-		$("#to_date").val(moment().add(1, 'week').endOf('isoWeek').format('YYYY-MM-DD'));
+		$("#av_from_date").val(moment().add(1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
+		$("#av_to_date").val(moment().add(1, 'week').endOf('isoWeek').format('YYYY-MM-DD'));
 	} else if ($c == "t") {
-		$("#from_date").val(moment().format('YYYY-MM-DD'));
-		$("#to_date").val(moment().format('YYYY-MM-DD'));
+		$("#av_from_date").val(moment().format('YYYY-MM-DD'));
+		$("#av_to_date").val(moment().format('YYYY-MM-DD'));
 
 	}  else if ($c == "tw") {
-		$("#from_date").val(moment().format('YYYY-MM-DD'));
-		$("#to_date").val(moment().endOf('week').format('YYYY-MM-DD'));
+		$("#av_from_date").val(moment().format('YYYY-MM-DD'));
+		$("#av_to_date").val(moment().endOf('week').format('YYYY-MM-DD'));
 
 	}
 	setDateRangeString();
 	getWeekNo();
 })
 
-$('#from_date').on('change', function() {
+$('#av_from_date').on('change', function() {
 	$("#wshmessage").html("");
-	$("#to_date").val($("#from_date").val());	
+	$("#av_to_date").val($("#av_from_date").val());	
 	getWeekNo();
 });
 
@@ -252,12 +252,12 @@ function getWeekNo() {
 	var result =Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);		
 	$("#week_no").html("  "+result);
 	*/
-	var weekno= moment($("#from_date").val(), 'YYYY-MM-DD').format('WW')
+	var weekno= moment($("#av_from_date").val(), 'YYYY-MM-DD').format('WW')
 	$("#week_no").html(weekno);
 }
 
 function setDateRangeString() {
-	$('#avmessage').html(moment($("#from_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY') + ' - ' + moment($("#to_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY'));
+	$('#avmessage').html(moment($("#av_from_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY') + ' - ' + moment($("#av_to_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY'));
 }
 
 function mySubmitFunction(e) {
@@ -277,16 +277,11 @@ function mySubmitFunction(e) {
 				if (data.includes("Successfully") == true) {
 					$userid=$("#userid").val();
 					$("#"+$userid).click();
-					getAvailablity();
-				}
-				
-				
+					location.reload();
+				}			
 			},
-			error : function(xhr, desc, err) {
-				
-				hideprocessview();				
-								
-				
+			error : function(xhr, desc, err) {				
+				hideprocessview();
 			}
 		});
 	  return false;

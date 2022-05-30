@@ -73,7 +73,7 @@ function showGreeting(senderid,sender,message,time,rcvr,rcvrid,color) {
 	$content = "<tr>" + "<td class='text-justify'><a class='text-decoration-none' href='#' emp-id='"
 			+ senderid + "' onclick='viewEmlpoyee(this);'  style='color: "
 			+ color + "'>" + sender + "</a>: " + message + "</td>" +
-			"<td class='text-muted col-sm-3 text-center'>" + time + "</td></tr>";
+			"<td class='text-muted col-sm-3 small text-center'>" + time + "</td></tr>";
 	
 	
     //alert($content);
@@ -131,7 +131,7 @@ $(function() {
 	$leftmsg = "<tr><td colspan='2'>Left Conversation</td></tr>";
 	$("#connect").click(function() {
 		connect();		
-		triggerToast("Connected with EMS chatroom!");
+		//triggerToast("Connected with EMS chatroom!");
 	});
 	$("#disconnect").click(function() {
 		disconnect();

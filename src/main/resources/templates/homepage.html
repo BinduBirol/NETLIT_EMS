@@ -28,15 +28,12 @@
 	<script type="text/javascript">
 		viewToday();
 		getloggeinusers();
-		getAvailablity();
 		
 		function getloggeinusers() {
 			$.get("getLoggedInUsers", function(data, status) {
 				$("#luserdiv").html(data);
 			});
 		}
-		
-		
 		
 		function viewToday() {
 			var today = new Date();
@@ -49,39 +46,7 @@
 			$("#date").html(weekday[date.getDay()].toUpperCase()+", "+ dd + '/' + mm + '/' + yyyy);
 		}
 		
-		function availablity(z) {			
-			$empid = $(z).attr("emp-id");
-			$.ajax({
-				url : "setavailablity?empid=" + $empid,
-				type : 'GET',
-				success : function(data) {					
-					$('.availablitymodalcontent').html(data);
-					$('#availablitymodal').modal('show');					
-				},
-				error : function(xhr, desc, err) {
-					$('.availablitymodalcontent').html(xhr.responseText);
-					$('#availablitymodal').modal('show');
-				}
-			});
-		}
-		function getAvailablity() {
-			$.get("getAvailablity", function(data, status) {
-				$("#getAvailablityDiv").html(data);
-				reloadAvtable();
-			});
-		}
-		function reloadAvtable() {
-			$('#avtable').DataTable({
-			    dom: "<'row mb-3'<'col-sm-4'l><'col-sm-8 text-end'<'d-flex justify-content-end'fB>>>t<'d-flex align-items-center'<'me-auto'i><'mb-0'p>>",
-			    lengthMenu: [ 10, 20, 30, 40, 50 ],
-			    responsive: true,
-			    buttons: [ 
-			      
-			      { extend: 'csv', className: 'btn btn-outline-theme btn-sm' }
-			    ]
-			  });
-			
-		}
+		
 	</script>
 </body>
 </html>
