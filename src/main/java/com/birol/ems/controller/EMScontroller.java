@@ -78,6 +78,7 @@ import com.birol.persistence.dao.RoleRepository;
 import com.birol.persistence.model.User;
 import com.birol.security.ActiveUserStore;
 import com.birol.service.IUserService;
+import com.birol.web.util.GenericResponse;
 
 @Controller
 public class EMScontroller {
@@ -224,4 +225,10 @@ public class EMScontroller {
 		}
 	}
 
+	@GetMapping("/user/generate/2faqr")
+	@ResponseBody
+    public GenericResponse generate2faQR(Authentication auth) throws UnsupportedEncodingException {     
+        User user = (User) auth.getPrincipal();
+        return new GenericResponse(userService.generateQRUrl(user));
+    }
 }

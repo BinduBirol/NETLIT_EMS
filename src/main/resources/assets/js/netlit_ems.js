@@ -16,9 +16,7 @@ function googleTranslateElementInit() {
 function showprocessview() {
 	$(".processview").prop("disabled", true);
 	// add spinner to button
-	$(".processview")
-			.html(
-					"<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> Loading...");
+	$(".processview") .html("<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> Loading...");
 }
 
 function hideprocessview() {
@@ -48,4 +46,18 @@ function viewEmlpoyee(z) {
 
 		}
 	});
+}
+
+function setAutorowspan(tableid, rowindex) {	
+	const table = document.querySelector(tableid);
+	let headerCell = null;
+	for (let row of table.rows) {
+	  const firstCell = row.cells[rowindex];	  
+	  if (headerCell === null || firstCell.innerText !== headerCell.innerText) {
+	    headerCell = firstCell;
+	  } else {
+	    headerCell.rowSpan++;
+	    firstCell.remove();
+	  }
+	}
 }

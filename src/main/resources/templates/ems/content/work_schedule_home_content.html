@@ -192,19 +192,15 @@
 						<hr class="mb-4" />
 						<div class="row">
 							<div id="datatable" class="mb-5">
-									<div class="card border-theme">
-										<div class="card-header fw-bold small d-flex">
+									
 									    <div class="flex-grow-1">
 									    
 												<div class="row small">
 													<form id="searchform" action="empsAvailability" method="get">													
 														<div class="row ">
 															
+															<div class="input-group " id="">																
 																
-															
-															<div class="input-group " id="">
-																
-																<button type="button" th:emp-id="${session.userdtl.empid}" onclick="availablity(this);" class="btn btn-outline-theme">Add <i class="fa fa-plus"></i></button>
 																<span class="input-group-text"><i class="fa fa-filter"></i></span>
 																<select name="empid" id="empidselect" class="form-select form-select-sm">																	
 																	<option value=""> All Employees </option>
@@ -213,8 +209,9 @@
 																
 																<select name="c" id="daterangeselect" class="form-select form-select-sm">
 																	<option value="">Date Range</option>
-																	<option value="t">Today</option>
+																	<option selected="selected" value="t">Today</option>
 																	<option value="y">Yesterday</option>
+																	<option value="n2d">Next 3 Days</option>
 																	<option value="lw">Last Week</option>
 																	<option value="tw">This Week</option>
 																	<option value="nw">Next Week</option>
@@ -236,15 +233,16 @@
 													</form>
 																								
 													
-													</div>
+													
 													
 													
 													</div>
 									    
-									    </span>
+									   
 									    <!-- <a href="#" data-toggle="card-expand" class="text-white text-opacity-50 text-decoration-none"><i class="fa fa-fw fa-expand"></i></a> -->
 									  </div>
-										<div class="card-body">
+									  <br/>
+										
 										
 										<div class="d-flex align-items-start mb-3">
 											<a href="#"> <img onerror="this.onerror=null; this.src='assets/img/user/user.png'"
@@ -253,7 +251,7 @@
 											</a>
 											<div class="ms-3">
 												<h5 class="mt-0 mb-1">
-													<a class="text-decoration-none" href="#" th:emp-id="${emp.empid}" onclick="viewEmlpoyee(this);" th:text="${emp.full_name}"></a> 
+													<a class="text-decoration-none" href="#" th:emp-id="${emp.empid}" onclick="viewEmlpoyee(this);" th:text="${emp.full_name}"></a> [ Chief ]
 												</h5>
 												<ul class="small list-unstyled">
 													<li><span id="daterangehtml"></span> [ [[${wsh.size}]] ]</li>													
@@ -267,21 +265,22 @@
 										
 										
 										
-											<table  id="datatableDefault" class="table text-nowrap w-100">
+											
+											<table id="datatableDefaultz" class="table small table-bordered" >
 												<thead>
 													<tr>
 														<th>Employee</th>
 														<th><input id="checkAll" class="form-check-input" type="hidden"/> <i class="fa fa-thumbs-up"></i> </th>
-														<th>Date</th>														
+														<th width="95px">Date</th>														
 														<th>Week</th>
 														<th>Day</th>														
 														<th>Minute</th>
 														<th>Start</th>
 														<th>End</th>
 														<th>Break</th>														
-														<th>Desc</th>
-														<th>Created on</th>		
-														<th>P/A</th>
+														<th  >Desc</th>
+														<th>Created</th>		
+														
 													</tr>
 												</thead>
 												<tbody>	
@@ -289,7 +288,7 @@
 													
 													
 													<tr th:classappend="${wsh.status}==0 ? text-danger : normal"
-														th:each="wsh,iterator : ${wsh}">														
+														th:each="wsh,iterator : ${wsh}" class="align-middle">														
 														<td><a href="#" class="text-decoration-none" th:emp-id="${wsh.userid}" onclick="viewEmlpoyee(this);"   th:text="${wsh.full_name}"></a></td>	
 														<td ><input th:id="${wsh.av_id}" th:checked="${wsh.isapproved}" class="form-check-input avidcheckbox" type="checkbox"/></td>	
 														<td th:text="${wsh.date}">Date</td>									
@@ -297,28 +296,25 @@
 														<td th:text="${wsh.week}">Date</td>
 														<td th:text="${wsh.day}">Date</td>
 														
-														<td><input type="number" class="form-control wmint" readonly="readonly" th:value="${wsh.work_minute}"/></td>
-														<td><input type="time" class="form-control cal start" th:value="${wsh.work_start}"/></td>
-														<td><input type="time" class="form-control cal end" th:value="${wsh.work_end}"/></td>
-														<td><input type="number" class="form-control cal lbreak" th:value="${wsh.lunch_hour}"/></td>								
+														<td><input type="number" class=" td-input form-control form-control-sm   wmint " readonly="readonly" th:value="${wsh.work_minute}"/></td>
+														<td><input type="time" class="td-input form-control form-control-sm cal start  " th:value="${wsh.work_start}"/></td>
+														<td><input type="time" class="td-input form-control form-control-sm cal end " th:value="${wsh.work_end}"/></td>
+														<td><input type="number" class="td-input form-control form-control-sm cal lbreak " th:value="${wsh.lunch_hour}"/></td>
+														<td>
+															<textarea class="td-input form-control form-control-sm cal wdesc " th:text="${wsh.work_desc}" rows="2"></textarea>
 														
-														<td th:text="${wsh.work_desc}">Desc</td>
+														
 														<td th:text="${wsh.created==null}? ${wsh.updated} : ${wsh.created}" >date</td>
-														<td th:text="${wsh.status}==0 ? ABSENT : PRESENT">P/A</td>
+														
 													</tr>
 													
 													
 												</tbody>
 											</table>
-										</div>
-										<div class="card-arrow">
-											<div class="card-arrow-top-left"></div>
-											<div class="card-arrow-top-right"></div>
-											<div class="card-arrow-bottom-left"></div>
-											<div class="card-arrow-bottom-right"></div>
-										</div>
 										
-									</div>
+										
+										
+									
 								</div>
 						</div>
 					</div>
@@ -347,7 +343,6 @@
 
 		<!-- END container -->
 		<!-- END #content -->
-
 
 
 

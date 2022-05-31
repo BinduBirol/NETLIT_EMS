@@ -126,6 +126,7 @@ public class RegistrationRestController {
         return null;
     }
 
+    
     // ============== NON-API ============
 
     private SimpleMailMessage constructResendVerificationTokenEmail(final String contextPath, final Locale locale, final VerificationToken newToken, final User user) {

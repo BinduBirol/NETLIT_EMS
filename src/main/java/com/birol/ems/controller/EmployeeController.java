@@ -98,8 +98,9 @@ public class EmployeeController {
 			SimpleMailMessage email = new SimpleMailMessage();
 			email.setTo(emp.getEmail());
 			email.setSubject("Information added");
-			final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort()
-					+ request.getContextPath();
+			//final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort()
+					//+ request.getContextPath();
+			final String appUrl="https://ems.netlit.se";
 			String emailText = "Dear " + emp.getFull_name()
 					+ ",\nYour employment information succesfully added to NETLIT EMS system"
 					+ "\nGo to the link to create your account:" + "\n" + appUrl + "/registration.html";

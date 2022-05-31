@@ -40,7 +40,8 @@ public class EmailService {
         
         final String recipientAddress = user.getEmail();
         final String subject = "Registration Confirmation";
-        final String confirmationUrl = event.getAppUrl() + "/registrationConfirm?token=" + token;
+        //final String confirmationUrl = event.getAppUrl() + "/registrationConfirm?token=" + token;
+        final String confirmationUrl = "https://ems.netlit.se" + "/registrationConfirm?token=" + token;
         String text= "Dear "+user.getFirstName()+" "+user.getLastName()+",<br/>";
         text+= messagesSource.getMessage("message.regSuccLink", null, "To confirm your registration, please click on the below link.", event.getLocale());
         text+="<br/>"+confirmationUrl;

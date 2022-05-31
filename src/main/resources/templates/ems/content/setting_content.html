@@ -72,7 +72,7 @@
 												</div>
 												<div>													
 													<div class="text-white text-opacity-50 d-flex align-items-center">														
-														<a href="#" class="btn btn-outline-warning" onclick="disable2FA()">Disable 2FA</a> 
+														<a href="#" class="btn btn-outline-warning" onclick="generateQr()">Generate QR</a> 
 													</div>
 												</div>
 											</div>
@@ -86,7 +86,7 @@
 											<div class="list-group-item d-flex align-items-center">
 												<div class="flex-1 text-break">
 													<i class="fa fa-circle fs-8px fa-fw text-danger me-1"></i>
-													You are not using Two-step authentication
+													<span id="mfamessage">You are not using Two-step authentication</span>
 												</div>
 												<div>													
 													<div class="text-white text-opacity-50 d-flex align-items-center">														
@@ -161,12 +161,21 @@
 		function set2FA(use2FA){
 		    $.post( "/user/update/2fa", { use2FA: use2FA } , function( data ) {
 		        if(use2FA){
-		        	$("#qr").append('<img src="'+data.message+'" />').show();
+		        	$("#qr").html('<img src="'+data.message+'" />').show();
+		        	$("#mfamessage").html("You have enabled Two-step authentication");
 		        }else{
 		            window.location.reload();
 		        }
 		    });
 		}
+		
+		function generateQr(){
+		    $.get( "/user/generate/2faqr", function( data ) {		       
+		        	$("#qr").html('<img src="'+data.message+'" />').show();		        
+		    });
+		}
+		
+		
 	</script>
 	
 </div>

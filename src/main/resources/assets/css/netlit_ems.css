@@ -42,3 +42,14 @@
  input[readonly], input[disabled] {
   cursor: no-drop;
 }
+
+.td-input{
+	
+	
+}
+
+.td-input[type=number]{
+	width: 60px;
+}
+
+
