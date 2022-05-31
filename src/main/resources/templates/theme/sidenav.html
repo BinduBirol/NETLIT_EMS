@@ -68,7 +68,8 @@
 						<div class="menu-submenu">
 							<div class="menu-item">
 								<a href="/messaging" class="menu-link">
-									<span class="menu-text">Live Community Chat</span>
+									<span class="menu-text">Live Community Chat</span> 
+									
 								</a>
 							</div>
 							<div class="menu-item">
@@ -103,36 +104,39 @@
 					
 					
 					
-					<div class="menu-header">Components</div>					
-					<div class="menu-item has-sub">
-						<a href="javascript:;" class="menu-link">
-							<span class="menu-icon">
-								<i class="fas fa-users"></i>								
-							</span>
-							<span class="menu-text d-flex align-items-center">Employee Management</span> 
-							<span class="menu-caret"><b class="caret"></b></span>
-						</a>
-						<div class="menu-submenu">
-							<div class="menu-item">
-								<a href="/addEmployee"  class="menu-link">
-									<span class="menu-text">Add Employee</span>
-								</a>
-							</div>
-							<div class="menu-item">
-								<a href="/employeeList"  class="menu-link">
-									<span class="menu-text">Employee List</span>
-								</a>
-							</div>
-							<div class="menu-item">
-								<a href="/editEmployee" style="pointer-events: none; cursor: default;"  class="menu-link"  >
-									<span class="menu-text"><s>Update Employee Info</s></span>
-								</a>
-							</div>
-							
-						</div>
-					</div>
 					
-					<div  class="menu-item has-sub">
+						<div sec:authorize="!hasAnyAuthority('EMPLOYEE')" class="menu-header">Components</div>					
+						<div sec:authorize="!hasAnyAuthority('EMPLOYEE')" class="menu-item has-sub">
+							<a href="javascript:;" class="menu-link">
+								<span class="menu-icon">
+									<i class="fas fa-users"></i>								
+								</span>
+								<span class="menu-text d-flex align-items-center">Employee Management</span> 
+								<span class="menu-caret"><b class="caret"></b></span>
+							</a>
+							<div class="menu-submenu">
+								<div class="menu-item">
+									<a href="/addEmployee"  class="menu-link">
+										<span class="menu-text">Add Employee</span>
+									</a>
+								</div>
+								<div class="menu-item">
+									<a href="/employeeList"  class="menu-link">
+										<span class="menu-text">Employee List</span>
+									</a>
+								</div>
+								<div class="menu-item">
+									<a href="/editEmployee" style="pointer-events: none; cursor: default;"  class="menu-link"  >
+										<span class="menu-text"><s>Update Employee Info</s></span>
+									</a>
+								</div>
+								
+							</div>
+						</div>
+					
+					
+					
+					<div sec:authorize="!hasAnyAuthority('EMPLOYEE')"   class="menu-item has-sub">
 						
 						<a href="#" class="menu-link">
 							<span class="menu-icon">								
@@ -162,7 +166,7 @@
 					
 					<div class="menu-divider"></div>
 					<div class="menu-header">Users</div>
-					<div class="menu-item has-sub">						
+					<div sec:authorize="hasAnyAuthority('SUPER ADMIN')"  class="menu-item has-sub">						
 						<a href="#" class="menu-link">
 							<span class="menu-icon">								
 								<i class="fab  fa-superpowers"></i>

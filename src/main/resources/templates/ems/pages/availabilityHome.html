@@ -71,7 +71,7 @@
 																
 																<button type="button" th:emp-id="${session.userdtl.empid}" onclick="availablity(this);" class="btn btn-outline-theme">Add <i class="fa fa-plus"></i></button>
 																<span class="input-group-text"><i class="fa fa-filter"></i></span>
-																<select name="empid" id="empidselect" class="form-select form-select-sm">																	
+																<select sec:authorize="!hasAnyAuthority('EMPLOYEE')"  name="empid" id="empidselect" class="form-select form-select-sm">																	
 																	<option th:value="${session.userdtl.empid}"> Myself </option>
 																	<option th:each="emps : ${emps}" th:value="${emps.empid}">[[${emps.full_name}]]</option>																	
 																</select>
@@ -95,7 +95,7 @@
 																<button type="submit" class="btn btn-outline-theme"><i class="fa fa-search"></i></button>
 															</div>
 															
-															<input type="hidden" name="useridx" th:value="${session.userdtl.empid}" />
+															
 															
 														</div>														
 													</form>
@@ -296,7 +296,7 @@
 		var to_date = urlParams.get('to_date');
 		var empid = urlParams.get('empid');
 		
-		if(empid){			
+		if(c){			
 			$('#empidselect option[value="'+empid+'"]').attr("selected", "selected");
 			$('#daterangeselect option[value="'+c+'"]').attr("selected", "selected");
 			$("#from_date").val(from_date);

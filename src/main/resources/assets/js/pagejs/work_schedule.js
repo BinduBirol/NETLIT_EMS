@@ -83,8 +83,8 @@ $("#daterangeselect").change(function() {
 	
 
 		function workschedule(z) {
-			$("tr").removeClass("table-primary");
-			$(z).closest("tr").addClass("table-primary");
+			//$("tr").removeClass("table-primary");
+			//$(z).closest("tr").addClass("table-primary");
 			$empid = $(z).attr("emp-id");			
 
 			$.ajax({
@@ -145,9 +145,9 @@ $("#daterangeselect").change(function() {
 		
 		
 		$(".avidcheckbox").change(function (e) {			
-			$("tr").removeClass("table-primary");			
+			//$("tr").removeClass("table-primary");			
 			$target= $(e.target).closest('tr');
-			$target.addClass("table-primary");
+			//$target.addClass("table-primary");
 			var start = $target.find(".start").val();
 			var end = $target.find(".end").val();
 			var lbreak = $target.find(".lbreak").val();	
@@ -156,16 +156,16 @@ $("#daterangeselect").change(function() {
 			var av_id= this.id;
 			
 			if (!$.trim(wdesc).length > 0){
+				
+				//$('#'+this.id).attr( "checked", false );
 				$target.find(".wdesc").focus();
-				return false;
+				//$target.find(".avidcheckbox").attr( "checked", false );
+				
+				//return false;
 			}
 			
 			var app;
 			if ($('#'+this.id).is(':checked')) { app=1; }else{ app=0; }
-			
-			
-			
-			
 			var url="approveAvailablity?av_id="+av_id
 					+"&start="+start
 					+"&end="+end
@@ -188,15 +188,18 @@ $("#daterangeselect").change(function() {
 			
 		})
 		
+		
 		$(".cal").change(function (e) {
-			$("tr").removeClass("table-primary");			
+			//$('#'+this.id).attr( "checked", false );	
+			//$("tr").removeClass("table-primary");			
 			$target= $(e.target).closest('tr');
-			$target.addClass("table-primary");
+			$target.find(".avidcheckbox").attr( "checked", false );
+			//$target.addClass("table-primary");
 			var start = $target.find(".start").val();
 			var end = $target.find(".end").val();
 			var lbreak = $target.find(".lbreak").val();			
 			var diff = (Math.abs(new Date('2022-05-30 '+start) - new Date('2022-05-30 '+end))/1000/60)- lbreak;
-			$target.find(".wmint").val(diff);			
+			$target.find(".wmint").val(diff);		
 			
 		})		
 		
