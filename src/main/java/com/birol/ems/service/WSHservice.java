@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.birol.ems.dao.EmpWSHrepo;
-import com.birol.ems.dto.Availability;
+import com.birol.ems.dto.EmpTimeReportDTO;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
-import com.birol.ems.dto.Employee_work_schedule;
+import com.birol.ems.dto.Time_report_approved;
 
 @Service
 public class WSHservice {
@@ -27,19 +27,19 @@ public class WSHservice {
 		return totalDates;
 	}
 
-	public String generateWShID(Employee_work_schedule ewsh) {
+	public String generateWShID(Time_report_approved ewsh) {
 		String id = ewsh.getUserid() + ewsh.getDate().toString().replace("-", "");
 		return id;
 	}
 	
-	public String generateWavID(Availability ewsh) {
+	public String generateWavID(EmpTimeReportDTO ewsh) {
 		String id = "AV"+ewsh.getUserid() + ewsh.getDate().toString().replace("-", "");
 		return id;
 	}
 	
-	public ArrayList<Employee_work_schedule> getEmployeeTimeReport(long empid) {
-		ArrayList<Employee_work_schedule> empwsh= new ArrayList<Employee_work_schedule>();
-		empwsh=(ArrayList<Employee_work_schedule>) empWSHrepo.findByUserid(empid);
+	public ArrayList<Time_report_approved> getEmployeeTimeReport(long empid) {
+		ArrayList<Time_report_approved> empwsh= new ArrayList<Time_report_approved>();
+		empwsh=(ArrayList<Time_report_approved>) empWSHrepo.findByUserid(empid);
 		return empwsh;
 	}
 	

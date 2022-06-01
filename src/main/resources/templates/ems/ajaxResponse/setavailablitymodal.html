@@ -35,7 +35,7 @@
 <!-- ================== END page-css ================== -->
 
 </head>
-<form onsubmit="return mySubmitFunction(event)" id="wshform" action="saveWAV" method="post" >
+<form onsubmit="return mySubmitFunction(event)" id="wshform" action="saveTimeReport" method="post" >
 <div class="modal-header">
 	<div class="d-flex align-items-start">
 		<a href="#"> <img onerror="this.onerror=null; this.src='assets/img/user/user.png'"
@@ -48,6 +48,8 @@
 				type="button" th:href="@{/editEmployee(empid=${userdtl.empid})}"><i
 					class="fa fa-edit"></i></a></span> <br /> 
 			Week #<span id="week_no"></span>
+			<br/>
+			<span>Extent: [[${userdtl.employee_Type}]]</span>
 			<p id="avmessage"></p>
 		</div>
 	</div>
@@ -63,12 +65,19 @@
 		<div class="col-12 col-sm-4">
 			<label class="custom-control-label ">Availability</label> <select
 				id="availability" onc name="status" class="form-select border border-success">
-				<option value="1">Attend</option>
-				<option value="0">Absent</option>
+				<option value="1">Available</option>				
+				<option value="3">Sick Leave</option>
+				<option value="4">Vacation</option>
+				<option value="5">Child Care</option>
+				<option value="6">Absent for Other Reason</option>
 			</select>
 			<input type="hidden" id="userid" name="userid" th:value="${userdtl.empid}" />
 			
 		</div>
+		
+		
+		
+		
 		<div class="col-12 col-sm-4">
 			<label class="custom-control-label ">Date Range</label> 
 			<select id="avdaterangeselect" onc name="status" class="form-select">
@@ -214,7 +223,7 @@ $('#availability').change( function() {
 $("#avdaterangeselect").change(function() {
 	$c = $(this).val();
 	if ($c == "tm") {
-		$("#av_from_date").val(moment().add(1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
+		$("#av_from_date").val(moment().startOf('month').format('YYYY-MM-DD'));
 		$("#av_to_date").val(moment().endOf('month').format('YYYY-MM-DD'));
 
 	} else if ($c == "nm") {

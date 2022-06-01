@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>MY AVAILABLITY</title>
+	<title>TIME REPORT</title>
 	<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="description" content="" />
@@ -45,40 +45,35 @@
 						<div class="row">
 							<!-- BEGIN col-9 -->
 							
-								<ul class="breadcrumb">									
-									<li class="breadcrumb-item active">MY AVAILABILITY</li>
+								<ul class="breadcrumb">
+									<li class="breadcrumb-item"><a href="#">TIME REPORT</a></li>
+									<li class="breadcrumb-item active">VIEW TIME REPORT</li>
 								</ul>
 								
 								<h1 class="page-header">
-									MY AVAILABILITY
+									View Time Report
 								</h1>
 								
 								<hr class="mb-4" />
 								
 								<!-- BEGIN #datatable -->
 								<div id="datatable" class="mb-5">
-									<div class="card border-theme">
-										<div class="card-header fw-bold small d-flex">
+									
 									    <div class="flex-grow-1">
 									    
 												<div class="row small">
-													<form id="searchform" action="availabilityHome" method="get">													
-														<div class="row ">
-															
-																
-															
+													<form id="searchform" action="viewtimeReport" method="get">													
+														<div class="">
 															<div class="input-group " id="">
-																
-																<button type="button" th:emp-id="${session.userdtl.empid}" onclick="availablity(this);" class="btn btn-outline-theme">Add <i class="fa fa-plus"></i></button>
 																<span class="input-group-text"><i class="fa fa-filter"></i></span>
-																<select sec:authorize="!hasAnyAuthority('EMPLOYEE')"  name="empid" id="empidselect" class="form-select form-select-sm">																	
+																<select sec:authorize="!hasAnyAuthority('EMPLOYEE')" name="empid" id="empidselect" class="form-select form-select-sm">																	
 																	<option th:value="${session.userdtl.empid}"> Myself </option>
 																	<option th:each="emps : ${emps}" th:value="${emps.empid}">[[${emps.full_name}]]</option>																	
 																</select>
 																
 																<select name="c" id="daterangeselect" class="form-select form-select-sm">
 																	<option value="">Date Range</option>
-																	<option value="t">Today</option>
+																	<option selected="selected" value="t">Today</option>
 																	<option value="y">Yesterday</option>
 																	<option value="lw">Last Week</option>
 																	<option value="tw">This Week</option>
@@ -106,10 +101,8 @@
 													
 													</div>
 									    
-									    </span>
-									    <!-- <a href="#" data-toggle="card-expand" class="text-white text-opacity-50 text-decoration-none"><i class="fa fa-fw fa-expand"></i></a> -->
-									  </div>
-										<div class="card-body">
+									   <br/>
+										
 										
 										<div class="d-flex align-items-start mb-3">
 											<a href="#"> <img onerror="this.onerror=null; this.src='assets/img/user/user.png'"
@@ -122,7 +115,7 @@
 												</h5>
 												<ul class="small list-unstyled">
 													<li><span id="daterangehtml"></span> [ [[${total_days}]] ]</li>													
-													<li>Total available hours: [[${total_work}]]</li>
+													<li>Total work hour: <span class="h6">[[${total_work}]]</span></li>
 													
 												</ul>
 																					
@@ -130,56 +123,47 @@
 										</div>
 										
 										
-											<table  id="datatableDefault" class="table text-nowrap w-100">
+											<table  id="datatableDefaultz" class="table table-bordered table-hover">
 												<thead>
 													<tr>
-														<th>Date</th>
-														<th>Approved</th>													
 														<th>Week</th>
+														<th>Date</th>
 														<th>Day</th>														
 														<th>Hour</th>
 														<th>Start</th>
 														<th>End</th>
-														<th>Break</th>														
-														<th>Desc</th>
-														<th>Created on</th>		
-														<th>P/A</th>
+														<th>Break</th>
+														<th>Assgn By</th>
+														<th class="w-25 p-3">Desc</th>
+														<th>Assgn Date</th>	
+														
 													</tr>
 												</thead>
 												<tbody>	
 												
 													
 													
-													<tr th:classappend="${wsh.status}==0 ? text-muted : normal"
-														th:each="wsh,iterator : ${wsh}">														
-														<td th:text="${wsh.date}">Date</td>	
-														<td ><input th:id="${wsh.av_id}" th:checked="${wsh.isapproved}" disabled="disabled" class="form-check-input avidcheckbox" type="checkbox"/></td>								
+													<tr th:classappend="${wsh.status}==1 ?  normal:text-danger"
+														th:each="wsh,iterator : ${wsh}" class="align-middle">														
+														<td class="h2" th:text="${wsh.week}">week</td>
+														<td th:text="${wsh.date}">Date</td>										
 														
-														<td th:text="${wsh.week}">Date</td>
+														
 														<td th:text="${wsh.day}">Date</td>
 														
 														<td th:text="${wsh.work_minute}">Hour</td>
 														<td th:text="${wsh.work_start}">Start</td>
 														<td th:text="${wsh.work_end}">End</td>
-														<td th:text="${wsh.lunch_hour}">Break</td>								
+														<td th:text="${wsh.lunch_hour}">Break</td>										
+														<td th:text="${wsh.assigned_by_full_name}">Assgn By</td>
+														<td  th:text="${wsh.work_desc}">Desc</td>
+														<td th:text="${wsh.created==null}? ${wsh.updated} : ${wsh.created}">date</td>
 														
-														<td th:text="${wsh.work_desc}">Desc</td>
-														<td th:text="${wsh.created==null}? ${wsh.updated} : ${wsh.created}" >date</td>
-														<td th:text="${wsh.status}==0 ? ABSENT : PRESENT">P/A</td>
 													</tr>
-													
-													
 												</tbody>
 											</table>
-										</div>
-										<div class="card-arrow">
-											<div class="card-arrow-top-left"></div>
-											<div class="card-arrow-top-right"></div>
-											<div class="card-arrow-bottom-left"></div>
-											<div class="card-arrow-bottom-right"></div>
-										</div>
 										
-									</div>
+										
 								</div>
 								<!-- END #datatable -->
 								
@@ -207,11 +191,7 @@
 		
 		<div th:include="theme/theme_util :: theme_util"></div>	
 		
-		<div class="modal fade" id="availablitymodal">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content availablitymodalcontent">...</div>
-				</div>
-			</div>
+		
 		
 	</div>
 	<!-- END #app -->
@@ -308,21 +288,7 @@
 			
 		}
 		
-		function availablity(z) {			
-			$empid = $(z).attr("emp-id");
-			$.ajax({
-				url : "setavailablity?empid=" + $empid,
-				type : 'GET',
-				success : function(data) {					
-					$('.availablitymodalcontent').html(data);
-					$('#availablitymodal').modal('show');					
-				},
-				error : function(xhr, desc, err) {
-					$('.availablitymodalcontent').html(xhr.responseText);
-					$('#availablitymodal').modal('show');
-				}
-			});
-		}
+		setAutorowspan('#datatableDefaultz',0);
 		 
 	</script>
 </body>

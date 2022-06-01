@@ -61,13 +61,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.birol.ems.dao.AvailablityRepo;
+import com.birol.ems.dao.EmpTimeReportRepo;
 import com.birol.ems.dao.ComplaintsRepo;
 import com.birol.ems.dao.EmpWSHrepo;
 import com.birol.ems.dao.LoggedinUserRepo;
-import com.birol.ems.dto.Availability;
+import com.birol.ems.dto.EmpTimeReportDTO;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
-import com.birol.ems.dto.Employee_work_schedule;
+import com.birol.ems.dto.Time_report_approved;
 import com.birol.ems.dto.LoggedinUserDTO;
 import com.birol.ems.dto.Mail;
 import com.birol.ems.repo.EmployeeRepository;
@@ -105,7 +105,7 @@ public class EMScontroller {
 	@Autowired
 	EmpWSHrepo empWSHrepo;
 	@Autowired
-	AvailablityRepo avrepo;
+	EmpTimeReportRepo avrepo;
 	
 	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
 
@@ -116,9 +116,9 @@ public class EMScontroller {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 		String date = simpleDateFormat.format(new Date());
 		
-		Optional<Employee_work_schedule> ws= null;
-		Optional<Availability> avlist= null;
-		Employee_work_schedule obj = new Employee_work_schedule();
+		Optional<Time_report_approved> ws= null;
+		Optional<EmpTimeReportDTO> avlist= null;
+		Time_report_approved obj = new Time_report_approved();
 		try {
 			ws =empWSHrepo.findById(user.getId()+date);			
 			model.addAttribute("wsh",ws.get());
@@ -131,7 +131,7 @@ public class EMScontroller {
 			model.addAttribute("wsh",obj);			
 		}
 		
-		Availability avObj= new Availability();
+		EmpTimeReportDTO avObj= new EmpTimeReportDTO();
 		try {
 			avlist= avrepo.findById("AV"+user.getId()+date);
 			model.addAttribute("av",avlist.get());

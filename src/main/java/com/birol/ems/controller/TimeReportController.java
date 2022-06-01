@@ -32,11 +32,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.birol.ems.dao.AvailablityRepo;
+import com.birol.ems.dao.EmpTimeReportRepo;
 import com.birol.ems.dao.EmpWSHrepo;
-import com.birol.ems.dto.Availability;
+import com.birol.ems.dto.EmpTimeReportDTO;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
-import com.birol.ems.dto.Employee_work_schedule;
+import com.birol.ems.dto.Time_report_approved;
 import com.birol.ems.dto.LoggedinUserDTO;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmployeeService;
@@ -44,7 +44,7 @@ import com.birol.ems.service.WSHservice;
 import com.birol.persistence.model.User;
 
 @Controller
-public class WorkScheduleController {
+public class TimeReportController {
 	@Autowired
 	EmployeeService employeeService;
 	@Autowired
@@ -54,7 +54,7 @@ public class WorkScheduleController {
 	@Autowired
 	EmpWSHrepo empWSHrepo;
 	@Autowired
-	AvailablityRepo avrepo;
+	EmpTimeReportRepo avrepo;
 
 	@GetMapping("/work_schedule_home")
 	public ModelAndView work_schedule_home(final ModelMap model) {
@@ -62,8 +62,8 @@ public class WorkScheduleController {
 		return new ModelAndView("ems/pages/work_schedule_home", model);
 	}
 
-	@GetMapping("/empsAvailability")
-	public ModelAndView work_schedule_new(@RequestParam(required = false) String from_date,
+	@GetMapping("/empsTimereport")
+	public ModelAndView empsTimereport(@RequestParam(required = false) String from_date,
 			@RequestParam(required = false) String to_date, @RequestParam(required = false) String c,
 			@RequestParam(required = false) String empid, Authentication auth, final ModelMap model) {
 		User user = (User) auth.getPrincipal();
@@ -71,7 +71,7 @@ public class WorkScheduleController {
 		model.addAttribute("emps", employeeService.getEmployeeList());
 		model.addAttribute("emp", empdtl);
 
-		ArrayList<Availability> availist = new ArrayList<Availability>();
+		ArrayList<EmpTimeReportDTO> availist = new ArrayList<EmpTimeReportDTO>();
 
 		if (empid == null & from_date == null) {
 			availist = avrepo.getAvailablityAllandDateToday();
@@ -83,7 +83,7 @@ public class WorkScheduleController {
 
 		model.addAttribute("wsh", availist);
 
-		return new ModelAndView("ems/pages/work_schedule_new", model);
+		return new ModelAndView("ems/pages/empsTimereport", model);
 	}
 
 	@GetMapping("/workschedule")
@@ -93,8 +93,8 @@ public class WorkScheduleController {
 		return new ModelAndView("ems/ajaxResponse/viewworkschedule", model);
 	}
 
-	@GetMapping("/setavailablity")
-	public ModelAndView setavailablity(@RequestParam("empid") Long empid, final ModelMap model) {
+	@GetMapping("/settimereport")
+	public ModelAndView settimereport(@RequestParam("empid") Long empid, final ModelMap model) {
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
 		model.addAttribute("userdtl", empdtl);
 		return new ModelAndView("ems/ajaxResponse/setavailablitymodal", model);
@@ -103,15 +103,15 @@ public class WorkScheduleController {
 	@GetMapping("/workschedulehistory")
 	public ModelAndView workschedulehistory(@RequestParam("empid") Long empid, final ModelMap model) {
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
-		ArrayList<Employee_work_schedule> empwsh = new ArrayList<Employee_work_schedule>();
-		empwsh = (ArrayList<Employee_work_schedule>) empWSHrepo.findByUserid(empid);
+		ArrayList<Time_report_approved> empwsh = new ArrayList<Time_report_approved>();
+		empwsh = (ArrayList<Time_report_approved>) empWSHrepo.findByUserid(empid);
 		model.addAttribute("emp", empdtl);
 		model.addAttribute("wsh", empwsh);
 		return new ModelAndView("ems/ajaxResponse/viewWorkShHistory", model);
 	}
 
 	@RequestMapping(value = "/saveWSH", method = RequestMethod.POST)
-	public ModelAndView addEmployeeDo(@ModelAttribute Employee_work_schedule wsh, ModelMap model, Authentication auth,
+	public ModelAndView addEmployeeDo(@ModelAttribute Time_report_approved wsh, ModelMap model, Authentication auth,
 			final HttpServletRequest request) {
 		try {
 			User creator = (User) auth.getPrincipal();
@@ -150,8 +150,8 @@ public class WorkScheduleController {
 		return new ModelAndView("theme/ajaxResponse.html", model);
 	}
 
-	@RequestMapping(value = "/saveWAV", method = RequestMethod.POST)
-	public ModelAndView saveWAV(@ModelAttribute Availability av, ModelMap model, Authentication auth,
+	@RequestMapping(value = "/saveTimeReport", method = RequestMethod.POST)
+	public ModelAndView saveTimeReport(@ModelAttribute EmpTimeReportDTO av, ModelMap model, Authentication auth,
 			final HttpServletRequest request) {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -193,8 +193,8 @@ public class WorkScheduleController {
 		return new ModelAndView("theme/ajaxResponse.html", model);
 	}
 
-	@GetMapping("/timeReport")
-	public ModelAndView timeReport(@RequestParam(required = false) String from_date,
+	@GetMapping("/viewtimeReport")
+	public ModelAndView viewtimeReport(@RequestParam(required = false) String from_date,
 			@RequestParam(required = false) String to_date, @RequestParam(required = false) String c,
 			@RequestParam(required = false) String empid, Authentication auth, final ModelMap model) {
 		User user = (User) auth.getPrincipal();
@@ -208,7 +208,7 @@ public class WorkScheduleController {
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(userid);
 		model.addAttribute("emp", empdtl);
 
-		ArrayList<Employee_work_schedule> ewsh = null;
+		ArrayList<Time_report_approved> ewsh = null;
 		if(from_date==null) {
 			ewsh = empWSHrepo.getToday(userid);
 		}else {
@@ -216,18 +216,18 @@ public class WorkScheduleController {
 		}
 		
 		long total_wh = 0;
-		for (Employee_work_schedule w : ewsh) {
+		for (Time_report_approved w : ewsh) {
 			total_wh += w.getWork_minute();
 		}
 		model.addAttribute("wsh", ewsh);
 		model.addAttribute("total_days", ewsh.size());
 		model.addAttribute("total_work", wSHservice.mintsTOHmConvert(total_wh));
 		model.addAttribute("emps", employeeService.getEmployeeList());
-		return new ModelAndView("ems/pages/timeReport", model);
+		return new ModelAndView("ems/pages/viewtimeReport", model);
 	}
 
-	@GetMapping("/availabilityHome")
-	public ModelAndView availabilityHome(@RequestParam(required = false) String from_date,
+	@GetMapping("/ReportWorkTime")
+	public ModelAndView reportWorkTime(@RequestParam(required = false) String from_date,
 			@RequestParam(required = false) String to_date, @RequestParam(required = false) String empid,
 			Authentication auth, final ModelMap model) {
 
@@ -242,22 +242,22 @@ public class WorkScheduleController {
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(userid);
 		model.addAttribute("emp", empdtl);
 
-		ArrayList<Availability> ewsh = null;
+		ArrayList<EmpTimeReportDTO> ewsh = null;
 		if (from_date == null) {
-			ewsh = avrepo.getAvailablityByuseridandDategraterthanToday(userid);
+			ewsh = avrepo.getAvailablityByuseridandDatelessthanToday(userid);
 		} else {
 			ewsh = avrepo.getAllBetweenDates(userid, from_date, to_date);
 		}
 
 		long total_wh = 0;
-		for (Availability w : ewsh) {
+		for (EmpTimeReportDTO w : ewsh) {
 			total_wh += w.getWork_minute();
 		}
 		model.addAttribute("wsh", ewsh);
 		model.addAttribute("total_days", ewsh.size());
 		model.addAttribute("total_work", wSHservice.mintsTOHmConvert(total_wh));
 		model.addAttribute("emps", employeeService.getEmployeeList());
-		return new ModelAndView("ems/pages/availabilityHome", model);
+		return new ModelAndView("ems/pages/ReportWorkTime", model);
 	}
 
 	@GetMapping("/approveAvailablity")
@@ -267,8 +267,8 @@ public class WorkScheduleController {
 			@RequestParam boolean approve, @RequestParam String wdesc, final ModelMap model) {
 
 		User creator = (User) auth.getPrincipal();
-		Availability av = avrepo.findById(av_id).get();
-		Employee_work_schedule wsh = new Employee_work_schedule();
+		EmpTimeReportDTO av = avrepo.findById(av_id).get();
+		Time_report_approved wsh = new Time_report_approved();
 
 		wsh.setAssigned_by_full_name(creator.getFirstName() + " " + creator.getLastName());
 		wsh.setAssigned_by_id(creator.getId());

@@ -87,25 +87,37 @@
 						</a>
 					</div>
 					
-					<div class="menu-item">
-						<a href="/availabilityHome" class="menu-link">
-							<span class="menu-icon"><i class="fa fa-user-clock"></i></span>
-							<span class="menu-text">My Availability</span>
-						</a>
-					</div>
 					
-					<div class="menu-item">
-						<a href="/timeReport" class="menu-link">
-							<span class="menu-icon"><i class="fas  fa-file-alt"></i></span>
-							<span class="menu-text">Time Report</span>
-						</a>
-					</div>
+					<div class="menu-item has-sub">
+							<a href="javascript:;" class="menu-link">
+								<span class="menu-icon">
+									<i class="fas fa-clock"></i>								
+								</span>
+								<span class="menu-text d-flex align-items-center">Time Report</span> 
+								<span class="menu-caret"><b class="caret"></b></span>
+							</a>
+							<div class="menu-submenu">
+								<div class="menu-item">
+									<a href="/ReportWorkTime"  class="menu-link">
+										<span class="menu-text">Report work time</span>
+									</a>
+								</div>
+								<div class="menu-item">
+									<a href="/viewtimeReport"  class="menu-link">
+										<span class="menu-text">View</span>
+									</a>
+								</div>								
+								
+							</div>
+						</div>
 					
 					
 					
 					
 					
-						<div sec:authorize="!hasAnyAuthority('EMPLOYEE')" class="menu-header">Components</div>					
+					
+					
+						<div sec:authorize="!hasAnyAuthority('EMPLOYEE')" class="menu-header">Management</div>					
 						<div sec:authorize="!hasAnyAuthority('EMPLOYEE')" class="menu-item has-sub">
 							<a href="javascript:;" class="menu-link">
 								<span class="menu-icon">
@@ -142,19 +154,19 @@
 							<span class="menu-icon">								
 								<i class="far  fa-clock"></i>
 							</span>
-							<span class="menu-text">Work Schedule</span>
+							<span class="menu-text">TR Management</span>
 							<span class="menu-caret"><b class="caret"></b></span>
 						</a>
 						<div class="menu-submenu">							
 							<div class="menu-item">
-								<a href="/empsAvailability" class="menu-link">
-									<span class="menu-text">Employee's Availability</span>
+								<a href="/empsTimereport" class="menu-link">
+									<span class="menu-text">Approve Time Report</span>
 								</a>
 							</div>
 							
 							<div class="menu-item">
 								<a href="/work_schedule_home" class="menu-link">
-									<span class="menu-text">Custom Work Schedule</span>
+									<span class="menu-text">Set Time Report</span>
 								</a>
 							</div>																	
 						</div>						
