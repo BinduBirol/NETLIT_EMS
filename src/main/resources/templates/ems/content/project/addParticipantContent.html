@@ -1,0 +1,17 @@
+<div th:fragment="addParticipantContent">
+	<div class="form-group mb-3">	
+	<label class="form-label" for="role">Role</label>
+		<select onchange="searchUser(this);" id="role" class="form-select">
+	  		<option value="">Select Role</option>
+			<option th:each="roles : ${roles}" th:value="${roles.id}"
+				th:text="${roles.name}"></option>
+
+		</select>
+	</div>
+	
+	<div class="form-group mb-3">	
+	<label class="form-label" for="role">Role</label>
+		<input type="text" id="search_data" placeholder="Enter User name..."  class="form-control input-lg" />
+	</div>
+
+</div>

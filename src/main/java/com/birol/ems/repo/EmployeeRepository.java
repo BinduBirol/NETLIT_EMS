@@ -13,9 +13,9 @@ import com.birol.ems.dto.EMPLOYEE_BASIC;
 
 public interface EmployeeRepository extends CrudRepository<EMPLOYEE_BASIC, String> {
 	
-	String getbyroleQ= "SELECT * FROM employee_basic WHERE designation like ?1  ";
+	String getbyroleQ= "SELECT * FROM employee_basic WHERE roleid like ?1  ";
 	@Query(value =getbyroleQ,nativeQuery = true)
-	ArrayList<EMPLOYEE_BASIC> findbyrole( String roleid);
+	ArrayList<EMPLOYEE_BASIC> findbyrole( int roleid);
 	
 	String getbyidQ= "SELECT * FROM employee_basic WHERE userid = ?1  ";
 	@Query(value =getbyidQ,nativeQuery = true)

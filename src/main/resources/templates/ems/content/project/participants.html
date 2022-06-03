@@ -1,0 +1,46 @@
+<div th:fragment="participants">
+
+<div class="input-group flex-nowrap col-sm-4">
+  <span class="input-group-text" id="addon-wrapping"><i class="fa fa-users"></i></span>
+  <input id="search_all_users" type="text" class="form-control" placeholder="Employee Name" />
+  <input type="hidden" id="search_userid"/>
+  <input class="input-group-text " value="Add" type="submit"/>
+</div>
+
+	<table class="table">
+					  		<tr>
+					  			<th>#</th>
+					  			<th></th>
+					  			<th>Name</th>
+					  			<th>Designation</th>
+					  			<th>Role</th>
+					  			<th>Assign Date</th>
+					  			<th>Options</th>
+					  			
+					  		</tr>
+					  		
+					  		<tr class="align-middle" th:each="emp, iterator : ${project.workers}" >
+					  			<td th:text="${iterator.index+1}"></td>
+					  			<td>
+					  				<img width="34" th:src="*{'data:image/jpeg;base64,'+{emp.emp.emp_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/user/user.png'"  class="rounded-circle mx-auto d-block" id="previewImg"  src="" alt="Select an Image">
+					  			</td>
+					  			<td><a th:text="${emp.emp.full_name}" href="#" class="text-white text-decoration-none" th:emp-id="${emp.emp.empid}" onclick="viewEmlpoyee(this);"></a></td>
+					  			<td th:text="${emp.emp.designation}"></td>					  			
+					  			<td th:text="${emp.isadmin}? ADMIN: EMPLOYEE"></td>
+					  			<td th:text="${emp.created}"></td>
+								<td><a href="#" data-bs-toggle="dropdown"
+									class=" text-opacity-50"> <i class="fa fa-ellipsis-h"></i></a>
+									<div class="dropdown-menu dropdown-menu-end">
+										<a href="#" th:emp-id="${emp.emp.empid}"
+											onclick="viewEmlpoyee(this);" class="dropdown-item">View</a>
+										<a th:href="@{/editEmployee(empid=${emp.emp.empid})}"
+											class="dropdown-item">Edit</a> <a href="#"
+											class="dropdown-item">Remove</a>
+									</div></td>
+							</tr>
+					  	</table>
+					  	
+						
+						
+
+</div>

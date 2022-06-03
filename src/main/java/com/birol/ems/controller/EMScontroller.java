@@ -231,4 +231,19 @@ public class EMScontroller {
         User user = (User) auth.getPrincipal();
         return new GenericResponse(userService.generateQRUrl(user));
     }
+	
+	
+	@GetMapping("/fetchusersbyrole")
+	@ResponseBody
+	public ArrayList<EMPLOYEE_BASIC> getusersbyrole(@RequestParam int roleid){
+		ArrayList<EMPLOYEE_BASIC> users = employeeRepository.findbyrole(roleid);
+		return users;
+	}
+	
+	@GetMapping("/fetchallusers")
+	@ResponseBody
+	public ArrayList<EMPLOYEE_BASIC> fetchallusers(){
+		ArrayList<EMPLOYEE_BASIC> users = employeeService.getEmployeeList();
+		return users;
+	}
 }

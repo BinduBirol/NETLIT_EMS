@@ -1,0 +1,80 @@
+<div th:fragment="createproject">
+	<form action="createproject" method="post" enctype='multipart/form-data'>
+		<div class="row">
+				<div class="form-group mb-3">					
+				  	<img  class="" width="100" id="previewImg"  src="" alt=" ">
+				</div>
+		</div>
+	
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group mb-3">
+				  <label class="form-label" for="pn">Project Name</label>
+				  <input type="text" name="title" required="required" class="form-control" id="pn" placeholder="">
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group mb-3">
+				  <label class="form-label" for="key">Key</label>
+				  <input type="text" name="projectkey" required="required" class="form-control" id="key" placeholder="Eg. AT (for a project named Atlassian)">
+				</div>
+			</div>
+		
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group mb-3">
+				  <label class="form-label" for="desc">Description</label>
+				  <textarea name="description" required="required" class="form-control" id="desc" rows="3"></textarea>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group mb-3">
+				  <label class="form-label" for="defaultCheck1">Privacy</label>
+				  <div class="form-check">
+					  <input name="isprivate" value="1" class="form-check-input" type="checkbox" id="defaultCheck1" />
+					  <label class="form-check-label" for="defaultCheck1">Private project</label>
+					  <br/>
+					  <small id="privateHelp" class="form-text text-muted">
+						 Private projects are only visible to your workspace and anyone who has direct access to a repository in the project. 
+						  </small>
+					</div>
+				</div>
+			</div>
+		
+		</div>
+		
+		<div class="row">	
+			
+			
+			<div class="col-sm-6">
+				<div class="form-group mb-3">
+				  
+				  <div class="">
+					  <label class="form-label" for="defaultFile">Project Image</label>
+					  <input name="project_image_m" onchange="previewFile(this);" type="file" class="form-control" id="defaultFile" />
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-sm-6">
+				<div class="form-group mb-3">
+					<label class="form-label" for="submit">.</label>
+					<input class="btn btn-outline-theme form-control" type="submit"/>
+				</div>
+			</div>
+		
+		</div>
+		
+		<div class="row ">
+			
+			
+		
+		</div>
+	
+		
+	
+	</form>
+
+</div>

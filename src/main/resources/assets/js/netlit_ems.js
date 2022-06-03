@@ -61,3 +61,25 @@ function setAutorowspan(tableid, rowindex) {
 	  }
 	}
 }
+
+//"<img  th:src=\"*{'data:image/jpeg;base64,'+"+item.emp_image_encoded+"}\" onerror=\"this.onerror=null; this.src='assets/img/user/user.png'\"  class=\"rounded-circle mx-auto d-block col-12 col-sm-6\" id=\"previewImg\" >"
+$('#search_all_users').autocomplete({	
+    source: "fetchallusers",
+    minLength: 1,
+    select: function(event, ui)
+    {
+    	//alert(ui.item.empid);
+    	$(this).val(ui.item.full_name);
+    	$('#search_userid').val(ui.item.empid);
+    	return false;
+    	//$('#search_all_users').val(ui.item.empid);
+    }
+  }).data('ui-autocomplete')._renderItem = function(ul, item){
+    return $("<li class='ui-autocomplete-row'></li>")
+      .data("item.autocomplete", item)
+      .append(item.full_name)
+      .appendTo(ul);
+  }
+
+
+

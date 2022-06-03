@@ -1,0 +1,124 @@
+<div th:fragment="editproject">
+	<form action="editproject" method="post" enctype='multipart/form-data'>
+		<div class="row">
+			<div class="col-sm-4 text-left">
+				<div class="form-group mb-3">							
+				  	<img  class="rounded" id="previewImgx" width="100"  th:src="*{'data:image/jpeg;base64,'+{project.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'" />
+				</div>
+			</div>
+		</div>
+	
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group mb-3">
+				  <label class="form-label" for="pn">Project Name</label>
+				  <input type="text" name="title" th:value="${project.title}" required="required" class="form-control" id="pn" placeholder="">
+					<input type="hidden" name="projectid" th:value="${project.projectid}" />
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group mb-3">
+				  <label class="form-label" for="key">Key</label>
+				  <input type="text" name="projectkey" th:value="${project.projectkey}" required="required" class="form-control" id="key" placeholder="Eg. AT (for a project named Atlassian)">
+				</div>
+			</div>
+		
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group mb-3">
+				  <label class="form-label" for="desc">Description</label>
+				  <textarea name="description" th:text="${project.description}" required="required" class="form-control" id="desc" rows="3"></textarea>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group mb-3">
+				  <label class="form-label" for="defaultCheck1">Privacy</label>
+				  <div class="form-check">
+					  <input name="isprivate" value="1" th:checked="${project.isprivate}" class="form-check-input" type="checkbox" id="defaultCheck1" />
+					  <label class="form-check-label" for="defaultCheck1">Private project</label>
+					  <br/>
+					  <small id="privateHelp" class="form-text text-muted">
+						 Private projects are only visible to your workspace and anyone who has direct access to a repository in the project. 
+						  </small>
+					</div>
+				</div>
+			</div>
+		
+		</div>
+		
+		<div class="row">
+			
+			
+			
+			<div class="col-sm-6">
+				<div class="form-group mb-3">
+				  
+				  <div class="">
+					  <label class="form-label" for="status">Project status</label>
+					  <select name="status" id="status" th:field="*{project.status}"
+														required="required" class="form-select">
+														<option value="">Select Status</option>
+														<option value="New">New</option>
+														<option value="Ongoing">Ongoing</option>
+														<option value="Waiting">Waiting</option>
+
+													</select>
+					  
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-sm-6">
+				<div class="form-group mb-3">
+				  
+				  <div class="">
+					  <label class="form-label" for="defaultFile">Project Image</label>
+					  <input name="project_image_m" onchange="previewFile(this);" type="file" class="form-control" id="defaultFile" />
+					</div>
+				</div>
+			</div>
+			
+			
+			
+			
+		
+		</div>
+		
+		<div class="row text-center">
+		
+			<div class="col-sm-4">
+				
+			</div>
+			
+			<div class="col-sm-4">
+				<div class="form-group mb-3">
+					<input class="btn btn-outline-theme form-control" value="Update Project" type="submit"/>
+				</div>
+			</div>
+		
+		<div class="col-sm-4">
+				
+			</div>
+		</div>
+	
+		
+	
+	</form>
+
+<script type="text/javascript">
+			function previewFile(input) {
+				var file = $("input[type=file]").get(0).files[0];
+				if (file) {
+					var reader = new FileReader();
+					reader.onload = function() {
+						$("#previewImgx").attr("src", reader.result);
+						
+					}
+					reader.readAsDataURL(file);
+				}
+			}
+		
+</script>
+</div>

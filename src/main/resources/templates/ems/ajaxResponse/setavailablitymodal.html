@@ -283,10 +283,8 @@ function mySubmitFunction(e) {
 				$('.toast-header .title').html("Response");
 				$('.toast-body .toast-message').html(data);
 				$('.toast').toast('show');
-				if (data.includes("Successfully") == true) {
-					$userid=$("#userid").val();
-					$("#"+$userid).click();
-					location.reload();
+				if (data.includes("Successfully") == true) {					
+					 location.reload();
 				}			
 			},
 			error : function(xhr, desc, err) {				

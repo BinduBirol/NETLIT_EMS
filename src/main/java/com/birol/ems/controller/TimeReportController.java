@@ -140,6 +140,10 @@ public class TimeReportController {
 				Date xdate = new SimpleDateFormat("yyyy-M-d").parse(wsh.getDate().toString());
 				wsh.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
 				wsh.setWeek(d.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
+				
+				//LocalDate today = LocalDate.now();
+				//System.out.println(d+": "+today.compareTo(d));
+				
 				empWSHrepo.save(wsh);
 			}
 			model.addAttribute("message", "Successfully added work schedule for " + wsh.getFull_name());
@@ -164,6 +168,8 @@ public class TimeReportController {
 				l1 = LocalTime.parse(av.getWork_start());
 				l2 = LocalTime.parse(av.getWork_end());
 			}
+			
+			String msg="";
 
 			for (LocalDate d : dates) {
 				av.setDate(d);
@@ -176,9 +182,15 @@ public class TimeReportController {
 				Date xdate = new SimpleDateFormat("yyyy-M-d").parse(av.getDate().toString());
 				av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
 				av.setWeek(d.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
-				avrepo.save(av);
+				
+				if(LocalDate.now().compareTo(d)<0) {
+					msg+="\n"+d+": Cant set for advance date.";
+				}else {
+					avrepo.save(av);
+				}
+				
 			}
-			model.addAttribute("message", "Successfully added availablity for " + av.getFull_name());
+			model.addAttribute("message", "Successfully time reported for " + av.getFull_name()+msg);
 		} catch (Exception e) {
 			model.addAttribute("message", e.getMessage());
 		}

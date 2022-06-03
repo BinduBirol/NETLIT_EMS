@@ -73,7 +73,7 @@
 													
 													<tr th:classappend="${emp.status} ? normal: text-muted"  th:emp-id="${emp.empid}" th:each="emp,iterator : ${employees}">
 														<td th:text="${iterator.index+1}">57</td>
-														<td><a th:text="${emp.full_name}" href="#" class="text-white" th:emp-id="${emp.empid}" onclick="viewEmlpoyee(this);"></a></td>
+														<td><a th:text="${emp.full_name}" href="#" class="text-white text-decoration-none" th:emp-id="${emp.empid}" onclick="viewEmlpoyee(this);"></a></td>
 														<td th:text="${emp.designation}">Customer Support</td>
 														<td class="text-white" ><a class="text-white" th:href="'mailto:' + ${emp.email}" th:text="${emp.email}"></a></td>
 														<td th:text="${emp.phone}">27</td>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="theme/header :: staticheaderFragment"></head>
+<body>
+	<!-- BEGIN #app -->
+	<div id="app" class="app app-content-full-height">
+		<div th:include="theme/header :: dynamicheaderFragment"></div>
+		<div th:include="theme/sidenav :: sidenav"></div>
+		<!-- BEGIN #content -->
+		<div id="content" class="app-content">
+			<!-- BEGIN container -->
+			<div class="container">
+
+				<ul class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">PROJECT
+							MANAGEMENT</a></li>
+							<li class="breadcrumb-item"><a href="/projects ">PROJECTS
+							</a></li>
+					<li class="breadcrumb-item active">PROJECT DETAILS</li>
+				</ul>
+
+				<h1 class="page-header">[[${project.title}]]</h1>
+					<hr class="mb-4" />
+					
+					
+					
+					You are not authorized.
+					
+					
+					</div>
+			</div>
+					
+					<div class="modal fade" id="viewEmployee">
+				<div class="modal-dialog modal-xl">
+					<div class="modal-content empContent">...</div>
+				</div>
+			</div>			
+			
+			
+		</div>
+		
+		<script type="text/javascript">
+			function previewFile(input) {
+				var file = $("input[type=file]").get(0).files[0];
+				if (file) {
+					var reader = new FileReader();
+					reader.onload = function() {
+						$("#previewImg").attr("src", reader.result);
+					}
+					reader.readAsDataURL(file);
+				}
+			}
+		
+		</script>
+	
+		<!-- END #content -->
+		<div th:include="theme/theme_util :: theme_util"></div>
+	</div>
+	<!-- END #app -->
+	<div th:include="theme/footer::staticFooter"></div>
+</body>
+</html>
