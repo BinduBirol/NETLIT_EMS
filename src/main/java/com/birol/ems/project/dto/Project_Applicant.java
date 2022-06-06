@@ -16,9 +16,8 @@ import com.birol.ems.dto.EMPLOYEE_BASIC;
 @Entity
 public class Project_Applicant {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-	private String projectid;
+	private String id;
+	private long projectid;
 	private long empid;
 	private String emp_name;
 	@OneToOne
@@ -40,19 +39,23 @@ public class Project_Applicant {
 		updated = new Date();
 	}
 
-	public long getId() {
+	
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getProjectid() {
+	
+
+	public long getProjectid() {
 		return projectid;
 	}
 
-	public void setProjectid(String projectid) {
+	public void setProjectid(long projectid) {
 		this.projectid = projectid;
 	}
 

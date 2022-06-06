@@ -1,13 +1,82 @@
 <div th:fragment="participants">
 
-<div class="input-group flex-nowrap col-sm-4">
-  <span class="input-group-text" id="addon-wrapping"><i class="fa fa-users"></i></span>
-  <input id="search_all_users" type="text" class="form-control" placeholder="Employee Name" />
-  <input type="hidden" id="search_userid"/>
-  <input class="input-group-text " value="Add" type="submit"/>
-</div>
+<div th:if="${thisprojectemp.isadmin}">
+					  	<button type="button" class="btn btn-sm btn-outline-theme me-2 mb-3" data-bs-toggle="modal" data-bs-target="#modalSm">Add Participant</button>
 
-	<table class="table">
+						<div class="modal fade" id="modalSm">
+						  <form action="addParticipanttoProject">
+						  <div class="modal-dialog">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title">Add a participant to this project</h5>
+						        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+						      </div>
+						      <div class="modal-body">
+						      	<input type="hidden" th:value="${project.projectid}"/>
+						         <div th:include="ems/content/getEmployeesByRole :: getEmployeesByRole"></div>
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+						        <button type="submit" class="btn btn-outline-theme">Add</button>
+						      </div>
+						    </div>
+						  </div>
+						  </form>
+						</div>
+						</div>
+						
+					
+					<table th:if="${project.applicants.size}>0" class="table table-borderless">
+							<tr>
+					  			<th colspan="6">Applicants [[${project.applicants.size}]]</th>
+					  			
+					  			
+					  		</tr>
+					  		
+					  		<tr>
+					  			<th>#</th>
+					  			<th></th>
+					  			<th>Name</th>
+					  			<th>Designation</th>					  			
+					  			<th>Applied on</th>
+					  			<th>Approve/Decline</th>					  			
+					  			
+					  		</tr>
+					  		
+					  		<tr class="align-middle" th:each="emp, iterator : ${project.applicants}" >
+					  			<td th:text="${iterator.index+1}"></td>
+					  			<td>
+					  				<img width="34" th:src="*{'data:image/jpeg;base64,'+{emp.emp.emp_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/user/user.png'"  class="rounded-circle mx-auto d-block" id="previewImg"  src="" alt="Select an Image">
+					  			</td>
+					  			<td><a th:text="${emp.emp.full_name}" href="#" class="text-white text-decoration-none" th:emp-id="${emp.emp.empid}" onclick="viewEmlpoyee(this);"></a></td>
+					  			<td th:text="${emp.emp.designation}"></td>				  			
+					  			
+					  			<td th:text="${emp.created}"></td>	
+					  			<td>
+					  				<input type="hidden" class="empid" th:value="${emp.empid}"/>
+					  								<div class="form-group">
+														<div class="form-check form-check-inline">
+															<input class="form-check-input" name="approve" type="radio" id="inlineRadio1" value="1" />
+															<label class="form-check-label" for="inlineRadio1">Approve</label>
+														</div>
+														<div class="form-check form-check-inline">
+															<input class="form-check-input" name="approve" type="radio" id="inlineRadio2" value="0"  />
+															<label class="form-check-label" for="inlineRadio2">Decline</label>
+														</div>
+														
+													</div>
+					  				
+					  			</td>								
+							</tr>
+					  	</table>
+						
+						
+
+					<table class="table table-borderless small">
+							<tr>
+					  			<th colspan="7">Participants [[${project.workers.size}]]</th>
+					  		</tr>
+					  		
 					  		<tr>
 					  			<th>#</th>
 					  			<th></th>
@@ -15,7 +84,7 @@
 					  			<th>Designation</th>
 					  			<th>Role</th>
 					  			<th>Assign Date</th>
-					  			<th>Options</th>
+					  			<th th:if="${thisprojectemp.isadmin}">Options</th>
 					  			
 					  		</tr>
 					  		
@@ -28,19 +97,22 @@
 					  			<td th:text="${emp.emp.designation}"></td>					  			
 					  			<td th:text="${emp.isadmin}? ADMIN: EMPLOYEE"></td>
 					  			<td th:text="${emp.created}"></td>
-								<td><a href="#" data-bs-toggle="dropdown"
+								<td th:if="${thisprojectemp.isadmin}"><a href="#" data-bs-toggle="dropdown"
 									class=" text-opacity-50"> <i class="fa fa-ellipsis-h"></i></a>
 									<div class="dropdown-menu dropdown-menu-end">
 										<a href="#" th:emp-id="${emp.emp.empid}"
 											onclick="viewEmlpoyee(this);" class="dropdown-item">View</a>
-										<a th:href="@{/editEmployee(empid=${emp.emp.empid})}"
-											class="dropdown-item">Edit</a> <a href="#"
-											class="dropdown-item">Remove</a>
+										 <a href="#" th:if="${!emp.isadmin}"
+											class="dropdown-item" th:href="@{/removeFromProject(projectid=${emp.projectid},workerid=${emp.id})}" >Remove</a>
+											<a th:if="${!emp.isadmin}" href="#" th:href="@{/editEmployee(empid=${emp.emp.empid})}"
+											class="dropdown-item">Make Admin</a>
 									</div></td>
 							</tr>
 					  	</table>
 					  	
+					  	
 						
+			
 						
 
 </div>

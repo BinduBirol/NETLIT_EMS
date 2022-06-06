@@ -242,8 +242,9 @@ public class EMScontroller {
 	
 	@GetMapping("/fetchallusers")
 	@ResponseBody
-	public ArrayList<EMPLOYEE_BASIC> fetchallusers(){
-		ArrayList<EMPLOYEE_BASIC> users = employeeService.getEmployeeList();
+	public ArrayList<EMPLOYEE_BASIC> fetchallusers(@RequestParam(value="roleid") int roleid,
+			@RequestParam(value="searchtext") String searchtext){
+		ArrayList<EMPLOYEE_BASIC> users = employeeService.getEmployeeListForSearch(roleid,searchtext);
 		return users;
 	}
 }

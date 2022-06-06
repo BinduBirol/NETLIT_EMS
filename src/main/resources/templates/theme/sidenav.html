@@ -85,6 +85,28 @@
 							<span class="menu-icon"><i class="bi bi-calendar4"></i></span>
 							<span class="menu-text">Calendar</span>
 						</a>
+					</div><div sec:authorize="hasAnyAuthority('EMPLOYEE')"   class="menu-item has-sub">
+						
+						<a href="#" class="menu-link">
+							<span class="menu-icon">								
+								<i class="fa fa-diagram-project"></i>
+							</span>
+							<span class="menu-text">Projects</span>
+							<span class="menu-caret"><b class="caret"></b></span>
+						</a>
+						<div class="menu-submenu">							
+							<div class="menu-item">
+								<a href="/projects" class="menu-link">
+									<span class="menu-text">Projects</span>
+								</a>
+							</div>
+							<div class="menu-item">
+								<a href="/viewProject" style="pointer-events: none; cursor: default;" class="menu-link">
+									<span class="menu-text"><s>View Project</s></span>
+								</a>
+							</div>							
+																							
+						</div>						
 					</div>
 					
 					
@@ -188,7 +210,7 @@
 								</a>
 							</div>
 							<div class="menu-item">
-								<a href="/viewProjectAdmin" style="pointer-events: none; cursor: default;" class="menu-link">
+								<a href="/viewProject" style="pointer-events: none; cursor: default;" class="menu-link">
 									<span class="menu-text"><s>View Project</s></span>
 								</a>
 							</div>							

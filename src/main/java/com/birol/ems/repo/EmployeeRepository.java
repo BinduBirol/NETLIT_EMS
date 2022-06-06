@@ -17,6 +17,10 @@ public interface EmployeeRepository extends CrudRepository<EMPLOYEE_BASIC, Strin
 	@Query(value =getbyroleQ,nativeQuery = true)
 	ArrayList<EMPLOYEE_BASIC> findbyrole( int roleid);
 	
+	String getForSearchQ= "SELECT * FROM employee_basic WHERE roleid= :roleid  and full_name LIKE CONCAT('%',:text,'%')";
+	@Query(value =getForSearchQ,nativeQuery = true)
+	ArrayList<EMPLOYEE_BASIC> findForSearch( @Param("roleid")int roleid, @Param("text")String text);
+	
 	String getbyidQ= "SELECT * FROM employee_basic WHERE userid = ?1  ";
 	@Query(value =getbyidQ,nativeQuery = true)
 	EMPLOYEE_BASIC findbyUserid(Long id);

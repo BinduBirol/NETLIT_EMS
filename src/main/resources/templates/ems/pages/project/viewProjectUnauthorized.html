@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:include="theme/header :: staticheaderFragment"></head>
+<head th:include="theme/header :: staticheaderFragment">
+
+</head>
 <body>
 	<!-- BEGIN #app -->
 	<div id="app" class="app app-content-full-height">
@@ -21,10 +23,23 @@
 
 				<h1 class="page-header">[[${project.title}]]</h1>
 					<hr class="mb-4" />
+					<div th:if="${!project.isprivate}">						
+						<form th:if="${thisprojectapplicant==null}" action="applyToProject">
+							<input type="hidden" name="projectid" th:value="${project.projectid}">
+							<p>Apply to join this project.</p>
+							<button type="submit" class="btn btn-outline-theme">Apply</button>
+						</form>	
+						<div th:if="${thisprojectapplicant!=null}">
+							You Have applied to join this Open Project.
+						</div>					
+					</div>
+					<div th:if="${project.isprivate}">		
+						This is a private project.
+					</div>
 					
 					
 					
-					You are not authorized.
+					
 					
 					
 					</div>

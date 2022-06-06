@@ -27,7 +27,7 @@
 							class="nav-link active" data-bs-toggle="tab">My Projects</a></li>
 						<li class="nav-item me-1"><a href="#allProjects"
 							class="nav-link" data-bs-toggle="tab">All Projects</a></li>
-						<li class="nav-item me-1"><a href="#newProject"
+						<li sec:authorize="!hasAnyAuthority('EMPLOYEE')" class="nav-item me-1"><a href="#newProject"
 							class="nav-link" data-bs-toggle="tab">New Project</a></li>	
 					</ul>
 					<div class="tab-content pt-3">
@@ -50,7 +50,7 @@
 											<div class="row align-items-center mb-2 ">
 												<div class="">
 													
-													<h5 class="mb-0 text-truncate"><a th:href="@{/viewProjectAdmin(projectid=${all.projectid})}" class="text-decoration-none"><img width="30" height="30" class="rounded"th:src="*{'data:image/jpeg;base64,'+{all.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'"  /> [[${all.title}]]</a></h5>
+													<h5 class="mb-0 text-truncate"><a th:href="@{/viewProject(projectid=${all.projectid})}" class="text-decoration-none"><img width="30" height="30" class="rounded"th:src="*{'data:image/jpeg;base64,'+{all.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'"  /> [[${all.title}]]</a></h5>
 												</div>
 												<div class="col-5">
 													<div class="mt-n3 mb-n2" data-render="apexchart"
@@ -60,7 +60,8 @@
 											<!-- END stat-lg -->
 											<!-- BEGIN stat-sm -->
 											<div class="small text-white text-opacity-50 text-truncate">
-												<i class="fa fa-search fa-fw me-1"></i> Key: [[${all.projectkey}]]<br /><i class="fa fa-lock fa-fw me-1"></i> 
+												<i class="fa fa-search fa-fw me-1"></i> Key: [[${all.projectkey}]]<br /> <i class="far fa-user fa-fw me-1"></i> 
+													Chief: <a th:emp-id="${all.creatorid}" onclick="viewEmlpoyee(this);" href="#" class="text-decoration-none">[[${all.creatorname}]]</a><br /><i class="fa fa-lock fa-fw me-1"></i> 
 												 <span th:classappend="${all.isprivate}? text-danger :text-success" th:text="${all.isprivate}? PRIVATE : OPEN"></span><br />
 												<i class="far fa-comment-alt fa-fw me-1"></i> Desc: [[${all.description}]]<br /> <i class="far fa-clock fa-fw me-1"></i>
 												Created on: [[${all.created}]]
@@ -106,7 +107,7 @@
 											<div class="row align-items-center mb-2 ">
 												<div class="">
 													
-													<h5 class="mb-0 text-truncate"><a href="#" class="text-decoration-none"><img width="30" height="30" th:src="*{'data:image/jpeg;base64,'+{all.project_image_encoded}}" class="rounded" onerror="this.onerror=null; this.src='assets/img/pages/project.png'"  /> [[${all.title}]]</a></h5>
+													<h5 class="mb-0 text-truncate"><a th:href="@{/viewProject(projectid=${all.projectid})}" class="text-decoration-none"><img width="30" height="30" class="rounded"th:src="*{'data:image/jpeg;base64,'+{all.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'"  /> [[${all.title}]]</a></h5>
 												</div>
 												<div class="col-5">
 													<div class="mt-n3 mb-n2" data-render="apexchart"
@@ -117,7 +118,7 @@
 											<!-- BEGIN stat-sm -->
 											<div class="small text-white text-opacity-50 text-truncate">
 												<i class="fa fa-search fa-fw me-1"></i> Key: [[${all.projectkey}]]<br /> <i class="far fa-user fa-fw me-1"></i> 
-													Creator: <a th:emp-id="${all.creatorid}" onclick="viewEmlpoyee(this);" href="#" class="text-decoration-none">[[${all.creatorname}]]</a><br /> <i
+													Chief: <a th:emp-id="${all.creatorid}" onclick="viewEmlpoyee(this);" href="#" class="text-decoration-none">[[${all.creatorname}]]</a><br /> <i
 													class="fa fa-lock fa-fw me-1"></i> <span th:classappend="${all.isprivate}? text-danger :text-success" th:text="${all.isprivate}? PRIVATE : OPEN"></span><br />
 												<i class="far fa-comment-alt fa-fw me-1"></i> Desc: [[${all.description}]]<br /> <i class="far fa-clock fa-fw me-1"></i>
 												Created on: [[${all.created}]]
@@ -142,7 +143,7 @@
 							</div>
 						</div>
 						
-						<div class="tab-pane fade" id="newProject">
+						<div sec:authorize="!hasAnyAuthority('EMPLOYEE')" class="tab-pane fade" id="newProject">
 							<div class="row">
 								<div class="">
 									<!-- BEGIN card -->
