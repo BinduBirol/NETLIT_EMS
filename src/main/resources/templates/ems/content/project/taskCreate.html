@@ -1,0 +1,94 @@
+<div th:fragment="taskCreate">
+	<button type="button" class="btn btn-sm btn-outline-theme me-2 mb-3"
+			data-bs-toggle="modal" data-bs-target="#modalTask">Create Task</button>
+
+		<div class="modal fade" id="modalTask">
+			<form action="createTask" method="post" enctype='multipart/form-data'>
+				<div class="modal-dialog modal-xl">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Create a Task to this project</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+						</div>
+						<div class="modal-body">
+			
+			
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group mb-3">
+						  <label class="form-label" for="pn">Task Title</label>
+						  <input type="text" name="title" required="required" class="form-control" id="pn" placeholder="">
+							<input type="hidden" name="projectid" th:value="${project.projectid}"/>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group mb-3">
+						  <label class="form-label" for="key">Assignee</label>
+						  <select onchange="$('#assigneename').val($('#assigneeid :selected').text());" id="assigneeid" name="assigneeid" class="form-select" required="required">
+							  <option value="">Select Assignee</option>
+							  <option th:each="w : ${project.workers}" th:value="${w.empid}" th:text="${w.emp_name}"></option>
+							</select>
+							<input type="hidden" id="assigneename" name="assigneename">
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group mb-3">
+						  <label class="form-label" for="pn">Type</label>
+						  <select name="type"  class="form-select">
+							  <option value="Task">Task</option>
+							  <option value="Enhancement">Enhancement</option>
+							  <option value="Proposal">Proposal</option>
+							  <option value="Resolve">Resolve</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group mb-3">
+						  <label class="form-label" for="key">Priority</label>
+						  <select name="priority" class="form-select">
+						  	<option value="Normal">Normal</option>					  		
+							  <option value="High">High</option>							  
+							  <option value="Low">Low</option>
+							  <option value="Urgent">Urgent</option>			  
+							</select>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row">					
+					
+					<div class="col-sm-6">
+						<div class="form-group mb-3">
+						  
+						  <div class="">
+							  <label class="form-label" for="defaultFile">Task Attachment</label>
+							  <input name="attachment_m"  type="file" class="form-control"  />
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group mb-3">
+						  <label class="form-label" for="desc">Description</label>
+						  <textarea name="description" required="required" class="form-control" id="desc" rows="3"></textarea>
+						</div>
+					</div>
+				
+				</div>		
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-bs-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-outline-theme">Create Task</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+
+</div>

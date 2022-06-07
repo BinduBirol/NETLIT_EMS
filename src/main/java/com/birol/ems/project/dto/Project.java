@@ -39,6 +39,11 @@ public class Project {
 	@OneToMany(mappedBy = "projectid")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Project_Workers> workers;
+	
+	@OneToMany(mappedBy = "projectid")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private List<Project_Task> tasks;
+	
 	private String status;
 	private boolean isprivate;
 	
@@ -92,10 +97,13 @@ public class Project {
 		this.description = description;
 	}
 
-	
+	public List<Project_Task> getTasks() {
+		return tasks;
+	}
 
-	
-	
+	public void setTasks(List<Project_Task> tasks) {
+		this.tasks = tasks;
+	}
 
 	public String getProjectkey() {
 		return projectkey;

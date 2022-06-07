@@ -10,7 +10,7 @@
 	<!-- ================== BEGIN core-css ================== -->	
 	<link href="assets/css/vendor.min.css" rel="stylesheet" />
 	<link href="assets/css/app.min.css" rel="stylesheet" />
-	<link href="assets/css/netlit_ems.css" rel="stylesheet" />
+	<link href="assets/css/netlit_ems.css" rel="stylesheet" />	
 	<!-- ================== END core-css ================== -->	
 	<link href="assets/css/pages/projectview.css" rel="stylesheet" />
 </head>
@@ -71,7 +71,9 @@
 							
 						
 						</div>
-					  <div class="tab-pane fade" id="tasks">task</div>
+					  <div class="tab-pane fade" id="tasks">
+					  	<div th:include="ems/content/project/taskContent :: taskContent"></div>
+					  </div>
 					  <div class="tab-pane fade" id="participants">
 					  	<div th:include="ems/content/project/participants :: participants"></div>
 					  </div>
@@ -97,40 +99,62 @@
 	
 		<!-- END #content -->
 		<div th:include="theme/theme_util :: theme_util"></div>
-	</div>
+
 	<!-- END #app -->
-	<div th:include="theme/footer::staticFooter"></div>
 	
+	<div th:include="theme/footer::staticFooter"></div>
 	<script type="text/javascript">
 	
-		$('input[type=radio][name=approve]').on('change', function(e) {
-			
+		$('input[type=radio][name=approve]').on('change', function(e) {			
 			$target= $(e.target).closest('tr');
-			var empid = $target.find(".empid").val();
-			
+			var empid = $target.find(".empidapp").val();			
 			$.get("approveEmptoProject",
 					  {
 					    empid: empid,
 					    projectid: $("#projectid").val(),
 					    approve: $(this).val()
 					  },
-					  function(data, status){
-					    //alert("Data: " + data + "\nStatus: " + status);
+					  function(data, status){						
 					    $('.toast-header .title').html(status);
 						$('.toast-body .toast-message').html(data);					
 						$('.toast').toast('show');		
-			});
-			/*
-			switch ($(this).val()) {
-			case '0':
-				alert("Declined");
-				break;
-			case '1':
-				alert("Approved");
-				break;
-			}*/
+			});			
 		});
+		
+		$(".make-admin").click(function (e) {
+			$target= $(e.target).closest('tr');
+			var empid = $target.find(".empid").val();
+			$.get("makeAdmin",
+					  {
+					    empid: empid,
+					    projectid: $("#projectid").val()					    
+					  },
+					  function(data, status){ 
+						$target.find(".isadmin").html(data);
+			});
+		})
+		
+		$(".remove-admin").click(function (e) {
+			$target= $(e.target).closest('tr');
+			var empid = $target.find(".empid").val();
+			$.get("removeAdmin",
+					  {
+					    empid: empid,
+					    projectid: $("#projectid").val()					    
+					  },
+					  function(data, status){ 
+						$target.find(".isadmin").html(data);
+						if(data=="Last Admin"){
+							$('.toast-header .title').html("Error!");
+							$('.toast-body .toast-message').html("Can't remove the only Admin");					
+							$('.toast').toast('show');
+						}
+			});
+		})	
+		
 	</script>
+	
+	
 	 
 </body>
 </html>

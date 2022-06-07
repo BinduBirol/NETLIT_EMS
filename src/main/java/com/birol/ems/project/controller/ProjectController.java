@@ -1,9 +1,10 @@
-package com.birol.ems.controller;
+package com.birol.ems.project.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,11 +67,9 @@ public class ProjectController {
 				if(pw.getEmpid()==user.getId())myprojects.add(x);
 			}
 						
-		}	
-		
+		}		
 		model.addAttribute("my", myprojects);
-		model.addAttribute("all", allprojects);
-		
+		model.addAttribute("all", allprojects);		
 		return new ModelAndView("ems/pages/project/projectHome", model);
 	}
 	
@@ -237,7 +236,7 @@ public class ProjectController {
 			pw.setProjectid(pa.getProjectid());
 			
 			if(approve==1) {
-				String a= pw.getEmp_name()+ "is now a participant to this project";
+				String a= pw.getEmp_name()+ " is now a participant to this project";
 				project_WorkersDao.save(pw);
 				project_ApplicantDao.delete(pa);
 				activity.setMessage(a);
@@ -274,5 +273,88 @@ public class ProjectController {
 		
 		String redirurl= "viewProject?projectid="+projectid;
 		return new ModelAndView("redirect:/"+redirurl, model);
+	}
+	
+	@GetMapping("/addParticipanttoProject")
+	public ModelAndView addParticipanttoProject(
+			@RequestParam("projectid") Long projectid,
+			@RequestParam("emp") String emp,Authentication auth, final ModelMap model) {
+		String redirurl= "viewProject?projectid="+projectid;
+		User user = (User) auth.getPrincipal();		
+		String[] empsplit= emp.split("#");
+		String pwid=String.valueOf(projectid)+empsplit[1];
+		try {
+			Project_Workers pvw= project_WorkersDao.findById(pwid).get();
+			if(pvw!=null)
+				return new ModelAndView("redirect:/"+redirurl, model);			
+		}catch (NoSuchElementException e) {}
+		
+		Project_Workers pw = new Project_Workers();		
+		pw.setId(String.valueOf(projectid)+empsplit[1]);
+		pw.setEmpid(Long.parseLong(empsplit[1]));
+		pw.setEmp_name(empsplit[0].trim());
+		pw.setProjectid(projectid);
+		project_WorkersDao.save(pw);
+		
+		Project_Activity activity = new Project_Activity();
+		activity.setMessage(empsplit[0]+ "is now a participant to this project");
+		activity.setCreatorid(user.getId());
+		activity.setCreatorname(user.getFirstName()+" "+user.getLastName());
+		activity.setProjectid(projectid);
+		activity.setType("PARTICIPANT");
+		project_ActivityDao.save(activity);
+		return new ModelAndView("redirect:/"+redirurl, model);
+	}
+	
+	@GetMapping("/makeAdmin")
+	@ResponseBody
+	public String makeAdmin(@RequestParam(value="empid") int empid, Authentication auth,
+			@RequestParam(value="projectid") long projectid){
+		try {
+			User user = (User) auth.getPrincipal();		
+			Project_Workers pw =project_WorkersDao.findById(String.valueOf(projectid)+empid).get();
+			pw.setIsadmin(true);
+			project_WorkersDao.save(pw);
+			
+			Project_Activity activity = new Project_Activity();
+			activity.setMessage(pw.getEmp_name()+ " is now an ADMIN to this project");
+			activity.setCreatorid(user.getId());
+			activity.setCreatorname(user.getFirstName()+" "+user.getLastName());
+			activity.setProjectid(projectid);
+			activity.setType("PARTICIPANT");
+			project_ActivityDao.save(activity);
+			
+		}catch (Exception e) {
+			return "Error!";
+		}		
+		return "ADMIN";
+		
+	}
+	
+	@GetMapping("/removeAdmin")
+	@ResponseBody
+	public String removeAdmin(@RequestParam(value="empid") int empid, Authentication auth,
+			@RequestParam(value="projectid") long projectid){
+		try {
+			User user = (User) auth.getPrincipal();	
+			ArrayList<Project_Workers> pwlist= project_WorkersDao.findbyprojectidAndisadmin(projectid);
+			if(pwlist.size()<2)return "Last Admin";
+			Project_Workers pw =project_WorkersDao.findById(String.valueOf(projectid)+empid).get();
+			pw.setIsadmin(false);
+			project_WorkersDao.save(pw);
+			
+			Project_Activity activity = new Project_Activity();
+			activity.setMessage(pw.getEmp_name()+ " is no longer an admin to this project");
+			activity.setCreatorid(user.getId());
+			activity.setCreatorname(user.getFirstName()+" "+user.getLastName());
+			activity.setProjectid(projectid);
+			activity.setType("PARTICIPANT");
+			project_ActivityDao.save(activity);
+			
+		}catch (Exception e) {
+			return "Error!";
+		}		
+		return "EMPLOYEE";
+		
 	}
 }

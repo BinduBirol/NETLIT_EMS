@@ -62,9 +62,8 @@ function setAutorowspan(tableid, rowindex) {
 	}
 }
 
-//"<img  th:src=\"*{'data:image/jpeg;base64,'+"+item.emp_image_encoded+"}\" onerror=\"this.onerror=null; this.src='assets/img/user/user.png'\"  class=\"rounded-circle mx-auto d-block col-12 col-sm-6\" id=\"previewImg\" >"
+
 $('#search_all_users').autocomplete({	
-    //source: "fetchallusers",
 	source: function(request, response) {
 	    $.getJSON("fetchallusers", { roleid: $('#role').val(), searchtext: $('#search_all_users').val() },
 	              response);
@@ -72,16 +71,14 @@ $('#search_all_users').autocomplete({
     minLength: 1,
     select: function(event, ui)
     {
-    	$(this).val(ui.item.full_name);
-    	$('#search_userid').val(ui.item.empid);
+    	$(this).val(ui.item.full_name+" #"+ui.item.empid);
     	return false;
     }
   }).data('ui-autocomplete')._renderItem = function(ul, item){
     return $("<li class='ui-autocomplete-row'></li>")
       .data("item.autocomplete", item)
-      .append("<img width='50' class='rounded-circle text-center' src='assets/img/user/user.png'/>"+item.full_name)
+      .append("<img width='40' class='mx-auto rounded-circle' onerror=\"this.onerror=null; this.src='assets/img/user/user.png'\"  src='data:image/jpeg;base64, "+ item.emp_image_encoded + "'/>  "+item.full_name)
       .appendTo(ul);
   }
-
 
 

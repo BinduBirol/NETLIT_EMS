@@ -69,7 +69,12 @@ public class EmployeeService {
 	public ArrayList<EMPLOYEE_BASIC> getEmployeeListForSearch(int roleid, String txt) {
 		ArrayList<EMPLOYEE_BASIC> eList_all = new ArrayList<EMPLOYEE_BASIC>();
 		try {
-			eList_all = (ArrayList<EMPLOYEE_BASIC>) employeeRepository.findForSearch(roleid,txt);
+			if(roleid==99999) {
+				eList_all = (ArrayList<EMPLOYEE_BASIC>) employeeRepository.findAllForSearch(txt);
+			}else {
+				eList_all = (ArrayList<EMPLOYEE_BASIC>) employeeRepository.findForSearch(roleid,txt);
+			}
+			
 			for (EMPLOYEE_BASIC e : eList_all) {
 				// setting up image
 				if (e.getEmp_image() != null) {

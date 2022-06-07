@@ -40,4 +40,8 @@ public interface EmployeeRepository extends CrudRepository<EMPLOYEE_BASIC, Strin
 	String getlatestQ= "SELECT * FROM employee_basic order by created desc limit 5 ";
 	@Query(value =getlatestQ,nativeQuery = true)
 	ArrayList<EMPLOYEE_BASIC> findlatest();
+	
+	String getAllForSearchQ= "SELECT * FROM employee_basic WHERE full_name LIKE CONCAT('%',:text,'%')";
+	@Query(value =getAllForSearchQ,nativeQuery = true)
+	ArrayList<EMPLOYEE_BASIC> findAllForSearch(@Param("text") String txt);
 }

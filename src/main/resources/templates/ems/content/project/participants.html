@@ -12,7 +12,7 @@
 						        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 						      </div>
 						      <div class="modal-body">
-						      	<input type="hidden" th:value="${project.projectid}"/>
+						      	<input type="hidden" name="projectid" th:value="${project.projectid}"/>
 						         <div th:include="ems/content/getEmployeesByRole :: getEmployeesByRole"></div>
 						      </div>
 						      <div class="modal-footer">
@@ -53,15 +53,15 @@
 					  			
 					  			<td th:text="${emp.created}"></td>	
 					  			<td>
-					  				<input type="hidden" class="empid" th:value="${emp.empid}"/>
+					  				<input type="hidden" class="empidapp" th:value="${emp.empid}"/>
 					  								<div class="form-group">
 														<div class="form-check form-check-inline">
-															<input class="form-check-input" name="approve" type="radio" id="inlineRadio1" value="1" />
+															<input class="form-check-input"  name="approve" type="radio" id="inlineRadio1" value="1" />
 															<label class="form-check-label" for="inlineRadio1">Approve</label>
 														</div>
 														<div class="form-check form-check-inline">
-															<input class="form-check-input" name="approve" type="radio" id="inlineRadio2" value="0"  />
-															<label class="form-check-label" for="inlineRadio2">Decline</label>
+															<input class="form-check-input"   name="approve" type="radio" id="inlineRadio2" value="0"  />
+															<label class="form-check-label"  for="inlineRadio2">Decline</label>
 														</div>
 														
 													</div>
@@ -95,17 +95,21 @@
 					  			</td>
 					  			<td><a th:text="${emp.emp.full_name}" href="#" class="text-white text-decoration-none" th:emp-id="${emp.emp.empid}" onclick="viewEmlpoyee(this);"></a></td>
 					  			<td th:text="${emp.emp.designation}"></td>					  			
-					  			<td th:text="${emp.isadmin}? ADMIN: EMPLOYEE"></td>
+					  			<td class="isadmin" th:text="${emp.isadmin}? ADMIN: EMPLOYEE"></td>
 					  			<td th:text="${emp.created}"></td>
-								<td th:if="${thisprojectemp.isadmin}"><a href="#" data-bs-toggle="dropdown"
+								<td th:if="${thisprojectemp.isadmin}">
+								<input type="hidden" class="empid" th:value="${emp.empid}"/>
+								<a href="#" data-bs-toggle="dropdown"
 									class=" text-opacity-50"> <i class="fa fa-ellipsis-h"></i></a>
 									<div class="dropdown-menu dropdown-menu-end">
 										<a href="#" th:emp-id="${emp.emp.empid}"
 											onclick="viewEmlpoyee(this);" class="dropdown-item">View</a>
 										 <a href="#" th:if="${!emp.isadmin}"
 											class="dropdown-item" th:href="@{/removeFromProject(projectid=${emp.projectid},workerid=${emp.id})}" >Remove</a>
-											<a th:if="${!emp.isadmin}" href="#" th:href="@{/editEmployee(empid=${emp.emp.empid})}"
-											class="dropdown-item">Make Admin</a>
+											<a th:if="${!emp.isadmin}" href="#" 
+											class="dropdown-item make-admin">Make Admin</a>
+											<a th:if="${emp.isadmin}" href="#" 
+											class="dropdown-item remove-admin">Remove Admin</a>
 									</div></td>
 							</tr>
 					  	</table>

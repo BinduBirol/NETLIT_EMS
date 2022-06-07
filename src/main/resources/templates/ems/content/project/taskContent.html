@@ -1,0 +1,47 @@
+<div th:fragment="taskContent">
+	<div th:if="${thisprojectemp.isadmin}">
+		<div th:include="ems/content/project/taskCreate :: taskCreate"></div>
+	</div>
+
+
+	<table id="datatableDefault" class="table text-nowrap w-100">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Title</th>
+				<th>Assignee</th>
+				<th>Priority</th>
+				<th>Status</th>
+				<th>Type</th>
+				<th>Created</th>
+				<th>Updated</th>					
+				<th>Options</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			<tr  th:each="task,iterator : ${project.tasks}">
+			
+				<td th:text="${iterator.index+1}">#</td>
+				<td th:text="${task.title}">Title</td>
+				<td>
+					<a href="#" th:emp-id="${task.assigneeid}" onclick="viewEmlpoyee(this);" th:text="${task.assigneename}" >View</a></td>
+				<td th:text="${task.priority}">Priority</td>
+				<td th:text="${task.status}">Status</td>
+				<td th:text="${task.type}">Type</td>
+				<td th:text="${task.created}">Created</td>
+				<td th:text="${task.updated}">Updated</td>					
+				
+				<td><a href="#" data-bs-toggle="dropdown"
+					class=" text-opacity-50"> <i class="fa fa-ellipsis-h"></i></a>
+					<div class="dropdown-menu dropdown-menu-end">
+						<a href="#" th:emp-id="${task.title}" onclick="viewEmlpoyee(this);"
+							class="dropdown-item">View</a> <a
+							th:href="@{/editEmployee(empid=${task.title})}"
+							class="dropdown-item">Edit</a> <a href="#" class="dropdown-item">Report</a>
+					</div></td>
+			</tr>
+		</tbody>
+	</table>
+
+</div>

@@ -247,6 +247,59 @@
 				<!-- END col-3 -->
 			</div>
 			
+			<div class="row">
+								<div th:each="all : ${my}"  class="col-xl-3 col-lg-6">
+									<!-- BEGIN card -->
+									<div class="card mb-3">
+										<!-- BEGIN card-body -->
+										<div class="card-body">
+											<!-- BEGIN title -->
+											<div class="d-flex fw-bold small mb-3">
+												<span class="flex-grow-1"><span th:text="${all.status}"></span> </span> <a href="#"
+													data-toggle="card-expand"
+													class="text-white text-opacity-50 text-decoration-none"><i
+													class="bi bi-fullscreen"></i></a>
+											</div>
+											<!-- END title -->
+											<!-- BEGIN stat-lg -->
+											<div class="row align-items-center mb-2 ">
+												<div class="">
+													
+													<h5 class="mb-0 text-truncate"><a th:href="@{/viewProject(projectid=${all.projectid})}" class="text-decoration-none"><img width="30" height="30" class="rounded"th:src="*{'data:image/jpeg;base64,'+{all.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'"  /> [[${all.title}]]</a></h5>
+												</div>
+												<div class="col-5">
+													<div class="mt-n3 mb-n2" data-render="apexchart"
+														data-type="donut" data-title="Visitors" data-height="45"></div>
+												</div>
+											</div>
+											<!-- END stat-lg -->
+											<!-- BEGIN stat-sm -->
+											<div class="small text-white text-opacity-50 text-truncate">
+												<i class="fa fa-search fa-fw me-1"></i> Key: [[${all.projectkey}]]<br /> <i class="far fa-user fa-fw me-1"></i> 
+													Chief: <a th:emp-id="${all.creatorid}" onclick="viewEmlpoyee(this);" href="#" class="text-decoration-none">[[${all.creatorname}]]</a><br /><i class="fa fa-lock fa-fw me-1"></i> 
+												 <span th:classappend="${all.isprivate}? text-danger :text-success" th:text="${all.isprivate}? PRIVATE : OPEN"></span><br />
+												<i class="far fa-comment-alt fa-fw me-1"></i> Desc: [[${all.description}]]<br /> <i class="far fa-clock fa-fw me-1"></i>
+												Created on: [[${all.created}]]
+												
+												<br /> <i class="far fa-clock fa-fw me-1"></i>
+												Updated on:<span th:text="${all.updated==null}? ${all.created}: ${all.updated}" ></span>
+											</div>
+											<!-- END stat-sm -->
+										</div>
+										<!-- END card-body -->
+
+										<!-- BEGIN card-arrow -->
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+										<!-- END card-arrow -->
+									</div>
+									<!-- END card -->
+								</div>
+							</div>
 
 			<div class="row">
 				<div class="col-xl-6 col-lg-6">
