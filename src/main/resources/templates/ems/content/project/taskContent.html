@@ -15,7 +15,7 @@
 				<th>Type</th>
 				<th>Created</th>
 				<th>Updated</th>					
-				<th>Options</th>
+				<th><i class="far fa-lg fa-fw me-2 fa-list-alt"></i></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -27,7 +27,7 @@
 				<td>
 					<a href="#" class="text-decoration-none" th:emp-id="${task.assigneeid}" onclick="viewEmlpoyee(this);" th:text="${task.assigneename}" >View</a></td>
 				<td >
-					<select th:disabled="${task.creatorid!=session.userdtl.empid} "   name="priority" class="form-select form-select-sm">
+					<select  th:disabled="${task.creatorid!=session.userdtl.empid} "   name="priority" class="form-select form-select-sm">
 						  	<option value="Normal">Normal</option>					  		
 							  <option value="High">High</option>							  
 							  <option value="Low">Low</option>
