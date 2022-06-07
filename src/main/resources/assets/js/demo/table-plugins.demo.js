@@ -15,6 +15,7 @@ var handleRenderTableData = function() {
 			{ extend: 'csv', className: 'btn btn-outline-default btn-sm' }
 		]
 	});
+	
 };
 
 

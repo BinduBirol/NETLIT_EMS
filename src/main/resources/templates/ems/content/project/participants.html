@@ -51,7 +51,7 @@
 					  			<td><a th:text="${emp.emp.full_name}" href="#" class="text-white text-decoration-none" th:emp-id="${emp.emp.empid}" onclick="viewEmlpoyee(this);"></a></td>
 					  			<td th:text="${emp.emp.designation}"></td>				  			
 					  			
-					  			<td th:text="${emp.created}"></td>	
+					  			<td>[[${#dates.format(emp.created, 'dd MMM yyyy')}]]</td>	
 					  			<td>
 					  				<input type="hidden" class="empidapp" th:value="${emp.empid}"/>
 					  								<div class="form-group">
@@ -96,7 +96,7 @@
 					  			<td><a th:text="${emp.emp.full_name}" href="#" class="text-white text-decoration-none" th:emp-id="${emp.emp.empid}" onclick="viewEmlpoyee(this);"></a></td>
 					  			<td th:text="${emp.emp.designation}"></td>					  			
 					  			<td class="isadmin" th:text="${emp.isadmin}? ADMIN: EMPLOYEE"></td>
-					  			<td th:text="${emp.created}"></td>
+					  			<td >[[${#dates.format(emp.created, 'dd MMM yyyy')}]]</td>
 								<td th:if="${thisprojectemp.isadmin}">
 								<input type="hidden" class="empid" th:value="${emp.empid}"/>
 								<a href="#" data-bs-toggle="dropdown"

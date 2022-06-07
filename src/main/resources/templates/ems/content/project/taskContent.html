@@ -4,7 +4,7 @@
 	</div>
 
 
-	<table id="datatableDefault" class="table text-nowrap w-100">
+	<table id="datatableDefault" class="table text-nowrap w-100 ">
 		<thead>
 			<tr>
 				<th>#</th>
@@ -20,17 +20,38 @@
 		</thead>
 		<tbody>
 
-			<tr  th:each="task,iterator : ${project.tasks}">
+			<tr class="align-middle"  th:each="task,iterator : ${project.tasks}">
 			
 				<td th:text="${iterator.index+1}">#</td>
 				<td th:text="${task.title}">Title</td>
 				<td>
-					<a href="#" th:emp-id="${task.assigneeid}" onclick="viewEmlpoyee(this);" th:text="${task.assigneename}" >View</a></td>
-				<td th:text="${task.priority}">Priority</td>
-				<td th:text="${task.status}">Status</td>
-				<td th:text="${task.type}">Type</td>
-				<td th:text="${task.created}">Created</td>
-				<td th:text="${task.updated}">Updated</td>					
+					<a href="#" class="text-decoration-none" th:emp-id="${task.assigneeid}" onclick="viewEmlpoyee(this);" th:text="${task.assigneename}" >View</a></td>
+				<td >
+					<select th:disabled="${task.creatorid!=session.userdtl.empid} "   name="priority" class="form-select form-select-sm">
+						  	<option value="Normal">Normal</option>					  		
+							  <option value="High">High</option>							  
+							  <option value="Low">Low</option>
+							  <option value="Urgent">Urgent</option>			  
+							</select>
+				</td>
+				<td>
+					<select name="type" th:disabled="${task.creatorid!=session.userdtl.empid and task.assigneeid!=session.userdtl.empid} "   class="form-select form-select-sm">
+							  <option value="New">New</option>
+							  <option value="Ongoing">Ongoing</option>
+							  <option value="Waiting">Waiting</option>
+							  <option value="Finished">Finished</option>
+					</select>
+				</td>
+				<td>
+					<select name="type" th:disabled="${task.creatorid!=session.userdtl.empid}"   class="form-select form-select-sm">
+							  <option value="Task">Task</option>
+							  <option value="Enhancement">Enhancement</option>
+							  <option value="Proposal">Proposal</option>
+							  <option value="Resolve">Resolve</option>
+							</select>
+				</td>
+				<td>[[${#dates.format(task.created, 'dd MMM yyyy')}]]</td>
+				<td>[[${#dates.format(task.updated, 'dd MMM yyyy')}]]</td>					
 				
 				<td><a href="#" data-bs-toggle="dropdown"
 					class=" text-opacity-50"> <i class="fa fa-ellipsis-h"></i></a>

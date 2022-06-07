@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head >
-<title>PROJECT</title>
+<head>
+	<meta charset="utf-8" />
+	<title>EMPLOYEE LIST</title>
 	<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="description" content="" />
 	<meta name="author" content="" />
 	
-	<!-- ================== BEGIN core-css ================== -->	
+	<!-- ================== BEGIN core-css ================== -->
 	<link href="assets/css/vendor.min.css" rel="stylesheet" />
 	<link href="assets/css/app.min.css" rel="stylesheet" />
-	<link href="assets/css/netlit_ems.css" rel="stylesheet" />	
-	<!-- ================== END core-css ================== -->	
+	<link href="assets/css/netlit_ems.css" rel="stylesheet" />
+	<!-- ================== END core-css ================== -->
+	
+	<!-- ================== BEGIN page-css ================== -->
+	<link href="assets/plugins/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+	<link href="assets/plugins/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" />
+	<link href="assets/plugins/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
+	<link href="assets/plugins/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet" />
+	<!-- ================== END page-css ================== -->
+
 	<link href="assets/css/pages/projectview.css" rel="stylesheet" />
 </head>
 <body>
@@ -32,48 +41,66 @@
 					<li class="breadcrumb-item active">PROJECT DETAILS</li>
 				</ul>
 
-				<h1 class="page-header">[[${project.title}]]</h1>
+				<div class="d-flex align-items-start mt-3 mb-3">
+							  <a href="#">
+							    <img class="rounded" th:src="*{'data:image/jpeg;base64,'+{project.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'"  alt="" width="64" />
+							  </a>
+							  <div class="ms-3">
+							    <h2 class="mt-0 mb-1">[[${project.title}]]</h2>
+							    [[${project.description}]]
+							  </div>
+							</div>
 				<input type="hidden" id="projectid" th:value="${project.projectid}"/>
 					<hr class="mb-4" />
+					
+					
 					
 	
 					
 					
 					<ul class="nav nav-tabs" id="myTabs">
-					  <li class="nav-item me-1"><a href="#home" class="nav-link active" data-bs-toggle="tab">Home</a></li>
-					  <li class="nav-item me-1"><a href="#tasks" class="nav-link" data-bs-toggle="tab">Tasks</a></li>
+					<li class="nav-item me-1"><a href="#tasks" class="nav-link active" data-bs-toggle="tab">Tasks</a></li>
+					  <li class="nav-item me-1"><a href="#home" class="nav-link " data-bs-toggle="tab">Overview</a></li>
+					  
 					  <li class="nav-item me-1 dropdown">
 					    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-					      More
+					      More 			      
+					      
 					    </a>
 					    <div class="dropdown-menu">
-					      <a href="#participants" class="dropdown-item" data-bs-toggle="tab">Participants</a>
+					      <a href="#participants" class="dropdown-item" data-bs-toggle="tab">Participants <span th:if="${project.applicants.size>0}" class="badge bg-success">[[${project.applicants.size}]]</span></a>
 					      <a href="#setting" class="dropdown-item" data-bs-toggle="tab">Setting</a>
 					    </div> 
 					  </li>
 					</ul>
 					<div class="tab-content pt-3">
-					  <div class="tab-pane fade show active" id="home">
+						<div class="tab-pane fade show active" id="tasks">
+					  
+					  	<div th:include="ems/content/project/taskContent :: taskContent"></div>
+					  </div>
+					  
+					  <div class="tab-pane fade " id="home">
+					  
+					  
 							
-							<div class="d-flex align-items-start mt-3 mb-3">
-							  <a href="#">
-							    <img class="rounded" th:src="*{'data:image/jpeg;base64,'+{project.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'"  alt="" width="64" />
-							  </a>
-							  <div class="ms-3">
-							    <h5 class="mt-0 mb-1">[[${project.title}]]</h5>
-							    [[${project.description}]]
-							  </div>
-							</div>
+							
+							
+							
 							
 							<div class="row">
-								<div th:include="ems/content/project/projectActivity :: projectActivity"></div>						
+								<div class="col-sm-4">
+								xxx
+								</div>
+								
+								<div class="col-sm-8">
+								<div th:include="ems/content/project/projectActivity :: projectActivity"></div>	
+								</div>
+													
 							</div>
 							
 						
 						</div>
-					  <div class="tab-pane fade" id="tasks">
-					  	<div th:include="ems/content/project/taskContent :: taskContent"></div>
-					  </div>
+					  
 					  <div class="tab-pane fade" id="participants">
 					  	<div th:include="ems/content/project/participants :: participants"></div>
 					  </div>
@@ -103,6 +130,23 @@
 	<!-- END #app -->
 	
 	<div th:include="theme/footer::staticFooter"></div>
+	<!-- ================== BEGIN page-js ================== -->
+	<script src="assets/plugins/@highlightjs/cdn-assets/highlight.min.js"></script>
+	<script src="assets/js/demo/highlightjs.demo.js"></script>
+	<script src="assets/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="assets/plugins/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+	<script src="assets/plugins/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="assets/plugins/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+	<script src="assets/plugins/datatables.net-buttons/js/buttons.flash.min.js"></script>
+	<script src="assets/plugins/datatables.net-buttons/js/buttons.html5.min.js"></script>
+	<script src="assets/plugins/datatables.net-buttons/js/buttons.print.min.js"></script>
+	<script src="assets/plugins/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+	<script src="assets/plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="assets/plugins/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+	<script src="assets/plugins/bootstrap-table/dist/bootstrap-table.min.js"></script>
+	<script src="assets/js/demo/table-plugins.demo.js"></script>
+	<script src="assets/js/demo/sidebar-scrollspy.demo.js"></script>
+	<!-- ================== END page-js ================== -->
 	<script type="text/javascript">
 	
 		$('input[type=radio][name=approve]').on('change', function(e) {			

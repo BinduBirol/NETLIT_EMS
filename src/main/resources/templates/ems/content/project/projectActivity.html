@@ -19,11 +19,11 @@
 					<tbody>
 
 						<tr th:each="a : ${activity}">
-							<td><span class="d-flex align-items-center"> <i
-									class="bi bi-circle-fill fs-6px text-theme me-2"></i>
+							<td><span class="d-flex align-items-center"> <i th:classappend="${a.creatorid}==${session.userdtl.empid} ? text-theme: normal "
+									class="bi bi-circle-fill fs-6px  me-2"></i>
 									[[${a.message}]]
 							</span></td>
-							<td><small>[[${a.created}]]</small></td>
+							<td><small>[[${#dates.format(a.created, 'dd MMM yyyy')}]]</small></td>
 							<td><small><a th:text="${a.creatorname}" href="#"
 									class="text-white text-decoration-none"
 									th:emp-id="${a.creatorid}" onclick="viewEmlpoyee(this);"></a></small></td>
@@ -31,8 +31,7 @@
 								class="badge d-block bg-theme text-theme-900 rounded-0 pt-5px w-70px"
 								th:thext="${#authentication.getPrincipal().getFirstName()}"
 								style="min-height: 18px">[[${a.type}]]</span></td>
-							<td><a href="#" class="text-decoration-none text-white"><i
-									class="far fa-check-circle"></i></a></td>
+							
 						</tr>
 
 
