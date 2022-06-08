@@ -81,4 +81,22 @@ $('#search_all_users').autocomplete({
       .appendTo(ul);
   }
 
+function viewTask(z) {
+	$("tr").removeClass("table-primary");
+	$(z).closest("tr").addClass("table-primary");
+	$taskid = $(z).attr("task-id");
+	$.ajax({
+		url : "viewTask?taskid=" + $taskid,
+		type : 'GET',
+		success : function(data) {
+			$('.viewTaskContent').html(data);
+			$('#viewTask').modal('show');
+			historytablecontent(z);
+		},
+		error : function(xhr, desc, err) {
+			$('.viewTaskContent').html(xhr.responseText);
+			$('#viewTask').modal('show');
 
+		}
+	});
+}

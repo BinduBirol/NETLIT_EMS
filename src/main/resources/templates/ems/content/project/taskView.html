@@ -1,0 +1,45 @@
+<div th:fragment="taskView">
+					
+						<div class="modal-header">
+							Task #[[${task.taskid}]]
+							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+						</div>
+						<div class="modal-body">
+						
+							<ul>
+								<li>[[${task.title}]]</li>
+								<li>[[${task.description}]]</li>
+								<li>Assigned to [[${task.assigneename}]]</li>
+								<li>Created by [[${task.creatorname}]]</li>
+								<li>Updated on [[${#dates.format(task.updated, 'dd MMM yyyy')}]]</li>
+								<li>Created on [[${#dates.format(task.created, 'dd MMM yyyy')}]]</li>
+								<li>Type: [[${task.type}]]</li>
+								<li>Status: [[${task.status}]]</li>
+								<li>Priority: [[${task.priority}]]</li>
+								<li th:if="${task.attachment != null}">
+									<a  th:href="|download/task/attachment?&taskid=${task.taskid}|">Attachment</a>
+								</li>
+							</ul>
+							
+							<div class=" small d-flex align-items-start mt-3 mb-3">
+							  <a href="#">
+							    <img class="rounded" th:src="*{'data:image/jpeg;base64,'+{project.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'"  alt="" width="44" />
+							  </a>
+							  <div class="ms-3">
+							    <b class="mt-0 mb-1">[[${project.title}]] : </b>
+							    <small>[[${project.description}]]</small>
+							  </div>
+							</div>
+				
+					
+						</div>
+						<div class="modal-footer">
+						
+						
+							<button type="button" class="btn btn-default"
+								data-bs-dismiss="modal">Close</button>							
+						</div>					
+				
+
+
+</div>

@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.birol.ems.dao.EmpTimeReportRepo;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
+import com.birol.ems.dto.EmpTimeReportDTO;
 import com.birol.ems.project.dao.ProjectDao;
 import com.birol.ems.project.dao.Project_ActivityDao;
 import com.birol.ems.project.dao.Project_ApplicantDao;
@@ -46,6 +48,8 @@ public class ProjectController {
 	private Project_ApplicantDao project_ApplicantDao;
 	@Autowired
 	private Project_ActivityDao project_ActivityDao;
+	@Autowired
+	EmpTimeReportRepo avrepo;
 
 	@GetMapping("/projects")
 	public ModelAndView projectsHome(final ModelMap model, Authentication auth) {
@@ -178,6 +182,8 @@ public class ProjectController {
 		if(!meexists.isIsadmin()) return new ModelAndView("ems/pages/project/viewProjectAsEmployee", model);
 			
 		model.addAttribute("roles", roleRepository.findAll());
+		ArrayList<EmpTimeReportDTO> availist = avrepo.findbyProjectidAndApproved(projectid);		
+		model.addAttribute("wsh", availist);
 		return new ModelAndView("ems/pages/project/viewProjectAdmin", model);
 		
 	}
@@ -224,6 +230,7 @@ public class ProjectController {
 				activity.setCreatorname(user.getFirstName()+" "+user.getLastName());
 				activity.setProjectid(projectid);
 				activity.setType("PARTICIPANT");
+				activity.setTargetuser(empid);
 				project_ActivityDao.save(activity);
 				return a;
 			}
@@ -268,6 +275,7 @@ public class ProjectController {
 		activity.setCreatorname(user.getFirstName()+" "+user.getLastName());
 		activity.setProjectid(projectid);
 		activity.setType("PARTICIPANT");
+		activity.setTargetuser(Long.parseLong(workerid));
 		project_ActivityDao.save(activity);
 		
 		
@@ -302,6 +310,7 @@ public class ProjectController {
 		activity.setCreatorname(user.getFirstName()+" "+user.getLastName());
 		activity.setProjectid(projectid);
 		activity.setType("PARTICIPANT");
+		activity.setTargetuser(Long.parseLong(empsplit[1]));
 		project_ActivityDao.save(activity);
 		return new ModelAndView("redirect:/"+redirurl, model);
 	}
@@ -317,7 +326,7 @@ public class ProjectController {
 			project_WorkersDao.save(pw);
 			
 			Project_Activity activity = new Project_Activity();
-			activity.setMessage(pw.getEmp_name()+ " is now an ADMIN to this project");
+			activity.setMessage(pw.getEmp_name()+ " is now an ADMIN to the project");
 			activity.setCreatorid(user.getId());
 			activity.setCreatorname(user.getFirstName()+" "+user.getLastName());
 			activity.setProjectid(projectid);
@@ -349,6 +358,7 @@ public class ProjectController {
 			activity.setCreatorname(user.getFirstName()+" "+user.getLastName());
 			activity.setProjectid(projectid);
 			activity.setType("PARTICIPANT");
+			activity.setTargetuser(pw.getEmpid());
 			project_ActivityDao.save(activity);
 			
 		}catch (Exception e) {

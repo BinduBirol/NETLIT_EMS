@@ -31,6 +31,9 @@ public class Time_report_approved {
 	private String availability_id;
 	@Transient
 	private String work_hour;
+	
+	private long taskid;
+	private long projectid;
 
 	private Date created;
 	private Date updated;
@@ -176,6 +179,22 @@ public class Time_report_approved {
 
 	public LocalDate getDate() {
 		return date;
+	}	
+
+	public long getTaskid() {
+		return taskid;
+	}
+
+	public void setTaskid(long taskid) {
+		this.taskid = taskid;
+	}
+
+	public long getProjectid() {
+		return projectid;
+	}
+
+	public void setProjectid(long projectid) {
+		this.projectid = projectid;
 	}
 
 	public void setDate(LocalDate date) {

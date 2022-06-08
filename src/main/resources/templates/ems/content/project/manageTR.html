@@ -1,0 +1,62 @@
+<div th:fragment="manageTR">
+
+	<table id="datatableDefaultz" class="table small table-bordered">
+		<thead>
+			<tr>
+				<th>Employee</th>
+				<th><input id="checkAll" class="form-check-input" type="hidden" />
+					<i class="fa fa-thumbs-up"></i></th>
+				<th width="95px">Date</th>
+				<th>Week</th>
+				<th>Day</th>
+				<th>Minute</th>
+				<th>Start</th>
+				<th>End</th>
+				<th>Break</th>
+				<th>Desc</th>
+				<th>Task</th>
+				<th>Created</th>
+
+			</tr>
+		</thead>
+		<tbody>
+
+
+
+			<tr th:classappend="${wsh.status}==0 ? text-danger : normal"
+				th:each="wsh,iterator : ${wsh}" class="align-middle">
+				<td><a href="#" class="text-decoration-none"
+					th:emp-id="${wsh.userid}" onclick="viewEmlpoyee(this);"
+					th:text="${wsh.full_name}"></a></td>
+				<td><input th:id="${wsh.av_id}" th:checked="${wsh.isapproved}"
+					class="form-check-input avidcheckbox" type="checkbox" /></td>
+				<td th:text="${wsh.date}">Date</td>
+
+				<td th:text="${wsh.week}">Date</td>
+				<td th:text="${wsh.day}">Date</td>
+
+				<td><input type="number"
+					class=" td-input form-control form-control-sm   wmint "
+					readonly="readonly" th:value="${wsh.work_minute}" /></td>
+				<td><input type="time"
+					class="td-input form-control form-control-sm cal start  "
+					th:value="${wsh.work_start}" /></td>
+				<td><input type="time"
+					class="td-input form-control form-control-sm cal end "
+					th:value="${wsh.work_end}" /></td>
+				<td><input type="number"
+					class="td-input form-control form-control-sm cal lbreak "
+					th:value="${wsh.lunch_hour}" /></td>
+				<td><textarea
+						class="td-input form-control form-control-sm cal wdesc "
+						th:text="${wsh.work_desc}" rows="2"></textarea>
+				<td><a class="text-decoration-none" href="#" th:task-id="${wsh.taskid}" onclick="viewTask(this);">#[[${wsh.taskid}]]</a></td>
+				<td th:text="${wsh.created==null}? ${wsh.updated} : ${wsh.created}">date</td>
+
+			</tr>
+
+
+		</tbody>
+	</table>
+
+</div>

@@ -23,6 +23,7 @@ public class Project_Activity {
 	public String timediff;
 	public String type;
 	public long creatorid;
+	public long targetuser;
 	public String creatorname;
 
 	private Date created;
@@ -78,6 +79,16 @@ public class Project_Activity {
 	}
 
 	
+
+	public long getTargetuser() {
+		return targetuser;
+	}
+
+
+	public void setTargetuser(long targetuser) {
+		this.targetuser = targetuser;
+	}
+
 
 	public long getActivityid() {
 		return activityid;

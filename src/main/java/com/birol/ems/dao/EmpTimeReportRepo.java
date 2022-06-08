@@ -22,5 +22,11 @@ public interface EmpTimeReportRepo extends JpaRepository<EmpTimeReportDTO, Strin
 	
 	@Query(value = "SELECT * from EMP_TIME_REPORT  where  date BETWEEN STR_TO_DATE(:startDate, '%Y-%m-%d')  AND STR_TO_DATE(:endDate, '%Y-%m-%d') ",nativeQuery = true)
 	public ArrayList<EmpTimeReportDTO> getAllusersBetweenDates(@Param("startDate")String startDate,@Param("endDate")String endDate);
+	
+	@Query(value = "SELECT * from EMP_TIME_REPORT  where projectid = :projectid ",nativeQuery = true)
+	public ArrayList<EmpTimeReportDTO> findbyProjectid(@Param("projectid")long projectid);
+	
+	@Query(value = "SELECT * from EMP_TIME_REPORT  where projectid = :projectid and isapproved=0",nativeQuery = true)
+	public ArrayList<EmpTimeReportDTO> findbyProjectidAndApproved(@Param("projectid")long projectid);
 
 }

@@ -22,6 +22,17 @@
 	<!-- ================== END page-css ================== -->
 
 	<link href="assets/css/pages/projectview.css" rel="stylesheet" />
+	
+	<style type="text/css">
+	.form-select:disabled {
+		background-color: transparent;
+		background: transparent;
+		cursor: no-drop;
+		opacity: .6;
+		
+	}
+	
+	</style>
 </head>
 <body>
 	<!-- BEGIN #app -->
@@ -61,6 +72,7 @@
 					<ul class="nav nav-tabs" id="myTabs">
 					<li class="nav-item me-1"><a href="#tasks" class="nav-link active" data-bs-toggle="tab">Tasks</a></li>
 					  <li class="nav-item me-1"><a href="#home" class="nav-link " data-bs-toggle="tab">Overview</a></li>
+					  <li class="nav-item me-1"><a href="#mtr" class="nav-link " data-bs-toggle="tab">Manage TR <span th:if="${wsh.size>0}" class="badge bg-success">[[${wsh.size}]]</span></a></li>
 					  
 					  <li class="nav-item me-1 dropdown">
 					    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
@@ -101,6 +113,9 @@
 						
 						</div>
 					  
+					  <div class="tab-pane fade" id="mtr">					  	
+					  	<div th:include="ems/content/project/manageTR :: manageTR"></div>
+					  </div>
 					  <div class="tab-pane fade" id="participants">
 					  	<div th:include="ems/content/project/participants :: participants"></div>
 					  </div>
@@ -112,15 +127,20 @@
 					
 					</div>
 			</div>
-					
-					<div class="modal fade" id="viewEmployee">
-				<div class="modal-dialog modal-xl">
-					<div class="modal-content empContent">...</div>
-				</div>
-			</div>			
-			
-			
+
+		<div class="modal fade" id="viewEmployee">
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content empContent">...</div>
+			</div>
 		</div>
+
+<div class="modal fade" id="viewTask">
+		<div class="modal-dialog ">
+			<div class="modal-content viewTaskContent">...</div>
+		</div>
+	</div>
+
+	</div>
 		
 		
 	
@@ -145,58 +165,10 @@
 	<script src="assets/plugins/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
 	<script src="assets/plugins/bootstrap-table/dist/bootstrap-table.min.js"></script>
 	<script src="assets/js/demo/table-plugins.demo.js"></script>
-	<script src="assets/js/demo/sidebar-scrollspy.demo.js"></script>
+	<script src="assets/js/demo/sidebar-scrollspy.demo.js"></script>	
 	<!-- ================== END page-js ================== -->
-	<script type="text/javascript">
+	<script src="assets/js/pagejs/viewProject.js"></script>
 	
-		$('input[type=radio][name=approve]').on('change', function(e) {			
-			$target= $(e.target).closest('tr');
-			var empid = $target.find(".empidapp").val();			
-			$.get("approveEmptoProject",
-					  {
-					    empid: empid,
-					    projectid: $("#projectid").val(),
-					    approve: $(this).val()
-					  },
-					  function(data, status){						
-					    $('.toast-header .title').html(status);
-						$('.toast-body .toast-message').html(data);					
-						$('.toast').toast('show');		
-			});			
-		});
-		
-		$(".make-admin").click(function (e) {
-			$target= $(e.target).closest('tr');
-			var empid = $target.find(".empid").val();
-			$.get("makeAdmin",
-					  {
-					    empid: empid,
-					    projectid: $("#projectid").val()					    
-					  },
-					  function(data, status){ 
-						$target.find(".isadmin").html(data);
-			});
-		})
-		
-		$(".remove-admin").click(function (e) {
-			$target= $(e.target).closest('tr');
-			var empid = $target.find(".empid").val();
-			$.get("removeAdmin",
-					  {
-					    empid: empid,
-					    projectid: $("#projectid").val()					    
-					  },
-					  function(data, status){ 
-						$target.find(".isadmin").html(data);
-						if(data=="Last Admin"){
-							$('.toast-header .title').html("Error!");
-							$('.toast-body .toast-message').html("Can't remove the only Admin");					
-							$('.toast').toast('show');
-						}
-			});
-		})	
-		
-	</script>
 	
 	
 	 

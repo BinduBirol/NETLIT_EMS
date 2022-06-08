@@ -1,0 +1,99 @@
+<div th:fragment="taskEdit">
+
+		
+			<form action="editTaskDo" method="post" enctype='multipart/form-data'>
+				
+					
+						<div class="modal-header">
+							<div class="d-flex align-items-start mt-3 mb-3">
+							  <a href="#">
+							    <img class="rounded" th:src="*{'data:image/jpeg;base64,'+{project.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'"  alt="" width="64" />
+							  </a>
+							  <div class="ms-3">
+							    <h4 class="mt-0 mb-1">[[${project.title}]]</h4>
+							    [[${project.description}]]
+							  </div>
+							</div>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+						</div>
+						<div class="modal-body">
+			
+			
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group mb-3">
+						  <label class="form-label" for="pn">Task Title</label>
+						  <input type="text" th:value="${task.title}" name="title" required="required" class="form-control" id="pn" placeholder="">
+							<input type="hidden" name="projectid" th:value="${project.projectid}"/>
+							<input type="hidden" name="taskid" th:value="${task.taskid}"/>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group mb-3">
+						  <label class="form-label" for="key">Assignee</label>
+						  <select onchange="$('#teassigneename').val($('#teassigneeid :selected').text());" id="teassigneeid" name="assigneeid" class="form-select" required="required">
+							  <option value="">Select Assignee</option>
+							  <option th:selected="(${w.empid} == *{task.assigneeid})" th:each="w : ${project.workers}" th:value="${w.empid}" th:text="${w.emp_name}"></option>
+							</select>
+							<input type="hidden" th:value="${task.assigneename}" id="teassigneename" name="assigneename">
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group mb-3">
+						  <label class="form-label" for="pn">Type</label>
+						  <select th:field="*{task.type}" name="type"  class="form-select">
+							  <option value="Task">Task</option>
+							  <option value="Enhancement">Enhancement</option>
+							  <option value="Proposal">Proposal</option>
+							  <option value="Resolve">Resolve</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group mb-3">
+						  <label class="form-label" for="key">Priority</label>
+						  <select th:field="*{task.priority}" name="priority" class="form-select">
+						  	<option value="Normal">Normal</option>					  		
+							  <option value="High">High</option>							  
+							  <option value="Low">Low</option>
+							  <option value="Urgent">Urgent</option>			  
+							</select>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="row">					
+					
+					<div class="col-sm-6">
+						<div class="form-group mb-3">
+						  
+						  <div class="">
+							  <label class="form-label" for="defaultFile">Attachment</label>
+							  <input name="attachment_m"  type="file" class="form-control"  />
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group mb-3">
+						  <label class="form-label" for="desc">Description</label>
+						  <textarea name="description" required="required" class="form-control" id="desc" rows="3">[[${task.description}]]</textarea>
+						</div>
+					</div>
+				
+				</div>		
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-bs-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-outline-theme">Update Task</button>
+						</div>					
+				
+			</form>
+
+
+</div>

@@ -32,6 +32,9 @@ public class EmpTimeReportDTO {
 	private String work_hour;
 	
 	private boolean isapproved;
+	
+	private long taskid;
+	private long projectid;
 
 	private Date created;
 	private Date updated;
@@ -191,5 +194,23 @@ public class EmpTimeReportDTO {
 	public void setWork_hour(String work_hour) {
 		this.work_hour = work_hour;
 	}
+
+	public long getTaskid() {
+		return taskid;
+	}
+
+	public void setTaskid(long taskid) {
+		this.taskid = taskid;
+	}
+
+	public long getProjectid() {
+		return projectid;
+	}
+
+	public void setProjectid(long projectid) {
+		this.projectid = projectid;
+	}
+	
+	
 
 }

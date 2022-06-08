@@ -299,6 +299,8 @@ public class TimeReportController {
 		wsh.setStatus(av.getStatus());
 		wsh.setWork_desc(wdesc);
 		wsh.setWork_sh_id(wshid);
+		wsh.setTaskid(av.getTaskid());
+		wsh.setProjectid(av.getProjectid());
 
 		av.setWork_start(start);
 		av.setWork_end(end);

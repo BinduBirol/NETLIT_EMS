@@ -3,8 +3,9 @@
 		<div th:include="ems/content/project/taskCreate :: taskCreate"></div>
 	</div>
 
+	
 
-	<table id="datatableDefault" class="table text-nowrap w-100 ">
+	<table id="datatableDefaultx" class="table text-nowrap w-100">
 		<thead>
 			<tr>
 				<th>#</th>
@@ -22,20 +23,23 @@
 
 			<tr class="align-middle"  th:each="task,iterator : ${project.tasks}">
 			
-				<td th:text="${iterator.index+1}">#</td>
-				<td th:text="${task.title}">Title</td>
+				<td><a class="text-decoration-none" href="#" th:task-id="${task.taskid}" onclick="viewTask(this);">#[[${task.taskid}]]</a> </td>
+				<td >
+					[[${task.title}]]
+					<input type="hidden" class="taskid" th:value="${task.taskid}"/>
+				</td>
 				<td>
 					<a href="#" class="text-decoration-none" th:emp-id="${task.assigneeid}" onclick="viewEmlpoyee(this);" th:text="${task.assigneename}" >View</a></td>
 				<td >
-					<select  th:disabled="${task.creatorid!=session.userdtl.empid} "   name="priority" class="form-select form-select-sm">
+					<select onchange="updateTaskPriority(event, this);"  th:classappend="${task.creatorid==session.userdtl.empid} ? 'border-theme': ''"   th:field="*{project.tasks[__${iterator.index}__].priority}"  th:disabled="${task.creatorid!=session.userdtl.empid} "   name="priority" class="form-select form-select-sm">
 						  	<option value="Normal">Normal</option>					  		
 							  <option value="High">High</option>							  
 							  <option value="Low">Low</option>
-							  <option value="Urgent">Urgent</option>			  
-							</select>
+							  <option  value="Urgent">Urgent</option>			  
+					</select>
 				</td>
 				<td>
-					<select name="type" th:disabled="${task.creatorid!=session.userdtl.empid and task.assigneeid!=session.userdtl.empid} "   class="form-select form-select-sm">
+					<select th:classappend="${task.assigneeid==session.userdtl.empid} ? 'border-theme': ''" onchange="updateTaskStatus(event, this);"   th:field="*{project.tasks[__${iterator.index}__].status}" name="status" th:disabled="${task.creatorid!=session.userdtl.empid and task.assigneeid!=session.userdtl.empid} "   class="form-select form-select-sm">
 							  <option value="New">New</option>
 							  <option value="Ongoing">Ongoing</option>
 							  <option value="Waiting">Waiting</option>
@@ -43,7 +47,7 @@
 					</select>
 				</td>
 				<td>
-					<select name="type" th:disabled="${task.creatorid!=session.userdtl.empid}"   class="form-select form-select-sm">
+					<select onchange="updateTaskType(event, this);" th:classappend="${task.creatorid==session.userdtl.empid} ? 'border-theme': ''"  th:field="*{project.tasks[__${iterator.index}__].type}"  name="type" th:disabled="${task.creatorid!=session.userdtl.empid}"   class="form-select form-select-sm">
 							  <option value="Task">Task</option>
 							  <option value="Enhancement">Enhancement</option>
 							  <option value="Proposal">Proposal</option>
@@ -56,13 +60,39 @@
 				<td><a href="#" data-bs-toggle="dropdown"
 					class=" text-opacity-50"> <i class="fa fa-ellipsis-h"></i></a>
 					<div class="dropdown-menu dropdown-menu-end">
-						<a href="#" th:emp-id="${task.title}" onclick="viewEmlpoyee(this);"
-							class="dropdown-item">View</a> <a
-							th:href="@{/editEmployee(empid=${task.title})}"
-							class="dropdown-item">Edit</a> <a href="#" class="dropdown-item">Report</a>
+							<a href="#" th:task-id="${task.taskid}" th:emp-id="${session.userdtl.empid}"
+							th:if="${task.assigneeid==session.userdtl.empid} " onclick="getTimereportModal(this);"
+							class="dropdown-item">Report Time</a>
+							
+							<a href="#" th:task-id="${task.taskid}" onclick="viewTask(this);"
+							class="dropdown-item">View Task</a> 
+							
+							<a onclick="editTask(this);" href="#" th:task-id="${task.taskid}"
+							th:if="${task.creatorid==session.userdtl.empid} "
+							class="dropdown-item">Edit Task</a>
+							
+							<a th:href="@{/deleteTaskDo(taskid=${task.taskid})}"
+							th:if="${task.creatorid==session.userdtl.empid} "
+							class="dropdown-item">Delete Task</a>
+							
+							
 					</div></td>
 			</tr>
 		</tbody>
 	</table>
+
+	<div class="modal fade" id="editTask">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content editTaskContent">...</div>
+		</div>
+	</div>
+
+	
+
+	<div class="modal fade" id="availablitymodal">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content availablitymodalcontent">...</div>
+		</div>
+	</div>
 
 </div>
