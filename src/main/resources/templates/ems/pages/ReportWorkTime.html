@@ -78,8 +78,8 @@
 																</select>
 																
 																<select name="c" id="daterangeselect" class="form-select form-select-sm">
-																	<option value="">Date Range</option>
-																	<option value="t">Today</option>
+																	
+																	<option selected="selected" value="t">Today</option>
 																	<option value="y">Yesterday</option>
 																	<option value="lw">Last Week</option>
 																	<option value="tw">This Week</option>
@@ -165,7 +165,7 @@
 														<td th:text="${wsh.lunch_hour}">Break</td>								
 														
 														<td th:text="${wsh.work_desc}">Desc</td>
-														<td th:text="${wsh.created==null}? ${wsh.updated} : ${wsh.created}" >date</td>
+														<td th:text="${wsh.created==null}? ${#dates.format(wsh.updated, 'dd MMM yyyy')} : ${#dates.format(wsh.created, 'dd MMM yyyy')}" ></td>
 														<td th:text="${wsh.status}==0 ? ABSENT : PRESENT">P/A</td>
 													</tr>
 													
@@ -249,6 +249,10 @@
 	
 	
 	<script>
+	
+	$("#from_date").val(moment().format('YYYY-MM-DD'));
+	$("#to_date").val(moment().format('YYYY-MM-DD'));
+	
 		$("#daterangeselect").change(function() {
 			$c = $(this).val();
 

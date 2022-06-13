@@ -209,7 +209,7 @@
 																
 																<select name="c" id="daterangeselect" class="form-select form-select-sm">
 																	<option value="">Date Range</option>
-																	<option selected="selected" value="t">Today</option>
+																	<option value="t">Today</option>
 																	<option value="y">Yesterday</option>
 																	<option value="n2d">Next 3 Days</option>
 																	<option value="lw">Last Week</option>
@@ -270,9 +270,10 @@
 												<thead>
 													<tr>
 														<th>Employee</th>
+														<th>Week</th>
 														<th><input id="checkAll" class="form-check-input" type="hidden"/> <i class="fa fa-thumbs-up"></i> </th>
 														<th width="95px">Date</th>														
-														<th>Week</th>
+														
 														<th>Day</th>														
 														<th>Minute</th>
 														<th>Start</th>
@@ -287,13 +288,14 @@
 												
 													
 													
-													<tr th:classappend="${wsh.status}==0 ? text-danger : normal"
+													<tr th:classappend="${wsh.status}==1 ? norm  : text-danger"
 														th:each="wsh,iterator : ${wsh}" class="align-middle">														
-														<td><a href="#" class="text-decoration-none" th:emp-id="${wsh.userid}" onclick="viewEmlpoyee(this);"   th:text="${wsh.full_name}"></a></td>	
+														<td><a href="#" class="text-decoration-none h6" th:emp-id="${wsh.userid}" onclick="viewEmlpoyee(this);"   th:text="${wsh.full_name}"></a></td>	
+														<td class="h4" th:text="${wsh.week}">week</td>
 														<td ><input th:id="${wsh.av_id}" th:checked="${wsh.isapproved}" class="form-check-input avidcheckbox" type="checkbox"/></td>	
 														<td th:text="${wsh.date}">Date</td>									
 														
-														<td th:text="${wsh.week}">Date</td>
+														
 														<td th:text="${wsh.day}">Date</td>
 														
 														<td><input type="number" class=" td-input form-control form-control-sm   wmint " readonly="readonly" th:value="${wsh.work_minute}"/></td>
@@ -304,7 +306,7 @@
 															<textarea class="td-input form-control form-control-sm cal wdesc " th:text="${wsh.work_desc}" rows="2"></textarea>
 														
 														
-														<td th:text="${wsh.created==null}? ${wsh.updated} : ${wsh.created}" >date</td>
+														<td th:text="${wsh.created==null}? ${#dates.format(wsh.updated, 'dd MMM yyyy')} : ${#dates.format(wsh.created, 'dd MMM yyyy')}" ></td>
 														
 													</tr>
 													

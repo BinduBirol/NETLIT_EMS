@@ -47,7 +47,7 @@
 			<span><span class="modal-title" th:text="${userdtl.full_name}"></span>&nbsp;<a
 				type="button" th:href="@{/editEmployee(empid=${userdtl.empid})}"><i
 					class="fa fa-edit"></i></a></span> <br /> 
-			Week #<span id="week_no"></span>
+			Week No #<span id="week_no"></span>
 			<br/>
 			<span>Extent: [[${userdtl.employee_Type}]]</span>
 			<p id="avmessage"></p>
@@ -63,9 +63,9 @@
 
 	<div class="row">
 		<div class="col-12 col-sm-4">
-			<label class="custom-control-label ">Availability</label> <select
+			<label class="custom-control-label ">Time Registration</label> <select
 				id="availability" onc name="status" class="form-select border border-success">
-				<option value="1">Available</option>				
+				<option value="1">Worked Hours</option>				
 				<option value="3">Sick Leave</option>
 				<option value="4">Vacation</option>
 				<option value="5">Child Care</option>
@@ -116,7 +116,7 @@
 				class="form-control text-center absent">
 		</div>
 		<div class="col-4">
-			<label>Lunch Time (minute)</label> <input value=45 type="number" name="lunch_hour"
+			<label>Interval (minute)</label> <input value=45 type="number" name="lunch_hour"
 				class="form-control text-center absent">
 		</div>
 		<div class="col-4">

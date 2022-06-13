@@ -78,7 +78,7 @@ public class TimeReportController {
 		} else if (empid.isEmpty() & from_date != null) {
 			availist = avrepo.getAllusersBetweenDates(from_date, to_date);
 		} else if (!empid.isEmpty() && empid != null) {
-			availist = avrepo.getAllBetweenDates(Long.parseLong(empid), from_date, to_date);
+			availist = avrepo.getUserBetweenDates(Long.parseLong(empid), from_date, to_date);
 		}
 
 		model.addAttribute("wsh", availist);

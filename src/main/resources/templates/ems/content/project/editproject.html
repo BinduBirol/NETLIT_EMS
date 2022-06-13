@@ -3,7 +3,7 @@
 		<div class="row">
 			<div class="col-sm-4 text-left">
 				<div class="form-group mb-3">							
-				  	<img  class="rounded" id="previewImgx" width="100"  th:src="*{'data:image/jpeg;base64,'+{project.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'" />
+				  	<img  class="rounded" id="previewImgxy" width="100"  th:src="*{'data:image/jpeg;base64,'+{project.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'" />
 				</div>
 			</div>
 		</div>
@@ -40,7 +40,7 @@
 					  <label class="form-check-label" for="defaultCheck1">Private project</label>
 					  <br/>
 					  <small id="privateHelp" class="form-text text-muted">
-						 Private projects are only visible to your workspace and anyone who has direct access to a repository in the project. 
+						 Only a project admin would be able to add participants to a Private Projects. Employees wont be able to request to join the Private Project.
 						  </small>
 					</div>
 				</div>
@@ -75,7 +75,7 @@
 				  
 				  <div class="">
 					  <label class="form-label" for="defaultFile">Project Image</label>
-					  <input name="project_image_m" onchange="previewFile(this);" type="file" class="form-control" id="defaultFile" />
+					  <input name="project_image_m" onchange="previewFile(this);" type="file" class="form-control" id="defaultFilexy" />
 					</div>
 				</div>
 			</div>
@@ -113,7 +113,7 @@
 				if (file) {
 					var reader = new FileReader();
 					reader.onload = function() {
-						$("#previewImgx").attr("src", reader.result);
+						$("#previewImgxy").attr("src", reader.result);
 						
 					}
 					reader.readAsDataURL(file);
