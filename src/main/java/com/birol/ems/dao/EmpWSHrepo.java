@@ -32,4 +32,8 @@ public interface EmpWSHrepo extends JpaRepository<Time_report_approved, String> 
 	String deleteByAvid= "DELETE FROM time_report_approved WHERE availability_id = ?1 ";
 	@Query(value =deleteByAvid,nativeQuery = true)
 	String deleteByAvid(String availability_id);
+	
+	String getprojectTimereportq= "SELECT * FROM time_report_approved WHERE projectid = ?1  order by week desc, date desc";
+	@Query(value =getprojectTimereportq,nativeQuery = true)
+	ArrayList<Time_report_approved> findByProjectid(long projectid);
 }

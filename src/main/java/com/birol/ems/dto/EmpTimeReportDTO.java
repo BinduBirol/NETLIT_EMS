@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name="EMP_TIME_REPORT")
+@Table(name="emp_time_report")
 public class EmpTimeReportDTO {
 	@Id
 	private String av_id;

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>EMPLOYEE LIST</title>
+	<title>PROJECT</title>
 	<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="description" content="" />
@@ -72,7 +72,7 @@
 					<ul class="nav nav-tabs" id="myTabs">
 					<li class="nav-item me-1"><a href="#tasks" class="nav-link active" data-bs-toggle="tab">Tasks</a></li>
 					  <li class="nav-item me-1"><a href="#home" class="nav-link " data-bs-toggle="tab">Overview</a></li>
-					  <li class="nav-item me-1"><a href="#mtr" class="nav-link " data-bs-toggle="tab">Manage TR <span th:if="${wsh.size>0}" class="badge bg-success">[[${wsh.size}]]</span></a></li>
+					  <li class="nav-item me-1"><a href="#mtr" class="nav-link " data-bs-toggle="tab">Approve <span th:if="${wsh.size>0}" class="badge bg-success">[[${wsh.size}]]</span></a></li>
 					  
 					  <li class="nav-item me-1 dropdown">
 					    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
@@ -81,6 +81,7 @@
 					    </a>
 					    <div class="dropdown-menu">
 					      <a href="#participants" class="dropdown-item" data-bs-toggle="tab">Participants <span th:if="${project.applicants.size>0}" class="badge bg-success">[[${project.applicants.size}]]</span></a>
+					      <a href="#wh" class="dropdown-item" data-bs-toggle="tab">Work History</a>
 					      <a href="#setting" class="dropdown-item" data-bs-toggle="tab">Setting</a>
 					    </div> 
 					  </li>
@@ -119,6 +120,11 @@
 					  <div class="tab-pane fade" id="participants">
 					  	<div th:include="ems/content/project/participants :: participants"></div>
 					  </div>
+					  
+					  <div class="tab-pane fade" id="wh">
+							<div th:include="ems/content/project/workhistoryContent :: workhistoryContent"></div>
+						</div>
+					  
 					  <div class="tab-pane fade" id="setting">
 							<div th:include="ems/content/project/editproject :: editproject"></div>
 						</div>

@@ -1,6 +1,10 @@
 <div th:fragment="manageTR">
 
-	<table id="datatableDefaultz" class="table small table-bordered">
+<p th:if="${wsh.size==0}">
+	No pending Time Reports
+</p>
+
+	<table th:if="${wsh.size>0}" id="datatableDefaultz" class="table small table-bordered">
 		<thead>
 			<tr>
 				<th>Employee</th>

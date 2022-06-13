@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.birol.ems.dao.EmpTimeReportRepo;
+import com.birol.ems.dao.EmpWSHrepo;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.dto.EmpTimeReportDTO;
+import com.birol.ems.dto.Time_report_approved;
 import com.birol.ems.project.dao.ProjectDao;
 import com.birol.ems.project.dao.Project_ActivityDao;
 import com.birol.ems.project.dao.Project_ApplicantDao;
@@ -50,6 +52,8 @@ public class ProjectController {
 	private Project_ActivityDao project_ActivityDao;
 	@Autowired
 	EmpTimeReportRepo avrepo;
+	@Autowired
+	private EmpWSHrepo empWSHrepo;
 
 	@GetMapping("/projects")
 	public ModelAndView projectsHome(final ModelMap model, Authentication auth) {
@@ -169,7 +173,9 @@ public class ProjectController {
 			}
 		}
 		
+		List<Time_report_approved> tra= empWSHrepo.findByProjectid(projectid);
 		
+		model.addAttribute("workHistory", tra);
 		model.addAttribute("thisprojectapplicant", applicantexists);
 		model.addAttribute("project", project.get());
 		if(meexists==null) return new ModelAndView("ems/pages/project/viewProjectUnauthorized", model);

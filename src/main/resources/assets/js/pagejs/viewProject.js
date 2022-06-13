@@ -194,5 +194,10 @@ $(".cal").change(function (e) {
 	var diff = (Math.abs(new Date('2022-05-30 '+start) - new Date('2022-05-30 '+end))/1000/60)- lbreak;
 	$target.find(".wmint").val(diff);		
 	
-})		
+})	
+
+setAutorowspan('#workhtable',2);
+setAutorowspan('#workhtable',1);
+
+setAutorowspan('#workhtable',0);
 

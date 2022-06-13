@@ -1,0 +1,40 @@
+<div th:fragment="workhistoryContent">
+<table  id="workhtable" class="table table-striped table-bordered table-hover small ">
+												<thead>
+													<tr>
+														<th>Week</th>
+														<th>Date</th>
+														<th>Day</th>
+														<th>Name</th>																
+														<th>Hour</th>
+														<th>Start</th>
+														<th>End</th>
+														<th>Break</th>														
+														<th class="w-25 p-3">Desc</th>														
+														
+													</tr>
+												</thead>
+												<tbody>	
+												
+													
+													
+													<tr 
+														th:each="wsh,iterator : ${workHistory}" class="align-middle">														
+														<td class="h2" th:text="${wsh.week}">week</td>
+														<td th:text="${wsh.date}">Date</td>										
+														
+														
+														<td th:text="${wsh.day}">Date</td>
+														<td th:classappend="${wsh.status}==1 ?  text-success:text-danger" th:text="${wsh.full_name}">Hour</td>
+														<td th:classappend="${wsh.status}==1 ?  text-success:text-danger" th:text="${wsh.work_minute}">Hour</td>
+														<td th:classappend="${wsh.status}==1 ?  text-success:text-danger" th:text="${wsh.work_start}">Start</td>
+														<td th:classappend="${wsh.status}==1 ?  text-success:text-danger" th:text="${wsh.work_end}">End</td>
+														<td th:classappend="${wsh.status}==1 ?  text-success:text-danger" th:text="${wsh.lunch_hour}">Break</td>
+														<td th:classappend="${wsh.status}==1 ?  text-success:text-danger" th:text="${wsh.work_desc}">Desc</td>														
+														
+													</tr>
+												</tbody>
+											</table>
+
+<br/>
+</div>
