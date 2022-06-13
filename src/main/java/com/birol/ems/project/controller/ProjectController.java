@@ -190,7 +190,7 @@ public class ProjectController {
 		model.addAttribute("roles", roleRepository.findAll());
 		ArrayList<EmpTimeReportDTO> availist = avrepo.findbyProjectidAndApproved(projectid);		
 		model.addAttribute("wsh", availist);
-		return new ModelAndView("ems/pages/project/viewProjectAdmin", model);
+		return new ModelAndView("ems/pages/project/viewProjectAdmin2", model);
 		
 	}
 	

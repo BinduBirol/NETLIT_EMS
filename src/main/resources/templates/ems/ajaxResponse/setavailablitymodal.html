@@ -64,7 +64,7 @@
 	<div class="row">
 		<div class="col-12 col-sm-4">
 			<label class="custom-control-label ">Time Registration</label> <select
-				id="availability" onc name="status" class="form-select border border-success">
+				id="availability" onc name="status" class="form-select border is-valid">
 				<option value="1">Worked Hours</option>				
 				<option value="3">Sick Leave</option>
 				<option value="4">Vacation</option>
@@ -194,7 +194,7 @@ setModalData();
 
 function setModalData() {
 	$('#availability option[value="1"]').attr("selected", "selected");
-	$('.absent').addClass("border-success");
+	$('.absent').addClass("is-valid");
 	let today = new Date().toISOString().substr(0, 10);
 	$("#av_from_date").val(today);
 	$("#av_to_date").val(today);	
@@ -206,17 +206,17 @@ $('#availability').change( function() {
 	if ($(this).val() == 1) {		
 		$('.absent').prop('required', true);
 		$('.absent').prop('disabled', false);
-		$(this).removeClass("border-danger");
-		$(this).addClass("border-success");
-		$('.absent').removeClass("border-danger");
-		$('.absent').addClass("border-success");
+		$(this).removeClass("is-invalid");
+		$(this).addClass("is-valid");
+		$('.absent').removeClass("is-invalid");
+		$('.absent').addClass("is-valid");
 	} else {		
 		$(".absent").removeAttr("required");
 		$('.absent').prop('disabled', true);
-		$(".absent").removeClass("border-success");
-		$(".absent").addClass("border-danger");		
-		$(this).removeClass("border-success");
-		$(this).addClass("border-danger");		
+		$(".absent").removeClass("is-valid");
+		$(".absent").addClass("is-invalid");		
+		$(this).removeClass("is-valid");
+		$(this).addClass("is-invalid");		
 	}
 });
 

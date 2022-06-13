@@ -50,7 +50,7 @@
 											<div class="row align-items-center mb-2 ">
 												<div class="">
 													
-													<h5 class="mb-0 text-truncate"><a th:href="@{/viewProject(projectid=${all.projectid})}" class="text-decoration-none"><img width="30" height="30" class="rounded"th:src="*{'data:image/jpeg;base64,'+{all.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'"  /> [[${all.title}]]</a></h5>
+													<h5 class="mb-0 text-truncate"><a target="_blank" th:href="@{/viewProject(projectid=${all.projectid})}" class="text-decoration-none"><img width="30" height="30" class="rounded"th:src="*{'data:image/jpeg;base64,'+{all.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'"  /> [[${all.title}]]</a></h5>
 												</div>
 												<div class="col-5">
 													<div class="mt-n3 mb-n2" data-render="apexchart"
