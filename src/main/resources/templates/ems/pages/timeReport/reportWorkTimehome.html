@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>SET WORK SCHEDULE</title>
+<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+
+<!-- ================== BEGIN core-css ================== -->
+<link href="assets/css/vendor.min.css" rel="stylesheet" />
+<link href="assets/css/app.min.css" rel="stylesheet" />
+<link href="assets/css/netlit_ems.css" rel="stylesheet" />
+<!-- ================== END core-css ================== -->
+<!-- ================== BEGIN page-css ================== -->
+
+<!-- ================== BEGIN page-css ================== -->
+<link href="assets/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-daterangepicker/daterangepicker.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"
+	rel="stylesheet" />
+
+<link href="assets/plugins/select-picker/dist/picker.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/jquery-typeahead/dist/jquery.typeahead.min.css"
+	rel="stylesheet" />
+<!-- ================== END page-css ================== -->
+
+</head>
+<body>
+	<!-- BEGIN #app -->
+	<div class="app app-content-full-height">
+		<div th:include="theme/header :: dynamicheaderFragment"></div>
+		<div th:include="theme/sidenav :: sidenav"></div>
+		<!-- BEGIN #content -->
+		<div id="content" class="app-content">
+			<div class="row">
+				<div class="d-flex align-items-start">
+					<a href="#"> <img
+						onerror="this.onerror=null; this.src='assets/img/user/user.png'"
+						th:src="*{'data:image/jpeg;base64,'+{userdtl.emp_image_encoded}}"
+						alt="" width="100" class="rounded" />
+					</a>
+					<div class="ms-3">
+
+						<span><span class="modal-title"
+							th:text="${userdtl.full_name}"></span>&nbsp;</span> <br /> Week No #<span
+							id="trweek_no"></span> <br /> <span>Extent:
+							[[${userdtl.employee_Type}]]</span>
+						<p id="travmessage"></p>
+					</div>
+				</div>
+			</div>
+
+			<hr />
+			
+			<div class="row">
+				<div class="col-12 col-sm-3">
+					<label>Quick Report </label>
+					<button type="button" th:emp-id="${session.userdtl.empid}" onclick="availablity(this);" class="btn btn-outline-theme form-control">Quick Report <i class="fa fa-clock"></i></button>
+				</div>
+			
+				<div class="col-12 col-sm-3">
+					<label class="custom-control-label ">Date Range</label> <select
+						id="travdaterangeselect" onc name="status" class="form-select">
+						<option value="t">Today</option>
+						<option value="tw">This Week</option>
+						<option value="nw">Next Week</option>
+						<option value="tm">This month</option>
+						<option value="nm">Next month</option>
+						<option selected="selected" value="c">Custom</option>
+					</select> <input type="hidden" id="truserid" name="userid"
+						th:value="${userdtl.empid}" /> <input type="hidden"
+						name="full_name" th:value="${userdtl.full_name}">
+				</div>
+				
+
+				<div class="col-12 col-sm-3">
+					<div class="form-group">
+						<label>From Date to Date</label>
+						<div class="input-group " id="">
+							<input id="trav_from_date" name="from_date" required="required"
+								autocomplete="off" type="text"
+								class="form-control datepicker-default" placeholder="start date" />
+							<span class="input-group-text ">to</span> <input id="trav_to_date"
+								name="to_date" type="text" required="required"
+								autocomplete="off" class="form-control datepicker-default"
+								placeholder="end date" />
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-12 col-sm-3">
+					<label class="custom-control-label ">Find</label>
+					<button onclick="getTRforms()" type="button" class="btn btn-outline-theme form-control">Get Forms</button>
+				</div>
+
+			</div>
+			
+			<hr />
+
+			<table id="trTrTable" class="table mb-3 align-middle table-hover table-bordered small">
+				<thead>			
+				<tr>
+					<th width="120px">Date</th>
+					<th>T R</th>
+					<th width="100px">Work Start</th>
+					<th width="100px">Work End</th>
+					<th width="100px">Interval</th>				
+					<th >desc</th>
+					<th width="50px">Save</th>			
+				</tr>
+				</thead>
+				
+				<tbody>
+					
+					
+				</tbody>
+				
+			
+			</table>
+			
+<hr />
+		</div>
+		<!-- END #content -->
+		<div th:include="theme/theme_util :: theme_util"></div>
+		<div class="modal fade" id="availablitymodal">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content availablitymodalcontent">...</div>
+				</div>
+			</div>
+	</div>
+	<!-- END #app -->
+	<div th:include="theme/footer::staticFooter"></div>
+	<script src="assets/js/pagejs/reportWorkTimeHome.js"></script>
+	<!-- ================== BEGIN page-js ================== -->
+	<script src="assets/plugins/jquery-migrate/dist/jquery-migrate.min.js"></script>
+	<script
+		src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	<script src="assets/plugins/moment/min/moment.min.js"></script>
+	<script
+		src="assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script
+		src="assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+	<script
+		src="assets/plugins/bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+	<script
+		src="assets/plugins/jquery-typeahead/dist/jquery.typeahead.min.js"></script>
+	<script
+		src="assets/plugins/jquery.maskedinput/src/jquery.maskedinput.js"></script>
+	<script src="assets/plugins/select-picker/dist/picker.min.js"></script>
+	<script src="assets/plugins/@highlightjs/cdn-assets/highlight.min.js"></script>
+	<script src="assets/js/demo/highlightjs.demo.js"></script>
+	<script src="assets/js/demo/form-plugins.demo.js"></script>
+	<script src="assets/js/demo/sidebar-scrollspy.demo.js"></script>
+	<script src="assets/js/netlit_ems.js"></script>
+	<!-- ================== END page-js ================== -->
+</body>
+</html>

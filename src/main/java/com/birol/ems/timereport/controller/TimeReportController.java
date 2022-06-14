@@ -1,4 +1,4 @@
-package com.birol.ems.controller;
+package com.birol.ems.timereport.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -183,7 +183,7 @@ public class TimeReportController {
 				av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
 				av.setWeek(d.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
 				
-				if(LocalDate.now().compareTo(d)<0) {
+				if(LocalDate.now().compareTo(d)<0 && av.getStatus()==1) {
 					msg+="\n"+d+": Cant set for advance date.";
 				}else {
 					avrepo.save(av);
@@ -238,8 +238,8 @@ public class TimeReportController {
 		return new ModelAndView("ems/pages/viewtimeReport", model);
 	}
 
-	@GetMapping("/ReportWorkTime")
-	public ModelAndView reportWorkTime(@RequestParam(required = false) String from_date,
+	@GetMapping("/timeReportHistory")
+	public ModelAndView timeReportHistory(@RequestParam(required = false) String from_date,
 			@RequestParam(required = false) String to_date, @RequestParam(required = false) String empid,
 			Authentication auth, final ModelMap model) {
 
@@ -269,7 +269,16 @@ public class TimeReportController {
 		model.addAttribute("total_days", ewsh.size());
 		model.addAttribute("total_work", wSHservice.mintsTOHmConvert(total_wh));
 		model.addAttribute("emps", employeeService.getEmployeeList());
-		return new ModelAndView("ems/pages/ReportWorkTime", model);
+		return new ModelAndView("ems/pages/timeReportHistory", model);
+	}
+	
+	@GetMapping("/reportWorkTimeHome")
+	public ModelAndView reportWorkTimeHome(Authentication auth, final ModelMap model) {
+
+		User user = (User) auth.getPrincipal();
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
+		model.addAttribute("userdtl", empdtl);
+		return new ModelAndView("ems/pages/timeReport/reportWorkTimeHome", model);
 	}
 
 	@GetMapping("/approveAvailablity")
@@ -318,4 +327,12 @@ public class TimeReportController {
 		return av_id;
 	}
 
+	@ResponseBody
+	@GetMapping("/timereport/getbydate")
+	public EmpTimeReportDTO getTimereports(@RequestParam String date, Authentication auth){
+		User user = (User) auth.getPrincipal();
+		EmpTimeReportDTO tr= new EmpTimeReportDTO();
+		tr=avrepo.findbydateEmpid(user.getId(), LocalDate.parse(date));
+		return tr;		
+	}
 }

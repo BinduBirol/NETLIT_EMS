@@ -63,14 +63,14 @@
 									    <div class="flex-grow-1">
 									    
 												<div class="row small">
-													<form id="searchform" action="ReportWorkTime" method="get">													
+													<form id="searchform" action="timeReportHistory" method="get">													
 														<div class="row ">
 															
 																
 															
 															<div class="input-group " id="">
 																
-																<button type="button" th:emp-id="${session.userdtl.empid}" onclick="availablity(this);" class="btn btn-outline-theme">Report <i class="fa fa-clock"></i></button>
+																<button type="button" th:emp-id="${session.userdtl.empid}" onclick="availablity(this);" class="btn btn-outline-theme">Quick Report <i class="fa fa-clock"></i></button>
 																<span class="input-group-text"><i class="fa fa-filter"></i></span>
 																<select sec:authorize="!hasAnyAuthority('EMPLOYEE')"  name="empid" id="empidselect" class="form-select form-select-sm">																	
 																	<option th:value="${session.userdtl.empid}"> Myself </option>
