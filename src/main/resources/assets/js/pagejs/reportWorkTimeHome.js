@@ -1,28 +1,4 @@
-$("#travdaterangeselect").change(function() {
-	$c = $(this).val();
-	if ($c == "tm") {
-		$("#trav_from_date").val(moment().startOf('month').format('YYYY-MM-DD'));
-		$("#trav_to_date").val(moment().endOf('month').format('YYYY-MM-DD'));
 
-	} else if ($c == "nm") {
-		$("#trav_from_date").val(moment().add(1, 'month').startOf('month').format('YYYY-MM-DD'));
-		$("#trav_to_date").val(moment().add(1, 'month').endOf('month').format('YYYY-MM-DD'));
-
-	}  else if ($c == "nw") {
-		$("#trav_from_date").val(moment().add(1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
-		$("#trav_to_date").val(moment().add(1, 'week').endOf('isoWeek').format('YYYY-MM-DD'));
-	} else if ($c == "t") {
-		$("#trav_from_date").val(moment().format('YYYY-MM-DD'));
-		$("#trav_to_date").val(moment().format('YYYY-MM-DD'));
-
-	}  else if ($c == "tw") {
-		$("#trav_from_date").val(moment().format('YYYY-MM-DD'));
-		$("#trav_to_date").val(moment().endOf('week').format('YYYY-MM-DD'));
-
-	}
-	setDateRangeString();
-	getWeekNo();
-})
 
 $("#travdaterangeselect").change(function() {
 	$c = $(this).val();
@@ -45,6 +21,9 @@ $("#travdaterangeselect").change(function() {
 		$("#trav_from_date").val(moment().format('YYYY-MM-DD'));
 		$("#trav_to_date").val(moment().endOf('isoWeek').format('YYYY-MM-DD'));
 
+	}else if ($c == "lw") {
+		$("#trav_from_date").val(moment().add(-1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
+		$("#trav_to_date").val(moment().add(-1, 'week').endOf('isoWeek').format('YYYY-MM-DD'));
 	}
 	setDateRangeString();
 	getWeekNo();
@@ -92,6 +71,8 @@ function getTableRow(value, index, array) {
 	var btntxt="Save";
 	var inputclass="is-valid";
 	var trclass="";
+	var disablebtn="";
+	var work_minute=getworkminute(wsaart,wend,winterval);
 	
 	$.get('/timereport/getbydate', {date:value}, function (data, textStatus, jqXHR) {
 		if(data!=""){
@@ -101,13 +82,13 @@ function getTableRow(value, index, array) {
 			winterval=data.lunch_hour;
 			wdesc=data.work_desc;
 			if(data.status!=1){inputclass='is-invalid';}
-			btntxt= data.isapproved;
-			trclass="bg-warning bg-opacity-25";
-			
+			if(data.isapproved){btntxt='Approved';trclass="bg-success ";}else{btntxt='Pending';trclass="bg-warning ";}
+			work_minute=data.work_minute;			
+			disablebtn="disabled";			
 		}
 		
 		var select ="<select "
-			+" onc name='status' onchange='setTRvalues(this, event)' class='form-select "+inputclass+" form-select-sm availability"+sign+"'>"
+			+"  name='status' onchange='setTRvalues(this, event)' class='form-select "+inputclass+" form-select-sm availability"+sign+"'>"
 			+" <option value='1'>Worked Hours</option>	"			
 			+" <option value='3'>Sick Leave</option> "
 			+" <option value='4'>Vacation</option> "
@@ -116,21 +97,22 @@ function getTableRow(value, index, array) {
 			+" </select> ";
 		
 		
-		var tr = "<tr class='"+trclass+"'>";
+		var tr = "<tr class=' bg-opacity-25 "+trclass+"'>";
 		
 
 		tr += "<td>"+moment(value, 'YYYY-MM-DD').format('dddd<br>D MMMM YYYY') +"</td>";
 		tr += "<td>"+select+"</td>";
 		
-		tr += "<td><input type='time' value='"+wsaart+"' name='work_start' class='form-control form-control-sm text-center absent  "+inputclass+"'></td>";
-		tr += "<td><input value='"+wend+"' type='time' name='work_end' class='form-control form-control-sm text-center absent  "+inputclass+"'></td>";
+		tr += "<td><input "+disablebtn+" type='time' value='"+wsaart+"' onchange='calculate(event)' name='work_start' class='start cal form-control form-control-sm text-center absent  "+inputclass+"'></td>";
+		tr += "<td><input "+disablebtn+" value='"+wend+"' onchange='calculate(event)' type='time' name='work_end' class='end cal form-control form-control-sm text-center absent  "+inputclass+"'></td>";
 		
-		tr += "<td><input value="+winterval+" type='number' name='lunch_hour' class='form-control form-control-sm text-center absent  "+inputclass+"'/></td>";
-		tr += "<td><textarea name='work_desc' class='form-control form-control-sm work_desc' rows='2'>"+wdesc+"</textarea></td>";
-		tr += "<td><button onclick='saveTR(this, event)' class='btn btn-sm btn-outline-theme' id='"+sign+"'>"+btntxt+"</button></td>";
+		tr += "<td><input "+disablebtn+" value="+winterval+" onchange='calculate(event)' type='number' name='lunch_hour' class='lbreak cal form-control form-control-sm text-center absent  "+inputclass+"'/></td>";
+		tr += "<td><input value="+work_minute+" type='text' name='work_minute' readonly class='wmint form-control form-control-sm text-center  '/></td>";
+		tr += "<td><textarea name='work_desc' class='form-control form-control-sm work_desc' rows='1'>"+wdesc+"</textarea></td>";
+		tr += "<td><button onclick='saveTR(this, event)' "+disablebtn+" class='btn btn-sm btn-outline-theme' id='"+sign+"'>"+btntxt+"</button></td>";
 		
 		tr += "</tr>";
-		$('#trTrTable tbody').append(tr);
+		$('#trTrTable tbody').append($(tr).hide().fadeIn(1000));
 		
 		$('.availability'+sign+' option[value="'+wstatus+'"]').attr("selected", "selected");
 		
@@ -167,14 +149,19 @@ function setTRvalues(t, e) {
 		$(t).addClass("is-valid");
 		$target.find('.absent').removeClass("is-invalid");
 		$target.find('.absent').addClass("is-valid");
+		calculate(e);
 	} else {		
 		$target.find(".absent").removeAttr("required");
 		$target.find('.absent').prop('disabled', true);
 		$target.find(".absent").removeClass("is-valid");
 		$target.find(".absent").addClass("is-invalid");		
 		$(t).removeClass("is-valid");
-		$(t).addClass("is-invalid");		
+		$(t).addClass("is-invalid");
+		$target.find(".wmint").val(0);
 	}
+	
+	$target.find('.btn').prop('disabled', false);
+	$target.find('.btn').html('Save');
 }
 
 function availablity(z) {			
@@ -192,6 +179,25 @@ function availablity(z) {
 		}
 	});
 }
+
+function calculate(e) {
+	$target= $(e.target).closest('tr');
+	var start = $target.find(".start").val();
+	var end = $target.find(".end").val();
+	var lbreak = $target.find(".lbreak").val();			
+	$target.find(".wmint").val(getworkminute(start,end,lbreak));
+	$target.find('.btn').prop('disabled', false);
+	$target.find('.btn').html('Save');
+	
+}
+
+function getworkminute(start,end,lbreak) {		
+	var diff = (Math.abs(new Date('2022-05-30 '+start) - new Date('2022-05-30 '+end))/1000/60)- lbreak;
+	return diff;
+	
+}
+
+
 
 function saveTR(t,e) {	
 	$target= $(e.target).closest('tr');
