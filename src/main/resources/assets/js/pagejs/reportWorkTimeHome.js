@@ -1,6 +1,22 @@
+function getDatesByWeekNo(week) {
+	var thisyear="'"+moment().year()+"'";
+	var startweek = moment(thisyear).add(week, 'weeks').startOf('isoWeek').format('YYYY-MM-DD');
+	var endweek = moment(thisyear).add(week, 'weeks').endOf('isoWeek').format('YYYY-MM-DD');
+	$("#trav_from_date").val(startweek);
+	$("#trav_to_date").val(endweek);
+}
+
+$("#inputweekno").change(function() {
+	$('#travdaterangeselect').val('c');
+	getDatesByWeekNo($(this).val());
+	setDateRangeString();
+	getWeekNo();
+	getTRforms();
+})
 
 
 $("#travdaterangeselect").change(function() {
+	
 	$c = $(this).val();
 	if ($c == "tm") {
 		$("#trav_from_date").val(moment().startOf('month').format('YYYY-MM-DD'));
@@ -28,6 +44,7 @@ $("#travdaterangeselect").change(function() {
 	setDateRangeString();
 	getWeekNo();
 	getTRforms();
+	
 })
 
 $('#trav_from_date').on('change', function() {
@@ -40,6 +57,7 @@ $('#trav_from_date').on('change', function() {
 function getWeekNo() {
 	var weekno= moment($("#trav_from_date").val(), 'YYYY-MM-DD').format('WW')
 	$("#trweek_no").html(weekno);
+	$("#inputweekno").val(weekno);
 }
 
 function setDateRangeString() {
@@ -50,10 +68,13 @@ function getTRforms(){
 	
 	var fd =$("#trav_from_date").val();
 	var td =$("#trav_to_date").val();
+	setDateRangeString();
 	$('tbody').empty();
 	
 	var dates = enumerateDaysBetweenDates(fd,td);
 	dates.forEach(getTableRow);
+	
+	$("#sorttable").trigger("click");
 }
 
 
@@ -88,7 +109,7 @@ function getTableRow(value, index, array) {
 		}
 		
 		var select ="<select "
-			+"  name='status' onchange='setTRvalues(this, event)' class='form-select "+inputclass+" form-select-sm availability"+sign+"'>"
+			+"  name='status' onchange='setTRvalues(this, event)' class='status form-select "+inputclass+" form-select-sm availability"+sign+"'>"
 			+" <option value='1'>Worked Hours</option>	"			
 			+" <option value='3'>Sick Leave</option> "
 			+" <option value='4'>Vacation</option> "
@@ -97,21 +118,22 @@ function getTableRow(value, index, array) {
 			+" </select> ";
 		
 		
-		var tr = "<tr class=' bg-opacity-25 "+trclass+"'>";
+		var tr = " <tr class=' bg-opacity-25 "+trclass+"'>";
 		
+		tr += "<td class='sort d-none'> "+moment(value, 'YYYY-MM-DD').format('MDD')+"</td>";
 
-		tr += "<td>"+moment(value, 'YYYY-MM-DD').format('dddd<br>D MMMM YYYY') +"</td>";
-		tr += "<td>"+select+"</td>";
+		tr += "<td class='text-white'> <input type='hidden' class='date' value='"+value+"'>"+moment(value, 'YYYY-MM-DD').format('dddd<br>D MMMM YYYY') +"</td>";
+		tr += "<td> "+select+"</td>";
 		
 		tr += "<td><input "+disablebtn+" type='time' value='"+wsaart+"' onchange='calculate(event)' name='work_start' class='start cal form-control form-control-sm text-center absent  "+inputclass+"'></td>";
 		tr += "<td><input "+disablebtn+" value='"+wend+"' onchange='calculate(event)' type='time' name='work_end' class='end cal form-control form-control-sm text-center absent  "+inputclass+"'></td>";
 		
 		tr += "<td><input "+disablebtn+" value="+winterval+" onchange='calculate(event)' type='number' name='lunch_hour' class='lbreak cal form-control form-control-sm text-center absent  "+inputclass+"'/></td>";
 		tr += "<td><input value="+work_minute+" type='text' name='work_minute' readonly class='wmint form-control form-control-sm text-center  '/></td>";
-		tr += "<td><textarea name='work_desc' class='form-control form-control-sm work_desc' rows='1'>"+wdesc+"</textarea></td>";
-		tr += "<td><button onclick='saveTR(this, event)' "+disablebtn+" class='btn btn-sm btn-outline-theme' id='"+sign+"'>"+btntxt+"</button></td>";
+		tr += "<td><textarea onchange='calculate(event)' name='work_desc' class='form-control form-control-sm work_desc' rows='1'>"+wdesc+"</textarea></td>";
+		tr += "<td><button  onclick='saveTR(this, event)'  "+disablebtn+" class='btn btn-sm btn-outline-theme' >"+btntxt+"</button></td> ";
 		
-		tr += "</tr>";
+		tr += " </tr> ";
 		$('#trTrTable tbody').append($(tr).hide().fadeIn(1000));
 		
 		$('.availability'+sign+' option[value="'+wstatus+'"]').attr("selected", "selected");
@@ -138,10 +160,8 @@ function enumerateDaysBetweenDates(startDate, endDate) {
 };
 
 
-function setTRvalues(t, e) {
-	
-	$target= $(e.target).closest('tr');
-	
+function setTRvalues(t, e) {	
+	$target= $(e.target).closest('tr');	
 	if ($(t).val() == 1) {
 		$target.find('.absent').prop('required', true);
 		$target.find('.absent').prop('disabled', false);
@@ -157,7 +177,11 @@ function setTRvalues(t, e) {
 		$target.find(".absent").addClass("is-invalid");		
 		$(t).removeClass("is-valid");
 		$(t).addClass("is-invalid");
+		
 		$target.find(".wmint").val(0);
+		$target.find(".start").val("");
+		$target.find(".end").val("");
+		$target.find(".lbreak").val(0);
 	}
 	
 	$target.find('.btn').prop('disabled', false);
@@ -201,14 +225,129 @@ function getworkminute(start,end,lbreak) {
 
 function saveTR(t,e) {	
 	$target= $(e.target).closest('tr');
+	
 	var desc= $target.find('.work_desc').val();
-	if ($.trim(desc).length > 0) {
-	    alert(desc);
-	}else{
-		$('.toast-header .title').html("Alert!!");
-		$('.toast-body .toast-message').html("Please add a note to your Time Report");
-		$('.toast').toast('show');
+	var start = $target.find(".start").val();
+	var end = $target.find(".end").val();
+	var lbreak = $target.find(".lbreak").val();	
+	var date = $target.find(".date").val();
+	var status = $target.find(".status").val();	
+	var wmint = $target.find(".wmint").val();	
+	
+	if (validate(e)) {
+		 $.post("saveDateTimeReport",
+				  {
+			 		status: status,
+			 		from_date: date,
+			 		work_start:start,
+			 		work_end:end,
+			 		lunch_hour:lbreak,
+			 		work_desc:desc,
+			 		work_minute:wmint
+			 		
+				  },
+				  function(data, status){
+				    //alert("Data: " + data + "\nStatus: " + status);
+				    $('.toast-header .title').html("Response");
+					$('.toast-body .toast-message').html(data);
+					$('.toast').removeClass("text-danger");
+					$('.toast').toast('show');
+					if (data.includes("Successfully") == true) {					
+						$target= $(e.target).closest('tr').addClass("bg-warning");
+						$target.find('.btn').attr("disabled","disabled");
+						$target.find('.btn').html("Pending");
+					}
+					
+				  });
 	}
 }
 
+function validate(e){	
+	$target= $(e.target).closest('tr');
+	
+	var desc= $target.find('.work_desc').val();
+	var start = $target.find(".start").val();
+	var end = $target.find(".end").val();
+	var lbreak = $target.find(".lbreak").val();	
+	var date = $target.find(".date").val();
+	var status = $target.find(".status").val();	
+	var wmint = $target.find(".wmint").val();
+	
+	if(status==1 && $.trim(desc).length>0 && $.trim(start).length>0 && $.trim(end).length>0){
+		return true;
+	} else if(status!=1 && wmint==0 && $.trim(desc).length>0){
+		return true;
+	} else{
+		$('.toast-header .title').html("Alert!!");
+		$('.toast-body .toast-message').html("Work Start/End/Description can't be empty!!");
+		$('.toast').addClass("text-danger");
+		$('.toast').toast('show');
+		return false;
+	}
+}
 
+function sortTable(n) {
+	  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+	  table = document.getElementById("trTrTable");
+	  switching = true;
+	  // Set the sorting direction to ascending:
+	  dir = "asc"; 
+	  /*
+		 * Make a loop that will continue until no switching has been done:
+		 */
+	  while (switching) {
+	    // start by saying: no switching is done:
+	    switching = false;
+	    rows = table.rows;
+	    /*
+		 * Loop through all table rows (except the first, which contains table
+		 * headers):
+		 */
+	    for (i = 1; i < (rows.length - 1); i++) {
+	      // start by saying there should be no switching:
+	      shouldSwitch = false;
+	      /*
+			 * Get the two elements you want to compare, one from current row
+			 * and one from the next:
+			 */
+	      x = rows[i].getElementsByTagName("TD")[n];
+	      y = rows[i + 1].getElementsByTagName("TD")[n];
+	      /*
+			 * check if the two rows should switch place, based on the
+			 * direction, asc or desc:
+			 */
+	      if (dir == "asc") {
+	        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+	          // if so, mark as a switch and break the loop:
+	          shouldSwitch= true;
+	          break;
+	        }
+	      } else if (dir == "desc") {
+	        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+	          // if so, mark as a switch and break the loop:
+	          shouldSwitch = true;
+	          break;
+	        }
+	      }
+	    }
+	    if (shouldSwitch) {
+	      /*
+			 * If a switch has been marked, make the switch and mark that a
+			 * switch has been done:
+			 */
+	      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+	      switching = true;
+	      // Each time a switch is done, increase this count by 1:
+	      switchcount ++;      
+	    } else {
+	      /*
+			 * If no switching has been done AND the direction is "asc", set the
+			 * direction to "desc" and run the while loop again.
+			 */
+	      if (switchcount == 0 && dir == "asc") {
+	        dir = "desc";
+	        switching = true;
+	      }
+	    }
+	  }
+	}

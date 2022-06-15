@@ -69,16 +69,21 @@
 				</div>
 			
 				<div class="col-12 col-sm-3">
-					<label class="custom-control-label ">Date Range</label> <select
-						id="travdaterangeselect" onc name="status" class="form-select">
-						<option value="t">Today</option>
-						<option value="lw">Last Week</option>
-						<option value="tw">This Week</option>
-						<option value="nw">Next Week</option>
-						<option value="tm">This month</option>
-						<option value="nm">Next month</option>
-						<option selected="selected" value="c">Custom</option>
-					</select> <input type="hidden" id="truserid" name="userid"
+					<label class="custom-control-label">Date Range | Week No</label> 
+						<div class="input-group " id="">
+						<select
+							id="travdaterangeselect" onc name="status" class="form-select">
+							<option value="t">Today</option>
+							<option value="lw">Last Week</option>
+							<option value="tw">This Week</option>
+							<option value="nw">Next Week</option>
+							<option value="tm">This month</option>
+							<option value="nm">Next month</option>
+							<option selected="selected" value="c">Custom</option>
+						</select> 						
+						<input type="number" class="form-control" id="inputweekno"/>
+					</div>
+					<input type="hidden" id="truserid" name="userid"
 						th:value="${userdtl.empid}" /> <input type="hidden"
 						name="full_name" th:value="${userdtl.full_name}">
 				</div>
@@ -110,8 +115,8 @@
 
 			<table id="trTrTable" class="table mb-3 align-middle table-hover  small">
 				<thead>			
-				<tr>
-					<th width="120px">Date</th>
+				<tr>					
+					<th width="140px"><a class="text-decoration-none" id="sorttable" href="#" onclick="sortTable(0);"><i class="fa fa-sort"></i> Sort</a></th>
 					<th>T R</th>
 					<th width="100px">Work Start</th>
 					<th width="100px">Work End</th>

@@ -154,8 +154,8 @@ public class TimeReportController {
 		return new ModelAndView("theme/ajaxResponse.html", model);
 	}
 
-	@RequestMapping(value = "/saveTimeReport", method = RequestMethod.POST)
-	public ModelAndView saveTimeReport(@ModelAttribute EmpTimeReportDTO av, ModelMap model, Authentication auth,
+	@RequestMapping(value = "/saveQuickTimeReport", method = RequestMethod.POST)
+	public ModelAndView saveQuickTimeReport(@ModelAttribute EmpTimeReportDTO av, ModelMap model, Authentication auth,
 			final HttpServletRequest request) {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -184,7 +184,7 @@ public class TimeReportController {
 				av.setWeek(d.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
 				
 				if(LocalDate.now().compareTo(d)<0 && av.getStatus()==1) {
-					msg+="\n"+d+": Cant set for advance date.";
+					msg+="\n"+d+": Cant set worked hours for advance date.";
 				}else {
 					avrepo.save(av);
 				}
@@ -196,6 +196,56 @@ public class TimeReportController {
 		}
 
 		return new ModelAndView("theme/ajaxResponse.html", model);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/saveDateTimeReport", method = RequestMethod.POST)
+	public String saveDateTimeReport(@ModelAttribute EmpTimeReportDTO av, Authentication auth,
+			final HttpServletRequest request) {
+		String msg="";
+		User user = (User) auth.getPrincipal();
+		av.setUserid(user.getId());
+		av.setFull_name(user.getFirstName()+" "+user.getLastName());
+		try {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			LocalDate avDate = LocalDate.parse(av.getFrom_date(), formatter);
+
+			LocalTime l1 = null, l2 = null;
+			if (av.getStatus() == 1) {
+				l1 = LocalTime.parse(av.getWork_start());
+				l2 = LocalTime.parse(av.getWork_end());
+			}else {
+				av.setWork_start(null);
+				av.setWork_end(null);
+				av.setLunch_hour(0);
+				av.setWork_minute(0);
+			}
+			
+			av.setDate(avDate);
+			av.setAv_id(wSHservice.generateWavID(av));
+			/*
+			try {
+				av.setWork_minute((Duration.between(l1, l2).toMinutes()) - av.getLunch_hour());
+			} catch (Exception e) {
+				av.setWork_minute(0);
+			}
+			*/
+
+			Date xdate = new SimpleDateFormat("yyyy-M-d").parse(av.getDate().toString());
+			av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
+			av.setWeek(avDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
+			
+			if(LocalDate.now().compareTo(avDate)<0 && av.getStatus()==1) {
+				msg="Cant report for advance date: "+avDate;
+			}else {
+				avrepo.save(av);
+				msg="Successfully reported for date: " + av.getFrom_date();
+			}
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+
+		return msg;
 	}
 
 	@GetMapping("/checkwshdate")
