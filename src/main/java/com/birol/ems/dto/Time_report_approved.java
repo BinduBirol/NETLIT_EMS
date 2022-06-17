@@ -29,6 +29,8 @@ public class Time_report_approved {
 	private LocalDate date;
 	private long work_minute;
 	private String availability_id;
+	private int obtype;
+	private int obminute;
 	@Transient
 	private String work_hour;
 	
@@ -87,6 +89,23 @@ public class Time_report_approved {
 
 	public void setWork_start(String work_start) {
 		this.work_start = work_start;
+	}
+	
+
+	public int getObtype() {
+		return obtype;
+	}
+
+	public void setObtype(int obtype) {
+		this.obtype = obtype;
+	}
+
+	public int getObminute() {
+		return obminute;
+	}
+
+	public void setObminute(int obminute) {
+		this.obminute = obminute;
 	}
 
 	public String getWork_end() {

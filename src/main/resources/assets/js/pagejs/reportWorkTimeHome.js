@@ -34,7 +34,7 @@ $("#travdaterangeselect").change(function() {
 		$("#trav_to_date").val(moment().format('YYYY-MM-DD'));
 
 	}  else if ($c == "tw") {
-		$("#trav_from_date").val(moment().format('YYYY-MM-DD'));
+		$("#trav_from_date").val(moment().startOf('isoWeek').format('YYYY-MM-DD'));
 		$("#trav_to_date").val(moment().endOf('isoWeek').format('YYYY-MM-DD'));
 
 	}else if ($c == "lw") {
@@ -220,15 +220,16 @@ function calculate(e) {
 	$target= $(e.target).closest('tr');
 	var start = $target.find(".start").val();
 	var end = $target.find(".end").val();
-	var lbreak = $target.find(".lbreak").val();			
-	$target.find(".wmint").val(getworkminute(start,end,lbreak));
+	var lbreak = $target.find(".lbreak").val();	
+	var obmin = $target.find(".obminute").val();		
+	$target.find(".wmint").val(getworkminute(start,end,lbreak,obmin));
 	$target.find('.btn').prop('disabled', false);
 	$target.find('.btn').html('Save');
 	
 }
 
-function getworkminute(start,end,lbreak) {		
-	var diff = (Math.abs(new Date('2022-05-30 '+start) - new Date('2022-05-30 '+end))/1000/60)- lbreak;
+function getworkminute(start,end,lbreak,obmin) {		
+	var diff = ((Math.abs(new Date('2022-05-30 '+start) - new Date('2022-05-30 '+end))/1000/60)- lbreak)+parseInt(obmin);
 	return diff;
 	
 }
@@ -244,7 +245,9 @@ function saveTR(t,e) {
 	var lbreak = $target.find(".lbreak").val();	
 	var date = $target.find(".date").val();
 	var status = $target.find(".status").val();	
-	var wmint = $target.find(".wmint").val();	
+	var wmint = $target.find(".wmint").val();
+	var obtype = $target.find(".obtype").val();	
+	var obminute = $target.find(".obminute").val();	
 	
 	if (validate(e)) {
 		 $.post("saveDateTimeReport",
@@ -255,8 +258,9 @@ function saveTR(t,e) {
 			 		work_end:end,
 			 		lunch_hour:lbreak,
 			 		work_desc:desc,
-			 		work_minute:wmint
-			 		
+			 		work_minute:wmint,
+			 		obtype:obtype,
+			 		obminute:obminute			 		
 				  },
 				  function(data, status){
 				    //alert("Data: " + data + "\nStatus: " + status);

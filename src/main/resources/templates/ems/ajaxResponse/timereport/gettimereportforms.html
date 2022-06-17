@@ -17,7 +17,8 @@
 
 	<tbody>
 		<tr class="bg-opacity-25" 		
-		 th:classappend="${tr.isapproved} ? 'bg-success': 'bg-warning'" th:each="tr,iterator: ${trlist}">
+		 th:classappend="${tr.bg_class}" th:each="tr,iterator: *{trlist}">
+			
 			<td class="d-none"> 
 			<input type="hidden" class="date" th:value="${#temporals.format(tr.date, 'yyyy-MM-dd')}"/>
 			[[${#temporals.format(tr.date, 'yyyyMMdd')}]]</td>
@@ -25,7 +26,7 @@
 			<td>
 			<select name='status' onchange='setTRvalues(this, event)'
 				th:classappend="${tr.status==1} ? 'is-valid': 'is-invalid'"
-				
+				th:field="*{trlist[__${iterator.index}__].status}"
 				class='status  form-select form-select-sm availabilitysign'>
 					<option value='1'>Worked Hours</option>
 					<option value='3'>Sick Leave</option>
@@ -48,15 +49,15 @@
 				<select name='obtype' onchange='calculate(event)'
 				
 				class='obtype form-select form-select-sm '>
-					<option value='1'>OB-1</option>
-					<option value='2'>OB-2</option>
-					<option value='3'>OB-3</option>
-					<option value='4'>OB-4</option>
-					<option value='5'>OB-5</option>
+					<option value='1'>OB1 </option>
+					<option value='2'>OB2</option>
+					<option value='3'>OB3</option>
+					<option value='4'>OB4</option>
+					<option value='5'>OB5 &nbsp;&nbsp;</option>
 			</select>
 			</td>
-			<td><input value=0 type="number" name='ob_hours' class='ob_hours form-control form-control-sm text-center  '/></td>
-			<td><input value=0 type='text' th:value='${tr.work_minute}' name='work_minute' readonly class='wmint form-control form-control-sm text-center  '/></td>
+			<td><input th:value='${tr.obminute}' type="number"  onchange='calculate(event)' name='obminute' class='obminute form-control form-control-sm text-center  '/></td>
+			<td><input  type='text' th:value='${tr.work_minute}' name='work_minute' readonly class='wmint form-control form-control-sm text-center  '/></td>
 			<td>
 				<textarea th:text='${tr.work_desc}' onchange='calculate(event)' name='work_desc' class='form-control form-control-sm work_desc' rows='1'></textarea>
 			</td>
@@ -64,8 +65,8 @@
 				<button th:if="${!#strings.isEmpty(tr.av_id)}"  onclick='saveTR(this, event)' disabled="disabled"    th:text= "${tr.isapproved}? 'APPROVED':'PENDING' " class='btn btn-sm btn-outline-theme bg-opacity-25' >Save</button>
 				<button th:if="${#strings.isEmpty(tr.av_id)}"  onclick='saveTR(this, event)'   class='btn btn-sm btn-outline-theme' >SAVE</button>
 			</td>
+			
 		</tr>
-
 	</tbody>
 
 

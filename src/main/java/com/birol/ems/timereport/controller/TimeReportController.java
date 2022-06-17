@@ -364,6 +364,8 @@ public class TimeReportController {
 		wsh.setWork_sh_id(wshid);
 		wsh.setTaskid(av.getTaskid());
 		wsh.setProjectid(av.getProjectid());
+		wsh.setObtype(av.getObtype());
+		wsh.setObminute(av.getObminute());
 
 		av.setWork_start(start);
 		av.setWork_end(end);
@@ -411,6 +413,8 @@ public class TimeReportController {
 				tr.setWork_end("17:00");
 				tr.setLunch_hour(45);
 				tr.setWork_minute(495);
+			}else {
+				tr.setBg_class( ((tr.isIsapproved()) ? "bg-success" : "bg-warning"));
 			}
 			trlist.add(tr);
 		}

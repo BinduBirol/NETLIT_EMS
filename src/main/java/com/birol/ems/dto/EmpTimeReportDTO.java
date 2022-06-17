@@ -23,6 +23,8 @@ public class EmpTimeReportDTO {
 	private String work_start;
 	private String work_end;
 	private int status;
+	private int obtype;
+	private int obminute;
 	private String work_desc;
 	private int week;
 	private String day;
@@ -30,6 +32,8 @@ public class EmpTimeReportDTO {
 	private long work_minute;
 	@Transient
 	private String work_hour;
+	@Transient
+	private String bg_class;
 	
 	private boolean isapproved;
 	
@@ -48,6 +52,36 @@ public class EmpTimeReportDTO {
 	protected void onUpdate() {
 		updated = new Date();
 	}	
+
+	
+	
+
+	
+	
+
+	public String getBg_class() {
+		return bg_class;
+	}
+
+	public void setBg_class(String bg_class) {
+		this.bg_class = bg_class;
+	}
+
+	public int getObtype() {
+		return obtype;
+	}
+
+	public void setObtype(int obtype) {
+		this.obtype = obtype;
+	}
+
+	public int getObminute() {
+		return obminute;
+	}
+
+	public void setObminute(int obminute) {
+		this.obminute = obminute;
+	}
 
 	public String getFull_name() {
 		return full_name;
