@@ -64,7 +64,7 @@ function setDateRangeString() {
 	$('#travmessage').html(moment($("#trav_from_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY') + ' - ' + moment($("#trav_to_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY'));
 }
 
-function getTRforms(){
+function getTRformsx(){
 	
 	var fd =$("#trav_from_date").val();
 	var td =$("#trav_to_date").val();
@@ -77,6 +77,18 @@ function getTRforms(){
 	$("#sorttable").trigger("click");
 }
 
+
+function getTRforms(){
+	
+	var fd =$("#trav_from_date").val();
+	var td =$("#trav_to_date").val();
+	setDateRangeString();
+	
+	$.get('/getTimeFormsBydate', {from_date:fd,to_date:td}, function (data, textStatus, jqXHR) {
+		$("#getTablediv").html(data).hide().fadeIn(1000);
+	});
+		
+}
 
 
 
@@ -255,7 +267,7 @@ function saveTR(t,e) {
 					if (data.includes("Successfully") == true) {					
 						$target= $(e.target).closest('tr').addClass("bg-warning");
 						$target.find('.btn').attr("disabled","disabled");
-						$target.find('.btn').html("Pending");
+						$target.find('.btn').html("PENDING");
 					}
 					
 				  });

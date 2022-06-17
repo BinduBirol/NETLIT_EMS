@@ -13,9 +13,12 @@ import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -242,6 +245,7 @@ public class TimeReportController {
 				msg="Successfully reported for date: " + av.getFrom_date();
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			return e.getMessage();
 		}
 
@@ -383,6 +387,42 @@ public class TimeReportController {
 		User user = (User) auth.getPrincipal();
 		EmpTimeReportDTO tr= new EmpTimeReportDTO();
 		tr=avrepo.findbydateEmpid(user.getId(), LocalDate.parse(date));
+		return tr;		
+	}
+	
+	@SuppressWarnings("null")
+	@GetMapping("/getTimeFormsBydate")
+	public ModelAndView getTimeFormsBydate(@RequestParam String from_date,@RequestParam String to_date, Authentication auth, final ModelMap model){
+		User user = (User) auth.getPrincipal();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate fromLocalDate = LocalDate.parse(from_date, formatter);
+		LocalDate toLocalDate = LocalDate.parse(to_date, formatter);
+		List<LocalDate> dates = wSHservice.getDatesBetween(fromLocalDate, toLocalDate);		
+		EmpTimeReportDTO tr= new EmpTimeReportDTO();
+		List<EmpTimeReportDTO> trlist=new LinkedList<EmpTimeReportDTO>();
+		
+		for(LocalDate d:dates) {
+			tr= getTimereportsByDate(d.toString(),user.getId());
+			if(tr==null) {
+				tr= new EmpTimeReportDTO();
+				tr.setStatus(1);
+				tr.setDate(d);
+				tr.setWork_start("08:00");
+				tr.setWork_end("17:00");
+				tr.setLunch_hour(45);
+				tr.setWork_minute(495);
+			}
+			trlist.add(tr);
+		}
+		
+		model.addAttribute("dates", dates);
+		model.addAttribute("trlist", trlist);
+		return	new ModelAndView("ems/ajaxResponse/timereport/gettimereportforms",model);	
+	}
+	
+	public EmpTimeReportDTO getTimereportsByDate(String date,long userid){
+		EmpTimeReportDTO tr= new EmpTimeReportDTO();
+		tr=avrepo.findbydateEmpid(userid, LocalDate.parse(date));
 		return tr;		
 	}
 }

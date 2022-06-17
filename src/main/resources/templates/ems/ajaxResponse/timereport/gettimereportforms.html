@@ -1,0 +1,72 @@
+<table id="trTrTable" class="table mb-3 align-middle table-hover  small table-responsive">
+	<thead>
+		<tr>
+			<th width="140px"><a class="text-decoration-none" id="sorttable"
+				href="#" onclick="sortTable(0);"><i class="fa fa-sort"></i> Sort</a></th>
+			<th>T R</th>
+			<th >Work Start</th>
+			<th >Work End</th>
+			<th >Interval</th>
+			<th >OB Type</th>
+			<th >OB Hours</th>
+			<th >Minute</th>
+			<th>desc</th>
+			<th >Save</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<tr class="bg-opacity-25" 		
+		 th:classappend="${tr.isapproved} ? 'bg-success': 'bg-warning'" th:each="tr,iterator: ${trlist}">
+			<td class="d-none"> 
+			<input type="hidden" class="date" th:value="${#temporals.format(tr.date, 'yyyy-MM-dd')}"/>
+			[[${#temporals.format(tr.date, 'yyyyMMdd')}]]</td>
+			<td> [[${#temporals.format(tr.date, 'E')}]]<br/>[[${#temporals.format(tr.date, 'dd MMM yyyy')}]]</td>
+			<td>
+			<select name='status' onchange='setTRvalues(this, event)'
+				th:classappend="${tr.status==1} ? 'is-valid': 'is-invalid'"
+				
+				class='status  form-select form-select-sm availabilitysign'>
+					<option value='1'>Worked Hours</option>
+					<option value='3'>Sick Leave</option>
+					<option value='4'>Vacation</option>
+					<option value='5'>Child Care</option>
+					<option value='6'>Absent for Other Reason</option>
+			</select>			
+			</td>
+			
+			<td>
+				<input type="time" th:value='${tr.work_start}' th:classappend="${tr.status==1} ? 'is-valid': 'is-invalid'" onchange='calculate(event)' name='work_start' class='start cal form-control form-control-sm text-center absent is-valid'>
+			</td>
+			<td>
+				<input  th:value='${tr.work_end}' onchange='calculate(event)' th:classappend="${tr.status==1} ? 'is-valid': 'is-invalid'" type='time' name='work_end' class='end cal form-control form-control-sm text-center absent  is-valid'>
+			</td>
+			<td>
+				<input value=0 onchange='calculate(event)' th:classappend="${tr.status==1} ? 'is-valid': 'is-invalid'" th:value='${tr.lunch_hour}' type='number' name='lunch_hour' class='lbreak cal form-control form-control-sm text-center absent  is-valid'/>
+			</td>
+			<td>
+				<select name='obtype' onchange='calculate(event)'
+				
+				class='obtype form-select form-select-sm '>
+					<option value='1'>OB-1</option>
+					<option value='2'>OB-2</option>
+					<option value='3'>OB-3</option>
+					<option value='4'>OB-4</option>
+					<option value='5'>OB-5</option>
+			</select>
+			</td>
+			<td><input value=0 type="number" name='ob_hours' class='ob_hours form-control form-control-sm text-center  '/></td>
+			<td><input value=0 type='text' th:value='${tr.work_minute}' name='work_minute' readonly class='wmint form-control form-control-sm text-center  '/></td>
+			<td>
+				<textarea th:text='${tr.work_desc}' onchange='calculate(event)' name='work_desc' class='form-control form-control-sm work_desc' rows='1'></textarea>
+			</td>
+			<td>
+				<button th:if="${!#strings.isEmpty(tr.av_id)}"  onclick='saveTR(this, event)' disabled="disabled"    th:text= "${tr.isapproved}? 'APPROVED':'PENDING' " class='btn btn-sm btn-outline-theme bg-opacity-25' >Save</button>
+				<button th:if="${#strings.isEmpty(tr.av_id)}"  onclick='saveTR(this, event)'   class='btn btn-sm btn-outline-theme' >SAVE</button>
+			</td>
+		</tr>
+
+	</tbody>
+
+
+</table>
