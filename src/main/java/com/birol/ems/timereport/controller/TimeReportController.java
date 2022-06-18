@@ -44,6 +44,8 @@ import com.birol.ems.dto.LoggedinUserDTO;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmployeeService;
 import com.birol.ems.service.WSHservice;
+import com.birol.ems.timereport.repo.AvailabilityRepo;
+import com.birol.ems.timereport.repo.OvertimeRepo;
 import com.birol.persistence.model.User;
 
 @Controller
@@ -58,6 +60,10 @@ public class TimeReportController {
 	EmpWSHrepo empWSHrepo;
 	@Autowired
 	EmpTimeReportRepo avrepo;
+	@Autowired
+    private OvertimeRepo overtimeRepo;
+    @Autowired
+    private AvailabilityRepo availabilityRepo;
 
 	@GetMapping("/work_schedule_home")
 	public ModelAndView work_schedule_home(final ModelMap model) {
@@ -84,6 +90,8 @@ public class TimeReportController {
 			availist = avrepo.getUserBetweenDates(Long.parseLong(empid), from_date, to_date);
 		}
 
+		model.addAttribute("avtype", availabilityRepo.findAll());
+		model.addAttribute("obtype", overtimeRepo.findAll());
 		model.addAttribute("wsh", availist);
 
 		return new ModelAndView("ems/pages/empsTimereport", model);
@@ -99,6 +107,8 @@ public class TimeReportController {
 	@GetMapping("/settimereport")
 	public ModelAndView settimereport(@RequestParam("empid") Long empid, final ModelMap model) {
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
+		model.addAttribute("avtype", availabilityRepo.findAll());
+		model.addAttribute("obtype", overtimeRepo.findAll());
 		model.addAttribute("userdtl", empdtl);
 		return new ModelAndView("ems/ajaxResponse/setavailablitymodal", model);
 	}
@@ -221,18 +231,11 @@ public class TimeReportController {
 				av.setWork_start(null);
 				av.setWork_end(null);
 				av.setLunch_hour(0);
-				av.setWork_minute(0);
+				av.setWork_minute(av.getWork_minute());
 			}
 			
 			av.setDate(avDate);
 			av.setAv_id(wSHservice.generateWavID(av));
-			/*
-			try {
-				av.setWork_minute((Duration.between(l1, l2).toMinutes()) - av.getLunch_hour());
-			} catch (Exception e) {
-				av.setWork_minute(0);
-			}
-			*/
 
 			Date xdate = new SimpleDateFormat("yyyy-M-d").parse(av.getDate().toString());
 			av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
@@ -334,11 +337,23 @@ public class TimeReportController {
 		model.addAttribute("userdtl", empdtl);
 		return new ModelAndView("ems/pages/timeReport/reportWorkTimeHome", model);
 	}
+	
+	@GetMapping("/rejectAvailablity")
+	@ResponseBody
+	public String RejectAvailablity(Authentication auth,@RequestParam String av_id,@RequestParam String wdesc) {
+		EmpTimeReportDTO av = avrepo.findById(av_id).get();
+		av.setIsrejected(true);
+		av.setIsapproved(false);
+		av.setWork_desc(wdesc);		
+		avrepo.save(av);
+		return "Succesfully Rejected";
+	}
 
 	@GetMapping("/approveAvailablity")
 	@ResponseBody
 	public String ApproveAvailablity(Authentication auth, @RequestParam String av_id, @RequestParam String start,
 			@RequestParam String end, @RequestParam int lbreak, @RequestParam int minutes,
+			@RequestParam int obmint,
 			@RequestParam boolean approve, @RequestParam String wdesc, final ModelMap model) {
 
 		User creator = (User) auth.getPrincipal();
@@ -365,11 +380,14 @@ public class TimeReportController {
 		wsh.setTaskid(av.getTaskid());
 		wsh.setProjectid(av.getProjectid());
 		wsh.setObtype(av.getObtype());
-		wsh.setObminute(av.getObminute());
-
+		wsh.setObminute(obmint);
+		
+		
 		av.setWork_start(start);
 		av.setWork_end(end);
 		av.setLunch_hour(lbreak);
+		av.setObtype(av.getObtype());
+		av.setObminute(obmint);
 		av.setWork_minute(minutes);
 		av.setWork_desc(wdesc);
 		av.setIsapproved(approve);
@@ -415,11 +433,13 @@ public class TimeReportController {
 				tr.setWork_minute(495);
 			}else {
 				tr.setBg_class( ((tr.isIsapproved()) ? "bg-success" : "bg-warning"));
+				tr.setBg_class( ((tr.isIsrejected()) ? "bg-danger" : "bg-warning"));
 			}
 			trlist.add(tr);
 		}
 		
-		model.addAttribute("dates", dates);
+		model.addAttribute("avtype", availabilityRepo.findAll());
+		model.addAttribute("obtype", overtimeRepo.findAll());
 		model.addAttribute("trlist", trlist);
 		return	new ModelAndView("ems/ajaxResponse/timereport/gettimereportforms",model);	
 	}

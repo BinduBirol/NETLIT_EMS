@@ -153,6 +153,7 @@ $("#daterangeselect").change(function() {
 			var lbreak = $target.find(".lbreak").val();	
 			var minutes= $target.find(".wmint").val();
 			var wdesc= $target.find(".wdesc").val();
+			var obmint= $target.find(".obminute").val();
 			var av_id= this.id;
 			
 			if (!$.trim(wdesc).length > 0){
@@ -172,6 +173,7 @@ $("#daterangeselect").change(function() {
 					+"&lbreak="+lbreak
 					+"&minutes="+minutes
 					+"&approve="+app
+					+"&obmint="+obmint
 					+"&wdesc="+wdesc;
 			
 			$.ajax({
@@ -188,6 +190,28 @@ $("#daterangeselect").change(function() {
 			
 		})
 		
+		$(".rejectcheckbox").change(function (e) {	
+			var av_id=  $(this).attr("av-id");
+			
+			$target= $(e.target).closest('tr');
+			var wdesc= $target.find(".wdesc").val();
+			var url="rejectAvailablity?av_id="+av_id+"&wdesc="+wdesc;
+			$.ajax({
+				url : url,
+				type : 'GET',
+				success : function(data) {
+					$target.find(".avidcheckbox").prop( "checked", false );
+					$target.find(".avidcheckbox").attr( "disabled", true );
+					$(this).attr( "disabled", true );
+					console.log(data);
+				},
+				error : function(xhr, desc, err) {
+					$(this).prop( "checked", false );
+					alert(xhr.responseText);
+				}
+			});							
+			
+		})
 		
 		$(".cal").change(function (e) {
 			//$('#'+this.id).attr( "checked", false );	
@@ -197,8 +221,9 @@ $("#daterangeselect").change(function() {
 			//$target.addClass("table-primary");
 			var start = $target.find(".start").val();
 			var end = $target.find(".end").val();
-			var lbreak = $target.find(".lbreak").val();			
-			var diff = (Math.abs(new Date('2022-05-30 '+start) - new Date('2022-05-30 '+end))/1000/60)- lbreak;
+			var lbreak = $target.find(".lbreak").val();	
+			var obmin= $target.find(".obminute").val();	
+			var diff = (Math.abs(new Date('2022-05-30 '+start) - new Date('2022-05-30 '+end))/1000/60)- lbreak+parseInt(obmin);
 			$target.find(".wmint").val(diff);		
 			
 		})		

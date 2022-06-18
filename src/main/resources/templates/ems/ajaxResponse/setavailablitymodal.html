@@ -65,11 +65,7 @@
 		<div class="col-12 col-sm-4">
 			<label class="custom-control-label ">Time Registration</label> <select
 				id="availability" onc name="status" class="form-select border is-valid">
-				<option value="1">Worked Hours</option>				
-				<option value="3">Sick Leave</option>
-				<option value="4">Vacation</option>
-				<option value="5">Child Care</option>
-				<option value="6">Absent for Other Reason</option>
+				<option  th:each="at: ${avtype}" th:value="${at.typeid}" th:text="${at.typename}">xx</option>
 			</select>
 			<input type="hidden" id="userid" name="userid" th:value="${userdtl.empid}" />
 			

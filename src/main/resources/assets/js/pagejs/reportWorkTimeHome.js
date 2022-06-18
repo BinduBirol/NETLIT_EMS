@@ -85,79 +85,10 @@ function getTRforms(){
 	setDateRangeString();
 	
 	$.get('/getTimeFormsBydate', {from_date:fd,to_date:td}, function (data, textStatus, jqXHR) {
-		$("#getTablediv").html(data).hide().fadeIn(1000);
+		$("#getTablediv").html(data).hide().slideDown();
 	});
 		
 }
-
-
-
-
-function getTableRow(value, index, array) {
-
-	var sign = value.replace('-', '').replace('-', '');
-	var wstatus="1";
-	var wsaart="08:00";
-	var wend="17:00";
-	var winterval=45;
-	var wdesc="";
-	var btntxt="Save";
-	var inputclass="is-valid";
-	var trclass="";
-	var disablebtn="";
-	var work_minute=getworkminute(wsaart,wend,winterval);
-	
-	$.get('/timereport/getbydate', {date:value}, function (data, textStatus, jqXHR) {
-		if(data!=""){
-			wstatus=data.status;
-			wsaart=data.work_start;
-			wend=data.work_end;
-			winterval=data.lunch_hour;
-			wdesc=data.work_desc;
-			if(data.status!=1){inputclass='is-invalid';}
-			if(data.isapproved){btntxt='Approved';trclass="bg-success ";}else{btntxt='Pending';trclass="bg-warning ";}
-			work_minute=data.work_minute;			
-			disablebtn="disabled";			
-		}
-		
-		var select ="<select "
-			+"  name='status' onchange='setTRvalues(this, event)' class='status form-select "+inputclass+" form-select-sm availability"+sign+"'>"
-			+" <option value='1'>Worked Hours</option>	"			
-			+" <option value='3'>Sick Leave</option> "
-			+" <option value='4'>Vacation</option> "
-			+" <option value='5'>Child Care</option> "
-			+" <option value='6'>Absent for Other Reason</option> "
-			+" </select> ";
-		
-		
-		var tr = " <tr class=' bg-opacity-25 "+trclass+"'>";
-		
-		tr += "<td class='sort d-none'> "+moment(value, 'YYYY-MM-DD').format('MDD')+"</td>";
-
-		tr += "<td class='text-white'> <input type='hidden' class='date' value='"+value+"'>"+moment(value, 'YYYY-MM-DD').format('dddd<br>D MMMM YYYY') +"</td>";
-		tr += "<td> "+select+"</td>";
-		
-		tr += "<td><input "+disablebtn+" type='time' value='"+wsaart+"' onchange='calculate(event)' name='work_start' class='start cal form-control form-control-sm text-center absent  "+inputclass+"'></td>";
-		tr += "<td><input "+disablebtn+" value='"+wend+"' onchange='calculate(event)' type='time' name='work_end' class='end cal form-control form-control-sm text-center absent  "+inputclass+"'></td>";
-		
-		tr += "<td><input "+disablebtn+" value="+winterval+" onchange='calculate(event)' type='number' name='lunch_hour' class='lbreak cal form-control form-control-sm text-center absent  "+inputclass+"'/></td>";
-		tr += "<td><input value="+work_minute+" type='text' name='work_minute' readonly class='wmint form-control form-control-sm text-center  '/></td>";
-		tr += "<td><textarea onchange='calculate(event)' name='work_desc' class='form-control form-control-sm work_desc' rows='1'>"+wdesc+"</textarea></td>";
-		tr += "<td><button  onclick='saveTR(this, event)'  "+disablebtn+" class='btn btn-sm btn-outline-theme' >"+btntxt+"</button></td> ";
-		
-		tr += " </tr> ";
-		$('#trTrTable tbody').append($(tr).hide().fadeIn(1000));
-		
-		$('.availability'+sign+' option[value="'+wstatus+'"]').attr("selected", "selected");
-		
-	});
-	
-	
-	
-}
-
-
-
 
 function enumerateDaysBetweenDates(startDate, endDate) {
     var dates = [];
@@ -291,11 +222,17 @@ function validate(e){
 	
 	if(status==1 && $.trim(desc).length>0 && $.trim(start).length>0 && $.trim(end).length>0){
 		return true;
-	} else if(status!=1 && wmint==0 && $.trim(desc).length>0){
+	} else if(status!=1  && $.trim(desc).length>0){
 		return true;
-	} else{
+	} else if($.trim(desc).length==0){
 		$('.toast-header .title').html("Alert!!");
-		$('.toast-body .toast-message').html("Work Start/End/Description can't be empty!!");
+		$('.toast-body .toast-message').html("Job description can't be empty!!");
+		$('.toast').addClass("text-danger");
+		$('.toast').toast('show');
+		return false;
+	}else if($.trim(start).length==0 || $.trim(end).length==0){
+		$('.toast-header .title').html("Alert!!");
+		$('.toast-body .toast-message').html("Start/End Time can't be empty!!");
 		$('.toast').addClass("text-danger");
 		$('.toast').toast('show');
 		return false;

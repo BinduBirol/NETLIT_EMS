@@ -36,6 +36,7 @@ public class EmpTimeReportDTO {
 	private String bg_class;
 	
 	private boolean isapproved;
+	private boolean isrejected;
 	
 	private long taskid;
 	private long projectid;
@@ -52,12 +53,15 @@ public class EmpTimeReportDTO {
 	protected void onUpdate() {
 		updated = new Date();
 	}	
-
-	
 	
 
-	
-	
+	public boolean isIsrejected() {
+		return isrejected;
+	}
+
+	public void setIsrejected(boolean isrejected) {
+		this.isrejected = isrejected;
+	}
 
 	public String getBg_class() {
 		return bg_class;

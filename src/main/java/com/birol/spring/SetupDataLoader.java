@@ -14,6 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.repo.EmployeeRepository;
+import com.birol.ems.timereport.dto.Availability_Type;
+import com.birol.ems.timereport.dto.Overtime_Type;
+import com.birol.ems.timereport.repo.AvailabilityRepo;
+import com.birol.ems.timereport.repo.OvertimeRepo;
 import com.birol.persistence.dao.PrivilegeRepository;
 import com.birol.persistence.dao.RoleRepository;
 import com.birol.persistence.dao.UserRepository;
@@ -40,6 +44,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     
     @Autowired
     private EmployeeRepository employeeRepository;
+    
+    @Autowired
+    private OvertimeRepo overtimeRepo;
+    @Autowired
+    private AvailabilityRepo availabilityRepo;
     // API
 
     @Override
@@ -62,7 +71,19 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleIfNotFound("HELPDESK", userPrivileges);
         createRoleIfNotFound("HR ADMIN", adminPrivileges);
         createRoleIfNotFound("SALARY ADMIN", adminPrivileges);
-        createRoleIfNotFound("GROUP LEADER", adminPrivileges);      
+        createRoleIfNotFound("GROUP LEADER", adminPrivileges); 
+        
+        createAvailabilityTypeIfNotFound(1,"Worked Time",100);
+        createAvailabilityTypeIfNotFound(3,"Sick Leave",100);
+        createAvailabilityTypeIfNotFound(4,"Vacation",50);
+        createAvailabilityTypeIfNotFound(5,"Child Care",90);
+        createAvailabilityTypeIfNotFound(6,"Absent for other reason",0);
+        
+        createOvertimeTypeIfNotFound(1,"OB-1",110);
+        createOvertimeTypeIfNotFound(2,"OB-2",110);
+        createOvertimeTypeIfNotFound(3,"OB-3",110);
+        createOvertimeTypeIfNotFound(4,"OB-4",110);
+        createOvertimeTypeIfNotFound(5,"OB-5",110);
 
         // == create initial user
         createUserIfNotFound(1,"test@test.com", "Test", "Test", "test", new ArrayList<>(Arrays.asList(adminRole)));
@@ -90,7 +111,30 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         role = roleRepository.save(role);
         return role;
     }
+    
+    @Transactional
+    Availability_Type createAvailabilityTypeIfNotFound(int typeid,final String name, int percentage) {
+    	Availability_Type avt = availabilityRepo.findByTypename(name);
+        if (avt == null) {
+        	avt = new Availability_Type(typeid,name,percentage,true); 
+        	avt.setIsactive(true);
+        	avt.setPercentage(percentage);
+        }
+        avt = availabilityRepo.save(avt);
+        return avt;
+    }
 
+    @Transactional
+    Overtime_Type createOvertimeTypeIfNotFound(int typeid,final String name, int percentage) {
+    	Overtime_Type ovt = overtimeRepo.findByTypename(name);
+        if (ovt == null) {
+        	ovt = new Overtime_Type(typeid,name,percentage,true); 
+        	ovt.setIsactive(true);
+        }
+        ovt = overtimeRepo.save(ovt);
+        return ovt;
+    }
+    
     @Transactional
     User createUserIfNotFound(final int id,final String email, final String firstName, final String lastName, final String password, final Collection<Role> roles) {
         User user = userRepository.findByEmail(email);      
