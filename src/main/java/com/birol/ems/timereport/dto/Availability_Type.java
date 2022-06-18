@@ -9,8 +9,6 @@ import javax.persistence.Id;
 public class Availability_Type {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public int id; 
 	public int typeid; 
 	public String typename; 
 	public int percentage; 
@@ -22,26 +20,12 @@ public class Availability_Type {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Availability_Type(int id, int typeid, String typename, int percentage, boolean isactive) {
-		super();
-		this.id = id;
-		this.typeid = typeid;
-		this.typename = typename;
-		this.percentage = percentage;
-		this.isactive = isactive;
-	}
 	public Availability_Type(int typeid, String typename, int percentage, boolean isactive) {
 		super();
 		this.typeid = typeid;
 		this.typename = typename;
 		this.percentage = percentage;
 		this.isactive = isactive;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 	public int getTypeid() {
 		return typeid;

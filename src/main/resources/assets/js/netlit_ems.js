@@ -100,3 +100,10 @@ function viewTask(z) {
 		}
 	});
 }
+
+function minutesToHour(totalMinutes) {
+	 var hours = Math.floor(totalMinutes / 60);          
+	 var minutes = totalMinutes % 60;
+	 return hours+" H "+minutes+" Min"
+	return totalMinutes;
+}

@@ -31,7 +31,6 @@ public class Time_report_approved {
 	private String availability_id;
 	private int obtype;
 	private int obminute;
-	@Transient
 	private String work_hour;
 	
 	private long taskid;

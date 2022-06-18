@@ -32,13 +32,13 @@
 			</td>
 			
 			<td>
-				<input type="time" th:value='${tr.work_start}' th:classappend="${tr.status==1} ? 'is-valid': 'is-invalid'" onchange='calculate(event)' name='work_start' class='start cal form-control form-control-sm text-center absent is-valid'>
+				<input type="time"  th:value='${tr.work_start}' th:disabled="${!#strings.isEmpty(tr.av_id)}" th:classappend="${tr.status==1} ? 'is-valid': 'is-invalid'" onchange='calculate(event)' name='work_start' class='timepicker start cal form-control form-control-sm text-center absent is-valid'>
 			</td>
 			<td>
-				<input  th:value='${tr.work_end}' onchange='calculate(event)' th:classappend="${tr.status==1} ? 'is-valid': 'is-invalid'" type='time' name='work_end' class='end cal form-control form-control-sm text-center absent  is-valid'>
+				<input  th:value='${tr.work_end}' onchange='calculate(event)'  th:classappend="${tr.status==1} ? 'is-valid': 'is-invalid'" type="time" name='work_end' class='timepicker end cal form-control form-control-sm text-center absent  is-valid'>
 			</td>
 			<td>
-				<input onchange='calculate(event)' th:classappend="${tr.status==1} ? 'is-valid': 'is-invalid'" th:value='${tr.lunch_hour}' type='number' name='lunch_hour' class='lbreak cal form-control form-control-sm text-center absent  is-valid'/>
+				<input onchange='calculate(event)'  th:classappend="${tr.status==1} ? 'is-valid': 'is-invalid'" th:value='${tr.lunch_hour}' type='number' name='lunch_hour' class='lbreak cal form-control form-control-sm text-center absent  is-valid'/>
 			</td>
 			<td>
 				<select name='obtype' onchange='calculate(event)'				
@@ -48,18 +48,19 @@
 			</td>
 			<td>
 			<input th:value='${tr.obminute}' type="number"  onchange='calculate(event)' name='obminute' class='obminute form-control form-control-sm text-center  '/></td>
-			<td><input  type='text' th:value='${tr.work_minute}' name='work_minute' readonly class='wmint form-control form-control-sm text-center  '/></td>
+			<td>
+				<input  type='text' th:value='${tr.work_hour}' name='work_hour' readonly class='work_hour form-control form-control-sm text-center  '/>
+				<input  type="hidden" th:value='${tr.work_minute}' name='work_minute' readonly class='wmint form-control form-control-sm text-center  '/>
+			
+			</td>
 			<td>
 				<textarea th:text='${tr.work_desc}' onchange='calculate(event)' name='work_desc' class='form-control form-control-sm work_desc' rows='1'></textarea>
 			</td>
 			<td>
-				<button th:if="${!#strings.isEmpty(tr.av_id) and !tr.isrejected}"  onclick='saveTR(this, event)' disabled="disabled"    th:text= "${tr.isapproved}? 'APPROVED':'PENDING' " class='btn btn-sm btn-outline-theme bg-opacity-25' >Save</button>
-				<button th:if="${tr.isrejected}"  onclick='saveTR(this, event)' disabled="disabled"    class='btn btn-sm btn-outline-theme bg-opacity-25' >REJECTED</button>
+				<button th:if="${!#strings.isEmpty(tr.av_id) and !tr.isrejected}"  onclick='saveTR(this, event)' disabled="disabled"    th:text= "${tr.isapproved}? 'APPROVED':'PENDING' " class='btn btn-sm btn-outline-primary bg-opacity-25' >Save</button>
+				<button th:if="${tr.isrejected}"  onclick='saveTR(this, event)' disabled="disabled"    class='btn btn-sm btn-sm btn-outline-danger bg-opacity-25' >REJECTED</button>
 				<button th:if="${#strings.isEmpty(tr.av_id)}"  onclick='saveTR(this, event)'   class='btn btn-sm btn-outline-theme' >SAVE</button>
 			</td>
-			
 		</tr>
 	</tbody>
-
-
 </table>

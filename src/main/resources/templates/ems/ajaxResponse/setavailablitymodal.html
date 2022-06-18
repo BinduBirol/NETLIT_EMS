@@ -61,7 +61,7 @@
 <div class="modal-body">
 
 
-	<div class="row">
+	<div class="row mb-3">
 		<div class="col-12 col-sm-4">
 			<label class="custom-control-label ">Time Registration</label> <select
 				id="availability" onc name="status" class="form-select border is-valid">
@@ -76,7 +76,7 @@
 		
 		<div class="col-12 col-sm-4">
 			<label class="custom-control-label ">Date Range</label> 
-			<select id="avdaterangeselect" onc name="status" class="form-select">
+			<select onchange="calculate();" id="avdaterangeselect"  name="status" class="form-select">
 					<option value="t">Today</option>	
 					<option value="tw">This Week</option>								
 					<option value="nw">Next Week</option>					
@@ -108,16 +108,40 @@
 
 	<div class="row">
 		<div class="col-4">
-			<label>Work Start</label> <input type="time" value="08:00" name="work_start"
-				class="form-control text-center absent">
+			<label>Work Start</label> <input type="time" value="08:00" name="work_start" id="start"
+			 onchange="calculate();"	class="timepicker form-control text-center absent">
 		</div>
 		<div class="col-4">
-			<label>Interval (minute)</label> <input value=45 type="number" name="lunch_hour"
-				class="form-control text-center absent">
+			<label>Interval (minute)</label> <input value=45 type="number" name="lunch_hour" id="lbreak"
+				onchange="calculate();" class="form-control text-center absent">
 		</div>
 		<div class="col-4">
-			<label>Work End</label> <input value="17:00" type="time" name="work_end"
-				class="form-control text-center absent">
+			<label>Work End</label> <input value="17:00" type="time" name="work_end" id="end"
+				onchange="calculate();" class="form-control text-center absent timepicker">
+		</div>
+	</div>
+	
+	<hr>
+	<div class="row mb-3">
+		<div class="col-4">
+			<label>Overtime Type</label> 
+			<select name='obtype'	onchange="calculate();"			
+				class='obtype form-select form-select-sm '>
+					<option  th:each="at: ${obtype}" th:value="${at.typeid}" th:text="${at.typename}">xx</option>
+			</select>
+		</div>
+		<div class="col-4">
+			<label>Overtime (Hour:Minute)</label> <input  type="text" name="ob_hour" onchange="calculate();"	
+				class="ob_minute form-control text-center">
+				<input value=0 type="number" id="obminute" name="obminute" onchange="calculate();"	
+				class="ob_minute form-control text-center">
+		</div>
+		<div class="col-4">
+			<label>Total Work</label> <input readonly="readonly" type="text" name="work_hour" id="work_hour"
+				value="8 H 15 Min" class="form-control text-center ">
+				<input  type="hidden" name="work_minute"
+				id="work_minute" value=495
+				class=" form-control text-center ">
 		</div>
 	</div>
 	<hr>
@@ -207,12 +231,19 @@ $('#availability').change( function() {
 		$('.absent').removeClass("is-invalid");
 		$('.absent').addClass("is-valid");
 	} else {		
+		
+		$("#start").val("");
+		$("#end").val("");
+		$("#lbreak").val(0);	
+		
 		$(".absent").removeAttr("required");
 		$('.absent').prop('disabled', true);
 		$(".absent").removeClass("is-valid");
 		$(".absent").addClass("is-invalid");		
 		$(this).removeClass("is-valid");
-		$(this).addClass("is-invalid");		
+		$(this).addClass("is-invalid");	
+		calculate();
+		
 	}
 });
 
@@ -234,8 +265,8 @@ $("#avdaterangeselect").change(function() {
 		$("#av_to_date").val(moment().format('YYYY-MM-DD'));
 
 	}  else if ($c == "tw") {
-		$("#av_from_date").val(moment().format('YYYY-MM-DD'));
-		$("#av_to_date").val(moment().endOf('week').format('YYYY-MM-DD'));
+		$("#av_from_date").val(moment().startOf('isoWeek').format('YYYY-MM-DD'));
+		$("#av_to_date").val(moment().endOf('isoWeek').format('YYYY-MM-DD'));
 
 	}
 	setDateRangeString();
@@ -280,7 +311,7 @@ function mySubmitFunction(e) {
 				$('.toast-body .toast-message').html(data);
 				$('.toast').toast('show');
 				if (data.includes("Successfully") == true) {					
-					 location.reload();
+					 //location.reload();
 				}			
 			},
 			error : function(xhr, desc, err) {				
@@ -290,6 +321,18 @@ function mySubmitFunction(e) {
 	  return false;
 	}
 	
-
+function calculate() {
+	var start = $("#start").val();
+	var end = $("#end").val();
+	var lbreak = $("#lbreak").val();	
+	var obmin = $("#obminute").val();		
+	$("#work_minute").val(getworkminute(start,end,lbreak,obmin));
+	$("#work_hour").val(minutesToHour(getworkminute(start,end,lbreak,obmin)));	
+}
+function getworkminute(start,end,lbreak,obmin) {		
+	var diff = ((Math.abs(new Date('2022-05-30 '+start) - new Date('2022-05-30 '+end))/1000/60)- parseInt(lbreak))+parseInt(obmin);
+	return diff;
+	
+}
 
 </script>

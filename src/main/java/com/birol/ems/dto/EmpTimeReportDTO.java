@@ -30,7 +30,6 @@ public class EmpTimeReportDTO {
 	private String day;
 	private LocalDate date;
 	private long work_minute;
-	@Transient
 	private String work_hour;
 	@Transient
 	private String bg_class;

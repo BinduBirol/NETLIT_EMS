@@ -209,7 +209,12 @@
 														th:text="${at.typename}">xx</option>
 											</select></td>
 
-											<td><input type="number"
+											<td>
+											<input type="text"
+												class=" td-input form-control form-control-sm   work_hour "
+												readonly="readonly" th:value="${wsh.work_hour}" />
+												
+											<input type="hidden"
 												class=" td-input form-control form-control-sm   wmint "
 												readonly="readonly" th:value="${wsh.work_minute}" /></td>
 											<td><input type="time"

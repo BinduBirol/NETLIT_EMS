@@ -1,3 +1,4 @@
+
 function getDatesByWeekNo(week) {
 	var thisyear="'"+moment().year()+"'";
 	var startweek = moment(thisyear).add(week, 'weeks').startOf('isoWeek').format('YYYY-MM-DD');
@@ -125,6 +126,7 @@ function setTRvalues(t, e) {
 		$target.find(".start").val("");
 		$target.find(".end").val("");
 		$target.find(".lbreak").val(0);
+		calculate(e);
 	}
 	
 	$target.find('.btn').prop('disabled', false);
@@ -154,10 +156,13 @@ function calculate(e) {
 	var lbreak = $target.find(".lbreak").val();	
 	var obmin = $target.find(".obminute").val();		
 	$target.find(".wmint").val(getworkminute(start,end,lbreak,obmin));
+	$target.find(".work_hour").val(minutesToHour(getworkminute(start,end,lbreak,obmin)));	
 	$target.find('.btn').prop('disabled', false);
 	$target.find('.btn').html('Save');
 	
 }
+
+
 
 function getworkminute(start,end,lbreak,obmin) {		
 	var diff = ((Math.abs(new Date('2022-05-30 '+start) - new Date('2022-05-30 '+end))/1000/60)- lbreak)+parseInt(obmin);
@@ -179,6 +184,7 @@ function saveTR(t,e) {
 	var wmint = $target.find(".wmint").val();
 	var obtype = $target.find(".obtype").val();	
 	var obminute = $target.find(".obminute").val();	
+	var work_hour = $target.find(".work_hour").val();	
 	
 	if (validate(e)) {
 		 $.post("saveDateTimeReport",
@@ -191,7 +197,8 @@ function saveTR(t,e) {
 			 		work_desc:desc,
 			 		work_minute:wmint,
 			 		obtype:obtype,
-			 		obminute:obminute			 		
+			 		obminute:obminute,
+			 		work_hour:work_hour
 				  },
 				  function(data, status){
 				    //alert("Data: " + data + "\nStatus: " + status);
@@ -304,3 +311,5 @@ function sortTable(n) {
 	    }
 	  }
 	}
+
+

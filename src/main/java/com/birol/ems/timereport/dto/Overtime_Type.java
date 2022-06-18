@@ -9,16 +9,10 @@ import javax.persistence.Id;
 public class Overtime_Type {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public int id; 
 	public int typeid; 
 	public String typename; 
 	public int percentage; 
 	public boolean isactive;
-	
-	
-	
-	
 	
 	public Overtime_Type() {
 		super();
@@ -30,12 +24,6 @@ public class Overtime_Type {
 		this.typename = typename;
 		this.percentage = percentage;
 		this.isactive = isactive;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 	public int getTypeid() {
 		return typeid;

@@ -154,6 +154,7 @@ $("#daterangeselect").change(function() {
 			var minutes= $target.find(".wmint").val();
 			var wdesc= $target.find(".wdesc").val();
 			var obmint= $target.find(".obminute").val();
+			var work_hour=$target.find(".work_hour").val();
 			var av_id= this.id;
 			
 			if (!$.trim(wdesc).length > 0){
@@ -174,6 +175,7 @@ $("#daterangeselect").change(function() {
 					+"&minutes="+minutes
 					+"&approve="+app
 					+"&obmint="+obmint
+					+"&work_hour="+work_hour
 					+"&wdesc="+wdesc;
 			
 			$.ajax({
@@ -224,7 +226,8 @@ $("#daterangeselect").change(function() {
 			var lbreak = $target.find(".lbreak").val();	
 			var obmin= $target.find(".obminute").val();	
 			var diff = (Math.abs(new Date('2022-05-30 '+start) - new Date('2022-05-30 '+end))/1000/60)- lbreak+parseInt(obmin);
-			$target.find(".wmint").val(diff);		
+			$target.find(".wmint").val(diff);
+			$target.find(".work_hour").val(minutesToHour(parseInt(diff)));
 			
 		})		
 		

@@ -171,6 +171,7 @@ public class TimeReportController {
 	public ModelAndView saveQuickTimeReport(@ModelAttribute EmpTimeReportDTO av, ModelMap model, Authentication auth,
 			final HttpServletRequest request) {
 		try {
+			User creator = (User) auth.getPrincipal();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate fromLocalDate = LocalDate.parse(av.getFrom_date(), formatter);
 			LocalDate toLocalDate = LocalDate.parse(av.getTo_date(), formatter);
@@ -185,6 +186,8 @@ public class TimeReportController {
 			String msg="";
 
 			for (LocalDate d : dates) {
+				av.setUserid(creator.getId());
+				av.setFull_name(creator.getFirstName()+" "+creator.getLastName());
 				av.setDate(d);
 				av.setAv_id(wSHservice.generateWavID(av));
 				try {
@@ -353,7 +356,7 @@ public class TimeReportController {
 	@ResponseBody
 	public String ApproveAvailablity(Authentication auth, @RequestParam String av_id, @RequestParam String start,
 			@RequestParam String end, @RequestParam int lbreak, @RequestParam int minutes,
-			@RequestParam int obmint,
+			@RequestParam int obmint,@RequestParam String work_hour,
 			@RequestParam boolean approve, @RequestParam String wdesc, final ModelMap model) {
 
 		User creator = (User) auth.getPrincipal();
@@ -370,6 +373,7 @@ public class TimeReportController {
 		wsh.setWork_end(end);
 		wsh.setLunch_hour(lbreak);
 		wsh.setWork_minute(minutes);
+		wsh.setWork_hour(work_hour);
 		wsh.setUserid(av.getUserid());
 		wsh.setFull_name(av.getFull_name());
 		wsh.setAvailability_id(av.getAv_id());
@@ -389,6 +393,7 @@ public class TimeReportController {
 		av.setObtype(av.getObtype());
 		av.setObminute(obmint);
 		av.setWork_minute(minutes);
+		av.setWork_hour(work_hour);
 		av.setWork_desc(wdesc);
 		av.setIsapproved(approve);
 		avrepo.save(av);
@@ -431,9 +436,10 @@ public class TimeReportController {
 				tr.setWork_end("17:00");
 				tr.setLunch_hour(45);
 				tr.setWork_minute(495);
+				tr.setWork_hour("8 H 15 Min");
 			}else {
-				tr.setBg_class( ((tr.isIsapproved()) ? "bg-success" : "bg-warning"));
-				tr.setBg_class( ((tr.isIsrejected()) ? "bg-danger" : "bg-warning"));
+				tr.setBg_class( ((tr.isIsapproved()) ? "bg-success" : "bg-warning"));				
+				if(tr.isIsrejected())tr.setBg_class("bg-danger");
 			}
 			trlist.add(tr);
 		}
