@@ -429,7 +429,7 @@ public class TimeReportController {
 		for(LocalDate d:dates) {
 			tr= getTimereportsByDate(d.toString(),user.getId());
 			if(tr==null) {
-				tr= new EmpTimeReportDTO();
+				tr= new EmpTimeReportDTO();				
 				tr.setStatus(1);
 				tr.setDate(d);
 				tr.setWork_start("08:00");
@@ -437,6 +437,7 @@ public class TimeReportController {
 				tr.setLunch_hour(45);
 				tr.setWork_minute(495);
 				tr.setWork_hour("8 H 15 Min");
+				tr.setAv_id(wSHservice.generateWavID(tr));
 			}else {
 				tr.setBg_class( ((tr.isIsapproved()) ? "bg-success" : "bg-warning"));				
 				if(tr.isIsrejected())tr.setBg_class("bg-danger");

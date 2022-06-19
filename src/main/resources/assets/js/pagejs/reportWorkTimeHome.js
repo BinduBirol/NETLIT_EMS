@@ -129,8 +129,8 @@ function setTRvalues(t, e) {
 		calculate(e);
 	}
 	
-	$target.find('.btn').prop('disabled', false);
-	$target.find('.btn').html('Save');
+	$target.find('.btn-outline-theme').prop('disabled', false);
+	$target.find('.btn-outline-theme').html('Save');
 }
 
 function availablity(z) {			
@@ -157,8 +157,8 @@ function calculate(e) {
 	var obmin = $target.find(".obminute").val();		
 	$target.find(".wmint").val(getworkminute(start,end,lbreak,obmin));
 	$target.find(".work_hour").val(minutesToHour(getworkminute(start,end,lbreak,obmin)));	
-	$target.find('.btn').prop('disabled', false);
-	$target.find('.btn').html('Save');
+	$target.find('.btn-outline-theme').prop('disabled', false);
+	$target.find('.btn-outline-theme').html('Save');
 	
 }
 
@@ -208,8 +208,8 @@ function saveTR(t,e) {
 					$('.toast').toast('show');
 					if (data.includes("Successfully") == true) {					
 						$target= $(e.target).closest('tr').addClass("bg-warning");
-						$target.find('.btn').attr("disabled","disabled");
-						$target.find('.btn').html("PENDING");
+						$target.find('.btn-outline-theme').attr("disabled","disabled");
+						$target.find('.btn-outline-theme').html("PENDING");
 					}
 					
 				  });
@@ -311,5 +311,14 @@ function sortTable(n) {
 	    }
 	  }
 	}
+
+
+function showOBtr(e, z) {
+	var obtarget= $(z).attr("obtarget");
+	var avid = $(z).attr("av-id");
+	$(".ob"+obtarget+avid).show(500);
+	if(obtarget==2)obtarget=0;
+	$(z).attr("obtarget",parseInt(obtarget)+1);
+}
 
 
