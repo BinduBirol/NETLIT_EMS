@@ -14,6 +14,10 @@ public class Availability_Type {
 	public int percentage; 
 	public boolean isactive;
 	
+	public String start; 
+	public String end;
+	public int interval_minutes;
+	
 	
 	
 	public Availability_Type() {
@@ -51,4 +55,44 @@ public class Availability_Type {
 	public void setIsactive(boolean isactive) {
 		this.isactive = isactive;
 	}
+	public String getStart() {
+		return start;
+	}
+	public void setStart(String start) {
+		this.start = start;
+	}
+	public String getEnd() {
+		return end;
+	}
+	public void setEnd(String end) {
+		this.end = end;
+	}
+	public Availability_Type(int typeid, String typename, int percentage, boolean isactive, String start, String end) {
+		super();
+		this.typeid = typeid;
+		this.typename = typename;
+		this.percentage = percentage;
+		this.isactive = isactive;
+		this.start = start;
+		this.end = end;
+	}
+	public int getInterval_minutes() {
+		return interval_minutes;
+	}
+	public void setInterval_minutes(int interval_minutes) {
+		this.interval_minutes = interval_minutes;
+	}
+	public Availability_Type(int typeid, String typename, int percentage, boolean isactive, String start, String end,
+			int interval_minutes) {
+		super();
+		this.typeid = typeid;
+		this.typename = typename;
+		this.percentage = percentage;
+		this.isactive = isactive;
+		this.start = start;
+		this.end = end;
+		this.interval_minutes = interval_minutes;
+	}
+	
+	
 }

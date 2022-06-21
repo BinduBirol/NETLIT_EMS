@@ -73,17 +73,17 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleIfNotFound("SALARY ADMIN", adminPrivileges);
         createRoleIfNotFound("GROUP LEADER", adminPrivileges); 
         
-        createAvailabilityTypeIfNotFound(1,"Worked Time",100);
-        createAvailabilityTypeIfNotFound(3,"Sick Leave",100);
-        createAvailabilityTypeIfNotFound(4,"Vacation",50);
-        createAvailabilityTypeIfNotFound(5,"Child Care",90);
-        createAvailabilityTypeIfNotFound(6,"Absent for other reason",0);
+        createAvailabilityTypeIfNotFound(1,"Worked Time",100, "08:00","17:00",45);
+        createAvailabilityTypeIfNotFound(3,"Sick Leave",100,"","",0);
+        createAvailabilityTypeIfNotFound(4,"Vacation",50,"","",0);
+        createAvailabilityTypeIfNotFound(5,"Child Care",90,"","",0);
+        createAvailabilityTypeIfNotFound(6,"Absent for other reason",0,"","",0);
         
-        createOvertimeTypeIfNotFound(1,"OB-1",110);
-        createOvertimeTypeIfNotFound(2,"OB-2",110);
-        createOvertimeTypeIfNotFound(3,"OB-3",110);
-        createOvertimeTypeIfNotFound(4,"OB-4",110);
-        createOvertimeTypeIfNotFound(5,"OB-5",110);
+        createOvertimeTypeIfNotFound(1,"OB-1",110,"06:01","08:00",0);
+        createOvertimeTypeIfNotFound(2,"OB-2",110,"18:01","00:00",0);
+        createOvertimeTypeIfNotFound(3,"OB-3",110,"08:00","17:00",0);
+        createOvertimeTypeIfNotFound(4,"OB-4",110,"00:01","05:59",0);
+        createOvertimeTypeIfNotFound(5,"OB-5",110,"08:00","17:00",0);
 
         // == create initial user
         createUserIfNotFound(1,"test@test.com", "Test", "Test", "test", new ArrayList<>(Arrays.asList(adminRole)));
@@ -113,10 +113,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
     
     @Transactional
-    Availability_Type createAvailabilityTypeIfNotFound(int typeid,final String name, int percentage) {
+    Availability_Type createAvailabilityTypeIfNotFound(int typeid,final String name, int percentage, String start,String end, int interval) {
     	Availability_Type avt = availabilityRepo.findByTypename(name);
         if (avt == null) {
-        	avt = new Availability_Type(typeid,name,percentage,true); 
+        	avt = new Availability_Type(typeid,name,percentage,true,start,end,interval); 
         	avt.setIsactive(true);
         	avt.setPercentage(percentage);
         }
@@ -125,11 +125,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    Overtime_Type createOvertimeTypeIfNotFound(int typeid,final String name, int percentage) {
+    Overtime_Type createOvertimeTypeIfNotFound(int typeid,final String name, int percentage, String start,String end,int interval) {
     	Overtime_Type ovt = overtimeRepo.findByTypename(name);
         if (ovt == null) {
-        	ovt = new Overtime_Type(typeid,name,percentage,true); 
-        	ovt.setIsactive(true);
+        	ovt = new Overtime_Type(typeid,name,percentage,true,start,end,interval); 
         }
         ovt = overtimeRepo.save(ovt);
         return ovt;

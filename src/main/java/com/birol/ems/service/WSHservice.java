@@ -11,6 +11,7 @@ import com.birol.ems.dao.EmpWSHrepo;
 import com.birol.ems.dto.EmpTimeReportDTO;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.dto.Time_report_approved;
+import com.birol.ems.timereport.dto.Timereport_Overtime_emp;
 
 @Service
 public class WSHservice {
@@ -34,6 +35,11 @@ public class WSHservice {
 	
 	public String generateWavID(EmpTimeReportDTO ewsh) {
 		String id = "AV"+ewsh.getUserid() + ewsh.getDate().toString().replace("-", "");
+		return id;
+	}
+	
+	public String generateOBID(Timereport_Overtime_emp ewsh, int n) {
+		String id = "OB"+ewsh.getUserid() + ewsh.getDate().toString().replace("-", "")+"_"+n;
 		return id;
 	}
 	

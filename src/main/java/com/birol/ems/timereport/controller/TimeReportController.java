@@ -44,7 +44,9 @@ import com.birol.ems.dto.LoggedinUserDTO;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmployeeService;
 import com.birol.ems.service.WSHservice;
+import com.birol.ems.timereport.dto.Timereport_Overtime_emp;
 import com.birol.ems.timereport.repo.AvailabilityRepo;
+import com.birol.ems.timereport.repo.EmpOvertimeRepo;
 import com.birol.ems.timereport.repo.OvertimeRepo;
 import com.birol.persistence.model.User;
 
@@ -59,7 +61,9 @@ public class TimeReportController {
 	@Autowired
 	EmpWSHrepo empWSHrepo;
 	@Autowired
-	EmpTimeReportRepo avrepo;
+	EmpTimeReportRepo avrepo;	
+	@Autowired
+	EmpOvertimeRepo obrepo;
 	@Autowired
     private OvertimeRepo overtimeRepo;
     @Autowired
@@ -257,6 +261,83 @@ public class TimeReportController {
 
 		return msg;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/saveRegularTime", method = RequestMethod.POST)
+	public String saveRegularTime(@ModelAttribute EmpTimeReportDTO av, Authentication auth,
+			final HttpServletRequest request) {
+		String msg="";
+		User user = (User) auth.getPrincipal();
+		av.setUserid(user.getId());
+		av.setFull_name(user.getFirstName()+" "+user.getLastName());
+		try {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			LocalDate avDate = LocalDate.parse(av.getFrom_date(), formatter);
+
+			LocalTime l1 = null, l2 = null;
+			if (av.getStatus() == 1) {
+				l1 = LocalTime.parse(av.getWork_start());
+				l2 = LocalTime.parse(av.getWork_end());
+			}else {
+				av.setWork_start(null);
+				av.setWork_end(null);
+				av.setLunch_hour(0);
+				av.setWork_minute(av.getWork_minute());
+			}
+			
+			av.setDate(avDate);
+			av.setAv_id(wSHservice.generateWavID(av));
+
+			Date xdate = new SimpleDateFormat("yyyy-M-d").parse(av.getDate().toString());
+			av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
+			av.setWeek(avDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
+			
+			if(LocalDate.now().compareTo(avDate)<0 && av.getStatus()==1) {
+				msg="Cant report for advance date: "+avDate;
+			}else {
+				avrepo.save(av);
+				msg="Successfully reported for date: " + av.getFrom_date();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+
+		return msg;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/saveOvertime", method = RequestMethod.POST)
+	public String saveOvertime(@ModelAttribute Timereport_Overtime_emp av, Authentication auth,
+			final HttpServletRequest request) {
+		String msg="";
+		User user = (User) auth.getPrincipal();
+		av.setUserid(user.getId());
+		av.setFull_name(user.getFirstName()+" "+user.getLastName());
+		try {
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			LocalDate avDate = LocalDate.parse(av.getFrom_date(), formatter);
+			av.setDate(avDate);
+			av.setOb_id(wSHservice.generateOBID(av,av.getObno()));
+
+			Date xdate = new SimpleDateFormat("yyyy-M-d").parse(av.getDate().toString());
+			av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
+			av.setWeek(avDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
+			
+			if(LocalDate.now().compareTo(avDate)<0) {
+				msg="Cant report for advance date: "+avDate;
+			}else {
+				obrepo.save(av);
+				msg="Successfully reported for date: " + av.getFrom_date();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg= e.getMessage();
+		}
+
+		return msg;
+	}
 
 	@GetMapping("/checkwshdate")
 	public ModelAndView checkwshdate(@RequestParam("empid") Long empid, @RequestParam("fromdate") Long fromdate,
@@ -438,10 +519,43 @@ public class TimeReportController {
 				tr.setWork_minute(495);
 				tr.setWork_hour("8 H 15 Min");
 				tr.setAv_id(wSHservice.generateWavID(tr));
+				
+				List<Timereport_Overtime_emp> overtime = new ArrayList<Timereport_Overtime_emp>();
+				for(int i=1;i<3;i++) {
+					Timereport_Overtime_emp ovemp= new Timereport_Overtime_emp(user.getId(),d);
+					ovemp.setOb_id(wSHservice.generateOBID(ovemp,i));
+					ovemp.setWork_minute(0);
+					ovemp.setWork_hour("0 H 0 Min");
+					ovemp.setObno(i);
+					overtime.add(ovemp);
+				}
+				tr.setOvertime(overtime);	
+				
 			}else {
+				List<Timereport_Overtime_emp> overtime = tr.getOvertime();
+				for(int i=1;i<3;i++) {
+					Timereport_Overtime_emp ovemp = new Timereport_Overtime_emp(user.getId(),d);
+					try {
+						ovemp= overtime.get(i-1);
+						ovemp.setObno(i);
+						ovemp.setBg_class( ((ovemp.isIsapproved()) ? "bg-success" : "bg-warning"));				
+						if(ovemp.isIsrejected())ovemp.setBg_class("bg-danger");
+						//overtime.add(ovemp);
+					}catch (Exception e) {
+						ovemp.setOb_id(wSHservice.generateOBID(ovemp,i));
+						ovemp.setWork_minute(0);
+						ovemp.setWork_hour("0 H 00 Min");
+						ovemp.setObno(i);
+						overtime.add(ovemp);
+					}
+				}
+				tr.setOvertime(overtime);
+				
+				
 				tr.setBg_class( ((tr.isIsapproved()) ? "bg-success" : "bg-warning"));				
 				if(tr.isIsrejected())tr.setBg_class("bg-danger");
-			}
+			}			
+					
 			trlist.add(tr);
 		}
 		

@@ -2,13 +2,20 @@ package com.birol.ems.dto;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import com.birol.ems.timereport.dto.Timereport_Overtime_emp;
 
 @Entity
 @Table(name="emp_time_report")
@@ -25,6 +32,11 @@ public class EmpTimeReportDTO {
 	private int status;
 	private int obtype;
 	private int obminute;
+	
+	@OneToMany(mappedBy = "av_id")
+	@LazyCollection(LazyCollectionOption.FALSE)	
+	private List<Timereport_Overtime_emp> overtime;
+	
 	private String work_desc;
 	private int week;
 	private String day;
@@ -246,6 +258,14 @@ public class EmpTimeReportDTO {
 
 	public void setProjectid(long projectid) {
 		this.projectid = projectid;
+	}
+
+	public List<Timereport_Overtime_emp> getOvertime() {
+		return overtime;
+	}
+
+	public void setOvertime(List<Timereport_Overtime_emp> overtime) {
+		this.overtime = overtime;
 	}
 	
 	

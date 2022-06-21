@@ -14,6 +14,10 @@ public class Overtime_Type {
 	public int percentage; 
 	public boolean isactive;
 	
+	public String start; 
+	public String end; 
+	public int interval_minutes;
+	
 	public Overtime_Type() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -49,11 +53,45 @@ public class Overtime_Type {
 	public void setIsactive(boolean isactive) {
 		this.isactive = isactive;
 	}
-	public Overtime_Type(String typename, int percentage) {
+	
+	public String getStart() {
+		return start;
+	}
+	public void setStart(String start) {
+		this.start = start;
+	}
+	public String getEnd() {
+		return end;
+	}
+	public void setEnd(String end) {
+		this.end = end;
+	}
+	public Overtime_Type(int typeid, String typename, int percentage, String start, String end) {
 		super();
+		this.typeid = typeid;
 		this.typename = typename;
 		this.percentage = percentage;
+		this.start = start;
+		this.end = end;
 	}
+	public int getInterval_minutes() {
+		return interval_minutes;
+	}
+	public void setInterval_minutes(int interval_minutes) {
+		this.interval_minutes = interval_minutes;
+	}
+	public Overtime_Type(int typeid, String typename, int percentage, boolean isactive, String start, String end,
+			int interval_minutes) {
+		super();
+		this.typeid = typeid;
+		this.typename = typename;
+		this.percentage = percentage;
+		this.isactive = isactive;
+		this.start = start;
+		this.end = end;
+		this.interval_minutes = interval_minutes;
+	}
+	
 	
 	
 }
