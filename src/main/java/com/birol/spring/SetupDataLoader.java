@@ -73,17 +73,18 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleIfNotFound("SALARY ADMIN", adminPrivileges);
         createRoleIfNotFound("GROUP LEADER", adminPrivileges); 
         
-        createAvailabilityTypeIfNotFound(1,"Worked Time",100, "08:00","17:00",45);
+        createAvailabilityTypeIfNotFound(1,"Regular work time",100, "08:00","16:45",45);
         createAvailabilityTypeIfNotFound(3,"Sick Leave",100,"","",0);
         createAvailabilityTypeIfNotFound(4,"Vacation",50,"","",0);
         createAvailabilityTypeIfNotFound(5,"Child Care",90,"","",0);
         createAvailabilityTypeIfNotFound(6,"Absent for other reason",0,"","",0);
+        createAvailabilityTypeIfNotFound(7,"Holiday",0,"","",0);
         
-        createOvertimeTypeIfNotFound(1,"OB-1",110,"06:01","08:00",0);
-        createOvertimeTypeIfNotFound(2,"OB-2",110,"18:01","00:00",0);
-        createOvertimeTypeIfNotFound(3,"OB-3",110,"08:00","17:00",0);
-        createOvertimeTypeIfNotFound(4,"OB-4",110,"00:01","05:59",0);
-        createOvertimeTypeIfNotFound(5,"OB-5",110,"08:00","17:00",0);
+        createOvertimeTypeIfNotFound(1,"OB-Morning",110,"06:00","08:00",0);
+        createOvertimeTypeIfNotFound(2,"OB-Evening",110,"18:00","23:59",0);
+        createOvertimeTypeIfNotFound(3,"OB-Weekend",110,"08:00","16:45",45);
+        createOvertimeTypeIfNotFound(4,"OB-4",110,"00:00","06:00",0);
+        createOvertimeTypeIfNotFound(5,"OB-5",110,"08:00","16:45",45);
 
         // == create initial user
         createUserIfNotFound(1,"test@test.com", "Test", "Test", "test", new ArrayList<>(Arrays.asList(adminRole)));

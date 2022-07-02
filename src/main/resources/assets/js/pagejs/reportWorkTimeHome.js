@@ -41,7 +41,14 @@ $("#travdaterangeselect").change(function() {
 	}else if ($c == "lw") {
 		$("#trav_from_date").val(moment().add(-1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
 		$("#trav_to_date").val(moment().add(-1, 'week').endOf('isoWeek').format('YYYY-MM-DD'));
+	}else if ($c == "yd") {
+		$("#trav_from_date").val(moment().add(-1, 'day').format('YYYY-MM-DD'));
+		$("#trav_to_date").val(moment().add(-1, 'day').format('YYYY-MM-DD'));
+	}else if ($c == "dby") {
+		$("#trav_from_date").val(moment().add(-2, 'day').format('YYYY-MM-DD'));
+		$("#trav_to_date").val(moment().add(-2, 'day').format('YYYY-MM-DD'));
 	}
+	
 	setDateRangeString();
 	getWeekNo();
 	getTRforms();
@@ -141,11 +148,18 @@ function calculate(e) {
 
 
 function getworkminute(start,end,lbreak) {		
-	var diff = ((Math.abs(new Date('2022-05-30 '+start) - new Date('2022-05-30 '+end))/1000/60)- lbreak);
+	 var diff = ((Math.abs(new Date('2022-05-30 '+start) - new
+			 Date('2022-05-30 '+end))/1000/60)- lbreak);
+	
+	 	/*start = start.split(":");
+	    end = end.split(":");
+	    var startDate = new Date(0, 0, 0, start[0], start[1], 0);
+	    var endDate = new Date(0, 0, 0, end[0], end[1], 0);
+	    var diff = ((endDate.getTime() - startDate.getTime())/1000/60)-lbreak;
+	    */
 	return diff;
 	
 }
-
 
 
 function saveTR(t,e) {	
@@ -199,11 +213,24 @@ function saveTR(t,e) {
 
 
 function showOBtr(e, z) {
-	var obtarget= $(z).attr("obtarget");
-	var avid = $(z).attr("av-id");
-	$(".ob"+avid+obtarget).show(500);
-	if(obtarget==2)obtarget=0;
-	$(z).attr("obtarget",parseInt(obtarget)+1);
+	$target= $(e.target).closest('tr');
+	var btnval= $target.find(".savebtn").html();
+	if(btnval!="SUBMIT"){
+		var avid = $(z).attr("av-id");	
+		if($(".ob"+avid+1).is(":visible")){
+			$(".ob"+avid+2).show(500);
+		}else{
+			$(".ob"+avid+1).show(500);
+		}
+	}else {
+		$target.find(".savebtn").focus();
+		$('.toast-header .title').html("Alert!!");
+		$('.toast-body .toast-message').html("Submit the regular time first.");
+		$('.toast').addClass("text-danger");
+		$('.toast').toast('show');
+	}
+	
+	
 }
 
 function setTypeval(e,z) {
@@ -244,8 +271,8 @@ function setOBTypeval(e,z) {
 	$target.find(".start").val(start);
 	$target.find(".end").val(end);
 	$target.find(".lbreak").val(interval);
-	$target.find(".wmint").val(getworkminute(start,end,0));
-	$target.find(".work_hour").val(minutesToHour(getworkminute(start,end,0)));
+	$target.find(".wmint").val(getworkminute(start,end,interval));
+	$target.find(".work_hour").val(minutesToHour(getworkminute(start,end,interval)));
 	
 	$target.find('.savebtn').prop('disabled', false);
 	$target.find('.savebtn').html('SUBMIT');
@@ -313,6 +340,15 @@ function validate(e){
 	var date = $target.find(".date").val();
 	var status = $target.find(".status").val();	
 	var wmint = $target.find(".wmint").val();
+	
+	if(wmint>480){
+		$target.find(".end").focus();
+		$('.toast-header .title').html("Alert!!");
+		$('.toast-body .toast-message').html("Can not report for more than 8 hours!!");
+		$('.toast').addClass("text-danger");
+		$('.toast').toast('show');
+		return false;
+	}
 	
 	if(status==""){
 		$target.find(".status").focus();
