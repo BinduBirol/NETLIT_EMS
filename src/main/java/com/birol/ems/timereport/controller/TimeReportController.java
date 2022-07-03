@@ -514,10 +514,11 @@ public class TimeReportController {
 				tr.setStatus(1);
 				tr.setDate(d);
 				tr.setWork_start("08:00");
-				tr.setWork_end("17:00");
+				tr.setWork_end("16:45");
 				tr.setLunch_hour(45);
-				tr.setWork_minute(495);
-				tr.setWork_hour("8 H 15 Min");
+				tr.setWork_minute(480);
+				tr.setWork_hour("8 H 0 Min");
+				tr.setUserid(user.getId());
 				tr.setAv_id(wSHservice.generateWavID(tr));
 				
 				List<Timereport_Overtime_emp> overtime = new ArrayList<Timereport_Overtime_emp>();
@@ -526,7 +527,7 @@ public class TimeReportController {
 					ovemp.setOb_id(wSHservice.generateOBID(ovemp,i));
 					ovemp.setWork_minute(0);
 					ovemp.setWork_hour("0 H 0 Min");
-					ovemp.setObno(i);
+					ovemp.setObno(i);					
 					overtime.add(ovemp);
 				}
 				tr.setOvertime(overtime);	
@@ -544,7 +545,7 @@ public class TimeReportController {
 					}catch (Exception e) {
 						ovemp.setOb_id(wSHservice.generateOBID(ovemp,i));
 						ovemp.setWork_minute(0);
-						ovemp.setWork_hour("0 H 00 Min");
+						ovemp.setWork_hour("0 H 00 Min");						
 						ovemp.setObno(i);
 						overtime.add(ovemp);
 					}

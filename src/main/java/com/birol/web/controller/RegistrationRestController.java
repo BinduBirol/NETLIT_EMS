@@ -81,9 +81,13 @@ public class RegistrationRestController {
         if (user != null) {
             final String token = UUID.randomUUID().toString();
             userService.createPasswordResetTokenForUser(user, token);
-            mailSender.send(constructResetTokenEmail(getAppUrl(request), request.getLocale(), token, user));
-        }
-        return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
+            //mailSender.send(constructResetTokenEmail(getAppUrl(request), request.getLocale(), token, user));
+            mailSender.send(constructResetTokenEmail("https://ems.netlit.se", request.getLocale(), token, user));
+            return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
+        }else {
+        	return new GenericResponse("User not found with mail: "+userEmail);
+		}
+        
     }
 
     // Save password
