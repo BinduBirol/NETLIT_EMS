@@ -1,8 +1,10 @@
 
 function getDatesByWeekNo(week) {
-	var thisyear="'"+moment().year()+"'";
-	var startweek = moment(thisyear).add(week, 'weeks').startOf('isoWeek').format('YYYY-MM-DD');
-	var endweek = moment(thisyear).add(week, 'weeks').endOf('isoWeek').format('YYYY-MM-DD');
+	var wyear=week.split("-W")[0];
+	var wweekno=week.split("-W")[1];	
+	var thisyear="'"+wyear+"'";
+	var startweek = moment(thisyear).add(wweekno, 'weeks').startOf('isoWeek').format('YYYY-MM-DD');
+	var endweek = moment(thisyear).add(wweekno, 'weeks').endOf('isoWeek').format('YYYY-MM-DD');
 	$("#trav_from_date").val(startweek);
 	$("#trav_to_date").val(endweek);
 }
@@ -56,9 +58,11 @@ $('#trav_from_date').on('change', function() {
 
 
 function getWeekNo() {
-	var weekno= moment($("#trav_from_date").val(), 'YYYY-MM-DD').format('WW')
+	var weekno= moment($("#trav_from_date").val(), 'YYYY-MM-DD').format('WW');
+	var year=moment($("#trav_from_date").val(), 'YYYY-MM-DD').format('YYYY');
 	$("#trweek_no").html(weekno);
-	$("#inputweekno").val(weekno);
+	var weekval=year+"-W"+weekno;
+	$("#inputweekno").val(weekval);
 }
 
 function setDateRangeString() {

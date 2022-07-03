@@ -66,12 +66,12 @@
 			<hr />
 			
 			<div class="row">
-				<div class="col-12 col-sm-3">
+				<div class="col-12 col-sm-2">
 					<label>Quick Report </label>
 					<button type="button" th:emp-id="${session.userdtl.empid}" onclick="availablity(this);" class="btn btn-outline-theme form-control">Quick Report <i class="fa fa-clock"></i></button>
 				</div>
 			
-				<div class="col-12 col-sm-3">
+				<div class="col-12 col-sm-4">
 					<label class="custom-control-label">Date Range | Week No</label> 
 						<div class="input-group " id="">
 						<select
@@ -84,7 +84,7 @@
 							<option value="nm">Next month</option>
 							<option selected="selected" value="c">Custom</option>
 						</select> 						
-						<input type="number" class="form-control" id="inputweekno"/>
+						<input type="week" class="form-control" id="inputweekno"/>
 					</div>
 					<input type="hidden" id="truserid" name="userid"
 						th:value="${userdtl.empid}" /> <input type="hidden"
