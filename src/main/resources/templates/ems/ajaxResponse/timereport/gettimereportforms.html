@@ -61,9 +61,9 @@
 				readonly class='wmint form-control form-control-sm text-center  ' />
 
 			</td>
-			<td rowspan="3"><textarea th:text='${tr.work_desc}' th:classappend="|work_desc${tr.av_id}|"
+			<td ><textarea th:text='${tr.work_desc}' 
 					onchange='calculate(event)' name='work_desc'
-					class='form-control form-control-sm work_desc' rows='3'></textarea>
+					class='form-control form-control-sm work_desc' rows='2'></textarea>
 			</td>
 			<td>
 				<button
@@ -123,6 +123,11 @@
 
 			</td>
 
+			<td ><textarea th:text='${ob.work_desc}' 
+					onchange='calculate(event)' name='work_desc'
+					class='form-control form-control-sm work_desc' rows='2'></textarea>
+			</td>
+			
 			<td>
 				<button th:if="${!#strings.isEmpty(ob.av_id) and !ob.isrejected}"
 					onclick='save(this, event)' disabled="disabled" saveaction="saveOvertime"

@@ -182,7 +182,7 @@ public class TimeReportController {
 			List<LocalDate> dates = wSHservice.getDatesBetween(fromLocalDate, toLocalDate);
 
 			LocalTime l1 = null, l2 = null;
-			if (av.getStatus() == 1) {
+			if (av.getWork_minute() > 0) {
 				l1 = LocalTime.parse(av.getWork_start());
 				l2 = LocalTime.parse(av.getWork_end());
 			}
@@ -231,7 +231,8 @@ public class TimeReportController {
 			LocalDate avDate = LocalDate.parse(av.getFrom_date(), formatter);
 
 			LocalTime l1 = null, l2 = null;
-			if (av.getStatus() == 1) {
+			
+			if (av.getWork_minute() > 0) {
 				l1 = LocalTime.parse(av.getWork_start());
 				l2 = LocalTime.parse(av.getWork_end());
 			}else {
@@ -240,6 +241,8 @@ public class TimeReportController {
 				av.setLunch_hour(0);
 				av.setWork_minute(av.getWork_minute());
 			}
+			
+			
 			
 			av.setDate(avDate);
 			av.setAv_id(wSHservice.generateWavID(av));
@@ -275,7 +278,8 @@ public class TimeReportController {
 			LocalDate avDate = LocalDate.parse(av.getFrom_date(), formatter);
 
 			LocalTime l1 = null, l2 = null;
-			if (av.getStatus() == 1) {
+			
+			if (av.getWork_minute() > 0) {
 				l1 = LocalTime.parse(av.getWork_start());
 				l2 = LocalTime.parse(av.getWork_end());
 			}else {
@@ -284,6 +288,8 @@ public class TimeReportController {
 				av.setLunch_hour(0);
 				av.setWork_minute(av.getWork_minute());
 			}
+			
+			
 			
 			av.setDate(avDate);
 			av.setAv_id(wSHservice.generateWavID(av));
@@ -523,11 +529,18 @@ public class TimeReportController {
 				
 				List<Timereport_Overtime_emp> overtime = new ArrayList<Timereport_Overtime_emp>();
 				for(int i=1;i<3;i++) {
-					Timereport_Overtime_emp ovemp= new Timereport_Overtime_emp(user.getId(),d);
-					ovemp.setOb_id(wSHservice.generateOBID(ovemp,i));
-					ovemp.setWork_minute(0);
-					ovemp.setWork_hour("0 H 0 Min");
-					ovemp.setObno(i);					
+					Timereport_Overtime_emp ovemp= new Timereport_Overtime_emp(user.getId(),d);			
+					
+					try {
+						ovemp= obrepo.findById(wSHservice.generateOBID(ovemp,i)).get();
+						ovemp.setBg_class( ((ovemp.isIsapproved()) ? "bg-success" : "bg-warning"));				
+						if(ovemp.isIsrejected())ovemp.setBg_class("bg-danger");
+					}catch (Exception e) {
+						ovemp.setOb_id(wSHservice.generateOBID(ovemp,i));
+						ovemp.setWork_minute(0);
+						ovemp.setWork_hour("0 H 0 Min");
+						ovemp.setObno(i);
+					}								
 					overtime.add(ovemp);
 				}
 				tr.setOvertime(overtime);	

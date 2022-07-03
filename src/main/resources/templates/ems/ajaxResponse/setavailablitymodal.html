@@ -122,29 +122,6 @@
 	</div>
 	
 	<hr>
-	<div class="row mb-3">
-		<div class="col-4">
-			<label>Overtime Type</label> 
-			<select name='obtype'	onchange="calculate();"			
-				class='obtype form-select form-select-sm '>
-					<option  th:each="at: ${obtype}" th:value="${at.typeid}" th:text="${at.typename}">xx</option>
-			</select>
-		</div>
-		<div class="col-4">
-			<label>Overtime (Hour:Minute)</label> <input  type="text" name="ob_hour" onchange="calculate();"	
-				class="ob_minute form-control text-center">
-				<input value=0 type="number" id="obminute" name="obminute" onchange="calculate();"	
-				class="ob_minute form-control text-center">
-		</div>
-		<div class="col-4">
-			<label>Total Work</label> <input readonly="readonly" type="text" name="work_hour" id="work_hour"
-				value="8 H 15 Min" class="form-control text-center ">
-				<input  type="hidden" name="work_minute"
-				id="work_minute" value=495
-				class=" form-control text-center ">
-		</div>
-	</div>
-	<hr>
 	<div class="row">
 		<div class="col-12">
 			<label>Job Description</label> <input required="required" id="desc" type="text" name="work_desc"

@@ -219,6 +219,7 @@ function saveTR(t,e) {
 function showOBtr(e, z) {
 	$target= $(e.target).closest('tr');
 	var btnval= $target.find(".savebtn").html();
+	/*
 	if(btnval!="SUBMIT"){
 		var avid = $(z).attr("av-id");	
 		if($(".ob"+avid+1).is(":visible")){
@@ -232,6 +233,13 @@ function showOBtr(e, z) {
 		$('.toast-body .toast-message').html("Submit the regular time first.");
 		$('.toast').addClass("text-danger");
 		$('.toast').toast('show');
+	}*/
+	
+	var avid = $(z).attr("av-id");	
+	if($(".ob"+avid+1).is(":visible")){
+		$(".ob"+avid+2).show(500);
+	}else{
+		$(".ob"+avid+1).show(500);
 	}
 	
 	
@@ -250,7 +258,7 @@ function setTypeval(e,z) {
 	$target.find(".wmint").val(getworkminute(start,end,0));
 	$target.find(".work_hour").val(minutesToHour(getworkminute(start,end,0)));
 	
-	if (type== 1) {
+	if (start!= null) {
 		$target.find('.absent').prop('disabled', false);
 		$(z).removeClass("is-invalid");
 		$(z).addClass("is-valid");
@@ -289,7 +297,7 @@ function save(t,e) {
 	$target= $(e.target).closest('tr');
 	
 	var av_id = $target.find(".av_id").val();
-	var desc= $('.work_desc'+av_id).val();
+	var desc= $target.find(".work_desc").val();
 	var start = $target.find(".start").val();
 	var end = $target.find(".end").val();
 	var lbreak = $target.find(".lbreak").val();	
@@ -337,7 +345,7 @@ function save(t,e) {
 function validate(e){	
 	$target= $(e.target).closest('tr');	
 	var av_id = $target.find(".av_id").val();
-	var desc= $('.work_desc'+av_id).val();
+	var desc= $target.find(".work_desc").val();
 	var start = $target.find(".start").val();
 	var end = $target.find(".end").val();
 	var lbreak = $target.find(".lbreak").val();	
@@ -368,7 +376,7 @@ function validate(e){
 	} else if(status!=1  && $.trim(desc).length>0){
 		return true;
 	} else if($.trim(desc).length==0){
-		$('.work_desc'+av_id).focus();
+		$target.find(".work_desc").focus();
 		$('.toast-header .title').html("Alert!!");
 		$('.toast-body .toast-message').html("Job description can't be empty!!");
 		$('.toast').addClass("text-danger");
