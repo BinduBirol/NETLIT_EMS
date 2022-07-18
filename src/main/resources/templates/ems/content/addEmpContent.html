@@ -86,7 +86,14 @@
 							              <div class="col-12 col-sm-6">
 							                <div class="form-group">
 							                  <label>Nearest Chief</label>
-							                  <input name="nearest_chief" type="text" class="form-control"  required="required" placeholder="Enter Nearest Chief">
+							                  <select name="nearest_chief_id" onchange="$('#nearest_chief_name').val($('#nearest_chief_id :selected').text());"
+														required="required" class="form-select" id="nearest_chief_id">
+														<option value="">Select Cheif</option>
+														<option th:each="c : ${chief}" th:value="${c.empid}"
+															th:text="${c.full_name}"></option>
+													</select>
+							                  
+							                  <input  name="nearest_chief_name" id="nearest_chief_name" type="hidden" class="form-control"  required="required" placeholder="Enter Nearest Chief">
 							                </div>
 							                <!-- /.form-group -->
 							              </div>

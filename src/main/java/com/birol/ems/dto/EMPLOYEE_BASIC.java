@@ -49,7 +49,8 @@ public class EMPLOYEE_BASIC {
 	private String phone_eve;
 	private String designation;
 	private String workspace;
-	private String nearest_chief;
+	private String nearest_chief_name;
+	private long nearest_chief_id;
 	private String address_full;
 	private String employee_Type;
 	private String contract_start;
@@ -274,12 +275,23 @@ public class EMPLOYEE_BASIC {
 	public void setWorkspace(String workspace) {
 		this.workspace = workspace;
 	}
-	public String getNearest_chief() {
-		return nearest_chief;
+	
+	public String getNearest_chief_name() {
+		return nearest_chief_name;
 	}
-	public void setNearest_chief(String nearest_chief) {
-		this.nearest_chief = nearest_chief;
+
+	public void setNearest_chief_name(String nearest_chief_name) {
+		this.nearest_chief_name = nearest_chief_name;
 	}
+
+	public long getNearest_chief_id() {
+		return nearest_chief_id;
+	}
+
+	public void setNearest_chief_id(long nearest_chief_id) {
+		this.nearest_chief_id = nearest_chief_id;
+	}
+
 	public String getAddress_full() {
 		return address_full;
 	}

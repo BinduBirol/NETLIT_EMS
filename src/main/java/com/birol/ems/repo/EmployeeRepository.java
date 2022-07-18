@@ -13,9 +13,9 @@ import com.birol.ems.dto.EMPLOYEE_BASIC;
 
 public interface EmployeeRepository extends CrudRepository<EMPLOYEE_BASIC, String> {
 	
-	String getbyroleQ= "SELECT * FROM employee_basic WHERE roleid like ?1  ";
+	String getbyroleQ= "SELECT * FROM employee_basic WHERE roleid in (:roleid)  ";
 	@Query(value =getbyroleQ,nativeQuery = true)
-	ArrayList<EMPLOYEE_BASIC> findbyrole( int roleid);
+	ArrayList<EMPLOYEE_BASIC> findbyrole( @Param("roleid")String roleid);
 	
 	String getForSearchQ= "SELECT * FROM employee_basic WHERE roleid= :roleid  and full_name LIKE CONCAT('%',:text,'%')";
 	@Query(value =getForSearchQ,nativeQuery = true)

@@ -66,7 +66,7 @@ public class EmployeeController {
 	@GetMapping("/addEmployee")
 	public ModelAndView addEmployee(final ModelMap model) {
 		model.addAttribute("roles", roleRepository.findAll());
-
+		model.addAttribute("chief", employeeRepository.findbyrole("7,6,4"));
 		return new ModelAndView("ems/pages/addEmployee", model);
 	}
 
@@ -229,7 +229,8 @@ public class EmployeeController {
 
 	@GetMapping("/editEmployee")
 	public ModelAndView editEmployee(@RequestParam("empid") Long empid, final ModelMap model) {
-		model.addAttribute("roles", roleRepository.findAll());		
+		model.addAttribute("roles", roleRepository.findAll());	
+		model.addAttribute("chief", employeeRepository.findbyrole("7,6,4"));
 		EMPLOYEE_BASIC empinfo = employeeService.getEmployeebyID(empid);
 		model.addAttribute("empinfo", empinfo);
 		User getuser= userService.findUserByEmail(empinfo.getEmail());

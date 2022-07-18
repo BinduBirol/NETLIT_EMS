@@ -260,7 +260,7 @@ public class EMScontroller {
 	@GetMapping("/fetchusersbyrole")
 	@ResponseBody
 	public ArrayList<EMPLOYEE_BASIC> getusersbyrole(@RequestParam int roleid){
-		ArrayList<EMPLOYEE_BASIC> users = employeeRepository.findbyrole(roleid);
+		ArrayList<EMPLOYEE_BASIC> users = employeeRepository.findbyrole(String.valueOf(roleid));
 		return users;
 	}
 	

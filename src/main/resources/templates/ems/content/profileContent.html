@@ -137,7 +137,9 @@
 												
 												<tr>
 													<td>Nearest Chief:</td>
-													<td th:text="${userdtl.nearest_chief}"></td>
+													<td >
+														<a th:text="${userdtl.nearest_chief_name}" href="#" class="text-white text-decoration-none" th:emp-id="${userdtl.nearest_chief_id}" ></a>											
+													</td>
 												</tr>
 												
 												<tr>

@@ -249,5 +249,5 @@ $("#daterangeselect").change(function() {
 		    });	
 		});
 		
-		setAutorowspan('#datatableDefaultz',1);
+		setAutorowspan('#datatableDefaultz',2);
 		setAutorowspan('#datatableDefaultz',0);
