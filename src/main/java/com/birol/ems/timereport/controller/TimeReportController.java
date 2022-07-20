@@ -15,11 +15,13 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -83,15 +85,23 @@ public class TimeReportController {
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
 		model.addAttribute("emps", employeeService.getEmployeeList());
 		model.addAttribute("emp", empdtl);
-
-		ArrayList<EmpTimeReportDTO> availist = new ArrayList<EmpTimeReportDTO>();
+		
+	
+		ArrayList<EmpTimeReportDTO> availist = new ArrayList<EmpTimeReportDTO>();	
 
 		if (empid == null & from_date == null) {
 			availist = avrepo.getAvailablityAllandDateToday();
-		} else if (empid.isEmpty() & from_date != null) {
-			availist = avrepo.getAllusersBetweenDates(from_date, to_date);
-		} else if (!empid.isEmpty() && empid != null) {
-			availist = avrepo.getUserBetweenDates(Long.parseLong(empid), from_date, to_date);
+		}else if (empid.startsWith("E")) {
+			availist = avrepo.getUserBetweenDates(Long.parseLong(empid.split("-")[1]), from_date, to_date);			
+		}else if (empid.equals("all")) {
+			availist = avrepo.getAllusersBetweenDates(from_date, to_date);			
+		}else if (empid.equals("me")) {
+			ArrayList<EMPLOYEE_BASIC> myemps= employeeRepository.getbyChief(user.getId());
+			Set<EmpTimeReportDTO> myeavaiset = new LinkedHashSet<EmpTimeReportDTO>();	
+			for(EMPLOYEE_BASIC x: myemps) {
+				myeavaiset.addAll( avrepo.getUserBetweenDates((x.getEmpid()), from_date, to_date));	
+			}
+			availist = new ArrayList<>(myeavaiset);
 		}
 
 		model.addAttribute("avtype", availabilityRepo.findAll());
@@ -195,9 +205,14 @@ public class TimeReportController {
 				av.setDate(d);
 				av.setAv_id(wSHservice.generateWavID(av));
 				try {
-					av.setWork_minute((Duration.between(l1, l2).toMinutes()) - av.getLunch_hour());
+					long wrkmin= (Duration.between(l1, l2).toMinutes()) - av.getLunch_hour();
+					long hours = wrkmin / 60; 
+					long minutes = wrkmin % 60;				
+					av.setWork_minute(wrkmin);
+					av.setWork_hour(hours+" H "+minutes+" Min");
 				} catch (Exception e) {
 					av.setWork_minute(0);
+					av.setWork_hour("0 H 0 Min");
 				}
 				Date xdate = new SimpleDateFormat("yyyy-M-d").parse(av.getDate().toString());
 				av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
@@ -324,10 +339,30 @@ public class TimeReportController {
 			
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate avDate = LocalDate.parse(av.getFrom_date(), formatter);
+			
 			av.setDate(avDate);
+			Date xdate = new SimpleDateFormat("yyyy-M-d").parse(av.getDate().toString());
+			
+			EmpTimeReportDTO etd = new EmpTimeReportDTO();
+			try {
+				etd= avrepo.findById(av.getAv_id()).get();
+			}catch (Exception e) {
+				etd.setAv_id(av.getAv_id());
+				etd.setDate(avDate);
+				etd.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
+				etd.setWeek(avDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
+				etd.setStatus(5);
+				etd.setWork_minute(0);
+				etd.setUserid(av.getUserid());
+				etd.setFull_name(av.getFull_name());
+				etd.setWork_hour("0 H 0 Min");
+				avrepo.save(etd);
+			}			
+			
+			
 			av.setOb_id(wSHservice.generateOBID(av,av.getObno()));
 
-			Date xdate = new SimpleDateFormat("yyyy-M-d").parse(av.getDate().toString());
+			
 			av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
 			av.setWeek(avDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
 			

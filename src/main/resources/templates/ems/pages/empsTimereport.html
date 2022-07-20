@@ -95,8 +95,9 @@
 													<span class="input-group-text"><i
 														class="fa fa-filter"></i></span> <select name="empid"
 														id="empidselect" class="form-select form-select-sm">
-														<option value="">All Employees</option>
-														<option th:each="emps : ${emps}" th:value="${emps.empid}">[[${emps.full_name}]]</option>
+														<option value="me">My Employees</option>
+														<option value="all">All Employees</option>
+														<option th:each="emps : ${emps}" th:value="|E-${emps.empid}|">[[${emps.full_name}]]</option>
 													</select> <select name="c" id="daterangeselect"
 														class="form-select form-select-sm">
 														<option value="">Date Range</option>
@@ -166,7 +167,7 @@
 
 
 
-								<table id="datatableDefaultz" class="table small table-bordered">
+								<table  class="table small table-bordered">
 									<thead>
 										<tr>
 											<th>Week</th>
@@ -177,60 +178,126 @@
 											<th>Total</th>
 											<th>Start</th>
 											<th>End</th>
-											<th>Break</th>
-											<th>Overtime</th>
+											<th>Break</th>											
 											<th>Desc</th>
 											<th>Created</th>
 											<th><input id="checkAll" class="form-check-input"
 												type="hidden" /> <i class="fa fa-thumbs-up"></i></th>
 										</tr>
 									</thead>
-									<tbody>
+									<tbody id="datatableDefaultz" th:each="wsh,iterator : ${wsh}">
 
 
 
 										<tr th:classappend="${wsh.status}==1 ? norm  : text-danger"
-											th:each="wsh,iterator : ${wsh}" class="align-middle">
-											<td class="h4" th:text="${wsh.week}">week</td>
-											<td><a href="#" class="text-decoration-none"
+											 class="align-middle">
+											<td th:rowspan="${wsh.overtime.size+1}"  th:text="${wsh.week}">week</td>
+											<td th:rowspan="${wsh.overtime.size+1}"><a href="#" class="text-decoration-none"
 												th:emp-id="${wsh.userid}" onclick="viewEmlpoyee(this);"
 												th:text="${wsh.full_name}"></a></td>
 
 
-											<td>[[${wsh.day}]]<br />[[${wsh.date}]]
+											<td th:rowspan="${wsh.overtime.size+1}">[[${wsh.day}]]<br />[[${wsh.date}]]
 											</td>
 
 
-											<td><select name='status'
+											<td>
+											
+											<select name='status' onchange='setTypeval( event,this)'
 												th:classappend="${wsh.status}==1 ? norm  : text-danger"
-												class='status  form-select form-select-sm cal'>
+												class='status  form-select form-select-sm availabilitysign'>
 													<option th:selected="${at.typeid==wsh.status}"
 														th:each="at: ${avtype}" th:value="${at.typeid}"
+														th:start="${at.start}"
+														th:end="${at.end}"
+														th:interval="${at.interval_minutes}"
+														th:text="${at.typename}">xx</option>
+											</select>
+											
+											
+											
+
+											<td>
+											<input type="text" onchange='calculate(event)'
+												class=" td-input form-control form-control-sm   work_hour "
+												readonly="readonly" th:value="${wsh.work_hour}" />
+												
+											<input type="hidden" onchange='calculate(event)'
+												class=" td-input form-control form-control-sm   wmint "
+												readonly="readonly" th:value="${wsh.work_minute}" /></td>
+											<td><input type="time" onchange='calculate(event)'
+												class="td-input form-control form-control-sm cal start  "
+												th:value="${wsh.work_start}" /></td>
+											<td><input type="time" onchange='calculate(event)'
+												class="td-input form-control form-control-sm cal end "
+												th:value="${wsh.work_end}" /></td>
+											<td><input type="number" onchange='calculate(event)'
+												class="td-input form-control form-control-sm cal lbreak "
+												th:value="${wsh.lunch_hour}" /></td>
+											
+											<td><textarea
+													th:classappend="${wsh.status}==1 ? norm  : text-danger"
+													class="td-input form-control form-control-sm cal wdesc "
+													th:text="${wsh.work_desc}" rows="2"></textarea>
+											<td
+												th:text="${wsh.created==null}? ${#dates.format(wsh.updated, 'dd MMM yyyy')} : ${#dates.format(wsh.created, 'dd MMM yyyy')}"></td>
+
+											<td>
+											
+											<div class="form-check">
+											  <input th:id="${wsh.av_id}"
+												th:checked="${wsh.isapproved}"
+												class="form-check-input avidcheckbox" type="checkbox" /> 
+											  <label class="form-check-label">Approve</label>
+											</div>
+											
+											<div class="form-check">
+											  <input th:av-id="${wsh.av_id}"												
+												class="form-check-input rejectcheckbox" type="checkbox" />
+											  <label class="form-check-label">Reject</label>
+											</div>
+											</td>
+										</tr>
+										
+										
+										
+										<tr th:each="wsh,iterator : ${wsh.overtime}"
+											 class="align-middle">
+											
+											
+
+
+											<td><select name='status'
+												onchange='setTypeval( event,this)'
+												class='status  form-select form-select-sm cal'>
+													<option th:selected="${at.typeid==wsh.status}"
+														th:each="at: ${obtype}" th:value="${at.typeid}"
+														th:start="${at.start}"
+														th:end="${at.end}"
+														th:interval="${at.interval_minutes}"
 														th:text="${at.typename}">xx</option>
 											</select></td>
 
 											<td>
-											<input type="text"
+											<input type="text" onchange='calculate(event)'
 												class=" td-input form-control form-control-sm   work_hour "
 												readonly="readonly" th:value="${wsh.work_hour}" />
 												
-											<input type="hidden"
+											<input type="hidden" onchange='calculate(event)'
 												class=" td-input form-control form-control-sm   wmint "
 												readonly="readonly" th:value="${wsh.work_minute}" /></td>
-											<td><input type="time"
+											<td><input type="time" onchange='calculate(event)'
 												class="td-input form-control form-control-sm cal start  "
 												th:value="${wsh.work_start}" /></td>
-											<td><input type="time"
+											<td><input type="time" onchange='calculate(event)'
 												class="td-input form-control form-control-sm cal end "
 												th:value="${wsh.work_end}" /></td>
-											<td><input type="number"
+											<td><input type="number" onchange='calculate(event)'
 												class="td-input form-control form-control-sm cal lbreak "
 												th:value="${wsh.lunch_hour}" /></td>
-											<td><input type="number"
-												class="td-input form-control form-control-sm cal obminute "
-												th:value="${wsh.obminute}" /></td>
+											
 											<td><textarea
-													th:classappend="${wsh.status}==1 ? norm  : text-danger"
+													
 													class="td-input form-control form-control-sm cal wdesc "
 													th:text="${wsh.work_desc}" rows="2"></textarea>
 											<td

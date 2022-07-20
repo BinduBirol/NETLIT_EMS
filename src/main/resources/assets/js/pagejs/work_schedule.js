@@ -144,7 +144,7 @@ $("#daterangeselect").change(function() {
 			  });
 		
 		
-		$(".avidcheckbox").change(function (e) {			
+		$(".avidcheckboxx").change(function (e) {			
 			//$("tr").removeClass("table-primary");			
 			$target= $(e.target).closest('tr');
 			//$target.addClass("table-primary");
@@ -215,6 +215,7 @@ $("#daterangeselect").change(function() {
 			
 		})
 		
+		/*
 		$(".cal").change(function (e) {
 			//$('#'+this.id).attr( "checked", false );	
 			//$("tr").removeClass("table-primary");			
@@ -229,7 +230,7 @@ $("#daterangeselect").change(function() {
 			$target.find(".wmint").val(diff);
 			$target.find(".work_hour").val(minutesToHour(parseInt(diff)));
 			
-		})		
+		})		*/
 		
 			
 		
@@ -249,5 +250,149 @@ $("#daterangeselect").change(function() {
 		    });	
 		});
 		
-		setAutorowspan('#datatableDefaultz',2);
-		setAutorowspan('#datatableDefaultz',0);
+		
+		function setTypeval(e,z) {
+			var start = $('option:selected', z).attr('start');
+			var end = $('option:selected', z).attr('end');
+			var interval = $('option:selected', z).attr('interval');
+			var type=$(z).val();
+			
+			$target= $(e.target).closest('tr');
+			$target.find(".start").val(start);
+			$target.find(".end").val(end);
+			$target.find(".lbreak").val(interval);
+			$target.find(".wmint").val(getworkminute(start,end,0));
+			$target.find(".work_hour").val(minutesToHour(getworkminute(start,end,0)));
+			
+			if (start!= null) {
+				$target.find('.absent').prop('disabled', false);
+				$(z).removeClass("is-invalid");
+				$(z).addClass("is-valid");
+				calculate(e);
+			}else{
+				$target.find('.absent').prop('disabled', true);	
+				$(z).removeClass("is-valid");
+				$(z).addClass("is-invalid");
+				calculate(e);
+			}
+			
+		}
+		
+		function calculate(e) {
+			$target= $(e.target).closest('tr');
+			var start = $target.find(".start").val();
+			var end = $target.find(".end").val();
+			var lbreak = $target.find(".lbreak").val();			
+			$target.find(".wmint").val(getworkminute(start,end,lbreak));
+			$target.find(".work_hour").val(minutesToHour(getworkminute(start,end,lbreak)));				
+		}
+		
+		function getworkminute(start,end,lbreak) {		
+			 var diff = ((Math.abs(new Date('2022-05-30 '+start) - new
+					 Date('2022-05-30 '+end))/1000/60)- lbreak);			
+			return diff;
+			
+		}
+		
+		function save(t,e) {
+			var action = $(t).attr('saveaction');
+			
+			$target= $(e.target).closest('tr');
+			
+			var av_id = $target.find(".av_id").val();
+			var desc= $target.find(".work_desc").val();
+			var start = $target.find(".start").val();
+			var end = $target.find(".end").val();
+			var lbreak = $target.find(".lbreak").val();	
+			var date = $target.find(".date").val();
+			var status = $target.find(".status").val();	
+			var wmint = $target.find(".wmint").val();
+			var work_hour = $target.find(".work_hour").val();
+			var obno = $target.find(".obno").val();
+			var user_id = $("#this_user_id").val();
+			
+			
+			if (validate(e)) {
+				 $.post(action,
+						  {
+					 		status: status,
+					 		from_date: date,
+					 		work_start:start,
+					 		work_end:end,
+					 		lunch_hour:lbreak,
+					 		work_desc:desc,
+					 		work_minute:wmint,			 		
+					 		work_hour:work_hour,
+					 		obno:obno,
+					 		userid:user_id,
+					 		av_id:av_id
+						  },
+						  function(data, status){		    
+						    
+							$('.toast-header .title').html("Response");
+							$('.toast-body .toast-message').html(data);
+							$('.toast').removeClass("text-danger");
+							$('.toast').toast('show');
+							
+							if (data.includes("Successfully") == true) {					
+								$target= $(e.target).closest('tr').addClass("bg-warning");
+								$target.find('.savebtn').attr("disabled","disabled");
+								$target.find('.savebtn').html("PENDING");						
+							}
+							
+						  });
+			}
+		}
+
+
+		function validate(e){	
+			$target= $(e.target).closest('tr');	
+			var av_id = $target.find(".av_id").val();
+			var desc= $target.find(".work_desc").val();
+			var start = $target.find(".start").val();
+			var end = $target.find(".end").val();
+			var lbreak = $target.find(".lbreak").val();	
+			var date = $target.find(".date").val();
+			var status = $target.find(".status").val();	
+			var wmint = $target.find(".wmint").val();
+			
+			if(wmint>480){
+				$target.find(".end").focus();
+				$('.toast-header .title').html("Alert!!");
+				$('.toast-body .toast-message').html("Can not report for more than 8 hours!!");
+				$('.toast').addClass("text-danger");
+				$('.toast').toast('show');
+				return false;
+			}
+			
+			if(status==""){
+				$target.find(".status").focus();
+				$('.toast-header .title').html("Alert!!");
+				$('.toast-body .toast-message').html("Select a Time Report type!!");
+				$('.toast').addClass("text-danger");
+				$('.toast').toast('show');
+				return false;
+			}
+			
+			if(status==1 && $.trim(desc).length>0 && $.trim(start).length>0 && $.trim(end).length>0){
+				return true;
+			} else if(status!=1  && $.trim(desc).length>0){
+				return true;
+			} else if($.trim(desc).length==0){
+				$target.find(".work_desc").focus();
+				$('.toast-header .title').html("Alert!!");
+				$('.toast-body .toast-message').html("Job description can't be empty!!");
+				$('.toast').addClass("text-danger");
+				$('.toast').toast('show');
+				return false;
+			}else if($.trim(start).length==0 || $.trim(end).length==0){
+				$('.toast-header .title').html("Alert!!");
+				$('.toast-body .toast-message').html("Start/End Time can't be empty!!");
+				$('.toast').addClass("text-danger");
+				$('.toast').toast('show');
+				return false;
+			}
+		}
+		
+		//setAutorowspan('#datatableDefaultz',2);
+		//setAutorowspan('#datatableDefaultz',0);

@@ -4,8 +4,13 @@ import java.nio.file.FileAlreadyExistsException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,7 +71,11 @@ public class EmployeeController {
 	@GetMapping("/addEmployee")
 	public ModelAndView addEmployee(final ModelMap model) {
 		model.addAttribute("roles", roleRepository.findAll());
-		model.addAttribute("chief", employeeRepository.findbyrole("7,6,4"));
+		List<Integer> roles = new ArrayList<Integer>();
+		roles.add(4);
+		roles.add(6);
+		roles.add(7);
+		model.addAttribute("chief", employeeRepository.findbyroles(roles));
 		return new ModelAndView("ems/pages/addEmployee", model);
 	}
 
@@ -230,7 +239,11 @@ public class EmployeeController {
 	@GetMapping("/editEmployee")
 	public ModelAndView editEmployee(@RequestParam("empid") Long empid, final ModelMap model) {
 		model.addAttribute("roles", roleRepository.findAll());	
-		model.addAttribute("chief", employeeRepository.findbyrole("7,6,4"));
+		List<Integer> roles = new ArrayList<Integer>();
+		roles.add(4);
+		roles.add(6);
+		roles.add(7);
+		model.addAttribute("chief", employeeRepository.findbyroles(roles));
 		EMPLOYEE_BASIC empinfo = employeeService.getEmployeebyID(empid);
 		model.addAttribute("empinfo", empinfo);
 		User getuser= userService.findUserByEmail(empinfo.getEmail());

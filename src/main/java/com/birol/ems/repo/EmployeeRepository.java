@@ -1,6 +1,7 @@
 package com.birol.ems.repo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,9 +14,13 @@ import com.birol.ems.dto.EMPLOYEE_BASIC;
 
 public interface EmployeeRepository extends CrudRepository<EMPLOYEE_BASIC, String> {
 	
-	String getbyroleQ= "SELECT * FROM employee_basic WHERE roleid in (:roleid)  ";
+	String getbyrolesQ= "SELECT * FROM employee_basic WHERE roleid in (:roleid)  ";
+	@Query(value =getbyrolesQ,nativeQuery = true)
+	ArrayList<EMPLOYEE_BASIC> findbyroles( @Param("roleid") List<Integer>  roleid);
+	
+	String getbyroleQ= "SELECT * FROM employee_basic WHERE roleid =:roleid  ";
 	@Query(value =getbyroleQ,nativeQuery = true)
-	ArrayList<EMPLOYEE_BASIC> findbyrole( @Param("roleid")String roleid);
+	ArrayList<EMPLOYEE_BASIC> findbyrole( @Param("roleid") String  roleid);
 	
 	String getForSearchQ= "SELECT * FROM employee_basic WHERE roleid= :roleid  and full_name LIKE CONCAT('%',:text,'%')";
 	@Query(value =getForSearchQ,nativeQuery = true)
@@ -36,6 +41,11 @@ public interface EmployeeRepository extends CrudRepository<EMPLOYEE_BASIC, Strin
 	String getbyStatusQ= "SELECT * FROM employee_basic WHERE status = ?1  ";
 	@Query(value =getbyStatusQ,nativeQuery = true)
 	ArrayList<EMPLOYEE_BASIC> findbyStatus(int s);
+	
+	String getbyChiefQ= "SELECT * FROM employee_basic WHERE nearest_chief_id = ?1  ";
+	@Query(value =getbyChiefQ,nativeQuery = true)
+	ArrayList<EMPLOYEE_BASIC> getbyChief(long id);
+	
 	
 	String getlatestQ= "SELECT * FROM employee_basic order by created desc limit 5 ";
 	@Query(value =getlatestQ,nativeQuery = true)
