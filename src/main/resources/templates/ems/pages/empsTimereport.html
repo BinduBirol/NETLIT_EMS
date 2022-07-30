@@ -97,7 +97,8 @@
 														id="empidselect" class="form-select form-select-sm">
 														<option value="me">My Employees</option>
 														<option value="all">All Employees</option>
-														<option th:each="emps : ${emps}" th:value="|E-${emps.empid}|">[[${emps.full_name}]]</option>
+														<option th:each="emps : ${emps}"
+															th:value="|E-${emps.empid}|">[[${emps.full_name}]]</option>
 													</select> <select name="c" id="daterangeselect"
 														class="form-select form-select-sm">
 														<option value="">Date Range</option>
@@ -167,7 +168,7 @@
 
 
 
-								<table  class="table small table-bordered">
+								<table class="table small table-bordered table-striped">
 									<thead>
 										<tr>
 											<th>Week</th>
@@ -178,51 +179,46 @@
 											<th>Total</th>
 											<th>Start</th>
 											<th>End</th>
-											<th>Break</th>											
+											<th>Break</th>
 											<th>Desc</th>
-											<th>Created</th>
+
 											<th><input id="checkAll" class="form-check-input"
 												type="hidden" /> <i class="fa fa-thumbs-up"></i></th>
 										</tr>
 									</thead>
-									<tbody id="datatableDefaultz" th:each="wsh,iterator : ${wsh}">
+									<tbody id="datatableDefaultz" >
 
-
+										<div th:each="wsh,iterator : ${wsh}">
 
 										<tr th:classappend="${wsh.status}==1 ? norm  : text-danger"
-											 class="align-middle">
-											<td th:rowspan="${wsh.overtime.size+1}"  th:text="${wsh.week}">week</td>
-											<td th:rowspan="${wsh.overtime.size+1}"><a href="#" class="text-decoration-none"
-												th:emp-id="${wsh.userid}" onclick="viewEmlpoyee(this);"
-												th:text="${wsh.full_name}"></a></td>
+											class="align-middle">
+											<td class="h4" th:rowspan="${wsh.overtime.size+1}" th:text="${wsh.week}">week</td>
+											<td th:rowspan="${wsh.overtime.size+1}"><a href="#"
+												class="text-decoration-none" th:emp-id="${wsh.userid}"
+												onclick="viewEmlpoyee(this);" th:text="${wsh.full_name}"></a></td>
 
 
 											<td th:rowspan="${wsh.overtime.size+1}">[[${wsh.day}]]<br />[[${wsh.date}]]
 											</td>
 
 
-											<td>
-											
-											<select name='status' onchange='setTypeval( event,this)'
+											<td><select name='status'
+												onchange='setTypeval( event,this)'
 												th:classappend="${wsh.status}==1 ? norm  : text-danger"
 												class='status  form-select form-select-sm availabilitysign'>
 													<option th:selected="${at.typeid==wsh.status}"
 														th:each="at: ${avtype}" th:value="${at.typeid}"
-														th:start="${at.start}"
-														th:end="${at.end}"
+														th:start="${at.start}" th:end="${at.end}"
 														th:interval="${at.interval_minutes}"
 														th:text="${at.typename}">xx</option>
 											</select>
+											<input class="av_id" th:value="${wsh.av_id}" type="hidden"/>
 											
-											
-											
-
-											<td>
-											<input type="text" onchange='calculate(event)'
+											</td>
+											<td><input type="text" onchange='calculate(event)'
 												class=" td-input form-control form-control-sm   work_hour "
-												readonly="readonly" th:value="${wsh.work_hour}" />
-												
-											<input type="hidden" onchange='calculate(event)'
+												readonly="readonly" th:value="${wsh.work_hour}" /> <input
+												type="hidden" onchange='calculate(event)'
 												class=" td-input form-control form-control-sm   wmint "
 												readonly="readonly" th:value="${wsh.work_minute}" /></td>
 											<td><input type="time" onchange='calculate(event)'
@@ -234,37 +230,36 @@
 											<td><input type="number" onchange='calculate(event)'
 												class="td-input form-control form-control-sm cal lbreak "
 												th:value="${wsh.lunch_hour}" /></td>
-											
+
 											<td><textarea
 													th:classappend="${wsh.status}==1 ? norm  : text-danger"
-													class="td-input form-control form-control-sm cal wdesc "
-													th:text="${wsh.work_desc}" rows="2"></textarea>
-											<td
-												th:text="${wsh.created==null}? ${#dates.format(wsh.updated, 'dd MMM yyyy')} : ${#dates.format(wsh.created, 'dd MMM yyyy')}"></td>
-
-											<td>
+													class="td-input form-control form-control-sm cal work_desc "
+													th:text="${wsh.work_desc}" rows="2"></textarea></td>
 											
-											<div class="form-check">
-											  <input th:id="${wsh.av_id}"
-												th:checked="${wsh.isapproved}"
-												class="form-check-input avidcheckbox" type="checkbox" /> 
-											  <label class="form-check-label">Approve</label>
-											</div>
 											
-											<div class="form-check">
-											  <input th:av-id="${wsh.av_id}"												
-												class="form-check-input rejectcheckbox" type="checkbox" />
-											  <label class="form-check-label">Reject</label>
-											</div>
+											<td >
+												
+													<div class="form-group">
+														<div class="form-check">
+															<input class="form-check-input" ajaxaction="approveRGtime" type="radio" value="" th:name="${wsh.av_id}" id="defaultRadio1" th:checked="${wsh.isapproved}" />
+															<label class="form-check-label" for="defaultRadio1">Approve</label>
+														</div>
+														<div class="form-check">
+															<input class="form-check-input" ajaxaction="rejectRGtime" type="radio" value="" th:name="${wsh.av_id}" id="defaultRadio2" th:checked="${wsh.isrejected}" />
+															<label class="form-check-label" for="defaultRadio2">Reject</label>
+														</div>														
+													</div>			
+												
+												
 											</td>
 										</tr>
-										
-										
-										
+
+
+
 										<tr th:each="wsh,iterator : ${wsh.overtime}"
-											 class="align-middle">
-											
-											
+											class="align-middle">
+
+
 
 
 											<td><select name='status'
@@ -272,18 +267,17 @@
 												class='status  form-select form-select-sm cal'>
 													<option th:selected="${at.typeid==wsh.status}"
 														th:each="at: ${obtype}" th:value="${at.typeid}"
-														th:start="${at.start}"
-														th:end="${at.end}"
+														th:start="${at.start}" th:end="${at.end}"
 														th:interval="${at.interval_minutes}"
 														th:text="${at.typename}">xx</option>
-											</select></td>
+											</select>
+											<input class="ob_id" th:value="${wsh.ob_id}" type="hidden"/>
+											</td>
 
-											<td>
-											<input type="text" onchange='calculate(event)'
+											<td><input type="text" onchange='calculate(event)'
 												class=" td-input form-control form-control-sm   work_hour "
-												readonly="readonly" th:value="${wsh.work_hour}" />
-												
-											<input type="hidden" onchange='calculate(event)'
+												readonly="readonly" th:value="${wsh.work_hour}" /> <input
+												type="hidden" onchange='calculate(event)'
 												class=" td-input form-control form-control-sm   wmint "
 												readonly="readonly" th:value="${wsh.work_minute}" /></td>
 											<td><input type="time" onchange='calculate(event)'
@@ -295,30 +289,29 @@
 											<td><input type="number" onchange='calculate(event)'
 												class="td-input form-control form-control-sm cal lbreak "
 												th:value="${wsh.lunch_hour}" /></td>
-											
+
 											<td><textarea
-													
-													class="td-input form-control form-control-sm cal wdesc "
+													class="td-input form-control form-control-sm cal work_desc "
 													th:text="${wsh.work_desc}" rows="2"></textarea>
-											<td
-												th:text="${wsh.created==null}? ${#dates.format(wsh.updated, 'dd MMM yyyy')} : ${#dates.format(wsh.created, 'dd MMM yyyy')}"></td>
+											</td>
 
 											<td>
-											
-											<div class="form-check">
-											  <input th:id="${wsh.av_id}"
-												th:checked="${wsh.isapproved}"
-												class="form-check-input avidcheckbox" type="checkbox" /> 
-											  <label class="form-check-label">Approve</label>
-											</div>
-											
-											<div class="form-check">
-											  <input th:av-id="${wsh.av_id}"												
-												class="form-check-input rejectcheckbox" type="checkbox" />
-											  <label class="form-check-label">Reject</label>
-											</div>
+												
+													<div class="form-group">
+														<div class="form-check">
+															<input class="form-check-input" ajaxaction="approveOBtime" type="radio" value="" th:name="${wsh.ob_id}" id="defaultRadio1" th:checked="${wsh.isapproved}" />
+															<label class="form-check-label" for="defaultRadio1">Approve</label>
+														</div>
+														<div class="form-check">
+															<input class="form-check-input" ajaxaction="rejectOBtime" type="radio" value="" th:name="${wsh.ob_id}" id="defaultRadio2" th:checked="${wsh.isrejected}" />
+															<label class="form-check-label" for="defaultRadio2">Reject</label>
+														</div>														
+													</div>			
+												
+												
 											</td>
 										</tr>
+										</div>
 
 
 									</tbody>

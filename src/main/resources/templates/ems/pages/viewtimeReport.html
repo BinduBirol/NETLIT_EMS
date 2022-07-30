@@ -73,13 +73,13 @@
 																
 																<select name="c" id="daterangeselect" class="form-select form-select-sm">
 																	<option value="">Date Range</option>
-																	<option selected="selected" value="t">Today</option>
+																	<option value="t">Today</option>
 																	<option value="y">Yesterday</option>
 																	<option value="lw">Last Week</option>
 																	<option value="tw">This Week</option>
 																	<option value="nw">Next Week</option>
 																	<option value="lm">Last month</option>
-																	<option value="tm">This month</option>
+																	<option selected="selected" value="tm">This month</option>
 																	<option value="nm">Next month</option>
 																	<option value="c">Custom</option>
 																</select>
@@ -123,43 +123,55 @@
 										</div>
 										
 										
-											<table  id="datatableDefaultz" class="table table-bordered table-hover">
+											<table  id="datatableDefaultz" class="table table-bordered ">
 												<thead>
 													<tr>
 														<th>Week</th>
 														<th>Date</th>
-														<th>Day</th>														
+																											
 														<th>Hour</th>
 														<th>Start</th>
 														<th>End</th>
-														<th>Break</th>
-														<th>Assgn By</th>
-														<th class="w-25 p-3">Desc</th>
-														<th>Approved</th>	
+														<th>Break (Min)</th>
+														
+														<th class="w-25 p-3">Desc</th>														
 														
 													</tr>
 												</thead>
-												<tbody>	
-												
+												<tbody >	
 													
-													
-													<tr th:classappend="${wsh.status}==1 ?  normal:text-danger"
-														th:each="wsh,iterator : ${wsh}" class="align-middle">														
+													<div th:each="wsh,iterator : ${wsh}">
+													<tr 
+														 class="align-middle">														
 														<td class="h2" th:text="${wsh.week}">week</td>
-														<td th:text="${wsh.date}">Date</td>										
+														<td >[[${wsh.day}]]<br/>[[${wsh.date}]]</td>
 														
-														
-														<td th:text="${wsh.day}">Date</td>
-														
-														<td th:text="${wsh.work_minute}">Hour</td>
+														<td th:text="${wsh.work_hour}">Hour</td>
 														<td th:text="${wsh.work_start}">Start</td>
 														<td th:text="${wsh.work_end}">End</td>
-														<td th:text="${wsh.lunch_hour}">Break</td>										
-														<td th:text="${wsh.assigned_by_full_name}">Assgn By</td>
+														<td th:text="${wsh.lunch_hour}">Break</td>								
+														
 														<td  th:text="${wsh.work_desc}">Desc</td>
-														<td th:text="${wsh.created==null}? ${#dates.format(wsh.updated, 'dd MMM yyyy')} : ${#dates.format(wsh.created, 'dd MMM yyyy')}" ></td>
+														
 														
 													</tr>
+													
+													<tr th:each="wsh,iterator : ${wsh.overtime}"
+														 class="align-middle">														
+														<td class="h2" th:text="${wsh.week}">week</td>
+														<td >[[${wsh.day}]]<br/>[[${wsh.date}]]</td>
+														
+														<td th:text="${wsh.work_hour}">Hour</td>
+														<td th:text="${wsh.work_start}">Start</td>
+														<td th:text="${wsh.work_end}">End</td>
+														<td th:text="${wsh.lunch_hour}">Break</td>								
+														
+														<td  th:text="${wsh.work_desc}">Desc</td>
+														
+														
+													</tr>
+													</div>
+													
 												</tbody>
 											</table>
 										
@@ -229,8 +241,8 @@
 	
 	<script>
 	
-	$("#from_date").val(moment().format('YYYY-MM-DD'));
-	$("#to_date").val(moment().format('YYYY-MM-DD'));
+	$("#from_date").val(moment().startOf('month').format('YYYY-MM-DD'));
+	$("#to_date").val(moment().endOf('month').format('YYYY-MM-DD'));
 	
 		$("#daterangeselect").change(function() {
 			$c = $(this).val();
@@ -293,7 +305,8 @@
 		}
 		
 		
-		setAutorowspan('#datatableDefaultz',8);
+		//setAutorowspan('#datatableDefaultz',2);
+		setAutorowspan('#datatableDefaultz',1);
 		setAutorowspan('#datatableDefaultz',0);
 		 
 	</script>

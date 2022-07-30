@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.IsoFields;
+import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -83,14 +85,19 @@ public class TimeReportController {
 			@RequestParam(required = false) String empid, Authentication auth, final ModelMap model) {
 		User user = (User) auth.getPrincipal();
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
-		model.addAttribute("emps", employeeService.getEmployeeList());
+		model.addAttribute("emps", employeeRepository.getbyChief(user.getId()));
 		model.addAttribute("emp", empdtl);
 		
 	
 		ArrayList<EmpTimeReportDTO> availist = new ArrayList<EmpTimeReportDTO>();	
 
 		if (empid == null & from_date == null) {
-			availist = avrepo.getAvailablityAllandDateToday();
+			ArrayList<EMPLOYEE_BASIC> myemps= employeeRepository.getbyChief(user.getId());
+			Set<EmpTimeReportDTO> myeavaiset = new LinkedHashSet<EmpTimeReportDTO>();	
+			for(EMPLOYEE_BASIC x: myemps) {
+				myeavaiset.addAll( avrepo.getAvailablityByuseridDatelessthanToday((x.getEmpid())));	
+			}
+			availist = new ArrayList<>(myeavaiset);
 		}else if (empid.startsWith("E")) {
 			availist = avrepo.getUserBetweenDates(Long.parseLong(empid.split("-")[1]), from_date, to_date);			
 		}else if (empid.equals("all")) {
@@ -192,9 +199,11 @@ public class TimeReportController {
 			List<LocalDate> dates = wSHservice.getDatesBetween(fromLocalDate, toLocalDate);
 
 			LocalTime l1 = null, l2 = null;
-			if (av.getWork_minute() > 0) {
+			
+			if (av.getWork_start()!=null&&av.getWork_end()!=null) {
 				l1 = LocalTime.parse(av.getWork_start());
 				l2 = LocalTime.parse(av.getWork_end());
+				av.setWork_minute((Duration.between(l1, l2).toMinutes()) - av.getLunch_hour());
 			}
 			
 			String msg="";
@@ -356,6 +365,7 @@ public class TimeReportController {
 				etd.setUserid(av.getUserid());
 				etd.setFull_name(av.getFull_name());
 				etd.setWork_hour("0 H 0 Min");
+				etd.setWork_desc("Overtime only");
 				avrepo.save(etd);
 			}			
 			
@@ -398,20 +408,31 @@ public class TimeReportController {
 		} else {
 			userid = Long.parseLong(empid);
 		}
-
+		
+		
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(userid);
 		model.addAttribute("emp", empdtl);
 
-		ArrayList<Time_report_approved> ewsh = null;
+		ArrayList<EmpTimeReportDTO> ewsh = null;
 		if(from_date==null) {
-			ewsh = empWSHrepo.getToday(userid);
+			LocalDate todaydate = LocalDate.now();	
+			from_date= String.valueOf(todaydate.withDayOfMonth(1));
+			LocalDate lastDayOfMonth = LocalDate.parse(from_date, DateTimeFormatter.ofPattern("yyyy-M-dd"))
+				       .with(TemporalAdjusters.lastDayOfMonth());
+			to_date= lastDayOfMonth.toString();
+			
+			ewsh = avrepo.getApprovedBetweenDates(userid,from_date,to_date);
 		}else {
-			ewsh = empWSHrepo.getAllBetweenDates(userid, from_date, to_date);
+			ewsh = avrepo.getApprovedBetweenDates(userid, from_date, to_date);
 		}
 		
 		long total_wh = 0;
-		for (Time_report_approved w : ewsh) {
+		
+		for (EmpTimeReportDTO w : ewsh) {
 			total_wh += w.getWork_minute();
+			for (Timereport_Overtime_emp o : w.getOvertime()) {
+				total_wh += o.getWork_minute();
+			}
 		}
 		model.addAttribute("wsh", ewsh);
 		model.addAttribute("total_days", ewsh.size());
@@ -474,6 +495,80 @@ public class TimeReportController {
 		return "Succesfully Rejected";
 	}
 
+	
+	@GetMapping("/approveRGtime")
+	@ResponseBody
+	public String approveRGtime(Authentication auth, @ModelAttribute EmpTimeReportDTO emptr) {
+		User creator = (User) auth.getPrincipal();		
+		EmpTimeReportDTO extr = avrepo.findById(emptr.getAv_id()).get();
+		extr.setStatus(emptr.getStatus());
+		extr.setWork_start(emptr.getWork_start());
+		extr.setWork_end(emptr.getWork_end());
+		extr.setLunch_hour(emptr.getLunch_hour());
+		extr.setWork_desc(emptr.getWork_desc());
+		extr.setWork_minute(emptr.getWork_minute());
+		extr.setWork_hour(emptr.getWork_hour());
+		extr.setIsapproved(true);
+		extr.setIsrejected(false);
+		avrepo.save(extr);
+		return extr.getAv_id();
+	}
+	
+	@GetMapping("/rejectRGtime")
+	@ResponseBody
+	public String rejectRGtime(Authentication auth, @ModelAttribute EmpTimeReportDTO emptr) {
+		User creator = (User) auth.getPrincipal();		
+		EmpTimeReportDTO extr = avrepo.findById(emptr.getAv_id()).get();
+		extr.setStatus(emptr.getStatus());
+		extr.setWork_start(emptr.getWork_start());
+		extr.setWork_end(emptr.getWork_end());
+		extr.setLunch_hour(emptr.getLunch_hour());
+		extr.setWork_desc(emptr.getWork_desc());
+		extr.setWork_hour(emptr.getWork_hour());
+		extr.setWork_minute(emptr.getWork_minute());
+		extr.setIsapproved(false);
+		extr.setIsrejected(true);
+		avrepo.save(extr);
+		return extr.getAv_id();
+	}
+	
+	@GetMapping("/approveOBtime")
+	@ResponseBody
+	public String approveOBtime(Authentication auth, @ModelAttribute Timereport_Overtime_emp  emptr) {
+		User creator = (User) auth.getPrincipal();		
+		Timereport_Overtime_emp extr = obrepo.findById(emptr.getOb_id()).get();
+		extr.setStatus(emptr.getStatus());
+		extr.setWork_start(emptr.getWork_start());
+		extr.setWork_end(emptr.getWork_end());
+		extr.setLunch_hour(emptr.getLunch_hour());
+		extr.setWork_desc(emptr.getWork_desc());
+		extr.setWork_hour(emptr.getWork_hour());
+		extr.setWork_minute(emptr.getWork_minute());
+		extr.setIsapproved(true);
+		extr.setIsrejected(false);
+		obrepo.save(extr);
+		return extr.getAv_id();
+	}
+	
+	@GetMapping("/rejectOBtime")
+	@ResponseBody
+	public String rejectOBtime(Authentication auth, @ModelAttribute Timereport_Overtime_emp  emptr) {
+		User creator = (User) auth.getPrincipal();		
+		Timereport_Overtime_emp extr = obrepo.findById(emptr.getOb_id()).get();
+		extr.setStatus(emptr.getStatus());
+		extr.setWork_start(emptr.getWork_start());
+		extr.setWork_end(emptr.getWork_end());
+		extr.setLunch_hour(emptr.getLunch_hour());
+		extr.setWork_desc(emptr.getWork_desc());
+		extr.setWork_hour(emptr.getWork_hour());
+		extr.setWork_minute(emptr.getWork_minute());
+		extr.setIsapproved(false);
+		extr.setIsrejected(true);
+		obrepo.save(extr);
+		return extr.getAv_id();
+	}
+	
+	
 	@GetMapping("/approveAvailablity")
 	@ResponseBody
 	public String ApproveAvailablity(Authentication auth, @RequestParam String av_id, @RequestParam String start,

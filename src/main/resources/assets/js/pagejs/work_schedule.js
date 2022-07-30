@@ -394,5 +394,49 @@ $("#daterangeselect").change(function() {
 			}
 		}
 		
-		//setAutorowspan('#datatableDefaultz',2);
-		//setAutorowspan('#datatableDefaultz',0);
+		
+		
+		
+		
+		
+		
+		$('.form-check-input').change(function(e) {
+			var action = $(this).attr("ajaxaction");			
+			$target= $(e.target).closest('tr');	
+			var av_id = $target.find(".av_id").val();
+			var ob_id = $target.find(".ob_id").val();
+			
+			var desc= $target.find(".work_desc").val();
+			var start = $target.find(".start").val();
+			var end = $target.find(".end").val();
+			var lbreak = $target.find(".lbreak").val();	
+			var date = $target.find(".date").val();
+			var status = $target.find(".status").val();	
+			var wmint = $target.find(".wmint").val();
+			var work_hour = $target.find(".work_hour").val();
+			
+			//alert(work_hour);
+			
+			if(validate(e)){
+				$.get(action, 
+						{	status: status,					 		
+					 		work_start:start,
+					 		work_end:end,
+					 		lunch_hour:lbreak,
+					 		work_desc:desc,
+					 		work_minute:wmint,			 		
+					 		work_hour:work_hour,					 		
+					 		av_id:av_id,
+					 		ob_id:ob_id}, 
+			 		
+			 		function (data, textStatus, jqXHR) {
+				   // alert(data);
+				});
+			}else {
+				$(this).prop('checked', false);
+			}			
+			
+		});
+		
+		setAutorowspan('#datatableDefaultz',2);
+		setAutorowspan('#datatableDefaultz',0);

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>SET WORK SCHEDULE</title>
+<title>REPORT WORK TIME</title>
 <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="description" content="" />
@@ -88,7 +88,7 @@
 							<option value="nm">Next month</option>
 							<option selected="selected" value="c">Custom</option>
 						</select> 						
-						<input type="week" class="form-control" id="inputweekno"/>
+						<input type="week" class="form-control" onfocus="this.showPicker()" id="inputweekno"/>
 					</div>
 					<input type="hidden" id="truserid" name="userid"
 						th:value="${userdtl.empid}" /> <input type="hidden"
