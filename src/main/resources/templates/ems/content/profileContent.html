@@ -48,6 +48,21 @@
 										class="fa fa-map-marker-alt fa-fw text-white text-opacity-50"></i>
 									<span th:text="${userdtl.address_full}"></span>
 								</div>
+								
+								<div class="mb-3 ">
+									<span th:if="${userdtl.socialMediaLinks.facebook}!=''">
+										<a th:if="${userdtl.socialMediaLinks.facebook}" th:href="${userdtl.socialMediaLinks.facebook}" target="_blank"><i class="fab fa-facebook fa-fw text-white "></i></a>									
+									</span>
+									<span th:if="${userdtl.socialMediaLinks.instagram}!=''">
+										<a  th:href="${userdtl.socialMediaLinks.instagram}" target="_blank"><i class="fab fa-instagram fa-fw text-white"></i></a>
+									</span>
+									<span th:if="${userdtl.socialMediaLinks.twitter}!=''">
+										<a th:href="${userdtl.socialMediaLinks.twitter}" target="_blank"><i class="fab fa-twitter fa-fw text-white"></i></a>
+									</span>
+									<span th:if="${userdtl.socialMediaLinks.linkedin}!=''">
+										<a th:href="${userdtl.socialMediaLinks.linkedin}" target="_blank"><i class="fab fa-linkedin fa-fw text-white"></i></a>
+									</span>
+								</div>
 
 
 								<hr class="" />
@@ -256,6 +271,20 @@
 									</div>
 									<div class="tab-pane fade" id="edit">
 										<div class="profile-content-container">
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
 											<div class="accordion" id="accordionExample">
 											<div class="alert alert-warning">												
 												<small class="img_size_warning">Only .pdf file allowed for CV and Certificates. Photo can be uploaded as ID copy.
@@ -403,6 +432,44 @@
 											      </div>
 											    </div>
 											  </div>
+											  
+											  <div class="accordion-item">
+											    <h2 class="accordion-header" id="headingOne">
+											      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#sml">
+											        Social Media Links
+											      </button>
+											    </h2>
+											    <div id="sml" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
+											      <div class="accordion-body">
+											      	
+											      	<table class="table">
+														<tr>
+															<td>Facebook</td>
+															<td><input th:value="${userdtl.socialMediaLinks.facebook}" name="socialMediaLinks.facebook" type="text" class="form-control"  placeholder="Enter facebook Link"></td>
+														</tr>
+														
+														<tr>
+															<td>Instagram</td>
+															<td><input th:value="${userdtl.socialMediaLinks.instagram}" name="socialMediaLinks.instagram" type="text" class="form-control"   placeholder="Enter instagram Link"></td>
+														</tr>
+														
+														<tr>
+															<td>Twitter</td>
+															<td><input th:value="${userdtl.socialMediaLinks.twitter}" name="socialMediaLinks.linkedin" type="text" class="form-control"  placeholder="Enter linkedin Link"></td>
+														</tr>
+														
+														<tr>
+															<td>LinkedIn</td>
+															<td><input th:value="${userdtl.socialMediaLinks.linkedin}" name="socialMediaLinks.twitter" type="text" class="form-control"   placeholder="Enter twitter Link"></td>
+														</tr>
+														
+													</table>
+											      	
+											      </div>
+											    </div>
+											  </div>
+											  
+											  
 											  <br/>
 												<div>
 													<input type="submit"  class="btn btn-info form-control" value="Save Info"/>

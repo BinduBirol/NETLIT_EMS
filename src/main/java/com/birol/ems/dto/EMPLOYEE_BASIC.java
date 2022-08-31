@@ -5,12 +5,17 @@ import java.util.Arrays;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
@@ -18,6 +23,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -72,6 +79,10 @@ public class EMPLOYEE_BASIC {
 	@Lob
 	private byte [] doc_others;
 	private boolean status;
+	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name="empid")
+	private SocialMediaLinksDTO socialMediaLinks;
 	
 	@Transient
 	private MultipartFile emp_image_m;
@@ -426,6 +437,15 @@ public class EMPLOYEE_BASIC {
 	}
 	public void setEmp_others_encoded(String emp_others_encoded) {
 		this.emp_others_encoded = emp_others_encoded;
+	}
+
+	public SocialMediaLinksDTO getSocialMediaLinks() {
+		return socialMediaLinks;
+	}
+
+	public void setSocialMediaLinks(SocialMediaLinksDTO socialMediaLinks) {
+		this.socialMediaLinks = socialMediaLinks;
 	}	
+	
 
 }

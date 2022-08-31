@@ -18,7 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.birol.ems.dao.ComplaintsRepo;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
+import com.birol.ems.dto.SocialMediaLinksDTO;
 import com.birol.ems.repo.EmployeeRepository;
+import com.birol.ems.repo.SocialMediaLinkRepo;
 import com.birol.ems.service.EmployeeService;
 import com.birol.persistence.dao.RoleRepository;
 import com.birol.persistence.model.User;
@@ -43,13 +45,22 @@ public class ProfileController {
 	ComplaintsRepo complaintsRepo;
 	@Autowired
 	com.birol.ems.dao.CommentRepo commentRepo;
+	@Autowired
+	SocialMediaLinkRepo socialMediaLinkRepo;
 
 	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
 
 	@GetMapping("/profile")
 	public ModelAndView profile(final ModelMap model, Authentication auth) {
 		User user = (User) auth.getPrincipal();
-		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());	
+		try {
+			empdtl.getSocialMediaLinks().hashCode();
+		} catch (NullPointerException e) {
+			SocialMediaLinksDTO sml= new SocialMediaLinksDTO(user.getId());
+			empdtl.setSocialMediaLinks(sml);
+			//empdtl.getSocialMediaLinks().setEmpid(user.getId());
+		}
 		model.addAttribute("user", user);
 		model.addAttribute("userdtl", empdtl);
 		return new ModelAndView("ems/pages/profile", model);
@@ -105,6 +116,10 @@ public class ProfileController {
 			model.addAttribute("message", e.getMessage());
 			logger.error(e.getMessage());
 		}
+		
+		personal.getSocialMediaLinks().setEmpid(empbasic.getEmpid());
+		socialMediaLinkRepo.save(personal.getSocialMediaLinks());
+		empbasic.setSocialMediaLinks(personal.getSocialMediaLinks());
 		employeeRepository.save(empbasic);
 		model.addAttribute("message", "Succesfully Updated Info For " + empbasic.getFirst_name());
 		model.addAttribute("class", "text-success");

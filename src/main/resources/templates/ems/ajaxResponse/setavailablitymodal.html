@@ -109,15 +109,15 @@
 	<div class="row">
 		<div class="col-4">
 			<label>Work Start</label> <input type="time" value="08:00" name="work_start" id="start"
-			 onchange="calculate();"	class="timepicker form-control text-center absent">
+			 onchange="calculate();"	class="timepicker form-control text-center absents">
 		</div>
 		<div class="col-4">
 			<label>Interval (minute)</label> <input value=30 type="number" name="lunch_hour" id="lbreak"
-				onchange="calculate();" class="form-control text-center absent">
+				onchange="calculate();" class="form-control text-center absents">
 		</div>
 		<div class="col-4">
 			<label>Work End</label> <input value="16:30" type="time" name="work_end" id="end"
-				onchange="calculate();" class="form-control text-center absent timepicker">
+				onchange="calculate();" class="form-control text-center absents timepicker">
 		</div>
 	</div>
 	
@@ -191,7 +191,7 @@ setModalData();
 
 function setModalData() {
 	$('#availability option[value="1"]').attr("selected", "selected");
-	$('.absent').addClass("is-valid");
+	$('.absents').addClass("is-valid");
 	let today = new Date().toISOString().substr(0, 10);
 	$("#av_from_date").val(today);
 	$("#av_to_date").val(today);	
@@ -201,22 +201,22 @@ function setModalData() {
 
 $('#availability').change( function() {	
 	if ($(this).val() == 1) {		
-		$('.absent').prop('required', true);
-		$('.absent').prop('disabled', false);
+		$('.absentss').prop('required', true);
+		$('.absentss').prop('disabled', false);
 		$(this).removeClass("is-invalid");
 		$(this).addClass("is-valid");
-		$('.absent').removeClass("is-invalid");
-		$('.absent').addClass("is-valid");
+		$('.absents').removeClass("is-invalid");
+		$('.absents').addClass("is-valid");
 	} else {		
 		
 		$("#start").val("");
 		$("#end").val("");
 		$("#lbreak").val(0);	
 		
-		$(".absent").removeAttr("required");
-		$('.absent').prop('disabled', true);
-		$(".absent").removeClass("is-valid");
-		$(".absent").addClass("is-invalid");		
+		$(".absents").removeAttr("required");
+		$('.absents').prop('disabled', true);
+		$(".absents").removeClass("is-valid");
+		$(".absents").addClass("is-invalid");		
 		$(this).removeClass("is-valid");
 		$(this).addClass("is-invalid");	
 		calculate();
