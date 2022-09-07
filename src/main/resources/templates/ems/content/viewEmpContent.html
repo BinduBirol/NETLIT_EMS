@@ -47,6 +47,12 @@
 										class="fa fa-map-marker-alt fa-fw text-white text-opacity-50"></i>
 									<span th:text="${userdtl.address_full}"></span>
 								</div>
+								
+								<div class="mb-3 ">
+									<span th:if="${userdtl.socialMediaLinks.linkedin}!=null">
+										<a th:href="${userdtl.socialMediaLinks.linkedin}" target="_blank"><i class="fab fa-linkedin fa-fw text-white"></i></a>
+									</span>		
+								</div>
 
 
 								<hr class="" />

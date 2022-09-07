@@ -35,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.birol.ems.dao.ComplaintsRepo;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
+import com.birol.ems.dto.SocialMediaLinksDTO;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmployeeService;
 import com.birol.persistence.dao.RoleRepository;
@@ -232,6 +233,12 @@ public class EmployeeController {
 	@GetMapping("/viewEmployee")
 	public ModelAndView viewEmployee(@RequestParam("empid") Long empid, final ModelMap model) {
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
+		try {
+			empdtl.getSocialMediaLinks().hashCode();
+		} catch (NullPointerException e) {
+			SocialMediaLinksDTO sml= new SocialMediaLinksDTO();
+			empdtl.setSocialMediaLinks(sml);		
+		}
 		model.addAttribute("userdtl", empdtl);
 		return new ModelAndView("ems/ajaxResponse/viewEmployee", model);
 	}

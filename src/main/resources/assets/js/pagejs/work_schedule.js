@@ -10,8 +10,8 @@ $("#daterangeselect").change(function() {
 			$("#to_date").val(moment().subtract(1, 'days').format('YYYY-MM-DD')); 
 
 		} else if ($c == "n2d") {
-			$("#from_date").val(moment().format('YYYY-MM-DD'));
-			$("#to_date").val(moment().add(2, 'days').format('YYYY-MM-DD')); 
+			$("#from_date").val(moment().add(1, 'days').format('YYYY-MM-DD'));
+			$("#to_date").val(moment().add(3, 'days').format('YYYY-MM-DD')); 
 
 		} else if ($c == "tm") {
 			$("#from_date").val(moment().startOf('month').format('YYYY-MM-DD'));
