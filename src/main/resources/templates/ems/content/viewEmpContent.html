@@ -49,9 +49,18 @@
 								</div>
 								
 								<div class="mb-3 ">
-									<span th:if="${userdtl.socialMediaLinks.linkedin}!=null">
-										<a th:href="${userdtl.socialMediaLinks.linkedin}" target="_blank"><i class="fab fa-linkedin fa-fw text-white"></i></a>
-									</span>		
+									<span th:if="${userdtl.socialMediaLinks.facebook}!='' and ${userdtl.socialMediaLinks.facebook}!=null">
+										<a th:href="${userdtl.socialMediaLinks.facebook}" target="_blank"><i class="fab fa-facebook fa-fw text-white text-opacity-50"></i></a>									
+									</span>
+									<span th:if="${userdtl.socialMediaLinks.instagram}!='' and ${userdtl.socialMediaLinks.instagram}!=null">
+										<a  th:href="${userdtl.socialMediaLinks.instagram}" target="_blank"><i class="fab fa-instagram fa-fw text-white text-opacity-50"></i></a>
+									</span>
+									<span th:if="${userdtl.socialMediaLinks.twitter}!='' and ${userdtl.socialMediaLinks.twitter}!=null">
+										<a th:href="${userdtl.socialMediaLinks.twitter}" target="_blank"><i class="fab fa-twitter fa-fw text-white text-opacity-50"></i></a>
+									</span>
+									<span th:if="${userdtl.socialMediaLinks.linkedin}!='' and ${userdtl.socialMediaLinks.linkedin}!=null">
+										<a th:href="${userdtl.socialMediaLinks.linkedin}" target="_blank"><i class="fab fa-linkedin fa-fw text-white text-opacity-50"></i></a>
+									</span>
 								</div>
 
 

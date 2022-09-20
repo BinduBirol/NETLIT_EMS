@@ -151,16 +151,10 @@ function calculate(e) {
 
 
 
-function getworkminute(start,end,lbreak) {		
-	 var diff = ((Math.abs(new Date('2022-05-30 '+start) - new
+function getworkminute(start,end,lbreak) {	
+
+	var diff = ((Math.abs(new Date('2022-05-30 '+start) - new
 			 Date('2022-05-30 '+end))/1000/60)- lbreak);
-	
-	 	/*start = start.split(":");
-	    end = end.split(":");
-	    var startDate = new Date(0, 0, 0, start[0], start[1], 0);
-	    var endDate = new Date(0, 0, 0, end[0], end[1], 0);
-	    var diff = ((endDate.getTime() - startDate.getTime())/1000/60)-lbreak;
-	    */
 	return diff;
 	
 }

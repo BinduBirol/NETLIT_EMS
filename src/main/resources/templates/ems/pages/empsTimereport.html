@@ -75,10 +75,10 @@
 
 						<ul class="breadcrumb">
 							<li class="breadcrumb-item"><a href="#">WORK SCHEDULE</a></li>
-							<li class="breadcrumb-item active">EMPLOYEE'S AVAILABILITY</li>
+							<li class="breadcrumb-item active">PENDING TIME REPORTS</li>
 						</ul>
 
-						<h1 class="page-header">Set work schedule from availability</h1>
+						<h1 class="page-header">Pending Time Reports</h1>
 
 						<hr class="mb-4" />
 						<div class="row">
@@ -156,8 +156,7 @@
 												th:text="${emp.full_name}"></a> [ Chief ]
 										</h5>
 										<ul class="small list-unstyled">
-											<li><span id="daterangehtml"></span> [ [[${wsh.size}]] ]</li>
-											<li>Total available hours: [[${total_work}]]</li>
+											<li><span id="daterangehtml"></span> [ [[${wsh.size}]] Pending ]</li>				
 
 										</ul>
 
@@ -168,7 +167,7 @@
 
 
 
-								<table class="table small table-bordered table-striped">
+								<table id="datatableDefaultz" class="table small table-bordered ">
 									<thead>
 										<tr>
 											<th>Week</th>
@@ -186,7 +185,7 @@
 												type="hidden" /> <i class="fa fa-thumbs-up"></i></th>
 										</tr>
 									</thead>
-									<tbody id="datatableDefaultz" >
+									<tbody  >
 
 										<div th:each="wsh,iterator : ${wsh}">
 
@@ -237,8 +236,7 @@
 													th:text="${wsh.work_desc}" rows="2"></textarea></td>
 											
 											
-											<td >
-												
+											<td >													
 													<div class="form-group">
 														<div class="form-check">
 															<input class="form-check-input" ajaxaction="approveRGtime" type="radio" value="" th:name="${wsh.av_id}" id="defaultRadio1" th:checked="${wsh.isapproved}" />

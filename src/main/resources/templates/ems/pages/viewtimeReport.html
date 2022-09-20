@@ -47,11 +47,11 @@
 							
 								<ul class="breadcrumb">
 									<li class="breadcrumb-item"><a href="#">TIME REPORT</a></li>
-									<li class="breadcrumb-item active">VIEW TIME REPORT</li>
+									<li class="breadcrumb-item active">APPROVED WORK TIME</li>
 								</ul>
 								
 								<h1 class="page-header">
-									View Time Report
+									View Approved Time Report
 								</h1>
 								
 								<hr class="mb-4" />
@@ -115,7 +115,8 @@
 												</h5>
 												<ul class="small list-unstyled">
 													<li><span id="daterangehtml"></span> [ [[${total_days}]] ]</li>													
-													<li>Total work hour: <span class="h6">[[${total_work}]]</span></li>
+													<li>Total Regular Work hour: <span class="h6 hljs-attr">[[${total_work}]]</span></li>
+													<li>Total Overtime hour: <span class="h6 hljs-string">[[${total_ob_work}]]</span></li>
 													
 												</ul>
 																					
@@ -125,16 +126,15 @@
 										
 											<table  id="datatableDefaultz" class="table table-bordered ">
 												<thead>
-													<tr>
+													<tr class="align-middle">
 														<th>Week</th>
 														<th>Date</th>
-																											
-														<th>Hour</th>
-														<th>Start</th>
-														<th>End</th>
-														<th>Break (Min)</th>
+																										
+														<th>Work Hour</th>
+														<th>Timing</th>											
 														
-														<th class="w-25 p-3">Desc</th>														
+														<th class="w-25 p-3">Desc</th>	
+														<th>Type</th>														
 														
 													</tr>
 												</thead>
@@ -142,31 +142,38 @@
 													
 													<div th:each="wsh,iterator : ${wsh}">
 													<tr 
-														 class="align-middle">														
+														 class="align-middle hljs-attr">														
 														<td class="h2" th:text="${wsh.week}">week</td>
 														<td >[[${wsh.day}]]<br/>[[${wsh.date}]]</td>
 														
 														<td th:text="${wsh.work_hour}">Hour</td>
-														<td th:text="${wsh.work_start}">Start</td>
-														<td th:text="${wsh.work_end}">End</td>
-														<td th:text="${wsh.lunch_hour}">Break</td>								
+														<td class="small">
+															Start : [[${wsh.work_start}]]<br/>
+															End : [[${wsh.work_end}]]<br/>
+															Break : [[${wsh.lunch_hour}]] Min
+														</td>
+																				
 														
 														<td  th:text="${wsh.work_desc}">Desc</td>
+														<td th:text="${wsh.av_type.typename}"></td>
 														
 														
 													</tr>
 													
 													<tr th:each="wsh,iterator : ${wsh.overtime}"
-														 class="align-middle">														
+														 class="align-middle  hljs-string">														
 														<td class="h2" th:text="${wsh.week}">week</td>
 														<td >[[${wsh.day}]]<br/>[[${wsh.date}]]</td>
 														
 														<td th:text="${wsh.work_hour}">Hour</td>
-														<td th:text="${wsh.work_start}">Start</td>
-														<td th:text="${wsh.work_end}">End</td>
-														<td th:text="${wsh.lunch_hour}">Break</td>								
+														<td class="small">
+															Start : [[${wsh.work_start}]]<br/>
+															End : [[${wsh.work_end}]]<br/>
+															Break : [[${wsh.lunch_hour}]] Min
+														</td>							
 														
 														<td  th:text="${wsh.work_desc}">Desc</td>
+														<td th:text="${wsh.ob_type.typename}"></td>
 														
 														
 													</tr>
@@ -305,7 +312,7 @@
 		}
 		
 		
-		//setAutorowspan('#datatableDefaultz',2);
+		setAutorowspan('#datatableDefaultz',5);
 		setAutorowspan('#datatableDefaultz',1);
 		setAutorowspan('#datatableDefaultz',0);
 		 

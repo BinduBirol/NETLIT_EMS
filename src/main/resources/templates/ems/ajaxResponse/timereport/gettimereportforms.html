@@ -42,11 +42,11 @@
 			</select></td>
 
 			<td><input type="time" th:value='${tr.work_start}'				
-				onchange='calculate(event)' name='work_start'
+				onchange='calculate(event)' name='work_start' onclick="this.showPicker()"
 				class='timepicker start cal form-control form-control-sm text-center absent '>
 			</td>
 			<td><input th:value='${tr.work_end}' onchange='calculate(event)'				
-				type="time" name='work_end'
+				type="time" name='work_end' onclick="this.showPicker()"
 				class='timepicker end cal form-control form-control-sm text-center absent  '>
 			</td>
 			<td><input onchange='calculate(event)'				

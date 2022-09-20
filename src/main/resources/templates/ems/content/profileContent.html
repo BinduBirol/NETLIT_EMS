@@ -50,17 +50,17 @@
 								</div>
 								
 								<div class="mb-3 ">
-									<span th:if="${userdtl.socialMediaLinks.facebook}!=null">
-										<a th:href="${userdtl.socialMediaLinks.facebook}" target="_blank"><i class="fab fa-facebook fa-fw text-white "></i></a>									
+									<span th:if="${userdtl.socialMediaLinks.facebook}!='' and ${userdtl.socialMediaLinks.facebook}!=null">
+										<a th:href="${userdtl.socialMediaLinks.facebook}" target="_blank"><i class="fab fa-facebook fa-fw text-white text-opacity-50"></i></a>									
 									</span>
-									<span th:if="${userdtl.socialMediaLinks.instagram}!=null">
-										<a  th:href="${userdtl.socialMediaLinks.instagram}" target="_blank"><i class="fab fa-instagram fa-fw text-white"></i></a>
+									<span th:if="${userdtl.socialMediaLinks.instagram}!='' and ${userdtl.socialMediaLinks.instagram}!=null">
+										<a  th:href="${userdtl.socialMediaLinks.instagram}" target="_blank"><i class="fab fa-instagram fa-fw text-white text-opacity-50"></i></a>
 									</span>
-									<span th:if="${userdtl.socialMediaLinks.twitter}!=null">
-										<a th:href="${userdtl.socialMediaLinks.twitter}" target="_blank"><i class="fab fa-twitter fa-fw text-white"></i></a>
+									<span th:if="${userdtl.socialMediaLinks.twitter}!='' and ${userdtl.socialMediaLinks.twitter}!=null">
+										<a th:href="${userdtl.socialMediaLinks.twitter}" target="_blank"><i class="fab fa-twitter fa-fw text-white text-opacity-50"></i></a>
 									</span>
-									<span th:if="${userdtl.socialMediaLinks.linkedin}!=null">
-										<a th:href="${userdtl.socialMediaLinks.linkedin}" target="_blank"><i class="fab fa-linkedin fa-fw text-white"></i></a>
+									<span th:if="${userdtl.socialMediaLinks.linkedin}!='' and ${userdtl.socialMediaLinks.linkedin}!=null">
+										<a th:href="${userdtl.socialMediaLinks.linkedin}" target="_blank"><i class="fab fa-linkedin fa-fw text-white text-opacity-50"></i></a>
 									</span>
 								</div>
 
@@ -427,7 +427,14 @@
 											      			<td>Others</td>
 											      			<td><input name="doc_m_others"  accept="application/pdf"  type="file" class="form-control"  placeholder="Enter CV"></td>
 											      		</tr>
+											      		
+											      		<tr>
+											      			<td class="small text-warning" colspan="2">
+											      			Documents are required to be added by the employee. Only .pdf and .docx are allowed as a file format in CV and certificates. Files and images are allowed in  .jpeg or .png format up to 10 MB in size. By uploading the second file replaces the existing one.</span>
 											      	
+											      			</td>
+											      		</tr>
+											      		
 											      	</table>
 											      </div>
 											    </div>

@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -15,6 +18,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import com.birol.ems.timereport.dto.Availability_Type;
 import com.birol.ems.timereport.dto.Timereport_Overtime_emp;
 
 @Entity
@@ -29,6 +33,7 @@ public class EmpTimeReportDTO {
 	private int lunch_hour;
 	private String work_start;
 	private String work_end;
+	@Column(nullable=false)
 	private int status;
 	private int obtype;
 	private int obminute;
@@ -36,6 +41,11 @@ public class EmpTimeReportDTO {
 	@OneToMany(mappedBy = "av_id")
 	@LazyCollection(LazyCollectionOption.FALSE)	
 	private List<Timereport_Overtime_emp> overtime;
+	
+	@JoinColumn(name="status", referencedColumnName="typeid",insertable=false, updatable=false)
+	@OneToOne
+	@LazyCollection(LazyCollectionOption.FALSE)	
+	private Availability_Type av_type;
 	
 	private String work_desc;
 	private int week;
@@ -267,6 +277,15 @@ public class EmpTimeReportDTO {
 	public void setOvertime(List<Timereport_Overtime_emp> overtime) {
 		this.overtime = overtime;
 	}
+
+	public Availability_Type getAv_type() {
+		return av_type;
+	}
+
+	public void setAv_type(Availability_Type av_type) {
+		this.av_type = av_type;
+	}
+	
 	
 	
 

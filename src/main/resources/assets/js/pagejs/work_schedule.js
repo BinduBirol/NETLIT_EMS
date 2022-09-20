@@ -438,5 +438,5 @@ $("#daterangeselect").change(function() {
 			
 		});
 		
-		setAutorowspan('#datatableDefaultz',2);
-		setAutorowspan('#datatableDefaultz',0);
+		//setAutorowspan('#datatableDefaultz',2);
+		//setAutorowspan('#datatableDefaultz',0);

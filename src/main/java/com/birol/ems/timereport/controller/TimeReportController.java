@@ -427,16 +427,18 @@ public class TimeReportController {
 		}
 		
 		long total_wh = 0;
+		long total_ob_wh = 0;
 		
 		for (EmpTimeReportDTO w : ewsh) {
 			total_wh += w.getWork_minute();
 			for (Timereport_Overtime_emp o : w.getOvertime()) {
-				total_wh += o.getWork_minute();
+				total_ob_wh += o.getWork_minute();
 			}
 		}
 		model.addAttribute("wsh", ewsh);
 		model.addAttribute("total_days", ewsh.size());
 		model.addAttribute("total_work", wSHservice.mintsTOHmConvert(total_wh));
+		model.addAttribute("total_ob_work", wSHservice.mintsTOHmConvert(total_ob_wh));
 		model.addAttribute("emps", employeeService.getEmployeeList());
 		return new ModelAndView("ems/pages/viewtimeReport", model);
 	}

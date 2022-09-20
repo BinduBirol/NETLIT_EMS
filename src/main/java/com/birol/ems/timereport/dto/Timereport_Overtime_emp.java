@@ -5,13 +5,19 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.lang.NonNull;
 
 @Entity
+@Table(name="emp_time_report_overtime")
 public class Timereport_Overtime_emp {
 	@Id
 	private String ob_id;	
@@ -48,9 +54,10 @@ public class Timereport_Overtime_emp {
 	private Date created;
 	private Date updated;
 	
-	
-
-	
+	@JoinColumn(name="status", referencedColumnName="typeid",insertable=false, updatable=false)
+	@OneToOne
+	@LazyCollection(LazyCollectionOption.FALSE)	
+	private Overtime_Type ob_type;	
 
 	public Timereport_Overtime_emp (long userid, LocalDate date) {
 		super();
@@ -268,6 +275,15 @@ public class Timereport_Overtime_emp {
 
 	public void setUpdated(Date updated) {
 		this.updated = updated;
+	}
+
+	
+	public Overtime_Type getOb_type() {
+		return ob_type;
+	}
+
+	public void setOb_type(Overtime_Type ob_type) {
+		this.ob_type = ob_type;
 	}
 
 	public Timereport_Overtime_emp() {
