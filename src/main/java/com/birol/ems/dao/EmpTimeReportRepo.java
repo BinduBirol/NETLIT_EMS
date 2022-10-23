@@ -16,7 +16,7 @@ public interface EmpTimeReportRepo extends JpaRepository<EmpTimeReportDTO, Strin
 	@Query(value = "SELECT * from emp_time_report  where userId = :userid AND  date BETWEEN CURDATE()-6 AND CURDATE()",nativeQuery = true)
 	ArrayList<EmpTimeReportDTO> getAvailablityByuseridandDatelessthanToday(@Param("userid") Long userid);
 	
-	@Query(value = "SELECT * from emp_time_report  where userId = :userid AND  date <= CURDATE() and isapproved=0 and isrejected=0 order by week asc, date asc",nativeQuery = true)
+	@Query(value = "SELECT * from emp_time_report  where userId = :userid AND  date <= CURDATE()  order by week asc, date asc",nativeQuery = true)
 	ArrayList<EmpTimeReportDTO> getAvailablityByuseridDatelessthanToday(@Param("userid") Long userid);
 	
 	@Query(value = "SELECT * from emp_time_report  where userId = :userid AND  date <= CURDATE() and isapproved=1 and isrejected=0 order by week asc, date asc",nativeQuery = true)
@@ -25,13 +25,13 @@ public interface EmpTimeReportRepo extends JpaRepository<EmpTimeReportDTO, Strin
 	@Query(value = "SELECT * from emp_time_report  where date <= CURDATE() and isapproved=0 and isrejected=0 order by week asc, date asc",nativeQuery = true)
 	ArrayList<EmpTimeReportDTO> getAvailablityAllandDateToday();
 	
-	@Query(value = "SELECT * from emp_time_report  where userId = :userid AND  date BETWEEN STR_TO_DATE(:startDate, '%Y-%m-%d')  AND STR_TO_DATE(:endDate, '%Y-%m-%d') and isapproved=1 and isrejected=0 order by week asc, date asc ",nativeQuery = true)
+	@Query(value = "SELECT * from emp_time_report  where userId = :userid AND  date BETWEEN STR_TO_DATE(:startDate, '%Y-%m-%d')  AND STR_TO_DATE(:endDate, '%Y-%m-%d') order by week asc, date asc ",nativeQuery = true)
 	public ArrayList<EmpTimeReportDTO> getApprovedBetweenDates(@Param("userid")long userid, @Param("startDate")String startDate,@Param("endDate")String endDate);
 	
 	@Query(value = "SELECT * from emp_time_report  where userId = :userid AND  date BETWEEN STR_TO_DATE(:startDate, '%Y-%m-%d')  AND STR_TO_DATE(:endDate, '%Y-%m-%d') ",nativeQuery = true)
 	public ArrayList<EmpTimeReportDTO> getAllBetweenDates(@Param("userid")long userid, @Param("startDate")String startDate,@Param("endDate")String endDate);
 	
-	@Query(value = "SELECT * from emp_time_report  where userId = :userid AND  date BETWEEN STR_TO_DATE(:startDate, '%Y-%m-%d')  AND STR_TO_DATE(:endDate, '%Y-%m-%d') and isapproved=0 and isrejected=0 order by week asc, date asc",nativeQuery = true)
+	@Query(value = "SELECT * from emp_time_report  where userId = :userid AND  date BETWEEN STR_TO_DATE(:startDate, '%Y-%m-%d')  AND STR_TO_DATE(:endDate, '%Y-%m-%d') order by week asc, date asc",nativeQuery = true)
 	public ArrayList<EmpTimeReportDTO> getUserBetweenDates(@Param("userid")long userid, @Param("startDate")String startDate,@Param("endDate")String endDate);
 	
 	

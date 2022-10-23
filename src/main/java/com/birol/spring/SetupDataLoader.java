@@ -79,8 +79,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createAvailabilityTypeIfNotFound(3,"Vacation",50,"","",0);
         createAvailabilityTypeIfNotFound(4,"Child Care",90,"","",0);
         createAvailabilityTypeIfNotFound(5,"Absent for other reason",0,"","",0);
-        createAvailabilityTypeIfNotFound(6,"Holiday",0,"","",0);  
-
+        createAvailabilityTypeIfNotFound(6,"Holiday",0,"","",0);
        
         createOvertimeTypeIfNotFound	(1,"OB-Morning",110,"06:00","08:00",0);        
         createOvertimeTypeIfNotFound	(2,"OB-Evening",110,"18:00","23:59",0);        

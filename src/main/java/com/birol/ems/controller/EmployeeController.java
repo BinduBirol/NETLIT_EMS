@@ -198,8 +198,16 @@ public class EmployeeController {
 				model.addAttribute("message", e.getMessage());
 				logger.error(e.getMessage());
 			}
-			employeeRepository.save(emp);
-			model.addAttribute("message", "Successfully Updated Info For " + emp.getFull_name());
+			
+			String msg="";
+			if(emp.getRoleid()==4) {
+				msg="Can't update a Super Admin ID !";				
+			}else {
+				employeeRepository.save(emp);
+				msg="Successfully Updated Info For " + emp.getFull_name();
+			}
+			
+			model.addAttribute("message", msg);
 			model.addAttribute("class", "text-success");
 		} catch (GenericJDBCException e) {
 			e.printStackTrace();

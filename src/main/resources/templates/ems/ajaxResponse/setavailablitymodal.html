@@ -77,12 +77,24 @@
 		<div class="col-12 col-sm-4">
 			<label class="custom-control-label ">Date Range</label> 
 			<select onchange="calculate();" id="avdaterangeselect"  name="status" class="form-select">
+					<!-- 
 					<option value="t">Today</option>	
 					<option value="tw">This Week</option>								
 					<option value="nw">Next Week</option>					
 					<option value="tm">This month</option>
 					<option value="nm">Next month</option>
 					<option value="c">Custom</option>
+					 -->
+					
+					<option value="lw">Last Week</option>
+					<option value="dby">Day before Yesterday</option>
+					<option value="yd">Yesterday</option>
+					<option value="t">Today</option>
+					<option value="tw">This Week</option>
+					<option value="nw">Next Week</option>
+					<option value="tm">This month</option>
+					<option value="nm">Next month</option>
+
 				</select>
 			<input type="hidden" id="userid" name="userid" th:value="${userdtl.empid}" />
 			<input type="hidden" name="full_name" th:value="${userdtl.full_name}">
@@ -225,7 +237,8 @@ $('#availability').change( function() {
 });
 
 $("#avdaterangeselect").change(function() {
-	$c = $(this).val();
+	$c = $(this).val();	
+
 	if ($c == "tm") {
 		$("#av_from_date").val(moment().startOf('month').format('YYYY-MM-DD'));
 		$("#av_to_date").val(moment().endOf('month').format('YYYY-MM-DD'));
@@ -245,6 +258,15 @@ $("#avdaterangeselect").change(function() {
 		$("#av_from_date").val(moment().startOf('isoWeek').format('YYYY-MM-DD'));
 		$("#av_to_date").val(moment().endOf('isoWeek').format('YYYY-MM-DD'));
 
+	}else if ($c == "lw") {
+		$("#av_from_date").val(moment().add(-1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
+		$("#av_from_date").val(moment().add(-1, 'week').endOf('isoWeek').format('YYYY-MM-DD'));
+	}else if ($c == "yd") {
+		$("#av_from_date").val(moment().add(-1, 'day').format('YYYY-MM-DD'));
+		$("#av_to_date").val(moment().add(-1, 'day').format('YYYY-MM-DD'));
+	}else if ($c == "dby") {
+		$("#av_from_date").val(moment().add(-2, 'day').format('YYYY-MM-DD'));
+		$("#av_to_date").val(moment().add(-2, 'day').format('YYYY-MM-DD'));
 	}
 	setDateRangeString();
 	getWeekNo();

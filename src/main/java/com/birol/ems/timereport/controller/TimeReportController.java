@@ -16,6 +16,7 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,9 +25,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -45,7 +50,9 @@ import com.birol.ems.dto.EmpTimeReportDTO;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.dto.Time_report_approved;
 import com.birol.ems.dto.LoggedinUserDTO;
+import com.birol.ems.dto.Mail;
 import com.birol.ems.repo.EmployeeRepository;
+import com.birol.ems.service.EmailService;
 import com.birol.ems.service.EmployeeService;
 import com.birol.ems.service.WSHservice;
 import com.birol.ems.timereport.dto.Timereport_Overtime_emp;
@@ -53,6 +60,8 @@ import com.birol.ems.timereport.repo.AvailabilityRepo;
 import com.birol.ems.timereport.repo.EmpOvertimeRepo;
 import com.birol.ems.timereport.repo.OvertimeRepo;
 import com.birol.persistence.model.User;
+import com.birol.service.IUserService;
+import com.birol.service.UserService;
 
 @Controller
 public class TimeReportController {
@@ -72,6 +81,12 @@ public class TimeReportController {
     private OvertimeRepo overtimeRepo;
     @Autowired
     private AvailabilityRepo availabilityRepo;
+    @Autowired
+	IUserService userService;
+    @Autowired
+	private JavaMailSender mailSender;
+	@Autowired
+	private Environment env;
 
 	@GetMapping("/work_schedule_home")
 	public ModelAndView work_schedule_home(final ModelMap model) {
@@ -95,7 +110,7 @@ public class TimeReportController {
 			ArrayList<EMPLOYEE_BASIC> myemps= employeeRepository.getbyChief(user.getId());
 			Set<EmpTimeReportDTO> myeavaiset = new LinkedHashSet<EmpTimeReportDTO>();	
 			for(EMPLOYEE_BASIC x: myemps) {
-				myeavaiset.addAll( avrepo.getAvailablityByuseridDatelessthanToday((x.getEmpid())));	
+				myeavaiset.addAll(avrepo.getAvailablityByuseridDatelessthanToday((x.getEmpid())));	
 			}
 			availist = new ArrayList<>(myeavaiset);
 		}else if (empid.startsWith("E")) {
@@ -106,14 +121,25 @@ public class TimeReportController {
 			ArrayList<EMPLOYEE_BASIC> myemps= employeeRepository.getbyChief(user.getId());
 			Set<EmpTimeReportDTO> myeavaiset = new LinkedHashSet<EmpTimeReportDTO>();	
 			for(EMPLOYEE_BASIC x: myemps) {
-				myeavaiset.addAll( avrepo.getUserBetweenDates((x.getEmpid()), from_date, to_date));	
+				myeavaiset.addAll( avrepo.getUserBetweenDates((x.getEmpid()), from_date, to_date));
 			}
 			availist = new ArrayList<>(myeavaiset);
 		}
-
+		
+		ArrayList<EmpTimeReportDTO> finalavailist = new ArrayList<EmpTimeReportDTO>();	
+		for(EmpTimeReportDTO x: availist) {
+			boolean add= false;
+			if(!x.isIsapproved() && !x.isIsrejected()) add= true;
+			
+			for(Timereport_Overtime_emp o: x.getOvertime()) {
+				if(!o.isIsapproved() && !o.isIsrejected())add=true;
+			}
+			if(add)finalavailist.add(x);
+		}
+		
 		model.addAttribute("avtype", availabilityRepo.findAll());
 		model.addAttribute("obtype", overtimeRepo.findAll());
-		model.addAttribute("wsh", availist);
+		model.addAttribute("wsh", finalavailist);
 
 		return new ModelAndView("ems/pages/empsTimereport", model);
 	}
@@ -426,6 +452,51 @@ public class TimeReportController {
 			ewsh = avrepo.getApprovedBetweenDates(userid, from_date, to_date);
 		}
 		
+		for (Iterator<EmpTimeReportDTO> itz = ewsh.iterator(); itz.hasNext();) {
+			EmpTimeReportDTO e = itz.next();
+			boolean remove= false;
+			if (!e.isIsrejected() && !e.isIsapproved()) {
+				if(e.getOvertime().size()>0) {
+					for(Timereport_Overtime_emp o: e.getOvertime()) {
+						if (!o.isIsrejected() && !o.isIsapproved()) {
+							remove= true;
+						}
+					}	
+				}else {
+					remove= true;
+				}							
+			} else if(e.isIsrejected()) {
+				if(e.getOvertime().size()>0) {
+					for(Timereport_Overtime_emp o: e.getOvertime()) {
+						if (!o.isIsrejected() && !o.isIsapproved()) {
+							remove= true;
+						}
+					}	
+				}else {
+					remove= true;
+				}
+			}
+			
+			if(remove)itz.remove();
+			
+		}
+		
+		for (EmpTimeReportDTO e : ewsh) {
+			if (e.isIsrejected() || !e.isIsapproved()) {				
+				e.setWork_minute(0);
+				e.setWork_hour("0 H 0 Min");
+				e.setWork_desc("Rejected / Not decided");				
+			}			
+			
+			for (Iterator<Timereport_Overtime_emp> it = e.getOvertime().iterator(); it.hasNext();) {
+				Timereport_Overtime_emp ob = it.next();
+				if (ob.isIsrejected() || !ob.isIsapproved()) {
+					it.remove();
+				}
+			}
+		}	
+		
+		
 		long total_wh = 0;
 		long total_ob_wh = 0;
 		
@@ -513,6 +584,17 @@ public class TimeReportController {
 		extr.setIsapproved(true);
 		extr.setIsrejected(false);
 		avrepo.save(extr);
+		
+		// send mail
+		SimpleMailMessage email = new SimpleMailMessage();
+		email.setTo(userService.getUserByID(extr.getUserid()).get().getEmail());
+		email.setSubject("STATUS OF YOUR REPORTED TIME");
+		final String appUrl = "https://ems.netlit.se";
+		String emailText = "You time report for date:"+extr.getDate()+" has been approved for the upcoming salary!";
+		email.setText(emailText);
+		email.setFrom(env.getProperty("support.email"));
+		mailSender.send(email);
+
 		return extr.getAv_id();
 	}
 	
@@ -521,6 +603,33 @@ public class TimeReportController {
 	public String rejectRGtime(Authentication auth, @ModelAttribute EmpTimeReportDTO emptr) {
 		User creator = (User) auth.getPrincipal();		
 		EmpTimeReportDTO extr = avrepo.findById(emptr.getAv_id()).get();
+		
+		/*
+		boolean validator= false;
+		for(Timereport_Overtime_emp ov: extr.getOvertime()) {
+			if(ov.isIsapproved())validator=true;
+		}
+		if(validator) {
+			extr.setStatus(5);
+			extr.setWork_start(null);
+			extr.setWork_end(null);
+			extr.setLunch_hour(0);
+			extr.setWork_minute(0);
+			extr.setWork_hour("0 H 0 Min");
+			extr.setIsapproved(true);
+			extr.setIsrejected(false);
+		}else {
+			extr.setStatus(emptr.getStatus());
+			extr.setWork_start(emptr.getWork_start());
+			extr.setWork_end(emptr.getWork_end());
+			extr.setLunch_hour(emptr.getLunch_hour());
+			extr.setWork_desc(emptr.getWork_desc());
+			extr.setWork_hour(emptr.getWork_hour());
+			extr.setWork_minute(emptr.getWork_minute());
+			extr.setIsapproved(false);
+			extr.setIsrejected(true);
+		}	
+		*/	
 		extr.setStatus(emptr.getStatus());
 		extr.setWork_start(emptr.getWork_start());
 		extr.setWork_end(emptr.getWork_end());
@@ -530,7 +639,19 @@ public class TimeReportController {
 		extr.setWork_minute(emptr.getWork_minute());
 		extr.setIsapproved(false);
 		extr.setIsrejected(true);
+		
 		avrepo.save(extr);
+		
+		// send mail
+		SimpleMailMessage email = new SimpleMailMessage();
+		email.setTo(userService.getUserByID(extr.getUserid()).get().getEmail());
+		email.setSubject("STATUS OF YOUR REPORTED TIME");
+		final String appUrl = "https://ems.netlit.se";
+		String emailText = "Ooops! Your reported time for date:"+extr.getDate()+" has been rejected. Please contact your nearest chief for more details info!";
+		email.setText(emailText);
+		email.setFrom(env.getProperty("support.email"));
+		mailSender.send(email);
+
 		return extr.getAv_id();
 	}
 	
@@ -548,6 +669,21 @@ public class TimeReportController {
 		extr.setWork_minute(emptr.getWork_minute());
 		extr.setIsapproved(true);
 		extr.setIsrejected(false);
+		
+		/*
+		EmpTimeReportDTO rgtime= avrepo.findById(extr.getAv_id()).get();
+		if(rgtime.isIsrejected()) {
+			rgtime.setStatus(5);
+			rgtime.setWork_start(null);
+			rgtime.setWork_end(null);
+			rgtime.setLunch_hour(0);
+			rgtime.setWork_minute(0);
+			rgtime.setWork_hour("0 H 0 Min");
+			rgtime.setIsapproved(true);
+			rgtime.setIsrejected(false);
+		}
+		avrepo.save(rgtime);
+		*/
 		obrepo.save(extr);
 		return extr.getAv_id();
 	}

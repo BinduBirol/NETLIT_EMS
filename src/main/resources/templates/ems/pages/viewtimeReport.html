@@ -129,23 +129,23 @@
 													<tr class="align-middle">
 														<th>Week</th>
 														<th>Date</th>
-																										
+														<th>Type</th>												
 														<th>Work Hour</th>
 														<th>Timing</th>											
 														
 														<th class="w-25 p-3">Desc</th>	
-														<th>Type</th>														
+																												
 														
 													</tr>
 												</thead>
 												<tbody >	
 													
 													<div th:each="wsh,iterator : ${wsh}">
-													<tr 
-														 class="align-middle hljs-attr">														
-														<td class="h2" th:text="${wsh.week}">week</td>
-														<td >[[${wsh.day}]]<br/>[[${wsh.date}]]</td>
-														
+													<tr th:classappend="${wsh.isIsrejected() or !wsh.isIsapproved()} ? text-danger : hljs-attr"
+														 class="align-middle ">														
+														<td class="h2 text-center" th:text="${wsh.week}">week</td>
+														<td class="text-white"><b>[[${wsh.day}]]<br/>[[${wsh.date}]]</b></td>
+														<td th:text="${wsh.av_type.typename}"></td>
 														<td th:text="${wsh.work_hour}">Hour</td>
 														<td class="small">
 															Start : [[${wsh.work_start}]]<br/>
@@ -155,7 +155,7 @@
 																				
 														
 														<td  th:text="${wsh.work_desc}">Desc</td>
-														<td th:text="${wsh.av_type.typename}"></td>
+														
 														
 														
 													</tr>
@@ -164,7 +164,7 @@
 														 class="align-middle  hljs-string">														
 														<td class="h2" th:text="${wsh.week}">week</td>
 														<td >[[${wsh.day}]]<br/>[[${wsh.date}]]</td>
-														
+														<td th:text="${wsh.ob_type.typename}"></td>
 														<td th:text="${wsh.work_hour}">Hour</td>
 														<td class="small">
 															Start : [[${wsh.work_start}]]<br/>
@@ -173,7 +173,7 @@
 														</td>							
 														
 														<td  th:text="${wsh.work_desc}">Desc</td>
-														<td th:text="${wsh.ob_type.typename}"></td>
+														
 														
 														
 													</tr>
@@ -312,7 +312,7 @@
 		}
 		
 		
-		setAutorowspan('#datatableDefaultz',5);
+		//setAutorowspan('#datatableDefaultz',2);
 		setAutorowspan('#datatableDefaultz',1);
 		setAutorowspan('#datatableDefaultz',0);
 		 

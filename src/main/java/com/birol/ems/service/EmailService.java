@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -76,9 +77,19 @@ public class EmailService {
         helper.setText(inlineImage + mail.getContent(), true);
         helper.setSubject(mail.getSubject());
         helper.setTo(mail.getTo());
-        helper.setFrom(mail.getFrom());
+        helper.setFrom(env.getProperty("support.email"));
 
         emailSender.send(message);
     }
+    
+	public void sendTextMail(Mail mail) {
+		SimpleMailMessage email = new SimpleMailMessage();
+		email.setTo(mail.getTo());
+		email.setSubject(mail.getSubject());
+		email.setText(mail.getContent());
+		System.out.println(env.getProperty("support.email"));
+		email.setFrom(env.getProperty("support.email"));
+		emailSender.send(email);
+	}
 
 }

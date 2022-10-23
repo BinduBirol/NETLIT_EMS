@@ -54,6 +54,19 @@
 	rel="stylesheet" />
 <!-- ================== END page-css ================== -->
 
+<style type="text/css">
+.custm-btn {
+	width: 90px !important;
+	text-align: left;
+	margin: 3px;
+}
+
+input[type="radio"] {
+	
+	outline: 1px solid black;
+}
+</style>
+
 </head>
 <body>
 	<!-- BEGIN #app -->
@@ -189,15 +202,16 @@
 
 										<div th:each="wsh,iterator : ${wsh}">
 
-										<tr th:classappend="${wsh.status}==1 ? norm  : text-danger"
+										<tr 
 											class="align-middle">
-											<td class="h4" th:rowspan="${wsh.overtime.size+1}" th:text="${wsh.week}">week</td>
+											<td class="h4 text-center" th:rowspan="${wsh.overtime.size+1}" th:text="${wsh.week}">week</td>
+											
 											<td th:rowspan="${wsh.overtime.size+1}"><a href="#"
 												class="text-decoration-none" th:emp-id="${wsh.userid}"
 												onclick="viewEmlpoyee(this);" th:text="${wsh.full_name}"></a></td>
 
 
-											<td th:rowspan="${wsh.overtime.size+1}">[[${wsh.day}]]<br />[[${wsh.date}]]
+											<td class="text-white" th:rowspan="${wsh.overtime.size+1}"><b>[[${wsh.day}]]<br />[[${wsh.date}]]</b>
 											</td>
 
 
@@ -231,18 +245,19 @@
 												th:value="${wsh.lunch_hour}" /></td>
 
 											<td><textarea
-													th:classappend="${wsh.status}==1 ? norm  : text-danger"
+													
 													class="td-input form-control form-control-sm cal work_desc "
 													th:text="${wsh.work_desc}" rows="2"></textarea></td>
 											
 											
 											<td >													
-													<div class="form-group">
-														<div class="form-check">
+													<div class="form-group " >
+														<div class=" btn btn-sm btn-success btn-block custm-btn">
 															<input class="form-check-input" ajaxaction="approveRGtime" type="radio" value="" th:name="${wsh.av_id}" id="defaultRadio1" th:checked="${wsh.isapproved}" />
 															<label class="form-check-label" for="defaultRadio1">Approve</label>
 														</div>
-														<div class="form-check">
+														
+														<div class=" btn btn-sm btn-danger btn-block custm-btn">
 															<input class="form-check-input" ajaxaction="rejectRGtime" type="radio" value="" th:name="${wsh.av_id}" id="defaultRadio2" th:checked="${wsh.isrejected}" />
 															<label class="form-check-label" for="defaultRadio2">Reject</label>
 														</div>														
@@ -255,14 +270,11 @@
 
 
 										<tr th:each="wsh,iterator : ${wsh.overtime}"
-											class="align-middle">
-
-
-
-
+											class="align-middle ">
+											
 											<td><select name='status'
 												onchange='setTypeval( event,this)'
-												class='status  form-select form-select-sm cal'>
+												class='status  form-select form-select-sm cal hljs-string'>
 													<option th:selected="${at.typeid==wsh.status}"
 														th:each="at: ${obtype}" th:value="${at.typeid}"
 														th:start="${at.start}" th:end="${at.end}"
@@ -295,12 +307,12 @@
 
 											<td>
 												
-													<div class="form-group">
-														<div class="form-check">
+													<div class="form-group text-center">
+														<div class="btn btn-sm btn-success btn-block custm-btn">
 															<input class="form-check-input" ajaxaction="approveOBtime" type="radio" value="" th:name="${wsh.ob_id}" id="defaultRadio1" th:checked="${wsh.isapproved}" />
 															<label class="form-check-label" for="defaultRadio1">Approve</label>
-														</div>
-														<div class="form-check">
+														</div>														
+														<div class="btn btn-sm btn-danger btn-block custm-btn">
 															<input class="form-check-input" ajaxaction="rejectOBtime" type="radio" value="" th:name="${wsh.ob_id}" id="defaultRadio2" th:checked="${wsh.isrejected}" />
 															<label class="form-check-label" for="defaultRadio2">Reject</label>
 														</div>														

@@ -81,13 +81,22 @@
 							</div>							
 						</div>
 					</div>
-					 -->
+					
 					<div class="menu-item">
 						<a href="/calendar" class="menu-link">
 							<span class="menu-icon"><i class="bi bi-calendar4"></i></span>
 							<span class="menu-text">Calendar</span>
 						</a>
-					</div><div sec:authorize="hasAnyAuthority('EMPLOYEE')"   class="menu-item has-sub">
+					</div>
+					 -->
+					<div class="menu-item">
+						<a target="_blank" href="https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=4765445b-32c6-49b0-83e6-1d93765276ca&redirect_uri=https%3A%2F%2Fwww.office.com%2Flandingv2&response_type=code%20id_token&scope=openid%20profile%20https%3A%2F%2Fwww.office.com%2Fv2%2FOfficeHome.All&response_mode=form_post&nonce=638003260288441132.MmFjNjA0NDMtMGUyOS00NzVmLThlMWEtODNmMmNlZGIwMTdiNmZlMDVjOWQtNmRkNy00NzllLWI3ZTEtZmI1M2E4MDk0ZTRh&ui_locales=sv-SE&mkt=sv-SE&login_hint=admnet%40grandfast.se&state=6T2NJoqX6WI0aWgDrGzJgrKwYZbM4Tvmf62JO1JaO1zeAaz1F0km1D6GfIEq9soIaM1qwLyh6ugUSt2b2sxdhQf56vTCOPIMARqbp2rtmUdMpKWAIy_J3B9gdKP5arqBGYaGE-VpfdzVCVdayxkUGQdj-2wMknJVDBoiDux6RTHl_P_BaLjWs3zuaoVtuMatuFKvKrE5rM2B-gI-76tHDKTTQ4Mu25RPkI3_gqlcbs2Ge4J-oJ-qbkzbW13heI-tIRXFWRplN8B-WOG2gKOPLp4rPtDF7HzpeGb7bjLHTcOwyIqinQNwW3Gla5sn9YpCpjyPkLOUIiWaq6OW4BfWcKbxy632DrR09W29_hP9v5E&x-client-SKU=ID_NETSTANDARD2_0&x-client-ver=6.16.0.0&sso_reload=true" class="menu-link">
+							<span class="menu-icon"><i class="bi-brands bi-microsoft"></i></span>
+							<span class="menu-text">Microsoft 365</span>
+						</a>
+					</div>
+					
+					<div sec:authorize="hasAnyAuthority('EMPLOYEE')"   class="menu-item has-sub">
 						
 						<a href="#" class="menu-link">
 							<span class="menu-icon">								
@@ -125,7 +134,8 @@
 									<a href="/reportWorkTimeHome"  class="menu-link">
 										<span class="menu-text">Report work time</span>
 									</a>
-								</div>
+								</div>								
+								
 								
 								<!-- 
 								<div class="menu-item">
