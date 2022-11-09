@@ -16,11 +16,13 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -37,12 +39,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 
 import com.birol.ems.dao.EmpTimeReportRepo;
 import com.birol.ems.dao.EmpWSHrepo;
@@ -142,6 +147,64 @@ public class TimeReportController {
 		model.addAttribute("wsh", finalavailist);
 
 		return new ModelAndView("ems/pages/empsTimereport", model);
+	}
+	
+	@GetMapping("/pendingTimeReportsHome")
+	public ModelAndView pendingTimeReportsHome(Authentication auth, final ModelMap model) {
+		User user = (User) auth.getPrincipal();
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
+		model.addAttribute("emps", employeeRepository.getbyChief(user.getId()));
+		model.addAttribute("emp", empdtl);		
+		
+		return new ModelAndView("ems/pages/pendingTimeReports", model);		
+	}
+	
+	@PostMapping("/getpendingTimeReports")
+	public ModelAndView getpendingTimeReports(	@RequestPayload String from_date,
+												@RequestPayload String to_date,
+												@RequestPayload String emp_id,
+												Authentication auth, final ModelMap model) {
+		
+		User user = (User) auth.getPrincipal();
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate fromLocalDate = LocalDate.parse(from_date, formatter);
+		LocalDate toLocalDate = LocalDate.parse(to_date, formatter);
+		List<LocalDate> dates = wSHservice.getDatesBetween(fromLocalDate, toLocalDate);	
+		ArrayList<EMPLOYEE_BASIC> myemps= employeeRepository.getbyChief(user.getId());
+		
+		Map<LocalDate, ArrayList<EmpTimeReportDTO>> map= new HashMap<LocalDate, ArrayList<EmpTimeReportDTO>>();
+		
+		
+		for(LocalDate d: dates) {
+			ArrayList<EmpTimeReportDTO> trlist = new ArrayList<EmpTimeReportDTO>();
+			if(emp_id.equals("all")) {
+				trlist = new ArrayList<EmpTimeReportDTO>();
+				trlist= avrepo.getAllusersOneDate(d);
+			}else if(emp_id.equals("me")) {				
+				for(EMPLOYEE_BASIC x: myemps) {
+					EmpTimeReportDTO obj= new EmpTimeReportDTO();
+					obj=avrepo.findbyOnedateEmpid(x.getEmpid(),d);
+					if(obj!=null)trlist.add(obj);
+				}
+													
+			}else {
+				trlist = new ArrayList<EmpTimeReportDTO>();
+				EmpTimeReportDTO obj= new EmpTimeReportDTO();
+				obj= avrepo.findbyOnedateEmpid(Long.parseLong(emp_id.split("-")[1]),d);
+				if(obj!=null)trlist.add(obj);
+			}		
+			
+			if(trlist.size()>0)map.put(d, trlist);
+		}
+		
+		model.addAttribute("dates", dates);
+		model.addAttribute("avtype", availabilityRepo.findAll());
+		model.addAttribute("obtype", overtimeRepo.findAll());
+		model.addAttribute("map", map);
+		
+		return new ModelAndView("ems/ajaxResponse/timereport/getPendingTimeReports", model);	
 	}
 
 	@GetMapping("/workschedule")
@@ -766,7 +829,7 @@ public class TimeReportController {
 	public EmpTimeReportDTO getTimereports(@RequestParam String date, Authentication auth){
 		User user = (User) auth.getPrincipal();
 		EmpTimeReportDTO tr= new EmpTimeReportDTO();
-		tr=avrepo.findbydateEmpid(user.getId(), LocalDate.parse(date));
+		tr=avrepo.findbyOnedateEmpid(user.getId(), LocalDate.parse(date));
 		return tr;		
 	}
 	
@@ -849,7 +912,7 @@ public class TimeReportController {
 	
 	public EmpTimeReportDTO getTimereportsByDate(String date,long userid){
 		EmpTimeReportDTO tr= new EmpTimeReportDTO();
-		tr=avrepo.findbydateEmpid(userid, LocalDate.parse(date));
+		tr=avrepo.findbyOnedateEmpid(userid, LocalDate.parse(date));
 		return tr;		
 	}
 }

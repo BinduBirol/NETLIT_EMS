@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<title>APPROVE TR</title>
+<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+
+<!-- ================== BEGIN core-css ================== -->
+<link href="assets/css/vendor.min.css" rel="stylesheet" />
+<link href="assets/css/app.min.css" rel="stylesheet" />
+<link href="assets/css/netlit_ems.css" rel="stylesheet" />
+<!-- ================== END core-css ================== -->
+<!-- ================== BEGIN page-css ================== -->
+<link
+	href="assets/plugins/datatables.net-bs5/css/dataTables.bootstrap5.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css"
+	rel="stylesheet" />
+<link href="assets/plugins/bootstrap-table/dist/bootstrap-table.min.css"
+	rel="stylesheet" />
+
+<!-- ================== BEGIN page-css ================== -->
+<link href="assets/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-daterangepicker/daterangepicker.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-slider/dist/css/bootstrap-slider.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/blueimp-file-upload/css/jquery.fileupload.css"
+	rel="stylesheet" />
+<link href="assets/plugins/summernote/dist/summernote-lite.css"
+	rel="stylesheet" />
+<link href="assets/plugins/spectrum-colorpicker2/dist/spectrum.min.css"
+	rel="stylesheet" />
+<link href="assets/plugins/select-picker/dist/picker.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/jquery-typeahead/dist/jquery.typeahead.min.css"
+	rel="stylesheet" />
+<!-- ================== END page-css ================== -->
+
+
+</head>
+
+<body>
+	<!-- BEGIN #app -->
+	<div id="app" class="app">
+		<div th:include="theme/header :: dynamicheaderFragment"></div>
+		<div th:include="theme/sidenav :: sidenav"></div>
+		<div id="content" class="app-content">
+			<!-- BEGIN container -->
+
+			<!-- BEGIN row -->
+			<div class="row justify-content-center">
+				<!-- BEGIN col-10 -->
+				<div>
+					<!-- BEGIN row -->
+					<div class="row">
+						<!-- BEGIN col-9 -->
+
+						<ul class="breadcrumb">
+							<li class="breadcrumb-item"><a href="#">WORK SCHEDULE</a></li>
+							<li class="breadcrumb-item active">PENDING TIME REPORTS</li>
+						</ul>
+
+						<h1 class="page-header">Pending Time Reports</h1>
+
+						<hr class="mb-4" />
+						<div class="row">
+							<div id="datatable" class="mb-5">
+
+								<div class="flex-grow-1">
+
+									<div class="row small">
+										<form id="searchform" action="" method="">
+											<div class="row ">
+
+												<div class="input-group " id="">
+
+													<span class="input-group-text"><i
+														class="fa fa-filter"></i></span> <select name="empid"
+														id="empidselect" class="form-select form-select-sm">
+														<option value="me">My Employees</option>
+														<option value="all">All Employees</option>
+														<option th:each="emps : ${emps}"
+															th:value="|E-${emps.empid}|">[[${emps.full_name}]]</option>
+													</select> <select name="c" id="daterangeselect"
+														class="form-select form-select-sm">
+														<option value="">Date Range</option>
+														<option value="t">Today</option>
+														<option value="y">Yesterday</option>
+														<option value="n2d">Next 3 Days</option>
+														<option value="lw">Last Week</option>
+														<option value="tw">This Week</option>
+														<option value="nw">Next Week</option>
+														<option value="lm">Last month</option>
+														<option value="tm">This month</option>
+														<option value="nm">Next month</option>
+														<option value="c">Custom</option>
+													</select> <input autocomplete="off" name="from_date" id="from_date"
+														required="required" type="text"
+														class="form-control form-control-sm datepicker-default"
+														placeholder="From date" /> <span class="input-group-text">to</span>
+													<input autocomplete="off" name="to_date" id="to_date"
+														type="text"
+														class="form-control form-control-sm datepicker-default"
+														placeholder="To date" />
+
+													<button id="searchBtn" type="button" class="btn btn-outline-theme">
+														<i class="fa fa-search"></i>
+													</button>
+												</div>
+											</div>
+										</form>
+									</div>
+									<!-- <a href="#" data-toggle="card-expand" class="text-white text-opacity-50 text-decoration-none"><i class="fa fa-fw fa-expand"></i></a> -->
+								</div>
+								<br />
+								
+								<div id="ajaxresponse">
+									Nothing to show.
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!-- END col-9-->
+					<!-- BEGIN col-3 -->
+
+					<!-- END col-3 -->
+				</div>
+				<!-- END row -->
+
+				<!-- END col-10 -->
+			</div>
+			<!-- END row -->
+
+			<div class="modal fade" id="viewEmployee">
+				<div class="modal-dialog modal-xl">
+					<div class="modal-content empContent">...</div>
+				</div>
+			</div>
+
+			<div class="modal fade" id="workschedule">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content wschcontent">...</div>
+				</div>
+			</div>
+
+			<!-- END container -->
+			<!-- END #content -->
+
+
+
+		</div>
+		<!-- END #app -->
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="assets/plugins/moment/min/moment.min.js"></script>
+		<script src="assets/js/pagejs/pendingTimeReport.js"></script>
+		<script src="assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+		<script src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+		
+		<div th:include="theme/theme_util :: theme_util"></div>
+	</div>
+	<!-- END #app -->
+	<div th:include="theme/footer::staticFooter"></div>
+</body>
+</html>
