@@ -1,12 +1,38 @@
-<table th:each="element : ${map}" class="table">
-	<thead>
-		<tr>
-			<td colspan="9"><h2>Week: [[${element.value[0].week}]], [[${#temporals.format(element.key, 'E, dd MMM yyyy')}]]</h2></td>
+
+<table id="pendingtable"  class="table table-hover">
+<span th:each="element : ${map}">
+	<thead th:if="${not #lists.isEmpty(element.value) OR not #lists.isEmpty(obmap.get(element.key))}">		
+		
+		<!-- 
+		<tr th:if="${ #lists.isEmpty(element.value) and #lists.isEmpty(obmap.get(element.key))}">
+			<td class="small text-white text-opacity-50" colspan="9">No data found on [[${#temporals.format(element.key, 'E, dd MMM yyyy')}]]</td>
 		</tr>
+		 -->
+		 
+		
+		<tr class="" >
+			<td colspan="9"></td>
+		</tr>
+		
+		<tr class="table-info" >
+			<th colspan="9"><h3> Week: ? , [[${#temporals.format(element.key, 'E, dd MMM yyyy')}]]</h3></th>
+		</tr>
+		
+		<tr class="table-active">
+			<th>Employee</th>
+			<th>Status</th>
+			<th>Total</th>
+			<th>Start</th>
+			<th>End</th>
+			<th>Break</th>
+			<th>Comment</th>
+			<th>Decision</th>
+			
+		</tr>		
 
 	</thead>
 	<tbody>
-		<tr style="vertical-align: middle;" th:each="tr : ${element.value}" >
+		<tr class="table-active" th:if="${not #lists.isEmpty(element.value)}" style="vertical-align: middle;" th:each="tr : ${element.value}" >
 			<td>
 				<a href="#" class="text-decoration-none" th:emp-id="${tr.userid}"
 				onclick="viewEmlpoyee(this);" th:text="${tr.full_name}"></a>
@@ -56,11 +82,60 @@
 				
 			</td>
 		</tr>
-	</tbody>
+		
+		<tr class="table-active" th:if="${not #lists.isEmpty(obmap.get(element.key))}" style="vertical-align: middle;" th:each="tr : ${obmap.get(element.key)}" >
+			<td>
+				<a href="#" class="text-decoration-none" th:emp-id="${tr.userid}"
+				onclick="viewEmlpoyee(this);" th:text="${tr.full_name}"></a>
+			</td>
+			<td>			
+				<select name='status' onchange='setTypeval( event,this)'
+					class='status  form-select form-select-sm cal hljs-string'>
+						<option th:selected="${at.typeid==tr.status}"
+							th:each="at: ${obtype}" th:value="${at.typeid}"
+							th:start="${at.start}" th:end="${at.end}"
+							th:interval="${at.interval_minutes}" th:text="${at.typename}">xx</option>
+				</select> <input class="ob_id" th:value="${tr.ob_id}" type="hidden" />		
+			</td>
+			<td>
+				<input type='text' th:value='${tr.work_hour}'
+				name='work_hour' readonly
+				class='work_hour form-control form-control-sm text-center  ' /> <input
+				type="hidden" th:value='${tr.work_minute}' name='work_minute'
+				readonly class='wmint form-control form-control-sm text-center  ' />
+			</td>
+			<td>
+				<input type="time" th:value='${tr.work_start}'				
+				onchange='calculate(event)' name='work_start' onclick="this.showPicker()"
+				class='timepicker start cal form-control form-control-sm text-center absent '>
+			</td>
+			<td>
+				<input th:value='${tr.work_end}' onchange='calculate(event)'				
+				type="time" name='work_end' onclick="this.showPicker()"
+				class='timepicker end cal form-control form-control-sm text-center absent  '>
+			</td>
+			<td>
+				<input onchange='calculate(event)'				
+				th:value='${tr.lunch_hour}' type='number' name='lunch_hour'
+				class='lbreak cal form-control form-control-sm text-center absent  ' />
+			</td>
+			<td>
+				<textarea th:text='${tr.work_desc}' 
+					onchange='calculate(event)' name='work_desc'
+					class='form-control form-control-sm work_desc' rows='2'></textarea>
+			</td>
+			<td>
+			<div class="btn-group btn-group-sm">
+				<input type="button" class="btn  btn-success" value="Approve"/>
+				<input type="button" class="btn btn-danger" value="Reject"/>				
+			</div>
+				
+			</td>
+		</tr>
 
+	</tbody>
+	</span>
 </table>
 
-<div th:if="${map.isEmpty()}"> 
-    <h1 class="text-warning">No data found.</h1>
-</div>
+
 

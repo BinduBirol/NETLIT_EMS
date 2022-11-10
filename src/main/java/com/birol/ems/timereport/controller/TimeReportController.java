@@ -175,34 +175,50 @@ public class TimeReportController {
 		ArrayList<EMPLOYEE_BASIC> myemps= employeeRepository.getbyChief(user.getId());
 		
 		Map<LocalDate, ArrayList<EmpTimeReportDTO>> map= new HashMap<LocalDate, ArrayList<EmpTimeReportDTO>>();
+		Map<LocalDate, ArrayList<Timereport_Overtime_emp>> obmap= new HashMap<LocalDate, ArrayList<Timereport_Overtime_emp>>();
 		
 		
 		for(LocalDate d: dates) {
 			ArrayList<EmpTimeReportDTO> trlist = new ArrayList<EmpTimeReportDTO>();
+			ArrayList<Timereport_Overtime_emp> oblist = new ArrayList<Timereport_Overtime_emp>();
+			
 			if(emp_id.equals("all")) {
 				trlist = new ArrayList<EmpTimeReportDTO>();
+				oblist = new ArrayList<Timereport_Overtime_emp>();
 				trlist= avrepo.getAllusersOneDate(d);
+				oblist=obrepo.getAllusersOneDate(d);
 			}else if(emp_id.equals("me")) {				
 				for(EMPLOYEE_BASIC x: myemps) {
 					EmpTimeReportDTO obj= new EmpTimeReportDTO();
+					Timereport_Overtime_emp obobj= new Timereport_Overtime_emp();
 					obj=avrepo.findbyOnedateEmpid(x.getEmpid(),d);
+					obobj=obrepo.findbyOnedateEmpid(x.getEmpid(),d);
 					if(obj!=null)trlist.add(obj);
+					if(obobj!=null)oblist.add(obobj);
 				}
 													
 			}else {
 				trlist = new ArrayList<EmpTimeReportDTO>();
+				oblist = new ArrayList<Timereport_Overtime_emp>();
 				EmpTimeReportDTO obj= new EmpTimeReportDTO();
+				Timereport_Overtime_emp obobj= new Timereport_Overtime_emp();
 				obj= avrepo.findbyOnedateEmpid(Long.parseLong(emp_id.split("-")[1]),d);
+				obobj=obrepo.findbyOnedateEmpid(Long.parseLong(emp_id.split("-")[1]),d);
 				if(obj!=null)trlist.add(obj);
+				if(obobj!=null)oblist.add(obobj);
 			}		
 			
-			if(trlist.size()>0)map.put(d, trlist);
+			//if(trlist.size()>0)map.put(d, trlist);
+			map.put(d, trlist);
+			//if(oblist.size()>0)obmap.put(d, oblist);
+			obmap.put(d, oblist);
 		}
 		
 		model.addAttribute("dates", dates);
 		model.addAttribute("avtype", availabilityRepo.findAll());
 		model.addAttribute("obtype", overtimeRepo.findAll());
 		model.addAttribute("map", map);
+		model.addAttribute("obmap", obmap);
 		
 		return new ModelAndView("ems/ajaxResponse/timereport/getPendingTimeReports", model);	
 	}
@@ -445,6 +461,7 @@ public class TimeReportController {
 			try {
 				etd= avrepo.findById(av.getAv_id()).get();
 			}catch (Exception e) {
+				/*
 				etd.setAv_id(av.getAv_id());
 				etd.setDate(avDate);
 				etd.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
@@ -456,6 +473,7 @@ public class TimeReportController {
 				etd.setWork_hour("0 H 0 Min");
 				etd.setWork_desc("Overtime only");
 				avrepo.save(etd);
+				*/
 			}			
 			
 			

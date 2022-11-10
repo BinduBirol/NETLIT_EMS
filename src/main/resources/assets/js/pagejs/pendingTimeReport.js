@@ -1,25 +1,9 @@
+pageStartAjaxcall();
+
 $("#searchBtn").click(function() {
-	var fd = $("#from_date").val();
-	var td = $("#to_date").val();
-	var emp= $("#empidselect").val();
-
-	if (fd == "" || td == "") {
-		$("#daterangeselect").focus();
-		$('.toast-header .title').html("Abort!!");
-		$('.toast-body .toast-message').html("Please select a date range.");		
-		$('.toast').toast('show');
-		return;
-	}
-
-	$.post("/getpendingTimeReports", {
-		from_date : fd,
-		to_date : td,
-		emp_id: emp
-	}, function(data, status) {		
-		$("#ajaxresponse").html(data).slideDown('slow');		
-	});
-
+	ajaxcall();
 })
+
 
 function calculate(e) {
 			$target= $(e.target).closest('tr');
@@ -63,22 +47,6 @@ function calculate(e) {
 			
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 $("#daterangeselect").change(function() {
 		$c = $(this).val();		
 
@@ -119,7 +87,56 @@ $("#daterangeselect").change(function() {
 			$("#to_date").val(moment().add(1, 'week').endOf('isoWeek').format('YYYY-MM-DD'));
 		}
 		
-		if ($c != "c") {
-			//$("#searchform").submit();
-		}		
+		ajaxcall();		
 	})
+	
+	$("#empidselect").change(function() {
+		ajaxcall();
+	})
+	
+	
+	
+function ajaxcall(){
+	
+	var fd = $("#from_date").val();
+	var td = $("#to_date").val();
+	var emp= $("#empidselect").val();
+
+	if (fd == "" || td == "") {
+		$("#daterangeselect").focus();
+		$('.toast-header .title').html("Abort!!");
+		$('.toast-body .toast-message').html("Please select a date range.");		
+		$('.toast').toast('show');
+		return;
+	}
+	
+	$.post("/getpendingTimeReports", {
+		from_date : fd,
+		to_date : td,
+		emp_id: emp
+	}, function(data, status) {		
+		$("#ajaxresponse").html(data).slideDown('slow');
+		$("html, body").animate({ scrollTop: $(document).height() }, 500);
+		var rowCount = $('#pendingtable tr').length;
+		if(rowCount==0){$("#ajaxresponse").html("<h4>No pending time reports.</h4>");}
+	});	
+}
+
+function pageStartAjaxcall(){	
+	var fd = moment().subtract(1, 'year').format('YYYY-MM-DD');
+	var td = moment().format('YYYY-MM-DD');
+	var emp= "me";
+	
+	$.post("/getpendingTimeReports", {
+		from_date : fd,
+		to_date : td,
+		emp_id: emp
+	}, function(data, status) {		
+		$("#ajaxresponse").html(data).slideDown('slow');
+		$("html, body").animate({ scrollTop: $(document).height() }, 500);
+		$("#from_date").val(fd);
+		$("#to_date").val(td);
+		var rowCount = $('#pendingtable tr').length;		
+		if(rowCount==0){$("#ajaxresponse").html("<h4>No pending time reports.</h4>");}
+	});	
+}
