@@ -115,10 +115,10 @@ function ajaxcall(){
 		to_date : td,
 		emp_id: emp
 	}, function(data, status) {		
-		$("#ajaxresponse").html(data).slideDown('slow');
-		$("html, body").animate({ scrollTop: $(document).height() }, 500);
+		$("#ajaxresponse").html(data).hide().slideDown();		
 		var rowCount = $('#pendingtable tr').length;
-		if(rowCount==0){$("#ajaxresponse").html("<h4>No pending time reports.</h4>");}
+		if(rowCount==0){$("#ajaxresponse").html("<h4>No pending time reports</h4>").hide().slideDown();}
+		//$("html, body").animate({ scrollTop: $(document).height() }, 500);
 	});	
 }
 
@@ -132,11 +132,50 @@ function pageStartAjaxcall(){
 		to_date : td,
 		emp_id: emp
 	}, function(data, status) {		
-		$("#ajaxresponse").html(data).slideDown('slow');
-		$("html, body").animate({ scrollTop: $(document).height() }, 500);
+		$("#ajaxresponse").html(data).hide().slideDown();		
 		$("#from_date").val(fd);
 		$("#to_date").val(td);
 		var rowCount = $('#pendingtable tr').length;		
-		if(rowCount==0){$("#ajaxresponse").html("<h4>No pending time reports.</h4>");}
+		if(rowCount==0){$("#ajaxresponse").html("<h4>No pending time reports</h4>").hide().slideDown();}
+		//$("html, body").animate({ scrollTop: $(document).height() }, 500);
 	});	
 }
+
+$(".btn-dec").click(function(e) {
+	showprocessview();
+	var decision=$(this).text();
+	var d=$("#actionDecision").val()
+	var data= $("#data").val();
+	var employee= $("#employee").val();
+	var action= $("#action").val();
+	var dataid= $("#dataid").val();
+	var ismail= $("#mail").is(":checked");
+	
+	$.post(action, {
+		rg : data,
+		ismail : ismail,
+		decision: d
+	}, function(data, status) {
+		hideprocessview();
+		$("#confirmDecisionmodal .btn-close").click();		
+		$('.toast-header .title').html("Response!");
+		$('.toast-body .toast-message').html(data);		
+		$('.toast').toast('show');
+		
+		var str="";
+		var bgclass="";
+		if(d==1){
+			$("."+dataid).closest("tr").addClass("bg-opacity-25 bg-success");
+			str="APPROVED";
+		}else{
+			$("."+dataid).closest("tr").addClass("bg-opacity-25 bg-danger");
+			str="REJECTED";;
+		}
+		
+		$("."+dataid).html(str);
+		return;
+	});	
+});
+
+
+

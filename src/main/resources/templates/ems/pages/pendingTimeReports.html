@@ -15,44 +15,8 @@
 <link href="assets/css/netlit_ems.css" rel="stylesheet" />
 <!-- ================== END core-css ================== -->
 <!-- ================== BEGIN page-css ================== -->
-<link
-	href="assets/plugins/datatables.net-bs5/css/dataTables.bootstrap5.min.css"
-	rel="stylesheet" />
-<link
-	href="assets/plugins/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css"
-	rel="stylesheet" />
-<link
-	href="assets/plugins/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css"
-	rel="stylesheet" />
-<link href="assets/plugins/bootstrap-table/dist/bootstrap-table.min.css"
-	rel="stylesheet" />
+<link href="assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
 
-<!-- ================== BEGIN page-css ================== -->
-<link href="assets/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
-<link
-	href="assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"
-	rel="stylesheet" />
-<link
-	href="assets/plugins/bootstrap-daterangepicker/daterangepicker.css"
-	rel="stylesheet" />
-<link
-	href="assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"
-	rel="stylesheet" />
-<link
-	href="assets/plugins/bootstrap-slider/dist/css/bootstrap-slider.min.css"
-	rel="stylesheet" />
-<link
-	href="assets/plugins/blueimp-file-upload/css/jquery.fileupload.css"
-	rel="stylesheet" />
-<link href="assets/plugins/summernote/dist/summernote-lite.css"
-	rel="stylesheet" />
-<link href="assets/plugins/spectrum-colorpicker2/dist/spectrum.min.css"
-	rel="stylesheet" />
-<link href="assets/plugins/select-picker/dist/picker.min.css"
-	rel="stylesheet" />
-<link
-	href="assets/plugins/jquery-typeahead/dist/jquery.typeahead.min.css"
-	rel="stylesheet" />
 <!-- ================== END page-css ================== -->
 
 
@@ -156,12 +120,39 @@
 					<div class="modal-content empContent">...</div>
 				</div>
 			</div>
+			
+			
 
-			<div class="modal fade" id="workschedule">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content wschcontent">...</div>
+			<div class="modal" id="confirmDecisionmodal">
+				  <div class="modal-dialog modal-dialog-centered">
+				    <div class="modal-content ">
+				      <div class="modal-header">
+				        <h5 class="modal-title">MODAL TITLE</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				      </div>
+				      <div class="modal-body">
+				        <form action="">
+				        <p class="">You are going to <span id="modal-dec"></span> time report for <span class="" id="modal-emp"></span></p>
+				        
+				        <input type="hidden" name="rg" id="data"/>
+				        <input type="hidden" id="action"/>
+				        <input type="hidden" id="dataid"/>
+				        <input type="hidden" name="decision" id="actionDecision"/>						
+						
+				        
+				        <div class="form-check">
+						  <input class="form-check-input" type="checkbox" name="ismail" value="" id="mail" checked="checked" />
+						  <label class="form-check-label" for="mail">Send notification to the work mail</label>
+						</div>
+				      </form>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default close" data-bs-dismiss="modal">Close</button>
+				        <button type="button" class="btn btn-dec processview">Confirm</button>
+				      </div>
+				    </div>
+				  </div>
 				</div>
-			</div>
 
 			<!-- END container -->
 			<!-- END #content -->
@@ -171,15 +162,14 @@
 		</div>
 		<!-- END #app -->
 
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-		<script src="assets/plugins/moment/min/moment.min.js"></script>
-		<script src="assets/js/pagejs/pendingTimeReport.js"></script>
-		<script src="assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
-		<script src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 		
-		<div th:include="theme/theme_util :: theme_util"></div>
 	</div>
 	<!-- END #app -->
-	<div th:include="theme/footer::staticFooter"></div>
+	<div th:include="theme/footer::staticFooter"></div>		
+		<script src="assets/plugins/moment/min/moment.min.js"></script>
+		<script src="assets/js/pagejs/pendingTimeReport.js"></script>		
+		<script src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+		<script src="assets/js/demo/form-plugins.demo.js"></script>		
+		<div th:include="theme/theme_util :: theme_util"></div> 
 </body>
 </html>

@@ -1,71 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<title>SET WORK SCHEDULE</title>
-<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="" />
-<meta name="author" content="" />
 
-<!-- ================== BEGIN core-css ================== -->
-<link href="assets/css/vendor.min.css" rel="stylesheet" />
-<link href="assets/css/app.min.css" rel="stylesheet" />
-<link href="assets/css/netlit_ems.css" rel="stylesheet" />
-<!-- ================== END core-css ================== -->
-<!-- ================== BEGIN page-css ================== -->
-
-<!-- ================== BEGIN page-css ================== -->
-<link href="assets/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
-<link
-	href="assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"
-	rel="stylesheet" />
-<link
-	href="assets/plugins/bootstrap-daterangepicker/daterangepicker.css"
-	rel="stylesheet" />
-<link
-	href="assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"
-	rel="stylesheet" />
-
-<link href="assets/plugins/select-picker/dist/picker.min.css"
-	rel="stylesheet" />
-<link
-	href="assets/plugins/jquery-typeahead/dist/jquery.typeahead.min.css"
-	rel="stylesheet" />
-<!-- ================== END page-css ================== -->
-
-</head>
 <form onsubmit="return mySubmitFunction(event)" id="wshform" action="saveQuickTimeReport" method="post" >
-<div class="modal-header">
-	<div class="d-flex align-items-start">
-		<a href="#"> <img onerror="this.onerror=null; this.src='assets/img/user/user.png'"
-			th:src="*{'data:image/jpeg;base64,'+{userdtl.emp_image_encoded}}"
-			alt="" width="100" class="rounded" />
-		</a>
-		<div class="ms-3">
-
-			<span><span class="modal-title" th:text="${userdtl.full_name}"></span>&nbsp;<a
-				type="button" th:href="@{/editEmployee(empid=${userdtl.empid})}"><i
-					class="fa fa-edit"></i></a></span> <br /> 
-			Week No #<span id="week_no"></span>
-			<br/>
-			<span>Extent: [[${userdtl.employee_Type}]]</span>
-			<p id="avmessage"></p>
-		</div>
-	</div>
-	
-	<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-
+<div class="modal-header bg-warning bg-opacity-25">	
+	<h4>Vacation Request Form</h4>		
 
 </div>
 <div class="modal-body">
 
+<div>
+			
+		<b>Regulations:</b>
+			<ul>
+				<li>Employee can request to take vacation for future working days.</li>
+				<li>Nearest chief has the authority to approve or reject the vacation request.</li>
+			</ul>
+			
+	</div>
+<hr/>
 
 	<div class="row mb-3">
 		<div class="col-12 col-sm-4">
-			<label class="custom-control-label ">Time Registration</label> <select
-				id="availability" onc name="status" class="form-select border is-valid">
-				<option  th:each="at: ${avtype}" th:value="${at.typeid}" th:text="${at.typename}">xx</option>
+			<label class="custom-control-label ">Date range</label> <select
+				id="availability" onc name="status" class="form-select border">
+				<option th:if="${at.typeid}!=1"  th:each="at: ${avtype}" th:value="${at.typeid}" th:text="${at.typename}">xx</option>
 			</select>
 			<input type="hidden" id="userid" name="userid" th:value="${userdtl.empid}" />
 			
@@ -77,18 +33,7 @@
 		<div class="col-12 col-sm-4">
 			<label class="custom-control-label ">Date Range</label> 
 			<select onchange="calculate();" id="avdaterangeselect"  name="status" class="form-select">
-					<!-- 
-					<option value="t">Today</option>	
-					<option value="tw">This Week</option>								
-					<option value="nw">Next Week</option>					
-					<option value="tm">This month</option>
-					<option value="nm">Next month</option>
-					<option value="c">Custom</option>
-					 -->
 					
-					<option value="lw">Last Week</option>
-					<option value="dby">Day before Yesterday</option>
-					<option value="yd">Yesterday</option>
 					<option value="t">Today</option>
 					<option value="tw">This Week</option>
 					<option value="nw">Next Week</option>
@@ -104,7 +49,7 @@
 			<div class="form-group">
 				<label>From Date to Date</label>
 				<div class="input-group " id="">
-					<input  id="av_from_date" name="from_date" required="required" autocomplete="off"
+					<input   id="av_from_date" name="from_date" required="required" autocomplete="off"
 						type="text" class="form-control datepicker-default" 
 						placeholder="start date" /> <span class="input-group-text ">to</span>
 					<input id="av_to_date" name="to_date" type="text" required="required" autocomplete="off"
@@ -116,94 +61,40 @@
 	</div>
 
 
-	<hr>
 
-	<div class="row">
-		<div class="col-4">
-			<label>Work Start</label> <input type="time" value="08:00" name="work_start" id="start"
-			 onchange="calculate();"	class="timepicker form-control text-center absents">
-		</div>
-		<div class="col-4">
-			<label>Interval (minute)</label> <input value=30 type="number" name="lunch_hour" id="lbreak"
-				onchange="calculate();" class="form-control text-center absents">
-		</div>
-		<div class="col-4">
-			<label>Work End</label> <input value="16:30" type="time" name="work_end" id="end"
-				onchange="calculate();" class="form-control text-center absents timepicker">
-		</div>
-	</div>
+
 	
-	<hr>
 	<div class="row">
 		<div class="col-12">
-			<label>Job Description</label> <input required="required" id="desc" type="text" name="work_desc"
-				class="form-control">
+			<label>Description</label> <textarea required="required" id="desc" type="text" name="work_desc"
+				class="form-control"></textarea>
 		</div>
 	</div>
+	<br/>
+	
+	<span>Employee: <strong><span class="" th:text="${userdtl.full_name}"></span> </strong>&nbsp;</span> <span>[ Extent: [[${userdtl.employee_Type}]] ]</span> <br /> 
+	<span id="avmessage"></span> [ Starting from Week No #<span id="week_no"></span> ]
+		
 	
 	
 
 </div>
 
 <div class="modal-footer">
-	<div class="row">
-		<button type="submit" class="form-control btn btn-outline-theme processview">Save</button>
+	
+		<button type="button" class="btn btn-default"  data-bs-dismiss="modal">Cancel</button>
+		<button type="submit" class=" btn btn-warning processview">SUBMIT</button>
 		
-	</div>
+	
 </div>
 
 </form>
-<div class="toasts-container">
-			<div class="toast fade hide mb-3" data-autohide="false" id="toast">
-				<div class="toast-header">
-					<i class="far fa-bell text-muted me-2"></i> 
-					<strong class="me-auto title">Title</strong>
-					<button type="button" id="toast-reload-btn" class="btn btn-link">Reload Page</button>					
-					<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-					
-				</div>
-				<div class="toast-body">
-					<div class="toast-message">
-					</div>					
-				</div>
-			</div>
-
-
-
-		</div>
-		<!-- ================== BEGIN core-js ================== -->
-	
-	<!-- ================== END core-js ================== -->
-<!-- ================== BEGIN page-js ================== -->
-<script src="assets/plugins/jquery-migrate/dist/jquery-migrate.min.js"></script>
-<script
-	src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-<script src="assets/plugins/moment/min/moment.min.js"></script>
-<script
-	src="assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script
-	src="assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
-<script
-	src="assets/plugins/bootstrap-slider/dist/bootstrap-slider.min.js"></script>
-<script
-	src="assets/plugins/jquery-typeahead/dist/jquery.typeahead.min.js"></script>
-<script
-	src="assets/plugins/jquery.maskedinput/src/jquery.maskedinput.js"></script>
-<script src="assets/plugins/select-picker/dist/picker.min.js"></script>
-<script src="assets/plugins/@highlightjs/cdn-assets/highlight.min.js"></script>
-<script src="assets/js/demo/highlightjs.demo.js"></script>
 <script src="assets/js/demo/form-plugins.demo.js"></script>
-<script src="assets/js/demo/sidebar-scrollspy.demo.js"></script>
-<script src="assets/js/netlit_ems.js"></script>
-<!-- ================== END page-js ================== -->
-
 
 <script>
 setModalData();
 
 function setModalData() {
-	$('#availability option[value="1"]').attr("selected", "selected");
-	$('.absents').addClass("is-valid");
 	let today = new Date().toISOString().substr(0, 10);
 	$("#av_from_date").val(today);
 	$("#av_to_date").val(today);	
@@ -211,36 +102,13 @@ function setModalData() {
 	setDateRangeString();
 }
 
-$('#availability').change( function() {	
-	if ($(this).val() == 1) {		
-		$('.absentss').prop('required', true);
-		$('.absentss').prop('disabled', false);
-		$(this).removeClass("is-invalid");
-		$(this).addClass("is-valid");
-		$('.absents').removeClass("is-invalid");
-		$('.absents').addClass("is-valid");
-	} else {		
-		
-		$("#start").val("");
-		$("#end").val("");
-		$("#lbreak").val(0);	
-		
-		$(".absents").removeAttr("required");
-		$('.absents').prop('disabled', true);
-		$(".absents").removeClass("is-valid");
-		$(".absents").addClass("is-invalid");		
-		$(this).removeClass("is-valid");
-		$(this).addClass("is-invalid");	
-		calculate();
-		
-	}
-});
+
 
 $("#avdaterangeselect").change(function() {
 	$c = $(this).val();	
 
 	if ($c == "tm") {
-		$("#av_from_date").val(moment().startOf('month').format('YYYY-MM-DD'));
+		$("#av_from_date").val(moment().format('YYYY-MM-DD'));
 		$("#av_to_date").val(moment().endOf('month').format('YYYY-MM-DD'));
 
 	} else if ($c == "nm") {
@@ -255,18 +123,9 @@ $("#avdaterangeselect").change(function() {
 		$("#av_to_date").val(moment().format('YYYY-MM-DD'));
 
 	}  else if ($c == "tw") {
-		$("#av_from_date").val(moment().startOf('isoWeek').format('YYYY-MM-DD'));
+		("#av_from_date").val(moment().format('YYYY-MM-DD'));
 		$("#av_to_date").val(moment().endOf('isoWeek').format('YYYY-MM-DD'));
 
-	}else if ($c == "lw") {
-		$("#av_from_date").val(moment().add(-1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
-		$("#av_from_date").val(moment().add(-1, 'week').endOf('isoWeek').format('YYYY-MM-DD'));
-	}else if ($c == "yd") {
-		$("#av_from_date").val(moment().add(-1, 'day').format('YYYY-MM-DD'));
-		$("#av_to_date").val(moment().add(-1, 'day').format('YYYY-MM-DD'));
-	}else if ($c == "dby") {
-		$("#av_from_date").val(moment().add(-2, 'day').format('YYYY-MM-DD'));
-		$("#av_to_date").val(moment().add(-2, 'day').format('YYYY-MM-DD'));
 	}
 	setDateRangeString();
 	getWeekNo();
@@ -280,19 +139,17 @@ $('#av_from_date').on('change', function() {
 
 
 function getWeekNo() {
-	/*
-	var currentdate = new Date($("#from_date").val());
-	var oneJan = new Date(currentdate.getFullYear(),0,1);
-	var numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
-	var result =Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);		
-	$("#week_no").html("  "+result);
-	*/
+	
 	var weekno= moment($("#av_from_date").val(), 'YYYY-MM-DD').format('WW')
 	$("#week_no").html(weekno);
 }
 
 function setDateRangeString() {
-	$('#avmessage').html(moment($("#av_from_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY') + ' - ' + moment($("#av_to_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY'));
+	var fd=$("#av_from_date").val();
+	var td=$("#av_to_date").val();
+	var daydiff= (moment.duration(moment(td, 'YYYY-MM-DD').diff(moment(fd, 'YYYY-MM-DD'))).asDays())+1;
+	var str=moment(fd, 'YYYY-MM-DD').format('dddd, MMMM D, YYYY') + ' - ' + moment(td, 'YYYY-MM-DD').format('dddd, MMMM D, YYYY');
+	$('#avmessage').html("Total "+daydiff+"days<br/>"+str);
 }
 
 function mySubmitFunction(e) {
@@ -320,18 +177,5 @@ function mySubmitFunction(e) {
 	  return false;
 	}
 	
-function calculate() {
-	var start = $("#start").val();
-	var end = $("#end").val();
-	var lbreak = $("#lbreak").val();	
-	var obmin = $("#obminute").val();		
-	$("#work_minute").val(getworkminute(start,end,lbreak,obmin));
-	$("#work_hour").val(minutesToHour(getworkminute(start,end,lbreak,obmin)));	
-}
-function getworkminute(start,end,lbreak,obmin) {		
-	var diff = ((Math.abs(new Date('2022-05-30 '+start) - new Date('2022-05-30 '+end))/1000/60)- parseInt(lbreak))+parseInt(obmin);
-	return diff;
-	
-}
 
 </script>

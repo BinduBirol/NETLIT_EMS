@@ -32,6 +32,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailMessage;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
@@ -67,6 +69,7 @@ import com.birol.ems.timereport.repo.OvertimeRepo;
 import com.birol.persistence.model.User;
 import com.birol.service.IUserService;
 import com.birol.service.UserService;
+import com.google.gson.Gson;
 
 @Controller
 public class TimeReportController {
@@ -679,167 +682,113 @@ public class TimeReportController {
 		return extr.getAv_id();
 	}
 	
-	@GetMapping("/rejectRGtime")
-	@ResponseBody
-	public String rejectRGtime(Authentication auth, @ModelAttribute EmpTimeReportDTO emptr) {
-		User creator = (User) auth.getPrincipal();		
-		EmpTimeReportDTO extr = avrepo.findById(emptr.getAv_id()).get();
-		
-		/*
-		boolean validator= false;
-		for(Timereport_Overtime_emp ov: extr.getOvertime()) {
-			if(ov.isIsapproved())validator=true;
-		}
-		if(validator) {
-			extr.setStatus(5);
-			extr.setWork_start(null);
-			extr.setWork_end(null);
-			extr.setLunch_hour(0);
-			extr.setWork_minute(0);
-			extr.setWork_hour("0 H 0 Min");
-			extr.setIsapproved(true);
-			extr.setIsrejected(false);
-		}else {
-			extr.setStatus(emptr.getStatus());
-			extr.setWork_start(emptr.getWork_start());
-			extr.setWork_end(emptr.getWork_end());
-			extr.setLunch_hour(emptr.getLunch_hour());
-			extr.setWork_desc(emptr.getWork_desc());
-			extr.setWork_hour(emptr.getWork_hour());
-			extr.setWork_minute(emptr.getWork_minute());
-			extr.setIsapproved(false);
-			extr.setIsrejected(true);
-		}	
-		*/	
-		extr.setStatus(emptr.getStatus());
-		extr.setWork_start(emptr.getWork_start());
-		extr.setWork_end(emptr.getWork_end());
-		extr.setLunch_hour(emptr.getLunch_hour());
-		extr.setWork_desc(emptr.getWork_desc());
-		extr.setWork_hour(emptr.getWork_hour());
-		extr.setWork_minute(emptr.getWork_minute());
-		extr.setIsapproved(false);
-		extr.setIsrejected(true);
-		
-		avrepo.save(extr);
-		
-		// send mail
-		SimpleMailMessage email = new SimpleMailMessage();
-		email.setTo(userService.getUserByID(extr.getUserid()).get().getEmail());
-		email.setSubject("STATUS OF YOUR REPORTED TIME");
-		final String appUrl = "https://ems.netlit.se";
-		String emailText = "Ooops! Your reported time for date:"+extr.getDate()+" has been rejected. Please contact your nearest chief for more details info!";
-		email.setText(emailText);
-		email.setFrom(env.getProperty("support.email"));
-		mailSender.send(email);
-
-		return extr.getAv_id();
-	}
 	
-	@GetMapping("/approveOBtime")
 	@ResponseBody
-	public String approveOBtime(Authentication auth, @ModelAttribute Timereport_Overtime_emp  emptr) {
-		User creator = (User) auth.getPrincipal();		
-		Timereport_Overtime_emp extr = obrepo.findById(emptr.getOb_id()).get();
-		extr.setStatus(emptr.getStatus());
-		extr.setWork_start(emptr.getWork_start());
-		extr.setWork_end(emptr.getWork_end());
-		extr.setLunch_hour(emptr.getLunch_hour());
-		extr.setWork_desc(emptr.getWork_desc());
-		extr.setWork_hour(emptr.getWork_hour());
-		extr.setWork_minute(emptr.getWork_minute());
-		extr.setIsapproved(true);
-		extr.setIsrejected(false);
-		
-		/*
-		EmpTimeReportDTO rgtime= avrepo.findById(extr.getAv_id()).get();
-		if(rgtime.isIsrejected()) {
-			rgtime.setStatus(5);
-			rgtime.setWork_start(null);
-			rgtime.setWork_end(null);
-			rgtime.setLunch_hour(0);
-			rgtime.setWork_minute(0);
-			rgtime.setWork_hour("0 H 0 Min");
-			rgtime.setIsapproved(true);
-			rgtime.setIsrejected(false);
-		}
-		avrepo.save(rgtime);
-		*/
-		obrepo.save(extr);
-		return extr.getAv_id();
-	}
-	
-	@GetMapping("/rejectOBtime")
-	@ResponseBody
-	public String rejectOBtime(Authentication auth, @ModelAttribute Timereport_Overtime_emp  emptr) {
-		User creator = (User) auth.getPrincipal();		
-		Timereport_Overtime_emp extr = obrepo.findById(emptr.getOb_id()).get();
-		extr.setStatus(emptr.getStatus());
-		extr.setWork_start(emptr.getWork_start());
-		extr.setWork_end(emptr.getWork_end());
-		extr.setLunch_hour(emptr.getLunch_hour());
-		extr.setWork_desc(emptr.getWork_desc());
-		extr.setWork_hour(emptr.getWork_hour());
-		extr.setWork_minute(emptr.getWork_minute());
-		extr.setIsapproved(false);
-		extr.setIsrejected(true);
-		obrepo.save(extr);
-		return extr.getAv_id();
-	}
-	
-	
-	@GetMapping("/approveAvailablity")
-	@ResponseBody
-	public String ApproveAvailablity(Authentication auth, @RequestParam String av_id, @RequestParam String start,
-			@RequestParam String end, @RequestParam int lbreak, @RequestParam int minutes,
-			@RequestParam int obmint,@RequestParam String work_hour,
-			@RequestParam boolean approve, @RequestParam String wdesc, final ModelMap model) {
-
+	@PostMapping("/rgTimeAction")
+	private String rgTimeAction(Authentication auth,@RequestPayload String rg, @RequestPayload boolean ismail, @RequestPayload boolean decision) {
+		String msg="Time report ";
+		Gson gson = new Gson(); 
+		EmpTimeReportDTO data = gson.fromJson(rg, EmpTimeReportDTO.class);
 		User creator = (User) auth.getPrincipal();
-		EmpTimeReportDTO av = avrepo.findById(av_id).get();
-		Time_report_approved wsh = new Time_report_approved();
-
-		wsh.setAssigned_by_full_name(creator.getFirstName() + " " + creator.getLastName());
-		wsh.setAssigned_by_id(creator.getId());
-
-		wsh.setDate(av.getDate());
-		wsh.setDay(av.getDay());
-		wsh.setWeek(av.getWeek());
-		wsh.setWork_start(start);
-		wsh.setWork_end(end);
-		wsh.setLunch_hour(lbreak);
-		wsh.setWork_minute(minutes);
-		wsh.setWork_hour(work_hour);
-		wsh.setUserid(av.getUserid());
-		wsh.setFull_name(av.getFull_name());
-		wsh.setAvailability_id(av.getAv_id());
-		String wshid = wSHservice.generateWShID(wsh);
-		wsh.setStatus(av.getStatus());
-		wsh.setWork_desc(wdesc);
-		wsh.setWork_sh_id(wshid);
-		wsh.setTaskid(av.getTaskid());
-		wsh.setProjectid(av.getProjectid());
-		wsh.setObtype(av.getObtype());
-		wsh.setObminute(obmint);
+		EmpTimeReportDTO av = avrepo.findById(data.getAv_id()).get();
 		
+		av.setStatus(data.getStatus());
+		av.setWork_start(data.getWork_start());
+		av.setWork_end(data.getWork_end());
+		av.setLunch_hour(data.getLunch_hour());
+		av.setWork_minute(data.getWork_minute());
+		av.setWork_hour(data.getWork_hour());
+		av.setWork_desc(data.getWork_desc());
 		
-		av.setWork_start(start);
-		av.setWork_end(end);
-		av.setLunch_hour(lbreak);
-		av.setObtype(av.getObtype());
-		av.setObminute(obmint);
-		av.setWork_minute(minutes);
-		av.setWork_hour(work_hour);
-		av.setWork_desc(wdesc);
-		av.setIsapproved(approve);
-		avrepo.save(av);
-		if (approve) {
-			empWSHrepo.save(wsh);
-		} else {
-			empWSHrepo.deleteById(wshid);
+		String emailText = "";
+		if(decision) {
+			msg+= "approved for ";
+			emailText ="You time report for date:"+av.getDate()+" has been approved for the upcoming salary!";
+			av.setIsapproved(true);
+			av.setIsrejected(false);			
+		}else {
+			msg+= "rejected for ";
+			emailText ="You time report for date:"+av.getDate()+" has been rejected!";
+			av.setIsapproved(false);
+			av.setIsrejected(true);			
+		}	
+		
+		try {			
+			avrepo.save(av);
+			msg+= av.getFull_name();
+			
+			if(ismail) {
+				// send mail
+				SimpleMailMessage email = new SimpleMailMessage();
+				email.setTo(userService.getUserByID(av.getUserid()).get().getEmail());
+				email.setSubject("STATUS OF YOUR REPORTED TIME");
+				final String appUrl = "https://ems.netlit.se";				
+				email.setText(emailText);
+				email.setFrom(env.getProperty("support.email"));
+				try {
+					mailSender.send(email);
+				} catch (Exception e) {
+					msg+="\nUnable to send mail.";
+				}
+			}			
+			
+		} catch (Exception e) {
+			msg=e.getMessage();
 		}
-		model.addAttribute("message", approve);
-		return av_id;
+		return msg;
+	}
+	
+	@ResponseBody
+	@PostMapping("/obTimeAction")
+	private String obTimeAction(Authentication auth,@RequestPayload String rg, @RequestPayload boolean ismail, @RequestPayload boolean decision) {
+		String msg="OverTime report ";
+		Gson gson = new Gson(); 
+		Timereport_Overtime_emp data = gson.fromJson(rg, Timereport_Overtime_emp.class);
+		User creator = (User) auth.getPrincipal();
+		Timereport_Overtime_emp av =obrepo.findById(data.getOb_id()).get();
+		
+		av.setStatus(data.getStatus());
+		av.setWork_start(data.getWork_start());
+		av.setWork_end(data.getWork_end());
+		av.setLunch_hour(data.getLunch_hour());
+		av.setWork_minute(data.getWork_minute());
+		av.setWork_hour(data.getWork_hour());
+		av.setWork_desc(data.getWork_desc());
+		
+		String emailText = "";
+		if(decision) {
+			msg+= "approved for ";
+			emailText ="You time report for date:"+av.getDate()+" has been approved for the upcoming salary!";
+			av.setIsapproved(true);
+			av.setIsrejected(false);			
+		}else {
+			msg+= "rejected for ";
+			emailText ="You time report for date:"+av.getDate()+" has been rejected!";
+			av.setIsapproved(false);
+			av.setIsrejected(true);			
+		}	
+		
+		try {			
+			obrepo.save(av);
+			msg+= av.getFull_name();
+			if(ismail) {
+				// send mail
+				SimpleMailMessage email = new SimpleMailMessage();
+				email.setTo(userService.getUserByID(av.getUserid()).get().getEmail());
+				email.setSubject("STATUS OF YOUR REPORTED TIME");
+				final String appUrl = "https://ems.netlit.se";				
+				email.setText(emailText);
+				email.setFrom(env.getProperty("support.email"));
+				try {
+					mailSender.send(email);
+				} catch (Exception e) {
+					msg+="\nUnable to send mail.";
+				}
+			}
+		} catch (Exception e) {
+			msg=e.getMessage();			
+		}
+		return msg;
 	}
 
 	@ResponseBody
@@ -930,7 +879,7 @@ public class TimeReportController {
 	
 	public EmpTimeReportDTO getTimereportsByDate(String date,long userid){
 		EmpTimeReportDTO tr= new EmpTimeReportDTO();
-		tr=avrepo.findbyOnedateEmpid(userid, LocalDate.parse(date));
+		tr=avrepo.findbyOnedateEmpidanytype(userid, LocalDate.parse(date));
 		return tr;		
 	}
 }

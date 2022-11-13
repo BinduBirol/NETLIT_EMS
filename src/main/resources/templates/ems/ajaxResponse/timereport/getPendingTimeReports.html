@@ -15,7 +15,12 @@
 		</tr>
 		
 		<tr class="table-info" >
-			<th colspan="9"><h3> Week: ? , [[${#temporals.format(element.key, 'E, dd MMM yyyy')}]]</h3></th>
+			<th colspan="9">
+				<h3> Week 
+				<span th:if="${not #lists.isEmpty(element.value)}" >[[${element.value[0].week}]]</span>
+				<span th:if="${#lists.isEmpty(element.value)}" >[[${obmap.get(element.key)[0].week}]]</span>			
+				 , [[${#temporals.format(element.key, 'E, dd MMM yyyy')}]]</h3>
+			 </th>
 		</tr>
 		
 		<tr class="table-active">
@@ -36,11 +41,15 @@
 			<td>
 				<a href="#" class="text-decoration-none" th:emp-id="${tr.userid}"
 				onclick="viewEmlpoyee(this);" th:text="${tr.full_name}"></a>
-			</td>
+				<input type="hidden" class="faction" value="rgTimeAction"/>
+				<input type="hidden" class="dataid" name="av_id" th:value="${tr.av_id}"/>
+				<input type="hidden" class="employee" th:value="${tr.full_name}"/>
+				<input type="hidden" class="date" th:value="${#temporals.format(tr.date, 'E, dd MMM yyyy')}"/>
+			</td>			
 			<td>
 				<select name='status' onchange='setTypeval( event,this)'
-				th:classappend="${tr.status==1} ? 'is-valid': 'is-invalid'"
-				class='status  form-select form-select-sm availabilitysign'>
+				th:classappend="${tr.status==1} ? 'border-success': 'border-danger'"
+				class='status  form-select form-select-sm availabilitysign border '>
 					<option th:selected="${at.typeid==tr.status}"
 						th:each="at: ${avtype}" th:value="${at.typeid}"
 						th:start="${at.start}" th:end="${at.end}"
@@ -74,23 +83,31 @@
 					onchange='calculate(event)' name='work_desc'
 					class='form-control form-control-sm work_desc' rows='2'></textarea>
 			</td>
-			<td>
+			<td th:class='${tr.av_id}'>
 			<div class="btn-group btn-group-sm">
-				<input type="button" class="btn  btn-success" value="Approve"/>
-				<input type="button" class="btn btn-danger" value="Reject"/>				
+				<input type="button" class="btn  btn-success decision"  value="Approve"/>
+				<input type="button" class="btn btn-danger decision"  value="Reject"/>				
 			</div>
 				
 			</td>
+			
 		</tr>
 		
 		<tr class="table-active" th:if="${not #lists.isEmpty(obmap.get(element.key))}" style="vertical-align: middle;" th:each="tr : ${obmap.get(element.key)}" >
+			
 			<td>
 				<a href="#" class="text-decoration-none" th:emp-id="${tr.userid}"
 				onclick="viewEmlpoyee(this);" th:text="${tr.full_name}"></a>
+				
+				<input type="hidden" class="dataid" name="ob_id" th:value="${tr.ob_id}"/>
+				<input type="hidden" class="faction" value="obTimeAction"/>
+				
+				<input type="hidden" class="employee" th:value="${tr.full_name}"/>
+				<input type="hidden" class="date" th:value="${#temporals.format(tr.date, 'E, dd MMM yyyy')}"/>
 			</td>
 			<td>			
 				<select name='status' onchange='setTypeval( event,this)'
-					class='status  form-select form-select-sm cal hljs-string'>
+					class='status  form-select form-select-sm cal border border-primary'>
 						<option th:selected="${at.typeid==tr.status}"
 							th:each="at: ${obtype}" th:value="${at.typeid}"
 							th:start="${at.start}" th:end="${at.end}"
@@ -124,18 +141,61 @@
 					onchange='calculate(event)' name='work_desc'
 					class='form-control form-control-sm work_desc' rows='2'></textarea>
 			</td>
-			<td>
+			<td th:class='${tr.ob_id}'>
 			<div class="btn-group btn-group-sm">
-				<input type="button" class="btn  btn-success" value="Approve"/>
-				<input type="button" class="btn btn-danger" value="Reject"/>				
+				<input type="button"  class="btn  btn-success decision " value="Approve"/>
+				<input type="button"  class="btn btn-danger decision" value="Reject"/>				
 			</div>
 				
 			</td>
+			
+			
 		</tr>
 
 	</tbody>
 	</span>
 </table>
+
+<script>
+	$(".decision").click(
+			function(e) {
+				$target = $(e.target).closest('tr');
+				var emp = $target.find(".employee").val();
+				var dataid = $target.find(".dataid").val();
+				
+				var values = {};
+				$.each($target.find("input, select, textarea").serializeArray(), function(i, field) {
+				    values[field.name] = field.value;
+				});
+				
+				var data= JSON.stringify(values);
+				
+				
+				var action = $target.find(".faction").val();
+				
+				var date = $target.find(".date").val().toUpperCase();
+				var dec = $(this).val();
+				var classappend = "";
+				var d=0;
+
+				if (dec == "Approve") {
+					d=1;
+					$("#confirmDecisionmodal .btn-dec").removeClass("btn-danger").addClass("btn-success").text(dec);
+				} else {
+					d=0;
+					$("#confirmDecisionmodal .btn-dec").removeClass("btn-success").addClass("btn-danger").text(dec);
+				}				
+				
+				$('#confirmDecisionmodal #action').val(action);
+				$('#confirmDecisionmodal #data').val(data);
+				$('#confirmDecisionmodal #dataid').val(dataid);
+				$('#confirmDecisionmodal #actionDecision').val(d);
+				$('#confirmDecisionmodal #modal-dec').text(dec);
+				$('#confirmDecisionmodal #modal-emp').text(emp);				
+				$('#confirmDecisionmodal .modal-title').text(date);
+				$('#confirmDecisionmodal').modal('show');
+			})
+</script>
 
 
 

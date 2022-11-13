@@ -1,0 +1,31 @@
+2022-11-13 20:20:17,622 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 6.2.3.Final
+2022-11-13 20:20:17,756 INFO o.s.b.StartupInfoLogger [main] Starting Application using Java 1.8.0_111 on DESKTOP-PV88BDA with PID 11740 (E:\EmsWorkspace\NETLIT_EMS\target\classes started by JGTDSL-BB in E:\EmsWorkspace\NETLIT_EMS)
+2022-11-13 20:20:17,760 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v2.6.7, Spring v5.3.19
+2022-11-13 20:20:17,762 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2022-11-13 20:20:19,277 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-11-13 20:20:19,469 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 177 ms. Found 24 JPA repository interfaces.
+2022-11-13 20:20:20,101 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$d570b128] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-11-13 20:20:20,147 INFO o.s.w.s.a.s.AbstractAddressingEndpointMapping [main] Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2022-11-13 20:20:20,560 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port(s): 8080 (http)
+2022-11-13 20:20:20,571 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8080"]
+2022-11-13 20:20:20,572 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2022-11-13 20:20:20,572 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/9.0.62]
+2022-11-13 20:20:20,767 INFO o.a.j.l.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2022-11-13 20:20:20,767 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 2607 ms
+2022-11-13 20:20:20,822 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2022-11-13 20:20:21,048 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2022-11-13 20:20:21,059 INFO o.s.b.a.h.H2ConsoleAutoConfiguration [main] H2 console available at '/h2'. Database available at 'jdbc:mysql://localhost:3306/netlit_ems?useLegacyDatetimeCode=false&serverTimezone=Asia/Jakarta&useSSL=false'
+2022-11-13 20:20:21,249 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-11-13 20:20:21,321 INFO o.h.Version [main] HHH000412: Hibernate ORM core version 5.6.8.Final
+2022-11-13 20:20:21,554 INFO o.h.a.c.r.j.JavaReflectionManager [main] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-11-13 20:20:21,768 INFO o.h.d.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2022-11-13 20:20:23,597 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-11-13 20:20:23,612 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-11-13 20:20:26,487 INFO o.s.s.w.DefaultSecurityFilterChain [main] Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6e975866, org.springframework.security.web.context.SecurityContextPersistenceFilter@6453c126, org.springframework.security.web.header.HeaderWriterFilter@746fda68, org.springframework.security.web.authentication.logout.LogoutFilter@400c0d26, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@b680059, org.springframework.security.web.session.ConcurrentSessionFilter@13e9a2f2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1a5b8f77, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5fb6fdb8, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@a809a62, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1dde749e, org.springframework.security.web.session.SessionManagementFilter@3167c0d, org.springframework.security.web.access.ExceptionTranslationFilter@14eaab92, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5afaa87a]
+2022-11-13 20:20:27,102 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8080"]
+2022-11-13 20:20:27,143 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port(s): 8080 (http) with context path ''
+2022-11-13 20:20:27,148 INFO o.s.c.l.CompositeLog [main] Starting...
+2022-11-13 20:20:27,148 INFO o.s.c.l.CompositeLog [main] BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@144d064a]]
+2022-11-13 20:20:27,149 INFO o.s.c.l.CompositeLog [main] Started.
+2022-11-13 20:20:27,662 INFO o.s.b.StartupInfoLogger [main] Started Application in 10.656 seconds (JVM running for 12.589)
+2022-11-13 20:21:26,688 INFO o.s.w.s.c.WebSocketMessageBrokerStats [MessageBroker-1] WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 1, completed tasks = 0]

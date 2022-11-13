@@ -39,8 +39,9 @@
  
  body{top:0!important;}
  
- input[readonly], input[disabled] {
-  cursor: no-drop;
+ input[readonly], input[disabled], select[disabled],textarea[disabled] {
+  cursor: no-drop; 
+  background: none !important;
 }
 
 .td-input{

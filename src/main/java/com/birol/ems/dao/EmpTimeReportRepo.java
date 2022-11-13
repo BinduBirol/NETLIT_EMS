@@ -50,6 +50,10 @@ public interface EmpTimeReportRepo extends JpaRepository<EmpTimeReportDTO, Strin
 	@Query(value = "SELECT * from emp_time_report  where  date=:date and isapproved=0 and isrejected=0 order by week asc, date asc",nativeQuery = true)
 	public ArrayList<EmpTimeReportDTO> getAllusersOneDate(@Param("date")LocalDate date);	
 	
+	@Query(value = "SELECT * from emp_time_report  where userid = :userid and date=:date",nativeQuery = true)
+	public EmpTimeReportDTO findbyOnedateEmpidanytype(@Param("userid")long userid, @Param("date")LocalDate date);	
+	
+	
 	
 	
 

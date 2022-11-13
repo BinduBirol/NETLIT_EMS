@@ -35,7 +35,19 @@
 <!-- ================== END page-css ================== -->
 <link href="/assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" />
 
+<style type="text/css">
+ input[readonly], input[disabled], select[disabled],textarea[disabled] {
+ border:0;
+}
 
+.date-tr {
+  
+  border-radius: 15px 0px 0px 15px;
+}
+
+
+
+</style>
 
 </head>
 <body>
@@ -69,8 +81,8 @@
 			
 			<div class="row">
 				<div class="col-12 col-sm-2">
-					<label>Quick Report </label>
-					<button type="button" th:emp-id="${session.userdtl.empid}" onclick="availablity(this);" class="btn btn-outline-theme form-control">Quick Report <i class="fa fa-clock"></i></button>
+					<label>Apply for vacation</label>
+					<button type="button" th:emp-id="${session.userdtl.empid}" onclick="availablity(this);" class="btn btn-warning form-control">Vacation <i class="fas fa-lg fa-fw me-2 fa-universal-access"></i></button>
 				</div>
 			
 				<div class="col-12 col-sm-4">
@@ -128,8 +140,8 @@
 		</div>
 		<!-- END #content -->
 		<div th:include="theme/theme_util :: theme_util"></div>
-		<div class="modal fade" id="availablitymodal">
-				<div class="modal-dialog modal-lg">
+		<div class="modal fade " id="availablitymodal">
+				<div class="modal-dialog modal-lg  bg-opacity-25">
 					<div class="modal-content availablitymodalcontent">...</div>
 				</div>
 			</div>
