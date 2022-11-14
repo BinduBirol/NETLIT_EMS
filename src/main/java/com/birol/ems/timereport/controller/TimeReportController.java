@@ -254,15 +254,15 @@ public class TimeReportController {
 			ArrayList<EmpTimeReportDTO> rglist2 = new ArrayList<>();
 			ArrayList<Timereport_Overtime_emp> oblist2 = new ArrayList<>();;
 			for(EmpTimeReportDTO r: rglist) {
-				if(r.getWeek()==w)rglist2.add(r);
-				tRwm+= r.getWork_minute();
+				if(r.getWeek()==w) {rglist2.add(r);
+				tRwm+= r.getWork_minute();}
 			}
 			for(Timereport_Overtime_emp o: oblist) {
-				if(o.getWeek()==w)oblist2.add(o);
-				tOwm+= o.getWork_minute();
+				if(o.getWeek()==w) {oblist2.add(o);
+				tOwm+= o.getWork_minute();}
 			}
-			tobj.setTotal_rg(String.valueOf(tRwm));
-			tobj.setTotal_ob(String.valueOf(tOwm));
+			tobj.setTotal_rg(wSHservice.mintsTOHmConvert(tRwm));
+			tobj.setTotal_ob(wSHservice.mintsTOHmConvert(tOwm));
 			totalmap.put(w, tobj);
 			rgmap.put(w, rglist2);
 			obmap.put(w, oblist2);
@@ -816,5 +816,10 @@ class TotalTRDTO {
 	}
 	public void setTotal_ob(String total_ob) {
 		this.total_ob = total_ob;
+	}
+	@Override
+	public String toString() {
+		return total_rg + "," + total_ob;
 	}	
+	
 }

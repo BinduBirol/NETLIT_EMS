@@ -91,7 +91,7 @@ function ajaxcall(){
 function designTable(){
 	$(".approvedtable").each(function() {
 		var id="#"+$(this).attr("id");
-		//console.log(id);
+		//sortmyTable(0,$(this).attr("id"));
 		setAutorowspan(id,0);
 	});	
 	

@@ -1,13 +1,13 @@
 <div th:each="element : ${rgmap}">
 	<table th:id="${'tableid'+element.key}"  class="table approvedtable">
 		<tr class="table-success">
-			<th colspan="2">
+			<th colspan="1">
 				<span class="h2">Week # [[${element.key}]]</span>				
 			</th>	
 			
-			<td class="text-right" colspan="5">
-				<em>TOTAL: [[${totalmap.get(element.key).total_rg}]]</em>
-				<em>OB: [[${totalmap.get(element.key).total_ob}]]</em>
+			<td class="text-right" colspan="6">
+				REGULAR: [[${totalmap.get(element.key).total_rg}]]<br/>
+				OB: [[${totalmap.get(element.key).total_ob}]]
 			</td>		
 		</tr>	
 		<tr class="">			
@@ -21,7 +21,7 @@
 		</tr>
 		
 		<tr th:if="${not #lists.isEmpty(element.value)}" style="vertical-align: middle;" th:each="tr : ${element.value}">
-			<td class="h5">[[${#temporals.format(tr.date, 'E')}]]<br/>[[${#temporals.format(tr.date, 'dd MMM yyyy')}]]</td>
+			<td class="fw-bold ">[[${#temporals.format(tr.date, 'E')}]]<br/>[[${#temporals.format(tr.date, 'dd MMM yyyy')}]]</td>
 			<td>[[${tr.av_type.typename}]]</td>
 			<td>[[${tr.work_start}]]</td>
 			<td>[[${tr.work_end}]]</td>
@@ -31,7 +31,7 @@
 		</tr>
 		
 		<tr th:if="${not #lists.isEmpty(obmap.get(element.key))}" th:each="tr : ${obmap.get(element.key)}" style="vertical-align: middle;" >
-			<td class="h5">[[${#temporals.format(tr.date, 'E')}]]<br/>[[${#temporals.format(tr.date, 'dd MMM yyyy')}]]</td>
+			<td class="fw-bold">[[${#temporals.format(tr.date, 'E')}]]<br/>[[${#temporals.format(tr.date, 'dd MMM yyyy')}]]</td>
 			<td>[[${tr.ob_type.typename}]]</td>
 			<td>[[${tr.work_start}]]</td>
 			<td>[[${tr.work_end}]]</td>

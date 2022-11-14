@@ -1,4 +1,8 @@
 
+//pagestartajaxcall();
+
+
+
 function getDatesByWeekNo(week) {
 	var wyear=week.split("-W")[0];
 	var wweekno=week.split("-W")[1];	
@@ -74,6 +78,14 @@ function getWeekNo() {
 
 function setDateRangeString() {
 	$('#travmessage').html(moment($("#trav_from_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY') + ' - ' + moment($("#trav_to_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY'));
+}
+
+function pagestartajaxcall(){
+	$("#trav_from_date").val(moment().startOf('isoWeek').format('YYYY-MM-DD'));
+	$("#trav_to_date").val(moment().endOf('isoWeek').format('YYYY-MM-DD'));
+	setDateRangeString();
+	getWeekNo();
+	getTRforms();
 }
 
 
