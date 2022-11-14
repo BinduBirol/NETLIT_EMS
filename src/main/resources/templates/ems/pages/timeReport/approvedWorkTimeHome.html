@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>APPROVED WORK TIME</title>
+<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+
+<!-- ================== BEGIN core-css ================== -->
+<link href="assets/css/vendor.min.css" rel="stylesheet" />
+<link href="assets/css/app.min.css" rel="stylesheet" />
+<link href="assets/css/netlit_ems.css" rel="stylesheet" />
+<!-- ================== END core-css ================== -->
+<!-- ================== BEGIN page-css ================== -->
+
+<!-- ================== BEGIN page-css ================== -->
+<link href="assets/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-daterangepicker/daterangepicker.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"
+	rel="stylesheet" />
+
+<link href="assets/plugins/select-picker/dist/picker.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/jquery-typeahead/dist/jquery.typeahead.min.css"
+	rel="stylesheet" />
+<!-- ================== END page-css ================== -->
+<link href="/assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" />
+
+<style type="text/css">
+
+table{
+
+}
+</style>
+
+</head>
+<body>
+	<!-- BEGIN #app -->
+	<div class="app app-content-full-height">
+		<div th:include="theme/header :: dynamicheaderFragment"></div>
+		<div th:include="theme/sidenav :: sidenav"></div>
+		<!-- BEGIN #content -->
+		<div id="content" class="app-content">
+			<div class="container">
+				
+				<div class="row justify-content-center">
+					<!-- BEGIN col-10 -->
+					<div >
+						<!-- BEGIN row -->
+						<div class="row">
+							<!-- BEGIN col-9 -->
+							
+								<ul class="breadcrumb">
+									<li class="breadcrumb-item"><a href="#">TIME REPORT</a></li>
+									<li class="breadcrumb-item active">APPROVED WORK TIME</li>
+								</ul>
+								
+								<h1 class="page-header">
+									View Approved Time Report
+								</h1>
+								
+								<hr class="mb-4" />
+								
+								<!-- BEGIN #datatable -->
+								<div id="datatable" class="mb-5">
+									
+									    <div class="flex-grow-1">
+									    
+												<div class="row small">
+																										
+														<div class="">
+															<div class="input-group " id="">
+																<span class="input-group-text"><i class="fa fa-filter"></i></span>
+							
+																
+																<select name="c" id="daterangeselect"
+																	class="form-select form-select-sm">
+																	<option value="">Date Range</option>
+																	<option value="t">Today</option>
+																	<option value="y">Yesterday</option>
+																	<option value="n2d">Next 3 Days</option>
+																	<option value="lw">Last Week</option>
+																	<option value="tw">This Week</option>
+																	<option value="nw">Next Week</option>
+																	<option value="lm">Last month</option>
+																	<option selected="selected" value="tm">This month</option>
+																	<option value="nm">Next month</option>
+																	<option value="c">Custom</option>
+																</select>
+																<input autocomplete="off"  name="from_date" id="from_date" required="required"  type="text" class="form-control form-control-sm datepicker-default"  placeholder="From date" />
+																<span class="input-group-text">to</span>
+																<input autocomplete="off" name="to_date" id="to_date" type="text" class="form-control form-control-sm datepicker-default"  placeholder="To date" />
+																
+																<button id="searchBtn" type="button" class="btn btn-outline-theme"><i class="fa fa-search"></i></button>
+															</div>	
+														</div>	
+													</div>
+													
+													
+													</div>
+													<hr>
+									    <div id="ajaxresponse">
+											Searching for data...
+										</div>
+								</div>
+								<!-- END #datatable -->
+								
+								
+							</div>
+							<!-- END col-9-->
+							<!-- BEGIN col-3 -->
+							
+							<!-- END col-3 -->
+						</div>
+						<!-- END row -->
+					</div>
+			</div>
+		</div>
+		<!-- END #content -->
+		
+		
+	</div>
+	<!-- END #app -->
+	<div th:include="theme/footer::staticFooter"></div>
+	
+	<div th:include="theme/theme_util :: theme_util"></div>		
+		<script src="assets/plugins/moment/min/moment.min.js"></script>
+		<script src="assets/js/demo/form-plugins.demo.js"></script>
+		<script src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+		<script src="assets/js/pagejs/approvedWorkTimeHome.js"></script>		
+</body>
+</html>

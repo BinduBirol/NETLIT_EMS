@@ -16,10 +16,12 @@
 		
 		<tr class="table-info" >
 			<th colspan="9">
-				<h3> Week 
+				<h3>			
+				 [[${#temporals.format(element.key, 'E, dd MMM yyyy')}]]
+				 , Week 
 				<span th:if="${not #lists.isEmpty(element.value)}" >[[${element.value[0].week}]]</span>
-				<span th:if="${#lists.isEmpty(element.value)}" >[[${obmap.get(element.key)[0].week}]]</span>			
-				 , [[${#temporals.format(element.key, 'E, dd MMM yyyy')}]]</h3>
+				<span th:if="${#lists.isEmpty(element.value)}" >[[${obmap.get(element.key)[0].week}]]</span>
+				 </h3>
 			 </th>
 		</tr>
 		

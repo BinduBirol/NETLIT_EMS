@@ -19,6 +19,9 @@ public interface EmpOvertimeRepo extends CrudRepository<Timereport_Overtime_emp,
 	public ArrayList<Timereport_Overtime_emp> getAllusersOneDate(@Param("date")LocalDate date);	
 	
 	@Query(value = "SELECT * from emp_time_report_overtime  where userid = :userid and date=:date and isapproved=0 and isrejected=0",nativeQuery = true)
-	public Timereport_Overtime_emp findbyOnedateEmpid(@Param("userid")long userid, @Param("date")LocalDate date);
+	public ArrayList<Timereport_Overtime_emp>  findbyOnedateEmpid(@Param("userid")long userid, @Param("date")LocalDate date);
+
+	@Query(value = "SELECT * from emp_time_report_overtime  where userid = :userid and date BETWEEN STR_TO_DATE(:startDate, '%Y-%m-%d')  AND STR_TO_DATE(:endDate, '%Y-%m-%d') and isapproved=1",nativeQuery = true)
+	public ArrayList<Timereport_Overtime_emp> approvedOneUserFdTd(@Param("startDate")String startDate, @Param("endDate")String endDate, @Param("userid")Long userid);
 
 }

@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -195,9 +196,9 @@ public class TimeReportController {
 					EmpTimeReportDTO obj= new EmpTimeReportDTO();
 					Timereport_Overtime_emp obobj= new Timereport_Overtime_emp();
 					obj=avrepo.findbyOnedateEmpid(x.getEmpid(),d);
-					obobj=obrepo.findbyOnedateEmpid(x.getEmpid(),d);
-					if(obj!=null)trlist.add(obj);
-					if(obobj!=null)oblist.add(obobj);
+					ArrayList<Timereport_Overtime_emp> list=obrepo.findbyOnedateEmpid(x.getEmpid(),d);
+					for(Timereport_Overtime_emp o: list)if(o!=null)oblist.add(o);
+					if(obj!=null)trlist.add(obj);					
 				}
 													
 			}else {
@@ -206,9 +207,9 @@ public class TimeReportController {
 				EmpTimeReportDTO obj= new EmpTimeReportDTO();
 				Timereport_Overtime_emp obobj= new Timereport_Overtime_emp();
 				obj= avrepo.findbyOnedateEmpid(Long.parseLong(emp_id.split("-")[1]),d);
-				obobj=obrepo.findbyOnedateEmpid(Long.parseLong(emp_id.split("-")[1]),d);
+				ArrayList<Timereport_Overtime_emp> list =obrepo.findbyOnedateEmpid(Long.parseLong(emp_id.split("-")[1]),d);
+				for(Timereport_Overtime_emp o: list)if(o!=null)oblist.add(o);
 				if(obj!=null)trlist.add(obj);
-				if(obobj!=null)oblist.add(obobj);
 			}		
 			
 			//if(trlist.size()>0)map.put(d, trlist);
@@ -226,6 +227,63 @@ public class TimeReportController {
 		return new ModelAndView("ems/ajaxResponse/timereport/getPendingTimeReports", model);	
 	}
 
+	@PostMapping("/getApprovedTimeReports")
+	public ModelAndView getApprovedTimeReports(	@RequestPayload String from_date,
+												@RequestPayload String to_date,												
+												Authentication auth, final ModelMap model) {
+		User user = (User) auth.getPrincipal();
+		ArrayList<EmpTimeReportDTO> rglist= avrepo.approvedOneUserFdTd(from_date, to_date, user.getId());
+		ArrayList<Timereport_Overtime_emp> oblist= obrepo.approvedOneUserFdTd(from_date, to_date, user.getId());
+		
+		HashSet<Integer> weeks= new HashSet<>();
+		for(EmpTimeReportDTO r: rglist) weeks.add(r.getWeek());
+		for(Timereport_Overtime_emp o: oblist) weeks.add(o.getWeek());
+		
+		HashMap<Integer, ArrayList<EmpTimeReportDTO>> rgmap= new HashMap<>();
+		HashMap<Integer, ArrayList<Timereport_Overtime_emp>> obmap= new HashMap<>();
+		HashMap<Integer, TotalTRDTO> totalmap= new HashMap<>();
+		
+		int tRwm=0;
+		int tOwm=0;
+		TotalTRDTO tobj= new TotalTRDTO();
+		
+		for(int w: weeks) {
+			tRwm=0;
+			tOwm=0;
+			tobj= new TotalTRDTO();
+			ArrayList<EmpTimeReportDTO> rglist2 = new ArrayList<>();
+			ArrayList<Timereport_Overtime_emp> oblist2 = new ArrayList<>();;
+			for(EmpTimeReportDTO r: rglist) {
+				if(r.getWeek()==w)rglist2.add(r);
+				tRwm+= r.getWork_minute();
+			}
+			for(Timereport_Overtime_emp o: oblist) {
+				if(o.getWeek()==w)oblist2.add(o);
+				tOwm+= o.getWork_minute();
+			}
+			tobj.setTotal_rg(String.valueOf(tRwm));
+			tobj.setTotal_ob(String.valueOf(tOwm));
+			totalmap.put(w, tobj);
+			rgmap.put(w, rglist2);
+			obmap.put(w, oblist2);
+		}
+		
+		model.addAttribute("rgmap", rgmap);
+		model.addAttribute("obmap", obmap);
+		model.addAttribute("totalmap", totalmap);
+		return new ModelAndView("ems/ajaxResponse/timereport/getApprovedTimeReports", model);	
+	}
+	
+	@GetMapping("/approvedWorkTimeHome")
+	public ModelAndView approvedWorkTimeHome(Authentication auth, final ModelMap model) {
+		User user = (User) auth.getPrincipal();
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
+		model.addAttribute("emps", employeeRepository.getbyChief(user.getId()));
+		model.addAttribute("emp", empdtl);		
+		return new ModelAndView("ems/pages/timeReport/approvedWorkTimeHome", model);	
+	}	
+	
+	
 	@GetMapping("/workschedule")
 	public ModelAndView workschedule(@RequestParam("empid") Long empid, final ModelMap model) {
 		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
@@ -242,15 +300,6 @@ public class TimeReportController {
 		return new ModelAndView("ems/ajaxResponse/setavailablitymodal", model);
 	}
 
-	@GetMapping("/workschedulehistory")
-	public ModelAndView workschedulehistory(@RequestParam("empid") Long empid, final ModelMap model) {
-		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
-		ArrayList<Time_report_approved> empwsh = new ArrayList<Time_report_approved>();
-		empwsh = (ArrayList<Time_report_approved>) empWSHrepo.findByUserid(empid);
-		model.addAttribute("emp", empdtl);
-		model.addAttribute("wsh", empwsh);
-		return new ModelAndView("ems/ajaxResponse/viewWorkShHistory", model);
-	}
 
 	@RequestMapping(value = "/saveWSH", method = RequestMethod.POST)
 	public ModelAndView addEmployeeDo(@ModelAttribute Time_report_approved wsh, ModelMap model, Authentication auth,
@@ -507,96 +556,7 @@ public class TimeReportController {
 		return new ModelAndView("theme/ajaxResponse.html", model);
 	}
 
-	@GetMapping("/viewtimeReport")
-	public ModelAndView viewtimeReport(@RequestParam(required = false) String from_date,
-			@RequestParam(required = false) String to_date, @RequestParam(required = false) String c,
-			@RequestParam(required = false) String empid, Authentication auth, final ModelMap model) {
-		User user = (User) auth.getPrincipal();
-		long userid = 0;
-		if (empid == null) {
-			userid = user.getId();
-		} else {
-			userid = Long.parseLong(empid);
-		}
-		
-		
-		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(userid);
-		model.addAttribute("emp", empdtl);
-
-		ArrayList<EmpTimeReportDTO> ewsh = null;
-		if(from_date==null) {
-			LocalDate todaydate = LocalDate.now();	
-			from_date= String.valueOf(todaydate.withDayOfMonth(1));
-			LocalDate lastDayOfMonth = LocalDate.parse(from_date, DateTimeFormatter.ofPattern("yyyy-M-dd"))
-				       .with(TemporalAdjusters.lastDayOfMonth());
-			to_date= lastDayOfMonth.toString();
-			
-			ewsh = avrepo.getApprovedBetweenDates(userid,from_date,to_date);
-		}else {
-			ewsh = avrepo.getApprovedBetweenDates(userid, from_date, to_date);
-		}
-		
-		for (Iterator<EmpTimeReportDTO> itz = ewsh.iterator(); itz.hasNext();) {
-			EmpTimeReportDTO e = itz.next();
-			boolean remove= false;
-			if (!e.isIsrejected() && !e.isIsapproved()) {
-				if(e.getOvertime().size()>0) {
-					for(Timereport_Overtime_emp o: e.getOvertime()) {
-						if (!o.isIsrejected() && !o.isIsapproved()) {
-							remove= true;
-						}
-					}	
-				}else {
-					remove= true;
-				}							
-			} else if(e.isIsrejected()) {
-				if(e.getOvertime().size()>0) {
-					for(Timereport_Overtime_emp o: e.getOvertime()) {
-						if (!o.isIsrejected() && !o.isIsapproved()) {
-							remove= true;
-						}
-					}	
-				}else {
-					remove= true;
-				}
-			}
-			
-			if(remove)itz.remove();
-			
-		}
-		
-		for (EmpTimeReportDTO e : ewsh) {
-			if (e.isIsrejected() || !e.isIsapproved()) {				
-				e.setWork_minute(0);
-				e.setWork_hour("0 H 0 Min");
-				e.setWork_desc("Rejected / Not decided");				
-			}			
-			
-			for (Iterator<Timereport_Overtime_emp> it = e.getOvertime().iterator(); it.hasNext();) {
-				Timereport_Overtime_emp ob = it.next();
-				if (ob.isIsrejected() || !ob.isIsapproved()) {
-					it.remove();
-				}
-			}
-		}	
-		
-		
-		long total_wh = 0;
-		long total_ob_wh = 0;
-		
-		for (EmpTimeReportDTO w : ewsh) {
-			total_wh += w.getWork_minute();
-			for (Timereport_Overtime_emp o : w.getOvertime()) {
-				total_ob_wh += o.getWork_minute();
-			}
-		}
-		model.addAttribute("wsh", ewsh);
-		model.addAttribute("total_days", ewsh.size());
-		model.addAttribute("total_work", wSHservice.mintsTOHmConvert(total_wh));
-		model.addAttribute("total_ob_work", wSHservice.mintsTOHmConvert(total_ob_wh));
-		model.addAttribute("emps", employeeService.getEmployeeList());
-		return new ModelAndView("ems/pages/viewtimeReport", model);
-	}
+	
 
 	@GetMapping("/timeReportHistory")
 	public ModelAndView timeReportHistory(@RequestParam(required = false) String from_date,
@@ -640,48 +600,6 @@ public class TimeReportController {
 		model.addAttribute("userdtl", empdtl);
 		return new ModelAndView("ems/pages/timeReport/reportWorkTimeHome", model);
 	}
-	
-	@GetMapping("/rejectAvailablity")
-	@ResponseBody
-	public String RejectAvailablity(Authentication auth,@RequestParam String av_id,@RequestParam String wdesc) {
-		EmpTimeReportDTO av = avrepo.findById(av_id).get();
-		av.setIsrejected(true);
-		av.setIsapproved(false);
-		av.setWork_desc(wdesc);		
-		avrepo.save(av);
-		return "Succesfully Rejected";
-	}
-
-	
-	@GetMapping("/approveRGtime")
-	@ResponseBody
-	public String approveRGtime(Authentication auth, @ModelAttribute EmpTimeReportDTO emptr) {
-		User creator = (User) auth.getPrincipal();		
-		EmpTimeReportDTO extr = avrepo.findById(emptr.getAv_id()).get();
-		extr.setStatus(emptr.getStatus());
-		extr.setWork_start(emptr.getWork_start());
-		extr.setWork_end(emptr.getWork_end());
-		extr.setLunch_hour(emptr.getLunch_hour());
-		extr.setWork_desc(emptr.getWork_desc());
-		extr.setWork_minute(emptr.getWork_minute());
-		extr.setWork_hour(emptr.getWork_hour());
-		extr.setIsapproved(true);
-		extr.setIsrejected(false);
-		avrepo.save(extr);
-		
-		// send mail
-		SimpleMailMessage email = new SimpleMailMessage();
-		email.setTo(userService.getUserByID(extr.getUserid()).get().getEmail());
-		email.setSubject("STATUS OF YOUR REPORTED TIME");
-		final String appUrl = "https://ems.netlit.se";
-		String emailText = "You time report for date:"+extr.getDate()+" has been approved for the upcoming salary!";
-		email.setText(emailText);
-		email.setFrom(env.getProperty("support.email"));
-		mailSender.send(email);
-
-		return extr.getAv_id();
-	}
-	
 	
 	@ResponseBody
 	@PostMapping("/rgTimeAction")
@@ -882,4 +800,21 @@ public class TimeReportController {
 		tr=avrepo.findbyOnedateEmpidanytype(userid, LocalDate.parse(date));
 		return tr;		
 	}
+}
+
+class TotalTRDTO {
+	String total_rg;
+	String total_ob;
+	public String getTotal_rg() {
+		return total_rg;
+	}
+	public void setTotal_rg(String total_rg) {
+		this.total_rg = total_rg;
+	}
+	public String getTotal_ob() {
+		return total_ob;
+	}
+	public void setTotal_ob(String total_ob) {
+		this.total_ob = total_ob;
+	}	
 }

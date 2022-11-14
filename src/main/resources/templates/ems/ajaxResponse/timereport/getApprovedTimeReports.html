@@ -1,0 +1,45 @@
+<div th:each="element : ${rgmap}">
+	<table th:id="${'tableid'+element.key}"  class="table approvedtable">
+		<tr class="table-success">
+			<th colspan="2">
+				<span class="h2">Week # [[${element.key}]]</span>				
+			</th>	
+			
+			<td class="text-right" colspan="5">
+				<em>TOTAL: [[${totalmap.get(element.key).total_rg}]]</em>
+				<em>OB: [[${totalmap.get(element.key).total_ob}]]</em>
+			</td>		
+		</tr>	
+		<tr class="">			
+			<th width="200px">Date</th>
+			<th width="200px">Status</th>
+			<th width="60px">Start</th>
+			<th width="60px">End</th>
+			<th width="60px">Interval</th>
+			<th>Description</th>
+			<th>Total</th>
+		</tr>
+		
+		<tr th:if="${not #lists.isEmpty(element.value)}" style="vertical-align: middle;" th:each="tr : ${element.value}">
+			<td class="h5">[[${#temporals.format(tr.date, 'E')}]]<br/>[[${#temporals.format(tr.date, 'dd MMM yyyy')}]]</td>
+			<td>[[${tr.av_type.typename}]]</td>
+			<td>[[${tr.work_start}]]</td>
+			<td>[[${tr.work_end}]]</td>
+			<td>[[${tr.lunch_hour}]]</td>
+			<td><textarea disabled="disabled" class="border-0 form-control" rows="1">[[${tr.work_desc}]]</textarea></td>
+			<td><b>[[${tr.work_hour}]]</b></td>
+		</tr>
+		
+		<tr th:if="${not #lists.isEmpty(obmap.get(element.key))}" th:each="tr : ${obmap.get(element.key)}" style="vertical-align: middle;" >
+			<td class="h5">[[${#temporals.format(tr.date, 'E')}]]<br/>[[${#temporals.format(tr.date, 'dd MMM yyyy')}]]</td>
+			<td>[[${tr.ob_type.typename}]]</td>
+			<td>[[${tr.work_start}]]</td>
+			<td>[[${tr.work_end}]]</td>
+			<td>[[${tr.lunch_hour}]]</td>
+			<td><textarea disabled="disabled" class="border-0 form-control" rows="1">[[${tr.work_desc}]]</textarea></td>
+			<td><b>[[${tr.work_hour}]]</b></td>
+		</tr>
+	
+	</table>
+	<br/>
+</div>

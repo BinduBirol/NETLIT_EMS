@@ -51,7 +51,10 @@ public interface EmpTimeReportRepo extends JpaRepository<EmpTimeReportDTO, Strin
 	public ArrayList<EmpTimeReportDTO> getAllusersOneDate(@Param("date")LocalDate date);	
 	
 	@Query(value = "SELECT * from emp_time_report  where userid = :userid and date=:date",nativeQuery = true)
-	public EmpTimeReportDTO findbyOnedateEmpidanytype(@Param("userid")long userid, @Param("date")LocalDate date);	
+	public EmpTimeReportDTO findbyOnedateEmpidanytype(@Param("userid")long userid, @Param("date")LocalDate date);
+
+	@Query(value = "SELECT * from emp_time_report  where userid = :userid and date BETWEEN STR_TO_DATE(:startDate, '%Y-%m-%d')  AND STR_TO_DATE(:endDate, '%Y-%m-%d') and isapproved=1",nativeQuery = true)
+	ArrayList<EmpTimeReportDTO> approvedOneUserFdTd(@Param("startDate")String from_date, @Param("endDate")String to_date, @Param("userid")Long id);	
 	
 	
 	
