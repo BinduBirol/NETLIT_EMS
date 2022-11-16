@@ -295,7 +295,7 @@ function save(t,e) {
 		 		from_date: date,
 		 		work_start:start,
 		 		work_end:end,
-		 		lunch_hour:lbreak,
+		 		work_interval:lbreak,
 		 		work_desc:desc,
 		 		work_minute:wmint,			 		
 		 		work_hour:work_hour,
@@ -326,8 +326,8 @@ function saveAjaxCall(){
 				$('.toast').toast('show');
 				
 				if (data.includes("Successfully") == true) {
-					$("[tr-id="+tr_id+"]").closest("tr").addClass("bg-warning");
-					$("[tr-id="+tr_id+"]").attr("disabled","disabled").text("PENDING").removeClass().addClass("savebtn btn btn-sm");
+					//$("[tr-id="+tr_id+"]").closest("tr").addClass("bg-warning");
+					$("[tr-id="+tr_id+"]").attr("disabled","disabled").text("PENDING").removeClass().addClass("savebtn btn btn-sm btn-outline-default");
 					
 					//$target= $(e.target).closest('tr').addClass("");
 					//$target.find('.savebtn').attr("disabled","disabled");

@@ -1,4 +1,4 @@
-<table 	class="table table-hover mb-3 align-middle">
+<table 	class="table mb-3 align-middle">
 	<thead>
 		<tr>
 			<th width="140px">Day</th>
@@ -60,6 +60,7 @@
 			<td>
 				<textarea th:text='${element.value[0].work_desc}'  th:disabled="${element.value[0].isapproved}"
 					onchange='calculate(event)' name='work_desc'
+					th:rows="${element.value[0].isapproved}?1:2"
 					class='form-control form-control-sm work_desc' rows='2'></textarea>
 			</td>
 			<td>
@@ -124,7 +125,7 @@
 			</td>
 			<td>
 				<input onchange='calculate(event)'				
-				th:value='${element.value[1].work_interval}' type='number' name='work_interval' th:disabled="${element.value[1].work_minute==0 OR element.value[2].isapproved}"	
+				th:value='${element.value[1].work_interval}' type='number' name='work_interval' th:disabled="${element.value[1].work_minute==0 OR element.value[1].isapproved}"	
 				class='lbreak cal form-control form-control-sm text-center absent  ' />
 			</td>
 			<td>
@@ -138,6 +139,7 @@
 			<td>
 				<textarea th:text='${element.value[1].work_desc}'  th:disabled="${element.value[1].isapproved}"
 					onchange='calculate(event)' name='work_desc'
+					th:rows="${element.value[1].isapproved}?1:2"
 					class='form-control form-control-sm work_desc' rows='2'></textarea>
 			</td>
 			<td>
@@ -217,7 +219,7 @@
 			<td>
 				<textarea th:text='${element.value[2].work_desc}'  th:disabled="${element.value[2].isapproved}"
 					onchange='calculate(event)' name='work_desc'
-					class='form-control form-control-sm work_desc' rows='2'></textarea>
+					class='form-control form-control-sm work_desc' th:rows="${element.value[2].isapproved}?1:2"></textarea>
 			</td>
 			<td>
 					<span>
