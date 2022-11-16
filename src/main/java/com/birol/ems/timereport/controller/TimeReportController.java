@@ -153,15 +153,7 @@ public class TimeReportController {
 		return new ModelAndView("ems/pages/empsTimereport", model);
 	}
 	
-	@GetMapping("/pendingTimeReportsHome")
-	public ModelAndView pendingTimeReportsHome(Authentication auth, final ModelMap model) {
-		User user = (User) auth.getPrincipal();
-		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
-		model.addAttribute("emps", employeeRepository.getbyChief(user.getId()));
-		model.addAttribute("emp", empdtl);		
-		
-		return new ModelAndView("ems/pages/pendingTimeReports", model);		
-	}
+	
 	
 	@PostMapping("/getpendingTimeReports")
 	public ModelAndView getpendingTimeReports(	@RequestPayload String from_date,
@@ -274,14 +266,7 @@ public class TimeReportController {
 		return new ModelAndView("ems/ajaxResponse/timereport/getApprovedTimeReports", model);	
 	}
 	
-	@GetMapping("/approvedWorkTimeHome")
-	public ModelAndView approvedWorkTimeHome(Authentication auth, final ModelMap model) {
-		User user = (User) auth.getPrincipal();
-		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
-		model.addAttribute("emps", employeeRepository.getbyChief(user.getId()));
-		model.addAttribute("emp", empdtl);		
-		return new ModelAndView("ems/pages/timeReport/approvedWorkTimeHome", model);	
-	}	
+		
 	
 	
 	@GetMapping("/workschedule")
@@ -291,14 +276,7 @@ public class TimeReportController {
 		return new ModelAndView("ems/ajaxResponse/viewworkschedule", model);
 	}
 
-	@GetMapping("/settimereport")
-	public ModelAndView settimereport(@RequestParam("empid") Long empid, final ModelMap model) {
-		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(empid);
-		model.addAttribute("avtype", availabilityRepo.findAll());
-		model.addAttribute("obtype", overtimeRepo.findAll());
-		model.addAttribute("userdtl", empdtl);
-		return new ModelAndView("ems/ajaxResponse/setavailablitymodal", model);
-	}
+	
 
 
 	@RequestMapping(value = "/saveWSH", method = RequestMethod.POST)
@@ -345,59 +323,7 @@ public class TimeReportController {
 		return new ModelAndView("theme/ajaxResponse.html", model);
 	}
 
-	@RequestMapping(value = "/saveQuickTimeReport", method = RequestMethod.POST)
-	public ModelAndView saveQuickTimeReport(@ModelAttribute EmpTimeReportDTO av, ModelMap model, Authentication auth,
-			final HttpServletRequest request) {
-		try {
-			User creator = (User) auth.getPrincipal();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			LocalDate fromLocalDate = LocalDate.parse(av.getFrom_date(), formatter);
-			LocalDate toLocalDate = LocalDate.parse(av.getTo_date(), formatter);
-			List<LocalDate> dates = wSHservice.getDatesBetween(fromLocalDate, toLocalDate);
-
-			LocalTime l1 = null, l2 = null;
-			
-			if (av.getWork_start()!=null&&av.getWork_end()!=null) {
-				l1 = LocalTime.parse(av.getWork_start());
-				l2 = LocalTime.parse(av.getWork_end());
-				av.setWork_minute((Duration.between(l1, l2).toMinutes()) - av.getLunch_hour());
-			}
-			
-			String msg="";
-
-			for (LocalDate d : dates) {
-				av.setUserid(creator.getId());
-				av.setFull_name(creator.getFirstName()+" "+creator.getLastName());
-				av.setDate(d);
-				av.setAv_id(wSHservice.generateWavID(av));
-				try {
-					long wrkmin= (Duration.between(l1, l2).toMinutes()) - av.getLunch_hour();
-					long hours = wrkmin / 60; 
-					long minutes = wrkmin % 60;				
-					av.setWork_minute(wrkmin);
-					av.setWork_hour(hours+" H "+minutes+" Min");
-				} catch (Exception e) {
-					av.setWork_minute(0);
-					av.setWork_hour("0 H 0 Min");
-				}
-				Date xdate = new SimpleDateFormat("yyyy-M-d").parse(av.getDate().toString());
-				av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
-				av.setWeek(d.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
-				
-				if(LocalDate.now().compareTo(d)<0 && av.getStatus()==1) {
-					msg+="\n"+d+": Cant set worked hours for advance date.";
-				}else {
-					avrepo.save(av);
-				}
-				
-			}
-			model.addAttribute("message", "Successfully time reported for " + av.getFull_name()+msg);
-		} catch (Exception e) {
-			model.addAttribute("message", e.getMessage());
-		}
-
-		return new ModelAndView("theme/ajaxResponse.html", model);
-	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/saveDateTimeReport", method = RequestMethod.POST)
@@ -592,14 +518,7 @@ public class TimeReportController {
 		return new ModelAndView("ems/pages/timeReportHistory", model);
 	}
 	
-	@GetMapping("/reportWorkTimeHome")
-	public ModelAndView reportWorkTimeHome(Authentication auth, final ModelMap model) {
-
-		User user = (User) auth.getPrincipal();
-		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
-		model.addAttribute("userdtl", empdtl);
-		return new ModelAndView("ems/pages/timeReport/reportWorkTimeHome", model);
-	}
+	
 	
 	@ResponseBody
 	@PostMapping("/rgTimeAction")
@@ -719,7 +638,7 @@ public class TimeReportController {
 	}
 	
 	@SuppressWarnings("null")
-	@GetMapping("/getTimeFormsBydate")
+	@GetMapping("/old_getTimeFormsBydate")
 	public ModelAndView getTimeFormsBydate(@RequestParam String from_date,@RequestParam String to_date, Authentication auth, final ModelMap model){
 		User user = (User) auth.getPrincipal();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

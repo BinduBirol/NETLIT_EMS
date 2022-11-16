@@ -157,7 +157,7 @@ $(".btn-dec").click(function(e) {
 		decision: d
 	}, function(data, status) {
 		hideprocessview();
-		$("#confirmDecisionmodal .btn-close").click();		
+		$("#confirmDecisionmodal .btn-close").click();
 		$('.toast-header .title').html("Response!");
 		$('.toast-body .toast-message').html(data);		
 		$('.toast').toast('show');

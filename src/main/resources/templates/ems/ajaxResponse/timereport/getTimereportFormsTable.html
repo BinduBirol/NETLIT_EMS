@@ -1,0 +1,257 @@
+<table 	class="table table-hover mb-3 align-middle">
+	<thead>
+		<tr>
+			<th width="140px">Day</th>
+			<th>T R Types</th>
+			<th>Work Start</th>
+			<th>Work End</th>
+			<th width="100px">Interval</th>
+			<th width="100px">Work Hour</th>
+			<th>desc</th>
+			<th>Save</th>
+			<th>OB</th>
+		</tr>
+	</thead>
+	
+	<tbody th:each="element: ${trmap}">
+		<tr class="bg-opacity-25 ">
+			<td style="" class="h5  bg-opacity-25  date-tr" rowspan="3">
+				[[${#temporals.format(element.key, 'E')}]]<br />
+				[[${#temporals.format(element.key, 'dd MMM yyyy')}]]
+			</td>
+			<td>
+				<input type="hidden" class="av_id" th:value='${element.value[0].tr_id}'/>
+				<input type="hidden" class="date" th:value="${#temporals.format(element.value[0].date, 'yyyy-MM-dd')}" />
+				
+				<select name='status' onchange='setTypeval( event,this)'
+				th:disabled="${element.value[0].isapproved}"
+				th:classappend="${element.value[0].work_minute>0} ? 'border-success': 'border-warning'"
+				class='status  form-select form-select-sm availabilitysign '>
+					<option value="">Select a type</option>
+					<option th:selected="${at.typeid==element.value[0].status}"
+						th:each="at: ${trtypeALL}" th:value="${at.typeid}"
+						th:start="${at.start}" th:end="${at.end}"
+						th:interval="${at.interval_minutes}" th:text="${at.typename}">xx</option>
+				</select>
+			</td>
+			<td>
+				<input type="time" th:value='${element.value[0].work_start}'	 th:disabled="${element.value[0].work_minute==0 OR element.value[0].isapproved}"
+				onchange='calculate(event)' name='work_start' onclick="this.showPicker()"
+				class='timepicker start cal form-control form-control-sm text-center absent '>
+			</td>
+			<td>
+				<input th:value='${element.value[0].work_end}' onchange='calculate(event)' th:disabled="${element.value[0].work_minute==0 OR element.value[0].isapproved}"			
+				type="time" name='work_end' onclick="this.showPicker()"
+				class='timepicker end cal form-control form-control-sm text-center absent  '>
+			</td>
+			<td>
+				<input onchange='calculate(event)'				
+				th:value='${element.value[0].work_interval}' type='number' name='work_interval' th:disabled="${element.value[0].work_minute==0 OR element.value[2].isapproved}"	
+				class='lbreak cal form-control form-control-sm text-center absent  ' />
+			</td>
+			<td>
+				<input type='text' th:value='${element.value[0].work_hour}' 
+				name='work_hour' readonly
+				class='work_hour form-control form-control-sm text-center  ' /> 
+				<input
+				type="hidden" th:value='${element.value[0].work_minute}' name='work_minute'
+				readonly class='wmint form-control form-control-sm text-center  ' />
+			</td>
+			<td>
+				<textarea th:text='${element.value[0].work_desc}'  th:disabled="${element.value[0].isapproved}"
+					onchange='calculate(event)' name='work_desc'
+					class='form-control form-control-sm work_desc' rows='2'></textarea>
+			</td>
+			<td>
+				<span>
+						<button th:if="${element.value[0].isapproved and !element.value[0].isrejected}" saveaction="saveTimeReport"
+						th:tr-id="${element.value[0].tr_id}"
+						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-success'>APPROVED</button>
+					</span>
+					
+					<span>
+						<button th:if="${!element.value[0].isapproved and element.value[0].isrejected}" saveaction="saveTimeReport"
+						th:tr-id="${element.value[0].tr_id}"
+						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-danger'>REJECTED</button>
+					</span>
+					
+					<span>
+						<button th:if="${!element.value[0].isapproved and !element.value[0].isrejected and element.value[0].status!=0}" saveaction="saveTimeReport"
+						th:tr-id="${element.value[0].tr_id}"
+						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-default'>PENDING</button>
+					</span>	
+					
+					<span>
+						<button th:if="${!element.value[0].isapproved and !element.value[0].isrejected and element.value[0].status==0}" saveaction="saveTimeReport"
+						th:tr-id="${element.value[0].tr_id}"
+						onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-theme'>SUBMIT</button>
+					</span>	
+			</td>
+			<td>
+					<button  onclick="showOBtr(event,this);" 
+					class='btn btn-sm btn-outline-success btn-add-ob '>
+					<i class="fa fa-plus"></i>
+				</button>		
+				
+			</td>
+		</tr>
+		
+		<tr th:classappend="${element.value[1].status==0} ? 'd-none' : ''" class="bg-opacity-25 ">		
+			<td>
+				<input type="hidden" class="av_id" th:value='${element.value[1].tr_id}'/>
+				<input type="hidden" class="date" th:value="${#temporals.format(element.value[1].date, 'yyyy-MM-dd')}" />
+				
+				<select name='status' onchange='setTypeval( event,this)'
+				th:disabled="${element.value[1].isapproved}"
+				th:classappend="${element.value[1].work_minute>0} ? 'border-success': 'border-warning'"				
+				class='status  form-select form-select-sm availabilitysign '>
+					<option value="">Select OB</option>
+					<option th:selected="${at.typeid==element.value[1].status}"
+						th:each="at: ${trtypeOB}" th:value="${at.typeid}"
+						th:start="${at.start}" th:end="${at.end}"
+						th:interval="${at.interval_minutes}" th:text="${at.typename}">xx</option>
+				</select>			
+			</td>
+			<td>
+				<input type="time" th:value='${element.value[1].work_start}' th:disabled="${element.value[1].work_minute==0 OR element.value[1].isapproved}"
+				onchange='calculate(event)' name='work_start' onclick="this.showPicker()"
+				class='timepicker start cal form-control form-control-sm text-center absent '>
+			</td>
+			<td>
+				<input th:value='${element.value[1].work_end}' onchange='calculate(event)' th:disabled="${element.value[1].work_minute==0 OR element.value[1].isapproved}"			
+				type="time" name='work_end' onclick="this.showPicker()"
+				class='timepicker end cal form-control form-control-sm text-center absent  '>
+			</td>
+			<td>
+				<input onchange='calculate(event)'				
+				th:value='${element.value[1].work_interval}' type='number' name='work_interval' th:disabled="${element.value[1].work_minute==0 OR element.value[2].isapproved}"	
+				class='lbreak cal form-control form-control-sm text-center absent  ' />
+			</td>
+			<td>
+				<input type='text' th:value='${element.value[1].work_hour}' 
+				name='work_hour' readonly
+				class='work_hour form-control form-control-sm text-center  ' /> 
+				<input
+				type="hidden" th:value='${element.value[1].work_minute}' name='work_minute'
+				readonly class='wmint form-control form-control-sm text-center  ' />
+			</td>
+			<td>
+				<textarea th:text='${element.value[1].work_desc}'  th:disabled="${element.value[1].isapproved}"
+					onchange='calculate(event)' name='work_desc'
+					class='form-control form-control-sm work_desc' rows='2'></textarea>
+			</td>
+			<td>
+				<span>
+						<button th:if="${element.value[1].isapproved and !element.value[1].isrejected}" saveaction="saveTimeReport"
+						th:tr-id="${element.value[1].tr_id}"
+						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-success'>APPROVED</button>
+					</span>
+					
+					<span>
+						<button th:if="${!element.value[1].isapproved and element.value[1].isrejected}" saveaction="saveTimeReport"
+						th:tr-id="${element.value[1].tr_id}"
+						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-danger'>REJECTED</button>
+					</span>
+					
+					<span>
+						<button th:if="${!element.value[1].isapproved and !element.value[1].isrejected and element.value[1].status!=0}" saveaction="saveTimeReport"
+						th:tr-id="${element.value[1].tr_id}"
+						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-default'>PENDING</button>
+					</span>	
+					
+					<span>
+						<button th:if="${!element.value[1].isapproved and !element.value[1].isrejected and element.value[1].status==0}" saveaction="saveTimeReport"
+						th:tr-id="${element.value[1].tr_id}"
+						onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-theme'>SUBMIT</button>
+					</span>	
+			
+			</td>
+			<td>
+				<button onclick="$(this).closest('tr').hide(500);"
+					class='btn btn-sm btn-outline-danger '>
+					<i class="fa fa-ban"></i>
+				</button>
+				
+			</td>
+		</tr>
+		
+		<tr th:classappend="${element.value[2].status==0} ? 'd-none' : ''" class="bg-opacity-25 ">
+			<td>
+				<input type="hidden" class="av_id" th:value='${element.value[2].tr_id}'/>
+				<input type="hidden" class="date" th:value="${#temporals.format(element.value[2].date, 'yyyy-MM-dd')}" />
+				
+				<select name='status' onchange='setTypeval( event,this)'
+				th:disabled="${element.value[2].isapproved}"	
+				th:classappend="${element.value[2].work_minute>0} ? 'border-success': 'border-warning'"			
+				class='status  form-select form-select-sm availabilitysign '>
+					<option value="">Select OB</option>
+					<option th:selected="${at.typeid==element.value[2].status}"
+						th:each="at: ${trtypeOB}" th:value="${at.typeid}"
+						th:start="${at.start}" th:end="${at.end}"
+						th:interval="${at.interval_minutes}" th:text="${at.typename}">xx</option>
+				</select>				
+			</td>
+			<td>
+				<input type="time" th:value='${element.value[2].work_start}'	 th:disabled="${element.value[2].work_minute==0 OR element.value[2].isapproved}"
+				onchange='calculate(event)' name='work_start' onclick="this.showPicker()"
+				class='timepicker start cal form-control form-control-sm text-center absent '>
+			</td>
+			<td>
+				<input th:value='${element.value[2].work_end}' onchange='calculate(event)' th:disabled="${element.value[2].work_minute==0 OR element.value[2].isapproved}"			
+				type="time" name='work_end' onclick="this.showPicker()"
+				class='timepicker end cal form-control form-control-sm text-center absent  '>
+			</td>
+			<td>
+				<input onchange='calculate(event)'				
+				th:value='${element.value[2].work_interval}' type='number' name='work_interval' th:disabled="${element.value[2].work_minute==0 OR element.value[2].isapproved}"	
+				class='lbreak cal form-control form-control-sm text-center absent  ' />
+			</td>
+			<td>
+				<input type='text' th:value='${element.value[2].work_hour}' 
+				name='work_hour' readonly
+				class='work_hour form-control form-control-sm text-center  ' /> 
+				<input
+				type="hidden" th:value='${element.value[2].work_minute}' name='work_minute'
+				readonly class='wmint form-control form-control-sm text-center  ' />
+			</td>
+			<td>
+				<textarea th:text='${element.value[2].work_desc}'  th:disabled="${element.value[2].isapproved}"
+					onchange='calculate(event)' name='work_desc'
+					class='form-control form-control-sm work_desc' rows='2'></textarea>
+			</td>
+			<td>
+					<span>
+						<button th:if="${element.value[2].isapproved and !element.value[2].isrejected}" saveaction="saveTimeReport"
+						th:tr-id="${element.value[2].tr_id}"
+						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-success'>APPROVED</button>
+					</span>
+					
+					<span>
+						<button th:if="${!element.value[2].isapproved and element.value[2].isrejected}" saveaction="saveTimeReport"
+						th:tr-id="${element.value[2].tr_id}"
+						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-danger '>REJECTED</button>
+					</span>
+					
+					<span>
+						<button th:if="${!element.value[2].isapproved and !element.value[2].isrejected and element.value[2].status!=0}" saveaction="saveTimeReport"
+						th:tr-id="${element.value[2].tr_id}"
+						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-default'>PENDING</button>
+					</span>	
+					
+					<span>
+						<button th:if="${!element.value[2].isapproved and !element.value[2].isrejected and element.value[2].status==0}" saveaction="saveTimeReport"
+						th:tr-id="${element.value[2].tr_id}"
+						onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-theme'>SUBMIT</button>
+					</span>			
+		
+			</td>
+			<td>							
+				<button onclick="$(this).closest('tr').hide(500);"
+					class='btn btn-sm btn-outline-danger '>
+					<i class="fa fa-ban"></i>
+				</button>
+			</td>
+		</tr>
+	
+	</tbody>
+</table>

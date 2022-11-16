@@ -137,10 +137,10 @@ function setTRvalues(t, e) {
 	$target.find('.btn-outline-theme').html('SUBMIT');
 }
 
-function availablity(z) {			
+function applyVacation(z) {			
 	$empid = $(z).attr("emp-id");
 	$.ajax({
-		url : "settimereport?empid=" + $empid,
+		url : "getVacationRequestModal?empid=" + $empid,
 		type : 'GET',
 		success : function(data) {					
 			$('.availablitymodalcontent').html(data);
@@ -162,7 +162,7 @@ function calculate(e) {
 	$target.find(".wmint").val(getworkminute(start,end,lbreak));
 	$target.find(".work_hour").val(minutesToHour(getworkminute(start,end,lbreak)));	
 	$target.find('.savebtn').prop('disabled', false);
-	$target.find('.savebtn').html('SUBMIT');
+	$target.find('.savebtn').addClass("btn-outline-theme").html('SUBMIT');
 	
 }
 
@@ -229,13 +229,13 @@ function saveTR(t,e) {
 
 function showOBtr(e, z) {
 	$target= $(e.target).closest('tr');
-	var btnval= $target.find(".savebtn").html();
+	var nxttr=$target.next('tr');
+	var nxtnxttr=nxttr.next('tr');
 	
-	var avid = $(z).attr("av-id");	
-	if($(".ob"+avid+1).is(":visible")){
-		$(".ob"+avid+2).show(500);
-	}else{
-		$(".ob"+avid+1).show(500);
+	if($(nxttr).is(":visible")){
+		$(nxtnxttr).removeClass("d-none").show(500);
+	}else{		
+		$(nxttr).removeClass("d-none").show(500);
 	}
 	
 	
@@ -256,51 +256,22 @@ function setTypeval(e,z) {
 	
 	if (start!= null) {
 		$target.find('.absent').prop('disabled', false);
-		$(z).removeClass("border-danger").addClass("border-success");		
+		$(z).removeClass("border-warning").addClass("border-success");		
 		
 	}else{
 		$target.find('.absent').prop('disabled', true);	
-		$(z).removeClass("border-success").addClass("border-danger");		
+		$(z).removeClass("border-success").addClass("border-warning");		
 	}
 	calculate(e);	
 	$target.find('.savebtn').prop('disabled', false);
 	$target.find('.savebtn').html('SUBMIT');
 }
 
-function setOBTypeval(e,z) {
-	$target= $(e.target).closest('tr');
-	var start = $('option:selected', z).attr('start');
-	var end = $('option:selected', z).attr('end');
-	var interval = $('option:selected', z).attr('interval');
-	
-	if (start!= null) {
-		$target.find('.absent').prop('disabled', false);
-		$(z).removeClass("border-danger").addClass("border-info");
-		$target.find(".wmint").val(getworkminute(start,end,interval));
-		$target.find(".work_hour").val(minutesToHour(getworkminute(start,end,interval)));	
-		
-	}else{
-		$target.find(".wmint").val(0);
-		$target.find(".work_hour").val("0 H 0 Min");
-		$target.find('.absent').prop('disabled', true);	
-		$(z).removeClass("border-info").addClass("border-danger");		
-	}
-	
-	
-	
-	
-	$target.find(".start").val(start);
-	$target.find(".end").val(end);
-	$target.find(".lbreak").val(interval);
-	
-	
-	$target.find('.savebtn').prop('disabled', false);
-	$target.find('.savebtn').html('SUBMIT');
-	
-}
-
 function save(t,e) {
+	
+	
 	var action = $(t).attr('saveaction');
+	
 	
 	$target= $(e.target).closest('tr');
 	
@@ -314,41 +285,58 @@ function save(t,e) {
 	var wmint = $target.find(".wmint").val();
 	var work_hour = $target.find(".work_hour").val();
 	var obno = $target.find(".obno").val();
-	var user_id = $("#this_user_id").val();
+	var user_id = $("#this_user_id").val();	
 	
+	var datetxt= $target.find("date-tr").html();
 	
-	if (validate(e)) {
-		 $.post(action,
-				  {
-			 		status: status,
-			 		from_date: date,
-			 		work_start:start,
-			 		work_end:end,
-			 		lunch_hour:lbreak,
-			 		work_desc:desc,
-			 		work_minute:wmint,			 		
-			 		work_hour:work_hour,
-			 		obno:obno,
-			 		userid:user_id,
-			 		av_id:av_id
-				  },
-				  function(data, status){		    
-				    
-					$('.toast-header .title').html("Response");
-					$('.toast-body .toast-message').html(data);
-					
-					$('.toast').toast('show');
-					
-					if (data.includes("Successfully") == true) {					
-						$target= $(e.target).closest('tr').addClass("bg-warning");
-						$target.find('.savebtn').attr("disabled","disabled");
-						$target.find('.savebtn').html("PENDING");						
-					}
-					
-				  });
+	if (validate(e)) {	
+		var data ={
+		 		status: status,
+		 		from_date: date,
+		 		work_start:start,
+		 		work_end:end,
+		 		lunch_hour:lbreak,
+		 		work_desc:desc,
+		 		work_minute:wmint,			 		
+		 		work_hour:work_hour,
+		 		obno:obno,
+		 		userid:user_id,
+		 		tr_id:av_id
+			  }
+		$("#modalConfirm .modal-title").html("CONFIRM");
+		$("#modalConfirm .cnfTxtMsg").html("You are going to submit time report for date: "+date);
+		$("#modalinputData").val(JSON.stringify(data));
+		$("#modalinputTrID").val(av_id);
+		$('#modalConfirm').modal('show');
 	}
 }
 
+function saveAjaxCall(){
+	var action="saveTimeReport";
+	var strdata= $("#modalinputData").val();
+	var tr_id=$("#modalinputTrID").val();
+	
+	$.post(action,
+			{str: strdata},
+			  function(data, status){		    
+			    
+				$("#modalConfirm .btn-close").click();
+				$('.toast-header .title').html("Response");
+				$('.toast-body .toast-message').html(data);				
+				$('.toast').toast('show');
+				
+				if (data.includes("Successfully") == true) {
+					$("[tr-id="+tr_id+"]").closest("tr").addClass("bg-warning");
+					$("[tr-id="+tr_id+"]").attr("disabled","disabled").text("PENDING").removeClass().addClass("savebtn btn btn-sm");
+					
+					//$target= $(e.target).closest('tr').addClass("");
+					//$target.find('.savebtn').attr("disabled","disabled");
+					//$target.find('.savebtn').html("PENDING");						
+				}
+				
+			  });	
+	
+}
 
 function validate(e){	
 	$target= $(e.target).closest('tr');	

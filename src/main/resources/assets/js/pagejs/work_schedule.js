@@ -299,7 +299,7 @@ $("#daterangeselect").change(function() {
 			
 			$target= $(e.target).closest('tr');
 			
-			var av_id = $target.find(".av_id").val();
+			var tr_id = $target.find(".av_id").val();
 			var desc= $target.find(".work_desc").val();
 			var start = $target.find(".start").val();
 			var end = $target.find(".end").val();
@@ -313,7 +313,9 @@ $("#daterangeselect").change(function() {
 			
 			
 			if (validate(e)) {
-				 $.post(action,
+				alert(tr_id);
+				
+				$.post(action,
 						  {
 					 		status: status,
 					 		from_date: date,
@@ -325,7 +327,7 @@ $("#daterangeselect").change(function() {
 					 		work_hour:work_hour,
 					 		obno:obno,
 					 		userid:user_id,
-					 		av_id:av_id
+					 		tr_id:tr_id
 						  },
 						  function(data, status){		    
 						    
@@ -335,13 +337,15 @@ $("#daterangeselect").change(function() {
 							$('.toast').toast('show');
 							
 							if (data.includes("Successfully") == true) {					
-								$target= $(e.target).closest('tr').addClass("bg-warning");
+								$target= $(e.target).closest('tr').addClass("text-warning");
 								$target.find('.savebtn').attr("disabled","disabled");
 								$target.find('.savebtn').html("PENDING");						
 							}
 							
 						  });
+						  
 			}
+			
 		}
 
 

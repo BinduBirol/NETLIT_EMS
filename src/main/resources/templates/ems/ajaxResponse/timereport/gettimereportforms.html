@@ -27,7 +27,7 @@
 			<td>
 			<input type="hidden" class="av_id" th:value='${tr.av_id}'/>
 			<select   name='status' onchange='setTypeval( event,this)' th:disabled="${tr.isapproved}"
-				th:classappend="${tr.status==1} ? 'border-success': 'border-danger'"
+				th:classappend="${tr.status==1} ? 'border-success': 'border-warning'"
 				class='status  form-select form-select-sm availabilitysign '>
 					<option th:selected="${at.typeid==tr.status}"
 						th:each="at: ${avtype}" th:value="${at.typeid}"

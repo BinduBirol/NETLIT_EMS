@@ -16,6 +16,8 @@ import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.timereport.dto.Availability_Type;
 import com.birol.ems.timereport.dto.Overtime_Type;
+import com.birol.ems.timereport.re.TimeReportTypesDTO;
+import com.birol.ems.timereport.re.TimeReportTypesRepo;
 import com.birol.ems.timereport.repo.AvailabilityRepo;
 import com.birol.ems.timereport.repo.OvertimeRepo;
 import com.birol.persistence.dao.PrivilegeRepository;
@@ -49,6 +51,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private OvertimeRepo overtimeRepo;
     @Autowired
     private AvailabilityRepo availabilityRepo;
+    
+    @Autowired
+    private TimeReportTypesRepo timeReportTypesRepo;
     // API
 
     @Override
@@ -87,6 +92,20 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createOvertimeTypeIfNotFound	(4,"OB-4",110,"00:00","06:00",0);        
         createOvertimeTypeIfNotFound	(5,"OB-5",110,"08:00","16:30",30);
         
+        //String name, int percentage, String start,String end, int interval, boolean isworking, boolean isob
+        createTimeReportTypeIfNotFound("Regular work time",100, "08:00","16:30",30,true,false);
+        createTimeReportTypeIfNotFound("Sick Leave",0,"","",0,false,false);
+        createTimeReportTypeIfNotFound("Vacation",0,"","",0,false,false);
+        createTimeReportTypeIfNotFound("Child Care",0,"","",0,false,false);
+        createTimeReportTypeIfNotFound("Absent for other reason",0,"","",0,false,false);
+        createTimeReportTypeIfNotFound("Holiday",0,"","",0,false,false);
+        
+        createTimeReportTypeIfNotFound	("OB-Morning",110,"06:00","08:00",0,true,true);        
+        createTimeReportTypeIfNotFound	("OB-Evening",110,"18:00","23:59",0,true,true);        
+        createTimeReportTypeIfNotFound	("OB-Weekend",110,"08:00","16:30",30,true,true);        
+        createTimeReportTypeIfNotFound	("OB-4",110,"00:00","06:00",0,true,true);        
+        createTimeReportTypeIfNotFound	("OB-5",110,"08:00","16:30",30,true,true);
+        
         // == create initial user
         createUserIfNotFound(1,"test@test.com", "Test", "Test", "test", new ArrayList<>(Arrays.asList(adminRole)));
 
@@ -124,6 +143,20 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
         avt = availabilityRepo.save(avt);
         return avt;
+    }
+    
+    @Transactional
+    TimeReportTypesDTO createTimeReportTypeIfNotFound(String name, int percentage, String start,String end, int interval, boolean isworking, boolean isob) {
+    	
+    	//TimeReportTypesDTO avt = new TimeReportTypesDTO();
+    	TimeReportTypesDTO avt = timeReportTypesRepo.findByTypename(name);
+        if (avt == null) {
+        	avt = new TimeReportTypesDTO(name,  start,  end, interval,
+        			percentage, isworking, isob);
+        }
+        avt = timeReportTypesRepo.save(avt);
+        return avt;
+        
     }
 
     @Transactional

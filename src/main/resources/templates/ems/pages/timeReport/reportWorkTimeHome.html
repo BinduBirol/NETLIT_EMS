@@ -40,8 +40,8 @@
  border:0;
 }
 
-.date-tr {
-  
+.savebtn {
+  width: 100px;
   
 }
 
@@ -82,7 +82,7 @@
 			<div class="row">
 				<div class="col-12 col-sm-2">
 					<label>Apply for vacation</label>
-					<button type="button" th:emp-id="${session.userdtl.empid}" onclick="availablity(this);" class="btn btn-warning form-control">Vacation <i class="fas fa-lg fa-fw me-2 fa-universal-access"></i></button>
+					<button type="button" th:emp-id="${session.userdtl.empid}" onclick="applyVacation(this);" class="btn btn-warning form-control">Vacation <i class="fas fa-lg fa-fw me-2 fa-universal-access"></i></button>
 				</div>
 			
 				<div class="col-12 col-sm-4">
@@ -124,7 +124,7 @@
 				</div>
 				
 				<div class="col-12 col-sm-3">
-					<label class="custom-control-label ">Find</label>
+					<label class="custom-control-label ">Get forms</label>
 					<button onclick="getTRforms()" type="button" class="btn btn-outline-theme form-control">Show Time Parameters</button>
 				</div>
 
@@ -136,7 +136,6 @@
 			
 			</div>
 			
-<hr />
 		</div>
 		<!-- END #content -->
 		<div th:include="theme/theme_util :: theme_util"></div>
@@ -144,6 +143,26 @@
 				<div class="modal-dialog modal-lg bg-dark ">
 					<div class="modal-content availablitymodalcontent">...</div>
 				</div>
+			</div>
+			
+			<div class="modal fade" id="modalConfirm">
+			  <div class="modal-dialog modal-dialog-centered">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title">MODAL TITLE</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			      </div>
+			      <div class="modal-body">
+			        <p class="cnfTxtMsg">Modal body text goes here.</p>
+			        <input type="hidden" id="modalinputData" />
+			        <input type="hidden" id="modalinputTrID" />
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+			        <button type="button" onclick="saveAjaxCall()" class="btn btn-outline-theme">SUBMIT</button>
+			      </div>
+			    </div>
+			  </div>
 			</div>
 	</div>
 	<!-- END #app -->

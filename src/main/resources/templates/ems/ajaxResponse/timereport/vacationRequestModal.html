@@ -1,5 +1,5 @@
 
-<form onsubmit="return mySubmitFunction(event)" id="wshform" action="saveQuickTimeReport" method="post" >
+<form onsubmit="return mySubmitFunction(event)" id="wshform" action="saveVacationRequest" method="post" >
 <div class="modal-header bg-warning bg-opacity-25">	
 	<h4>Vacation Request Form</h4>		
 
@@ -123,7 +123,7 @@ $("#avdaterangeselect").change(function() {
 		$("#av_to_date").val(moment().format('YYYY-MM-DD'));
 
 	}  else if ($c == "tw") {
-		("#av_from_date").val(moment().format('YYYY-MM-DD'));
+		$("#av_from_date").val(moment().format('YYYY-MM-DD'));
 		$("#av_to_date").val(moment().endOf('isoWeek').format('YYYY-MM-DD'));
 
 	}
