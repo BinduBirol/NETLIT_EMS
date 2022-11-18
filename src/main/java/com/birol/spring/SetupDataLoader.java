@@ -14,12 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.repo.EmployeeRepository;
-import com.birol.ems.timereport.dto.Availability_Type;
-import com.birol.ems.timereport.dto.Overtime_Type;
 import com.birol.ems.timereport.re.TimeReportTypesDTO;
 import com.birol.ems.timereport.re.TimeReportTypesRepo;
-import com.birol.ems.timereport.repo.AvailabilityRepo;
-import com.birol.ems.timereport.repo.OvertimeRepo;
 import com.birol.persistence.dao.PrivilegeRepository;
 import com.birol.persistence.dao.RoleRepository;
 import com.birol.persistence.dao.UserRepository;
@@ -47,10 +43,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Autowired
     private EmployeeRepository employeeRepository;
     
-    @Autowired
-    private OvertimeRepo overtimeRepo;
-    @Autowired
-    private AvailabilityRepo availabilityRepo;
     
     @Autowired
     private TimeReportTypesRepo timeReportTypesRepo;
@@ -76,21 +68,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleIfNotFound("HELPDESK", userPrivileges);
         createRoleIfNotFound("HR ADMIN", adminPrivileges);
         createRoleIfNotFound("SALARY ADMIN", adminPrivileges);
-        createRoleIfNotFound("GROUP LEADER", adminPrivileges); 
-        
-        createAvailabilityTypeIfNotFound(1,"Regular work time",100, "08:00","16:30",30);
-        
-        createAvailabilityTypeIfNotFound(2,"Sick Leave",100,"","",0);
-        createAvailabilityTypeIfNotFound(3,"Vacation",50,"","",0);
-        createAvailabilityTypeIfNotFound(4,"Child Care",90,"","",0);
-        createAvailabilityTypeIfNotFound(5,"Absent for other reason",0,"","",0);
-        createAvailabilityTypeIfNotFound(6,"Holiday",0,"","",0);
-       
-        createOvertimeTypeIfNotFound	(1,"OB-Morning",110,"06:00","08:00",0);        
-        createOvertimeTypeIfNotFound	(2,"OB-Evening",110,"18:00","23:59",0);        
-        createOvertimeTypeIfNotFound	(3,"OB-Weekend",110,"08:00","16:30",30);        
-        createOvertimeTypeIfNotFound	(4,"OB-4",110,"00:00","06:00",0);        
-        createOvertimeTypeIfNotFound	(5,"OB-5",110,"08:00","16:30",30);
+        createRoleIfNotFound("GROUP LEADER", adminPrivileges);
         
         //String name, int percentage, String start,String end, int interval, boolean isworking, boolean isob
         createTimeReportTypeIfNotFound("Regular work time",100, "08:00","16:30",30,true,false);
@@ -133,17 +111,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return role;
     }
     
-    @Transactional
-    Availability_Type createAvailabilityTypeIfNotFound(int typeid,final String name, int percentage, String start,String end, int interval) {
-    	Availability_Type avt = availabilityRepo.findByTypename(name);
-        if (avt == null) {
-        	avt = new Availability_Type(typeid,name,percentage,true,start,end,interval); 
-        	avt.setIsactive(true);
-        	avt.setPercentage(percentage);
-        }
-        avt = availabilityRepo.save(avt);
-        return avt;
-    }
+    
     
     @Transactional
     TimeReportTypesDTO createTimeReportTypeIfNotFound(String name, int percentage, String start,String end, int interval, boolean isworking, boolean isob) {
@@ -159,15 +127,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         
     }
 
-    @Transactional
-    Overtime_Type createOvertimeTypeIfNotFound(int typeid,final String name, int percentage, String start,String end,int interval) {
-    	Overtime_Type ovt = overtimeRepo.findByTypename(name);
-        if (ovt == null) {
-        	ovt = new Overtime_Type(typeid,name,percentage,true,start,end,interval); 
-        }
-        ovt = overtimeRepo.save(ovt);
-        return ovt;
-    }
+    
     
     @Transactional
     User createUserIfNotFound(final int id,final String email, final String firstName, final String lastName, final String password, final Collection<Role> roles) {

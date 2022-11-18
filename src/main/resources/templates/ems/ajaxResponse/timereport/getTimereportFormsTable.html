@@ -25,7 +25,7 @@
 				
 				<select name='status' onchange='setTypeval( event,this)'
 				th:disabled="${element.value[0].isapproved}"
-				th:classappend="${element.value[0].work_minute>0} ? 'border-success': 'border-warning'"
+				th:classappend="${element.value[0].status!=0} ? 'border-info': ''"
 				class='status  form-select form-select-sm availabilitysign '>
 					<option value="">Select a type</option>
 					<option th:selected="${at.typeid==element.value[0].status}"

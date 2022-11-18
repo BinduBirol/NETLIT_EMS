@@ -45,6 +45,10 @@
   
 }
 
+textarea{
+	font-style: italic;	
+}
+
 
 
 </style>
@@ -93,12 +97,12 @@
 							<option value="lw">Last Week</option>
 							<option value="dby">Day before Yesterday</option>
 							<option value="yd">Yesterday</option>
-							<option value="t">Today</option>							
+							<option selected="selected" value="t">Today</option>							
 							<option value="tw">This Week</option>
 							<option value="nw">Next Week</option>
 							<option value="tm">This month</option>
 							<option value="nm">Next month</option>
-							<option selected="selected" value="c">Custom</option>
+							<option value="c">Custom</option>
 						</select> 						
 						<input type="week" class="form-control" onclick="this.showPicker()" id="inputweekno"/>
 					</div>
@@ -167,7 +171,7 @@
 	</div>
 	<!-- END #app -->
 	<div th:include="theme/footer::staticFooter"></div>
-	<script src="assets/js/pagejs/reportWorkTimeHome.js"></script>
+	
 	<!-- ================== BEGIN page-js ================== -->
 	<script src="assets/plugins/jquery-migrate/dist/jquery-migrate.min.js"></script>
 	<script
@@ -191,5 +195,6 @@
 	<script src="assets/js/netlit_ems.js"></script>
 	<!-- ================== END page-js ================== -->
 	<script src="/assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+	<script src="assets/js/pagejs/reportWorkTimeHome.js"></script>
 </body>
 </html>

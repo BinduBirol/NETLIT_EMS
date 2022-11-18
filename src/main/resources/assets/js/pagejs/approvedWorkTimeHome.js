@@ -76,6 +76,7 @@ function ajaxcall(){
 		from_date : fd,
 		to_date : td
 	}, function(data, status) {	
+		setDateRangeString();
 		$("#ajaxresponse").hide();
 		$("#ajaxresponse").html(data);
 		
@@ -95,4 +96,8 @@ function designTable(){
 		setAutorowspan(id,0);
 	});	
 	
+}
+
+function setDateRangeString() {
+	$('#datestr').html(moment($("#from_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY') + ' - ' + moment($("#to_date").val(), 'YYYY-MM-DD').format('dddd, MMMM D, YYYY'));
 }

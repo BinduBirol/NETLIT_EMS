@@ -1,14 +1,14 @@
 package com.birol.ems.timereport.re;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.IsoFields;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -19,34 +19,28 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
-
-import com.birol.ems.dao.EmpTimeReportRepo;
-import com.birol.ems.dao.EmpWSHrepo;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
-import com.birol.ems.dto.EmpTimeReportDTO;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmployeeService;
 import com.birol.ems.service.WSHservice;
-import com.birol.ems.timereport.dto.Timereport_Overtime_emp;
-import com.birol.ems.timereport.repo.AvailabilityRepo;
-import com.birol.ems.timereport.repo.EmpOvertimeRepo;
-import com.birol.ems.timereport.repo.OvertimeRepo;
 import com.birol.persistence.model.User;
 import com.birol.service.IUserService;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 @Controller
 public class TimeReportControllerNew {
@@ -62,16 +56,6 @@ public class TimeReportControllerNew {
 	EmployeeRepository employeeRepository;
 	@Autowired
 	WSHservice wSHservice;
-	@Autowired
-	EmpWSHrepo empWSHrepo;
-	@Autowired
-	EmpTimeReportRepo avrepo;	
-	@Autowired
-	EmpOvertimeRepo obrepo;
-	@Autowired
-    private OvertimeRepo overtimeRepo;
-    @Autowired
-    private AvailabilityRepo availabilityRepo;
     @Autowired
 	IUserService userService;
     @Autowired
@@ -224,4 +208,241 @@ public class TimeReportControllerNew {
 
 		return msg;
 	}
+	
+	@PostMapping("/getpendingTimeReports")
+	public ModelAndView getpendingTimeReports(	@RequestPayload String from_date,
+												@RequestPayload String to_date,
+												@RequestPayload String emp_id,
+												Authentication auth, final ModelMap model) {
+		
+		User user = (User) auth.getPrincipal();
+		EMPLOYEE_BASIC empdtl = employeeService.getEmployeebyID(user.getId());
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate fromLocalDate = LocalDate.parse(from_date, formatter);
+		LocalDate toLocalDate = LocalDate.parse(to_date, formatter);
+		List<LocalDate> dates = wSHservice.getDatesBetween(fromLocalDate, toLocalDate);	
+		ArrayList<EMPLOYEE_BASIC> myemps= employeeRepository.getbyChief(user.getId());
+		
+		TreeMap<LocalDate, ArrayList<Time_Report_DTO>> map= new TreeMap<LocalDate, ArrayList<Time_Report_DTO>>();
+		
+		for(LocalDate d: dates) {
+			ArrayList<Time_Report_DTO> trlist = new ArrayList<Time_Report_DTO>();			
+			
+			if(emp_id.equals("all")) {
+				trlist = new ArrayList<Time_Report_DTO>();				
+				trlist= time_Report_Repo.findByDateAndIsapprovedAndIsrejected(d,false,false);
+			}else if(emp_id.equals("me")) {
+				trlist = new ArrayList<Time_Report_DTO>();	
+				for(EMPLOYEE_BASIC x: myemps) {									
+					trlist=time_Report_Repo.findByDateAndEmpidAndIsapprovedAndIsrejected(x.getEmpid(),d,false,false);					
+				}
+													
+			}else {
+				trlist = new ArrayList<Time_Report_DTO>();
+				trlist= time_Report_Repo.findByDateAndEmpidAndIsapprovedAndIsrejected(Long.parseLong(emp_id.split("-")[1]),d,false,false);
+			}		
+			
+			if(trlist.size()>0)map.put(d, trlist);
+			
+		}
+		
+		model.addAttribute("trtypeALL", timeReportTypesRepo.findAll());
+		model.addAttribute("trtypeRG", timeReportTypesRepo.findByisOB(false));
+		model.addAttribute("trtypeOB", timeReportTypesRepo.findByisOB(true));
+		model.addAttribute("map", map);
+		
+		return new ModelAndView("ems/ajaxResponse/timereport/getPendingTimeReports", model);	
+	}
+	
+	@ResponseBody
+	@PostMapping("/doPendingTimeReportAction")
+	private String doPendingTimeReportAction (Authentication auth,@RequestPayload String rg, 
+			@RequestPayload boolean ismail, @RequestPayload boolean decision) {
+		String msg="";
+		Type listType = new TypeToken<ArrayList<Time_Report_DTO>>(){}.getType();
+		List<Time_Report_DTO> dataList = new Gson().fromJson(rg, listType);
+		
+		User creator = (User) auth.getPrincipal();		
+		
+		if (decision) {
+			msg = "Approved "+dataList.size()+" time reports.";
+		} else {
+			msg = "Rejected "+dataList.size()+" time reports.";
+		}
+		for(Time_Report_DTO data: dataList) {
+			Time_Report_DTO av = time_Report_Repo.findById(data.getTr_id()).get();
+			av.setStatus(data.getStatus());
+			av.setWork_start(data.getWork_start());
+			av.setWork_end(data.getWork_end());
+			av.setWork_interval(data.getWork_interval());
+			av.setWork_minute(data.getWork_minute());
+			av.setWork_hour(data.getWork_hour());
+			av.setWork_desc(data.getWork_desc());
+			
+			String emailText = "";
+			if(decision) {				
+				emailText ="You time report for date:"+av.getDate()+" has been approved for the upcoming salary!";
+				av.setIsapproved(true);
+				av.setIsrejected(false);			
+			}else {
+				
+				emailText ="You time report for date:"+av.getDate()+" has been rejected!";
+				av.setIsapproved(false);
+				av.setIsrejected(true);			
+			}	
+			
+			try {			
+				time_Report_Repo.save(av);				
+				if(ismail) {
+					// send mail
+					String tomail= userService.getUserByID(av.getEmpid()).get().getEmail();
+					SimpleMailMessage email = new SimpleMailMessage();
+					email.setTo(tomail);
+					email.setSubject("STATUS OF YOUR REPORTED TIME");
+					final String appUrl = "https://ems.netlit.se";				
+					email.setText(emailText);
+					email.setFrom(env.getProperty("support.email"));
+					try {
+						mailSender.send(email);
+					} catch (Exception e) {
+						msg+="\nUnable to send mail to "+tomail;
+					}
+				}			
+				
+			} catch (Exception e) {
+				msg=e.getMessage();
+			}
+		}
+		
+		return msg;
+	}
+	
+	@ResponseBody
+	@PostMapping("/doTimeReportDecision")
+	private String doTimeReportDecision(Authentication auth,@RequestPayload String rg, 
+			@RequestPayload boolean ismail, @RequestPayload boolean decision) {
+		String msg="Time report ";
+		Gson gson = new Gson(); 
+		Time_Report_DTO data = gson.fromJson(rg, Time_Report_DTO.class);
+		User creator = (User) auth.getPrincipal();
+		Time_Report_DTO av = time_Report_Repo.findById(data.getTr_id()).get();
+		
+		av.setStatus(data.getStatus());
+		av.setWork_start(data.getWork_start());
+		av.setWork_end(data.getWork_end());
+		av.setWork_interval(data.getWork_interval());
+		av.setWork_minute(data.getWork_minute());
+		av.setWork_hour(data.getWork_hour());
+		av.setWork_desc(data.getWork_desc());
+		
+		String emailText = "";
+		if(decision) {
+			msg+= "approved for ";
+			emailText ="You time report for date:"+av.getDate()+" has been approved for the upcoming salary!";
+			av.setIsapproved(true);
+			av.setIsrejected(false);			
+		}else {
+			msg+= "rejected for ";
+			emailText ="You time report for date:"+av.getDate()+" has been rejected!";
+			av.setIsapproved(false);
+			av.setIsrejected(true);			
+		}	
+		
+		try {			
+			time_Report_Repo.save(av);
+			msg+= av.getFull_name();
+			
+			if(ismail) {
+				// send mail
+				SimpleMailMessage email = new SimpleMailMessage();
+				email.setTo(userService.getUserByID(av.getEmpid()).get().getEmail());
+				email.setSubject("STATUS OF YOUR REPORTED TIME");
+				final String appUrl = "https://ems.netlit.se";				
+				email.setText(emailText);
+				email.setFrom(env.getProperty("support.email"));
+				try {
+					mailSender.send(email);
+				} catch (Exception e) {
+					msg+="\nUnable to send mail.";
+				}
+			}			
+			
+		} catch (Exception e) {
+			msg=e.getMessage();
+		}
+		return msg;
+	}
+	
+	@PostMapping("/getApprovedTimeReports")
+	public ModelAndView getApprovedTimeReports(	@RequestPayload String from_date,
+												@RequestPayload String to_date,												
+												Authentication auth, final ModelMap model) {
+		User user = (User) auth.getPrincipal();
+		ArrayList<Time_Report_DTO> rglist= time_Report_Repo.findApprovedByEmpidAndFromDateToDate(user.getId(),from_date,to_date);
+		
+		HashSet<Integer> weeks= new HashSet<>();
+		for(Time_Report_DTO r: rglist) weeks.add(r.getWeek());
+		
+		TreeMap<Integer, ArrayList<Time_Report_DTO>> rgmap= new TreeMap<>();
+		HashMap<Integer, TotalTRDTO> totalmap= new HashMap<>();
+		
+		int tRwm=0;
+		int tOwm=0;
+		
+		int gtRwm=0;
+		int gtOwm=0;
+		
+		TotalTRDTO tobj= new TotalTRDTO();
+		TotalTRDTO gtobj= new TotalTRDTO();
+		
+		for(int w: weeks) {
+			tRwm=0;
+			tOwm=0;
+			tobj= new TotalTRDTO();
+			ArrayList<Time_Report_DTO> rglist2 = new ArrayList<>();
+			for (Time_Report_DTO r : rglist) {
+				if (r.getWeek() == w) {
+					rglist2.add(r);
+				if(!r.getTrTypes().isOB) {tRwm += r.getWork_minute();gtRwm += r.getWork_minute();}
+				if(r.getTrTypes().isOB) {tOwm += r.getWork_minute();gtOwm += r.getWork_minute();}
+				}
+			}
+			
+			tobj.setTotal_rg(wSHservice.mintsTOHmConvert(tRwm));
+			tobj.setTotal_ob(wSHservice.mintsTOHmConvert(tOwm));
+			totalmap.put(w, tobj);
+			rgmap.put(w, rglist2);
+		}
+		gtobj.setTotal_rg(wSHservice.mintsTOHmConvert(gtRwm));
+		gtobj.setTotal_ob(wSHservice.mintsTOHmConvert(gtOwm));
+		
+		model.addAttribute("rgmap", rgmap);
+		model.addAttribute("totalmap", totalmap);
+		model.addAttribute("grandtotal", gtobj);
+		return new ModelAndView("ems/ajaxResponse/timereport/getApprovedTimeReports", model);	
+	}
+	
+}
+
+class TotalTRDTO {
+	String total_rg;
+	String total_ob;
+	public String getTotal_rg() {
+		return total_rg;
+	}
+	public void setTotal_rg(String total_rg) {
+		this.total_rg = total_rg;
+	}
+	public String getTotal_ob() {
+		return total_ob;
+	}
+	public void setTotal_ob(String total_ob) {
+		this.total_ob = total_ob;
+	}
+	@Override
+	public String toString() {
+		return total_rg + "," + total_ob;
+	}	
+	
 }

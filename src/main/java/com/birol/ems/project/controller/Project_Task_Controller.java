@@ -1,54 +1,11 @@
 package com.birol.ems.project.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLConnection;
-import java.security.Principal;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.IsoFields;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.util.MimeTypeUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.birol.ems.dao.EmpTimeReportRepo;
-import com.birol.ems.dao.EmpWSHrepo;
-import com.birol.ems.dto.EMPLOYEE_BASIC;
-import com.birol.ems.dto.EmpTimeReportDTO;
-import com.birol.ems.project.dao.ProjectDao;
-import com.birol.ems.project.dao.Project_ActivityDao;
-import com.birol.ems.project.dao.Project_TaskDao;
-import com.birol.ems.project.dto.Project;
-import com.birol.ems.project.dto.Project_Activity;
-import com.birol.ems.project.dto.Project_Task;
-import com.birol.ems.service.EmployeeService;
-import com.birol.ems.service.WSHservice;
-import com.birol.persistence.model.User;
 
 @Controller
 public class Project_Task_Controller {
 	
+	/*
 	@Autowired
 	private Project_TaskDao project_TaskDao;
 	@Autowired
@@ -63,6 +20,7 @@ public class Project_Task_Controller {
 	EmpWSHrepo empWSHrepo;
 	@Autowired
 	EmpTimeReportRepo avrepo;
+	
 	
 	@RequestMapping(value = "/createTask", method = RequestMethod.POST)
 	public ModelAndView createTask(@ModelAttribute Project_Task pt, ModelMap model, Authentication auth,
@@ -260,5 +218,6 @@ public class Project_Task_Controller {
 
 		return message;
 	}
+	*/
 }
 

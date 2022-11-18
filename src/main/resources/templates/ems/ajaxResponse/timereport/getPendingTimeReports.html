@@ -1,13 +1,7 @@
 
 <table id="pendingtable"  class="table table-hover">
 <span th:each="element : ${map}">
-	<thead th:if="${not #lists.isEmpty(element.value) OR not #lists.isEmpty(obmap.get(element.key))}">		
-		
-		<!-- 
-		<tr th:if="${ #lists.isEmpty(element.value) and #lists.isEmpty(obmap.get(element.key))}">
-			<td class="small text-white text-opacity-50" colspan="9">No data found on [[${#temporals.format(element.key, 'E, dd MMM yyyy')}]]</td>
-		</tr>
-		 -->
+	<thead>		
 		 
 		
 		<tr class="" >
@@ -20,7 +14,7 @@
 				 [[${#temporals.format(element.key, 'E, dd MMM yyyy')}]]
 				 , Week 
 				<span th:if="${not #lists.isEmpty(element.value)}" >[[${element.value[0].week}]]</span>
-				<span th:if="${#lists.isEmpty(element.value)}" >[[${obmap.get(element.key)[0].week}]]</span>
+
 				 </h3>
 			 </th>
 		</tr>
@@ -41,19 +35,19 @@
 	<tbody>
 		<tr class="table-active" th:if="${not #lists.isEmpty(element.value)}" style="vertical-align: middle;" th:each="tr : ${element.value}" >
 			<td>
-				<a href="#" class="text-decoration-none" th:emp-id="${tr.userid}"
+				<a href="#" class="text-decoration-none" th:emp-id="${tr.empid}"
 				onclick="viewEmlpoyee(this);" th:text="${tr.full_name}"></a>
-				<input type="hidden" class="faction" value="rgTimeAction"/>
-				<input type="hidden" class="dataid" name="av_id" th:value="${tr.av_id}"/>
+				<input type="hidden" class="faction" value="doTimeReportDecision"/>
+				<input type="hidden" class="dataid" name="tr_id" th:value="${tr.tr_id}"/>
 				<input type="hidden" class="employee" th:value="${tr.full_name}"/>
 				<input type="hidden" class="date" th:value="${#temporals.format(tr.date, 'E, dd MMM yyyy')}"/>
 			</td>			
 			<td>
 				<select name='status' onchange='setTypeval( event,this)'
-				th:classappend="${tr.status==1} ? 'border-success': 'border-danger'"
+				th:classappend="${tr.work_minute>0} ? 'border-success': 'border-warning'"
 				class='status  form-select form-select-sm availabilitysign border '>
 					<option th:selected="${at.typeid==tr.status}"
-						th:each="at: ${avtype}" th:value="${at.typeid}"
+						th:each="at: ${trtypeALL}" th:value="${at.typeid}"
 						th:start="${at.start}" th:end="${at.end}"
 						th:interval="${at.interval_minutes}" th:text="${at.typename}">xx</option>
 				</select>
@@ -77,7 +71,7 @@
 			</td>
 			<td>
 				<input onchange='calculate(event)'				
-				th:value='${tr.lunch_hour}' type='number' name='lunch_hour'
+				th:value='${tr.work_interval}' type='number' name='work_interval'
 				class='lbreak cal form-control form-control-sm text-center absent  ' />
 			</td>
 			<td>
@@ -85,7 +79,7 @@
 					onchange='calculate(event)' name='work_desc'
 					class='form-control form-control-sm work_desc' rows='2'></textarea>
 			</td>
-			<td th:class='${tr.av_id}'>
+			<td th:class='${tr.tr_id}'>
 			<div class="btn-group btn-group-sm">
 				<input type="button" class="btn  btn-success decision"  value="Approve"/>
 				<input type="button" class="btn btn-danger decision"  value="Reject"/>				
@@ -94,69 +88,18 @@
 			</td>
 			
 		</tr>
-		
-		<tr class="table-active" th:if="${not #lists.isEmpty(obmap.get(element.key))}" style="vertical-align: middle;" th:each="tr : ${obmap.get(element.key)}" >
-			
-			<td>
-				<a href="#" class="text-decoration-none" th:emp-id="${tr.userid}"
-				onclick="viewEmlpoyee(this);" th:text="${tr.full_name}"></a>
-				
-				<input type="hidden" class="dataid" name="ob_id" th:value="${tr.ob_id}"/>
-				<input type="hidden" class="faction" value="obTimeAction"/>
-				
-				<input type="hidden" class="employee" th:value="${tr.full_name}"/>
-				<input type="hidden" class="date" th:value="${#temporals.format(tr.date, 'E, dd MMM yyyy')}"/>
-			</td>
-			<td>			
-				<select name='status' onchange='setTypeval( event,this)'
-					class='status  form-select form-select-sm cal border border-primary'>
-						<option th:selected="${at.typeid==tr.status}"
-							th:each="at: ${obtype}" th:value="${at.typeid}"
-							th:start="${at.start}" th:end="${at.end}"
-							th:interval="${at.interval_minutes}" th:text="${at.typename}">xx</option>
-				</select> <input class="ob_id" th:value="${tr.ob_id}" type="hidden" />		
-			</td>
-			<td>
-				<input type='text' th:value='${tr.work_hour}'
-				name='work_hour' readonly
-				class='work_hour form-control form-control-sm text-center  ' /> <input
-				type="hidden" th:value='${tr.work_minute}' name='work_minute'
-				readonly class='wmint form-control form-control-sm text-center  ' />
-			</td>
-			<td>
-				<input type="time" th:value='${tr.work_start}'				
-				onchange='calculate(event)' name='work_start' onclick="this.showPicker()"
-				class='timepicker start cal form-control form-control-sm text-center absent '>
-			</td>
-			<td>
-				<input th:value='${tr.work_end}' onchange='calculate(event)'				
-				type="time" name='work_end' onclick="this.showPicker()"
-				class='timepicker end cal form-control form-control-sm text-center absent  '>
-			</td>
-			<td>
-				<input onchange='calculate(event)'				
-				th:value='${tr.lunch_hour}' type='number' name='lunch_hour'
-				class='lbreak cal form-control form-control-sm text-center absent  ' />
-			</td>
-			<td>
-				<textarea th:text='${tr.work_desc}' 
-					onchange='calculate(event)' name='work_desc'
-					class='form-control form-control-sm work_desc' rows='2'></textarea>
-			</td>
-			<td th:class='${tr.ob_id}'>
-			<div class="btn-group btn-group-sm">
-				<input type="button"  class="btn  btn-success decision " value="Approve"/>
-				<input type="button"  class="btn btn-danger decision" value="Reject"/>				
-			</div>
-				
-			</td>
-			
-			
-		</tr>
 
 	</tbody>
 	</span>
 </table>
+
+<div class="text-center ">
+
+<div class="btn-group">
+<button onclick="actionAll(true)" class="btn btn-outline-success">APPROVE ALL</button>
+<button onclick="actionAll(false)"  class="btn btn-outline-danger">REJECT ALL</button>
+</div></div>
+
 
 <script>
 	$(".decision").click(

@@ -1,44 +1,10 @@
 package com.birol.ems.project.controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.birol.ems.dao.EmpTimeReportRepo;
-import com.birol.ems.dao.EmpWSHrepo;
-import com.birol.ems.dto.EMPLOYEE_BASIC;
-import com.birol.ems.dto.EmpTimeReportDTO;
-import com.birol.ems.dto.Time_report_approved;
-import com.birol.ems.project.dao.ProjectDao;
-import com.birol.ems.project.dao.Project_ActivityDao;
-import com.birol.ems.project.dao.Project_ApplicantDao;
-import com.birol.ems.project.dao.Project_WorkersDao;
-import com.birol.ems.project.dto.Project;
-import com.birol.ems.project.dto.Project_Activity;
-import com.birol.ems.project.dto.Project_Applicant;
-import com.birol.ems.project.dto.Project_Workers;
-import com.birol.persistence.dao.RoleRepository;
-import com.birol.persistence.model.User;
 
 @Controller
 public class ProjectController {
+	/*
 	
 	@Autowired
 	private ProjectDao projectDao;
@@ -373,4 +339,6 @@ public class ProjectController {
 		return "EMPLOYEE";
 		
 	}
+	
+	*/
 }

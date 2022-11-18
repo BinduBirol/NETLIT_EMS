@@ -118,7 +118,7 @@ function ajaxcall(){
 		$("#ajaxresponse").html(data).hide().slideDown();		
 		var rowCount = $('#pendingtable tr').length;
 		if(rowCount==0){$("#ajaxresponse").html("<h4>No pending time reports</h4>").hide().slideDown();}
-		//$("html, body").animate({ scrollTop: $(document).height() }, 500);
+		// $("html, body").animate({ scrollTop: $(document).height() }, 500);
 	});	
 }
 
@@ -137,7 +137,7 @@ function pageStartAjaxcall(){
 		$("#to_date").val(td);
 		var rowCount = $('#pendingtable tr').length;		
 		if(rowCount==0){$("#ajaxresponse").html("<h4>No pending time reports</h4>").hide().slideDown();}
-		//$("html, body").animate({ scrollTop: $(document).height() }, 500);
+		// $("html, body").animate({ scrollTop: $(document).height() }, 500);
 	});	
 }
 
@@ -173,9 +173,47 @@ $(".btn-dec").click(function(e) {
 		}
 		
 		$("."+dataid).html(str);
+		
+		if(dataid=="all"){
+			ajaxcall();
+		}
+		
 		return;
 	});	
 });
+
+function actionAll(d){
+	var data;
+	var array=[];
+	$("#pendingtable").find("tr").each(function(){
+		var values = {};
+		$.each($(this).find("input, select, textarea").serializeArray(), function(i, field) {
+		    values[field.name] = field.value;
+		});
+		if(!jQuery.isEmptyObject( values ) && typeof values!="undefined"){
+			array.push(values);
+		}
+    });
+	
+	data=JSON.stringify(array);
+	var dc=0;
+	if(d){
+		dc=1;
+		$('#confirmDecisionmodal .modal-title').text("APPROVE ALL");
+		$('#confirmDecisionmodal .modal-body p').text("You are going APPROVE all the time reports.");
+		$("#confirmDecisionmodal .btn-dec").removeClass("btn-danger").addClass("btn-success").text("APPROVE ALL");
+	}else{
+		dc=0;
+		$('#confirmDecisionmodal .modal-title').text("REJECT ALL");
+		$('#confirmDecisionmodal .modal-body p').text("You are going to REJECT all the time reports.");
+		$("#confirmDecisionmodal .btn-dec").removeClass("btn-success").addClass("btn-danger").text("REJECT ALL");
+	}	
+	$('#confirmDecisionmodal #action').val("doPendingTimeReportAction");
+	$("#confirmDecisionmodal #dataid").val("all");
+	$('#confirmDecisionmodal #data').val(data);
+	$('#confirmDecisionmodal #actionDecision').val(dc);	
+	$('#confirmDecisionmodal').modal('show');
+}
 
 
 

@@ -3,79 +3,41 @@ package com.birol.ems.controller;
 //import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileAlreadyExistsException;
 import java.security.Principal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.util.HtmlUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.repository.query.Param;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
-
-import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.birol.ems.dao.EmpTimeReportRepo;
 import com.birol.ems.dao.ComplaintsRepo;
-import com.birol.ems.dao.EmpWSHrepo;
 import com.birol.ems.dao.LoggedinUserRepo;
-import com.birol.ems.dto.EmpTimeReportDTO;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
-import com.birol.ems.dto.Time_report_approved;
+import com.birol.ems.dto.LoggedinUserDTO;
 import com.birol.ems.project.dao.ProjectDao;
 import com.birol.ems.project.dto.Project;
 import com.birol.ems.project.dto.Project_Workers;
-import com.birol.ems.dto.LoggedinUserDTO;
-import com.birol.ems.dto.Mail;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EMSservice;
-import com.birol.ems.service.EmailService;
 import com.birol.ems.service.EmployeeService;
 import com.birol.persistence.dao.RoleRepository;
 import com.birol.persistence.model.User;
@@ -106,10 +68,6 @@ public class EMScontroller {
 	@Autowired
 	EMSservice emsService;
 	@Autowired
-	EmpWSHrepo empWSHrepo;
-	@Autowired
-	EmpTimeReportRepo avrepo;
-	@Autowired
 	private ProjectDao projectDao;
 	
 	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
@@ -121,32 +79,7 @@ public class EMScontroller {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 		String date = simpleDateFormat.format(new Date());
 		
-		Optional<Time_report_approved> ws= null;
-		Optional<EmpTimeReportDTO> avlist= null;
-		Time_report_approved obj = new Time_report_approved();
-		try {
-			ws =empWSHrepo.findById(user.getId()+date);			
-			model.addAttribute("wsh",ws.get());
-			
-		} catch (NoSuchElementException e) {
-			obj.setWork_minute(0);
-			obj.setWork_start("N/A");
-			obj.setWork_end("N/A");
-			obj.setStatus(3);
-			model.addAttribute("wsh",obj);			
-		}
-		
-		EmpTimeReportDTO avObj= new EmpTimeReportDTO();
-		try {
-			avlist= avrepo.findById("AV"+user.getId()+date);
-			model.addAttribute("av",avlist.get());
-		} catch (Exception e) {
-			avObj.setWork_minute(0);
-			avObj.setWork_start("N/A");
-			avObj.setWork_end("N/A");
-			avObj.setStatus(3);
-			model.addAttribute("av",avObj);
-		}
+	
 		model.addAttribute("latest",employeeService.getLatestEmployeeList());
 		model.addAttribute("user",employeeService.getEmployeebyID(user.getId()));
 		

@@ -1,5 +1,5 @@
 
-//pagestartajaxcall();
+pagestartajaxcall();
 
 
 
@@ -81,8 +81,8 @@ function setDateRangeString() {
 }
 
 function pagestartajaxcall(){
-	$("#trav_from_date").val(moment().startOf('isoWeek').format('YYYY-MM-DD'));
-	$("#trav_to_date").val(moment().endOf('isoWeek').format('YYYY-MM-DD'));
+	$("#trav_from_date").val(moment().format('YYYY-MM-DD'));
+	$("#trav_to_date").val(moment().format('YYYY-MM-DD'));
 	setDateRangeString();
 	getWeekNo();
 	getTRforms();
