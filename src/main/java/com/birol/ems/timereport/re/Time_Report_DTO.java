@@ -19,7 +19,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
-@Table(name="TIME_REPORT")
+@Table(name="time_report")
 public class Time_Report_DTO {
 	
 	@Id
