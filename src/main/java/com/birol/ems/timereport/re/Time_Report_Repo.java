@@ -11,7 +11,7 @@ public interface Time_Report_Repo extends CrudRepository<Time_Report_DTO, String
 	
 	public ArrayList<Time_Report_DTO> findByDateAndIsapprovedAndIsrejected(LocalDate d,boolean a,boolean r);
 
-	public ArrayList<Time_Report_DTO> findByDateAndEmpidAndIsapprovedAndIsrejected(Long empid, LocalDate d,boolean a,boolean r);
+	public ArrayList<Time_Report_DTO> findByDateAndEmpidAndIsapprovedAndIsrejected( LocalDate d, Long empid,boolean a,boolean r);
 
 	public ArrayList<Time_Report_DTO> findByEmpid(Long id);
 

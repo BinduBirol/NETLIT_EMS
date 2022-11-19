@@ -227,11 +227,15 @@ public class EmployeeController {
 	public ModelAndView deleteEmployee(@RequestParam("empid") Long empid, final ModelMap model) {
 		try {
 			EMPLOYEE_BASIC emp = employeeRepository.findbyEmpid(empid);
-			User user = userService.findUserByEmail(emp.getEmail());
-			if (user != null)
+			try {
+				User user = userService.findUserByEmail(emp.getEmail());
 				userService.deleteUser(user);
+			} catch (Exception e) {
+				logger.info("Deleteing user "+emp.getFull_name()+" [not registered]");
+			}
+				
 			employeeRepository.delete(emp);
-			logger.debug("User deleted:" + emp.getFull_name());
+			logger.info("User deleted:" + emp.getFull_name());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

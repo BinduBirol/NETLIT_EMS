@@ -234,13 +234,14 @@ public class TimeReportControllerNew {
 				trlist= time_Report_Repo.findByDateAndIsapprovedAndIsrejected(d,false,false);
 			}else if(emp_id.equals("me")) {
 				trlist = new ArrayList<Time_Report_DTO>();	
-				for(EMPLOYEE_BASIC x: myemps) {									
-					trlist=time_Report_Repo.findByDateAndEmpidAndIsapprovedAndIsrejected(x.getEmpid(),d,false,false);					
+				for(EMPLOYEE_BASIC x: myemps) {
+					
+					trlist.addAll(time_Report_Repo.findByDateAndEmpidAndIsapprovedAndIsrejected(d,x.getEmpid(),false,false));					
 				}
 													
 			}else {
 				trlist = new ArrayList<Time_Report_DTO>();
-				trlist= time_Report_Repo.findByDateAndEmpidAndIsapprovedAndIsrejected(Long.parseLong(emp_id.split("-")[1]),d,false,false);
+				trlist= time_Report_Repo.findByDateAndEmpidAndIsapprovedAndIsrejected(d,Long.parseLong(emp_id.split("-")[1]),false,false);
 			}		
 			
 			if(trlist.size()>0)map.put(d, trlist);

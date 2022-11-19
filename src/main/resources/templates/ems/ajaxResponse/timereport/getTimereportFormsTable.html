@@ -13,8 +13,8 @@
 		</tr>
 	</thead>
 	
-	<tbody th:each="element: ${trmap}">
-		<tr class="bg-opacity-25 ">
+	<tbody class="border-white" th:each="element: ${trmap}">
+		<tr class="border-dark">
 			<td style="" class="h5  bg-opacity-25  date-tr" rowspan="3">
 				[[${#temporals.format(element.key, 'E')}]]<br />
 				[[${#temporals.format(element.key, 'dd MMM yyyy')}]]
@@ -90,14 +90,14 @@
 			</td>
 			<td>
 					<button  onclick="showOBtr(event,this);" 
-					class='btn btn-sm btn-outline-success btn-add-ob '>
+					class='btn btn-sm btn-outline-theme btn-add-ob '>
 					<i class="fa fa-plus"></i>
 				</button>		
 				
 			</td>
 		</tr>
 		
-		<tr th:classappend="${element.value[1].status==0} ? 'd-none' : ''" class="bg-opacity-25 ">		
+		<tr th:classappend="${element.value[1].status==0} ? 'd-none' : ''" class="border-dark ">		
 			<td>
 				<input type="hidden" class="av_id" th:value='${element.value[1].tr_id}'/>
 				<input type="hidden" class="date" th:value="${#temporals.format(element.value[1].date, 'yyyy-MM-dd')}" />
@@ -177,7 +177,7 @@
 			</td>
 		</tr>
 		
-		<tr th:classappend="${element.value[2].status==0} ? 'd-none' : ''" class="bg-opacity-25 ">
+		<tr th:classappend="${element.value[2].status==0} ? 'd-none' : ''" class="border-dark">
 			<td>
 				<input type="hidden" class="av_id" th:value='${element.value[2].tr_id}'/>
 				<input type="hidden" class="date" th:value="${#temporals.format(element.value[2].date, 'yyyy-MM-dd')}" />

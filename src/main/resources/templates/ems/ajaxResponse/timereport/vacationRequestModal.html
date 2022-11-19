@@ -19,7 +19,7 @@
 
 	<div class="row mb-3">
 		<div class="col-12 col-sm-4">
-			<label class="custom-control-label ">Date range</label> <select
+			<label class="custom-control-label ">Select a type</label> <select
 				id="availability" onc name="status" class="form-select border">
 				<option th:if="${at.typeid}!=1"  th:each="at: ${avtype}" th:value="${at.typeid}" th:text="${at.typename}">xx</option>
 			</select>
