@@ -79,6 +79,17 @@ public class EmployeeController {
 		model.addAttribute("chief", employeeRepository.findbyroles(roles));
 		return new ModelAndView("ems/pages/addEmployee", model);
 	}
+	
+	@GetMapping("/addEmployeenew")
+	public ModelAndView addEmployeenew(final ModelMap model) {
+		model.addAttribute("roles", roleRepository.findAll());
+		List<Integer> roles = new ArrayList<Integer>();
+		roles.add(4);
+		roles.add(6);
+		roles.add(7);
+		model.addAttribute("chief", employeeRepository.findbyroles(roles));
+		return new ModelAndView("ems/pages/employee/addEmployeenew", model);
+	}
 
 	@RequestMapping(value = "/addEmployeeDo", method = RequestMethod.POST)
 	public ModelAndView addEmployeeDo(@ModelAttribute EMPLOYEE_BASIC emp, ModelMap model, Authentication auth,
@@ -135,6 +146,7 @@ public class EmployeeController {
 	@RequestMapping(value = "/editEmployeeDo", method = RequestMethod.POST)
 	public ModelAndView editEmployeeDo(@ModelAttribute EMPLOYEE_BASIC emp, ModelMap model, Authentication auth,
 			final HttpServletRequest request) {
+		User authuser = (User) auth.getPrincipal();
 		try {
 			EMPLOYEE_BASIC empbasic = new EMPLOYEE_BASIC();
 			empbasic = employeeRepository.findbyEmpid(emp.getEmpid());
@@ -200,7 +212,7 @@ public class EmployeeController {
 			}
 			
 			String msg="";
-			if(emp.getRoleid()==4) {
+			if(empbasic.getRoleid()==4&& authuser.getId()!=emp.getEmpid()) {
 				msg="Can't update a Super Admin ID !";				
 			}else {
 				employeeRepository.save(emp);

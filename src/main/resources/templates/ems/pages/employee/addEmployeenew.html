@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="theme/header :: staticheaderFragment"></head>
+<style>
+
+/* Hide all steps by default: */
+.tab {
+	display: none;
+}
+</style>
+<body>
+	<!-- BEGIN #app -->
+	<div id="app" class="app">
+		<div th:include="theme/header :: dynamicheaderFragment"></div>
+		<div th:include="theme/sidenav :: sidenav"></div>
+
+		<div id="content" class="app-content">
+
+			<ul class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">EMPLOYEE MANAGEMENT</a></li>
+				<li class="breadcrumb-item active">ADD EMPLOYEE</li>
+			</ul>
+
+			<h1 class="page-header">Insert Employee Information</h1>
+			<hr />
+			
+			<div class="nav-wizards-container">
+  
+  <nav class="nav nav-wizards-1 mb-2">
+    <!-- completed -->
+    <div class="nav-item col">
+      <a class="nav-link" href="#">
+        <div class="nav-no">1</div>
+        <div class="nav-text">Employment Information</div>
+      </a>
+    </div>
+    
+    <div class="nav-item col">
+      <a class="nav-link " href="#">
+        <div class="nav-no">2</div>
+        <div class="nav-text">EMS Info</div>
+      </a>
+    </div>
+    
+    <div class="nav-item col">
+      <a class="nav-link " href="#">
+        <div class="nav-no">3</div>
+        <div class="nav-text">Documents</div>
+      </a>
+    </div>
+  
+    <!-- active -->
+    <div class="nav-item col">
+      <a class="nav-link " href="#">
+        <div class="nav-no">4</div>
+        <div class="nav-text">Personal Information</div>
+      </a>
+    </div>
+  
+    <!-- disabled -->
+    <div class="nav-item col">
+      <a class="nav-link " href="#">
+        <div class="nav-no">5</div>
+        <div class="nav-text">Account Information</div>
+      </a>
+    </div>
+  </nav>
+</div>
+<hr/>
+
+			<form id="regForm" action="/action_page.php">
+				<div class="tab">
+
+					<div id="employment" class="mb-5">
+						<h4>
+							Employment Information <i class="fa-solid fa-star text-danger"></i>
+						</h4>
+						<div class="card">
+							<div class="card-body pb-2">
+
+								<div class="row mb-3">
+									<div class="col-12 col-sm-6">
+										<div class="form-group">
+											<label>Contact</label>
+											<div class="input-group " id="">
+												<input autocomplete="off" name="contract_start"
+													required="required" type="text"
+													class="form-control datepicker-default"
+													placeholder="start date" /> <span class="input-group-text">to</span>
+												<input autocomplete="off" name="contract_end" type="text"
+													class="form-control datepicker-default"
+													placeholder="end date" />
+											</div>
+										</div>
+									</div>
+
+									<div class="col-12 col-sm-6">
+										<div class="form-group">
+											<label>Full Name</label> <input name="full_name" type="text"
+												class="form-control" required="required"
+												placeholder="Enter Full Name">
+										</div>
+									</div>
+								</div>
+
+
+								<div class="row mb-3">
+									<div class="col-12 col-sm-6">
+										<div class="form-group">
+											<label>Select Designation</label> <select name="designation"
+												required="required" class="form-select" id="slct_role">
+												<option value="">Select Designation</option>
+												<option th:each="roles : ${roles}" th:value="${roles.name}"
+													th:text="${roles.name}"></option>
+											</select>
+										</div>
+									</div>
+
+									<div class="col-12 col-sm-6">
+										<div class="form-group">
+											<label>Title, Workspace</label> <input name="workspace"
+												type="text" class="form-control" required="required"
+												placeholder="Enter Workspace">
+										</div>
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<div class="col-12 col-sm-6">
+										<div class="form-group">
+											<label>Work Email</label> <input name="email" type="email"
+												class="form-control" required="required"
+												placeholder="Enter Work Email">
+										</div>
+										<!-- /.form-group -->
+									</div>
+									<!-- /.col -->
+									<div class="col-12 col-sm-6">
+										<div class="form-group">
+											<label>Nearest Chief</label> <select name="nearest_chief_id"
+												onchange="$('#nearest_chief_name').val($('#nearest_chief_id :selected').text());"
+												required="required" class="form-select"
+												id="nearest_chief_id">
+												<option value="">Select Cheif</option>
+												<option th:each="c : ${chief}" th:value="${c.empid}"
+													th:text="${c.full_name}"></option>
+											</select> <input name="nearest_chief_name" id="nearest_chief_name"
+												type="hidden" class="form-control" required="required"
+												placeholder="Enter Nearest Chief">
+										</div>
+										<!-- /.form-group -->
+									</div>
+									<!-- /.col -->
+								</div>
+
+								<div class="row mb-3">
+									<div class="col-12 col-sm-6">
+										<div class="form-group">
+											<label>Employee Type</label> <select name="employee_Type"
+												required="required" class="form-select">
+												<option value="">Select Type</option>
+												<option value="Full Time">Full Time</option>
+												<option value="Part Time">Part Time</option>
+												<option value="Contractual">Contractual</option>
+
+											</select>
+
+
+										</div>
+										<!-- /.form-group -->
+									</div>
+									<!-- /.col -->
+									<div class="col-12 col-sm-6">
+										<div class="form-group">
+											<label>Work Phone</label> <input name="phone" type="tel"
+												class="form-control" required="required"
+												placeholder="Enter Work Phone">
+										</div>
+										<!-- /.form-group -->
+									</div>
+									<!-- /.col -->
+								</div>
+
+							</div>
+							<div class="card-arrow">
+								<div class="card-arrow-top-left"></div>
+								<div class="card-arrow-top-right"></div>
+								<div class="card-arrow-bottom-left"></div>
+								<div class="card-arrow-bottom-right"></div>
+							</div>
+							<div class="hljs-container rounded-bottom">
+								<small> All the employment information is required!! </small>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="tab">
+
+					<div id="user_info" class="mb-5">
+						<h4>
+							EMS Info <i class="fa-solid fa-star text-danger"></i>
+						</h4>
+						<div class="card">
+							<div class="card-body pb-2">
+								<div class="row mb-3">
+
+
+
+									<div class="col-xl-6">
+										<div class="form-group">
+											<label>Select Role</label> <select name="roleid"
+												required="required" class="form-select" id="slct_role">
+												<option value="">Select Role</option>
+												<option th:each="roles : ${roles}" th:value="${roles.id}"
+													th:text="${roles.name}"></option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div class="card-arrow">
+								<div class="card-arrow-top-left"></div>
+								<div class="card-arrow-top-right"></div>
+								<div class="card-arrow-bottom-left"></div>
+								<div class="card-arrow-bottom-right"></div>
+							</div>
+							<div class="hljs-container rounded-bottom">
+								<small>Set role of the employee to access the software
+									permissions</small>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="tab">
+					<div id="documents" class="mb-5">
+									<h4>Documents </h4>									
+									<div class="card">
+										<div class="card-body pb-2">
+										
+										<div class="row mb-3">
+													
+													<div class="col-12 col-sm-12">
+										                <div class="form-group">
+															<label>Employee Image</label>							
+															<div class="text-center">
+																<img   class="rounded-circle mx-auto d-block col-12 col-sm-6" id="previewImg"  src="" alt="Select an Image">
+															</div>															
+															<hr/>
+															<input accept="image/*" name="emp_image_m"  class="form-control" type="file" onchange="previewFile(this);"/>															 
+															
+										                </div>   
+										                 
+										              </div>								
+													
+														
+												</div>
+										
+										<div class="row mb-3">
+											<div class="col-12 col-sm-6">
+												<div class="form-group">
+													<label>CV </label> <br/>
+                 									<input name="doc_m_cv"  accept="application/pdf"  type="file" class="form-control"  placeholder="Enter CV">
+                
+												</div>
+											</div>
+											
+											<div class="col-12 col-sm-6">
+												<div class="form-group">
+													<label>Certificate </label> <br/>
+                  									<input name="doc_m_crt"  accept="application/pdf"  type="file" class="form-control"   placeholder="Enter Certificate copy">
+                
+												</div>
+											</div>
+											
+										</div>
+										
+										<div class="row mb-3">
+											<div class="col-12 col-sm-6">
+												<div class="form-group">
+													<label>ID copy</label> <br/>
+                  									<input name="doc_m_id"  accept="image/jpeg,image/png,application/pdf"  type="file" class="form-control"   placeholder="Enter ID copy">
+                
+												</div>
+											</div>
+											
+											<div class="col-12 col-sm-6">
+												<div class="form-group">
+													<label>Others </label> <br/>
+                 									<input name="doc_m_others"  accept="application/pdf"  type="file" class="form-control"  placeholder="Enter CV">
+                
+												</div>
+											</div>
+											
+										</div>
+
+
+									</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+										<div class="hljs-container rounded-bottom">										
+											<small class="text-warning">Only .pdf file allowed for CV and Certificates. Photo can be uploaded as ID copy.
+												<br/>
+												Max allowed size per file: 1MB
+												
+											</small>
+											         
+										</div>
+									</div>
+								</div>
+				</div>
+				<div class="tab">
+					<div id="personal" class="mb-5">
+									<h4>Employee Personal Information</h4>									
+									<div class="card">
+										<div class="card-body pb-2">
+										
+										
+										
+										
+										
+		<div class="row mb-3">
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>First Name</label>
+                 <input name="first_name" type="text" class="form-control"   placeholder="Enter First Name">
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input name="last_name" type="text" class="form-control"   placeholder="Enter Last Name">
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+            </div>
+            
+            
+            <div class="row mb-3">
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Private Email</label>
+                 <input name="private_email" type="email" class="form-control"   placeholder="Enter Private Email">
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Closest Relative's Contact info</label>
+                  <input name="closest_relative_full" type="text" class="form-control"   placeholder="Enter Closest Relative Full Description">
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+            </div>
+            
+             <div class="row mb-3">
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Full Address</label>
+                 <input name="address_full"  type="text" class="form-control"   placeholder="Enter Full Address">
+                </div>
+                <!-- /.form-group -->                
+              </div>
+              <!-- /.col -->
+               <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Evening Phone</label>
+                 <input name="phone_eve" type="tel" class="form-control"   placeholder="Enter Evening Phone">
+                </div>
+                <!-- /.form-group -->                
+              </div>
+              <!-- /.col -->
+            </div>
+            
+             <div class="row mb-3">
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Social Security Number</label>
+                 <input name="social_security_number" type="text" class="form-control"   placeholder="YYYYMMDD-XXXX">
+                </div>
+                <!-- /.form-group -->                
+              </div>
+              <!-- /.col -->
+               <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Gender</label>
+                 <select name="sex" class="form-select" >
+                 	<option value="">Select</option>                 	
+                 	<option value="Male">Male</option>
+                 	<option value="Female">Female</option>
+                 	<option value="Other">Other</option>
+                 	
+                 </select>
+                </div>
+                <!-- /.form-group -->                
+              </div>
+              <!-- /.col -->
+            </div>
+										</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+										<div class="hljs-container rounded-bottom">
+										<small>
+											Employee can add/edit personal information later.
+										</small>
+										</div>
+									</div>
+								</div>
+				</div>
+				<div class="tab">
+				<div id="account" class="mb-5">
+									<h4>Employee Account Information</h4>									
+									<div class="card">
+										<div class="card-body pb-2">
+											<div class="row mb-3">
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Bank Name</label>
+                 <input name="bank_name" type="text" class="form-control"  placeholder="Enter Bank Name">
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Account Number</label>
+                  <input name="account_number" type="text" class="form-control"   placeholder="Enter Bank Account Number">
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+            </div>
+            
+            
+            <div class="row mb-3">
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Clearing Number</label>
+                 <input name="clearing_number" type="text" class="form-control"  placeholder="Enter Clearing Number">
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Table Tax</label>
+                  <input name="table_tax" type="text" class="form-control"   placeholder="Enter Table Tax">
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+            </div>
+            
+										</div>
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+										<div class="hljs-container rounded-bottom"><small>
+											Employee can add/edit Account information later.
+										</small>
+										</div>
+									</div>
+								</div>
+								</div>
+				<div style="overflow: auto;">
+				
+				<div class="btn-group" style="float: right;">
+				  <button class="btn" type="button" id="prevBtn"
+							onclick="nextPrev(-1)">Previous</button>
+						<button class="btn" type="button" id="nextBtn"
+							onclick="nextPrev(1)">Next</button>
+				</div>
+					
+				</div>
+				<!-- Circles which indicates the steps of the form: -->
+				<div style="text-align: center; margin-top: 40px; display: none;">
+					<span class="step">1</span> <span class="step">2</span> <span
+						class="step">3</span> <span class="step">4</span>
+				</div>
+				
+				
+				
+			</form>
+		</div>
+
+	
+		<div th:include="theme/theme_util :: theme_util"></div>	
+	</div>
+	<script>
+var currentTab = 0; // Current tab is set to be the first tab (0)
+showTab(currentTab); // Display the current tab
+
+function showTab(n) {
+  // This function will display the specified tab of the form...
+  var x = document.getElementsByClassName("tab");
+  x[n].style.display = "block";
+  //... and fix the Previous/Next buttons:
+  if (n == 0) {
+    document.getElementById("prevBtn").style.display = "none";
+  } else {
+    document.getElementById("prevBtn").style.display = "inline";
+  }
+  if (n == (x.length - 1)) {
+    document.getElementById("nextBtn").innerHTML = "Submit";
+  } else {
+    document.getElementById("nextBtn").innerHTML = "Next";
+  }
+  //... and run a function that will display the correct step indicator:
+  fixStepIndicator(n)
+}
+
+function nextPrev(n) {
+  // This function will figure out which tab to display
+  var x = document.getElementsByClassName("tab");
+  // Exit the function if any field in the current tab is invalid:
+  if (n == 1 && !validateForm()) return false;
+  // Hide the current tab:
+  x[currentTab].style.display = "none";
+  // Increase or decrease the current tab by 1:
+  currentTab = currentTab + n;
+  // if you have reached the end of the form...
+  if (currentTab >= x.length) {
+    // ... the form gets submitted:
+    document.getElementById("regForm").submit();
+    return false;
+  }
+  // Otherwise, display the correct tab:
+  showTab(currentTab);
+}
+
+function validateForm() {
+  // This function deals with validation of the form fields
+  var x, y, i, valid = true;
+  x = document.getElementsByClassName("tab");
+  y = x[currentTab].getElementsByTagName("input");
+  // A loop that checks every input field in the current tab:
+  for (i = 0; i < y.length; i++) {
+    // If a field is empty...
+    if (y[i].value == "") {
+      // add an "invalid" class to the field:
+      y[i].className += " is-invalid";
+      // and set the current valid status to false
+      valid = false;
+    }
+  }
+  // If the valid status is true, mark the step as finished and valid:
+  if (valid) {
+    document.getElementsByClassName("nav-link")[currentTab].className += " finish";
+  }
+  return true; // return the valid status
+}
+
+
+
+function fixStepIndicator(n) {
+	  // This function removes the "active" class of all steps...
+	  var i, x = document.getElementsByClassName("nav-link");
+	  for (i = 0; i < x.length; i++) {
+		  //x[i].className  += " active";
+		  x[i].className = x[i].className.replace(" active", "");
+	  }
+	  //... and adds the "active" class on the current step:
+	  x[n].className += " active";
+	}
+
+</script>
+	<!-- END #app -->
+	<div th:include="theme/footer::staticFooter"></div>
+	
+
+</body>
+</html>
