@@ -273,6 +273,7 @@ public class TimeReportControllerNew {
 		}
 		for(Time_Report_DTO data: dataList) {
 			Time_Report_DTO av = time_Report_Repo.findById(data.getTr_id()).get();
+			String chief= employeeRepository.findbyEmpid(av.getEmpid()).getNearest_chief_name();
 			av.setStatus(data.getStatus());
 			av.setWork_start(data.getWork_start());
 			av.setWork_end(data.getWork_end());
@@ -288,14 +289,15 @@ public class TimeReportControllerNew {
 				av.setIsrejected(false);			
 			}else {
 				
-				emailText ="You time report for date:"+av.getDate()+" has been rejected!";
+				emailText ="You time report for date:"+av.getDate()+" has been rejected! For further enquiry contact your nearest chief ["+chief+"].";
 				av.setIsapproved(false);
 				av.setIsrejected(true);			
 			}	
 			
 			try {			
-				time_Report_Repo.save(av);				
-				if(ismail) {
+				time_Report_Repo.save(av);	
+				//System.out.println(emailText);
+				if(ismail) {					
 					// send mail
 					String tomail= userService.getUserByID(av.getEmpid()).get().getEmail();
 					SimpleMailMessage email = new SimpleMailMessage();
@@ -307,7 +309,7 @@ public class TimeReportControllerNew {
 					try {
 						mailSender.send(email);
 					} catch (Exception e) {
-						msg+="\nUnable to send mail to "+tomail;
+						msg+="\n[Unable to send mail to "+tomail+"]";
 					}
 				}			
 				
