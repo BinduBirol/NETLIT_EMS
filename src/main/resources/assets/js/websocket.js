@@ -6,7 +6,7 @@ function setConnected(connected) {
     $("#disconnect").prop("disabled", !connected);
     if (connected) {
     	stompClient.send("/app/hello", {}, JSON.stringify({
-			'message' : '<b class=\'text-success\'>Joined discussion</b>',
+			'message' : ' <b class=\'text-success\'>Joined discussion</b>',
 			'color' : $("#colorpicker").val()
 		}));
     	$( ".fa-circle" ).addClass( "text-success" );
@@ -41,7 +41,7 @@ function connect() {
 function disconnect() {
 	if (stompClient !== null) {
 		stompClient.send("/app/hello", {}, JSON.stringify({
-			'message' : '<b class=\'text-danger\'>Left discussion</b>',
+			'message' : ' <b class=\'text-danger\'>Left discussion</b>',
 			'color' : $("#colorpicker").val()
 		}));
 		stompClient.disconnect();

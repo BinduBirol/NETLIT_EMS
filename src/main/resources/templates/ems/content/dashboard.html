@@ -78,7 +78,7 @@
 							<div class="list-group">
 							  <!-- with icon -->
 							  <div th:each="users : ${latest}"  class="list-group-item d-flex align-items-center">
-							    <div class="w-40px h-40px d-flex align-items-center justify-content-center  rounded-2 ms-n1">
+							    <div class="w-40px h-40px d-flex align-items-center justify-content-center ms-n1">
 							      <img class="ms-100 mh-100 rounded-circle" onerror="this.onerror=null; this.src='assets/img/user/user.png'" th:src="*{'data:image/jpeg;base64,'+{users.emp_image_encoded}}"/>
 							    </div>
 							    <div class="flex-fill px-3">

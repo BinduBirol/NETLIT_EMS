@@ -54,8 +54,8 @@
 								<div th:if="${error!=null}" class="alert alert-danger"><p th:text="${error}"></p></div>							
 
 								<div class="modal fade" id="docomplaint">
-								  <div class="modal-dialog modal-xl">
-								    <div class="modal-content">
+								  <div class="modal-lg modal-dialog modal-dialog-centered ">
+								    <div class="modal-content bg-dark">
 								    <div class="modal-header">
 								        <h5 class="modal-title">CREATE A NEW ISSUE</h5>
 								        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -65,23 +65,21 @@
 								  </div>
 								</div>
 								
-								<div class="modal modal-cover fade" id="">
-								  <div class="modal-dialog">
+								<div class="modal fade" id="">
+								  <div class="modal-lg modal-dialog modal-dialog-centered">
 								    <div class="modal-content">
 								      <div th:include="ems/content/addComlaintsContent :: addComlaintsContent"></div>
 								    </div>
 								  </div>
-								</div>
-							
+								</div>							
 
 							<hr/>
 							<!-- BEGIN #datatable -->
-								<div id="datatable" class="mb-5">
-									<div class="card">
-									<div class="card-header">
-										<button type="button" class="btn btn-outline-theme btn-sm" data-bs-toggle="modal" data-bs-target="#docomplaint">Create A New Issue</button>
-									</div>
-										<div class="card-body">
+								<div id="datatable" class="mb-5">									
+									
+										<button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#docomplaint">Create A New Issue</button>
+										<hr/>				
+										
 											<table id="datatableDefault" class="table text-nowrap w-100">
 												<thead>
 													<tr>
@@ -122,15 +120,8 @@
 													</tr>
 												</tbody>
 											</table>
-										</div>
-										<div class="card-arrow">
-											<div class="card-arrow-top-left"></div>
-											<div class="card-arrow-top-right"></div>
-											<div class="card-arrow-bottom-left"></div>
-											<div class="card-arrow-bottom-right"></div>
-										</div>
 										
-									</div>
+										
 								</div>
 								<!-- END #datatable -->
 								
