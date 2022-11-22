@@ -330,7 +330,7 @@ public class TimeReportControllerNew {
 		Time_Report_DTO data = gson.fromJson(rg, Time_Report_DTO.class);
 		User creator = (User) auth.getPrincipal();
 		Time_Report_DTO av = time_Report_Repo.findById(data.getTr_id()).get();
-		
+		String chief= employeeRepository.findbyEmpid(av.getEmpid()).getNearest_chief_name();
 		av.setStatus(data.getStatus());
 		av.setWork_start(data.getWork_start());
 		av.setWork_end(data.getWork_end());
@@ -347,7 +347,7 @@ public class TimeReportControllerNew {
 			av.setIsrejected(false);			
 		}else {
 			msg+= "rejected for ";
-			emailText ="You time report for date:"+av.getDate()+" has been rejected!";
+			emailText ="You time report for date:"+av.getDate()+" has been rejected! For further enquiry contact your nearest chief ["+chief+"].";
 			av.setIsapproved(false);
 			av.setIsrejected(true);			
 		}	
