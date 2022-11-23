@@ -5,11 +5,11 @@
 		 
 		
 		<tr class="" >
-			<td colspan="9"></td>
+			<td colspan="10"></td>
 		</tr>
 		
 		<tr class="table-info" >
-			<th colspan="9">
+			<th colspan="10">
 				<h3>			
 				 [[${#temporals.format(element.key, 'E, dd MMM yyyy')}]]
 				 , Week 
@@ -20,6 +20,7 @@
 		</tr>
 		
 		<tr class="table-active">
+			<th>#</th>
 			<th>Employee</th>
 			<th>Status</th>
 			<th>Total</th>
@@ -34,6 +35,7 @@
 	</thead>
 	<tbody>
 		<tr class="table-active" th:if="${not #lists.isEmpty(element.value)}" style="vertical-align: middle;" th:each="tr : ${element.value}" >
+			<td>[[${trStat.index+1}]]</td>
 			<td>
 				<a href="#" class="text-decoration-none" th:emp-id="${tr.empid}"
 				onclick="viewEmlpoyee(this);" th:text="${tr.full_name}"></a>

@@ -54,7 +54,8 @@ tr.hover,
 th.hover,
 td.hover,
 tr.hoverable:hover {
-    background: rgba(50, 50, 50, .5);
+    --bs-table-accent-bg:var(--bs-table-active-bg);color:var(--bs-table-active-color)
+    
 }
 
 </style>
@@ -100,15 +101,15 @@ tr.hoverable:hover {
 						<div class="input-group " id="">
 						<select
 							id="travdaterangeselect" onc name="status" class="form-select">
-							<option value="lw">Last Week</option>
-							<option value="dby">Day before Yesterday</option>
-							<option value="yd">Yesterday</option>
-							<option selected="selected" value="t">Today</option>							
-							<option value="tw">This Week</option>
-							<option value="nw">Next Week</option>
 							<option value="tm">This month</option>
+							<option value="lw">Last week</option>
+							<option value="l3d">Last 3 days</option>							
+							<option value="yd">Yesterday</option>							
+							<option selected="selected" value="t">Today</option>
+							<option value="n3d">Next 3 days</option>							
+							<option value="tw">This Week</option>
+							<option value="nw">Next Week</option>							
 							<option value="nm">Next month</option>
-							<option value="c">Custom</option>
 						</select> 						
 						<input type="week" class="form-control" onclick="this.showPicker()" id="inputweekno"/>
 					</div>
@@ -145,6 +146,8 @@ tr.hoverable:hover {
 			<div id="getTablediv">
 			
 			</div>
+			
+			<br/>
 			
 		</div>
 		<!-- END #content -->

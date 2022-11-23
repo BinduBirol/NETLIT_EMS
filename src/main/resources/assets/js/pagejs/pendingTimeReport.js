@@ -85,6 +85,10 @@ $("#daterangeselect").change(function() {
 		} else if ($c == "nw") {
 			$("#from_date").val(moment().add(1, 'week').startOf('isoWeek').format('YYYY-MM-DD'));
 			$("#to_date").val(moment().add(1, 'week').endOf('isoWeek').format('YYYY-MM-DD'));
+		}else if ($c == "l2d") {
+			$("#from_date").val(moment().add(-3, 'days').format('YYYY-MM-DD'));
+			$("#to_date").val(moment().add(-1, 'days').format('YYYY-MM-DD')); 
+
 		}
 		
 		ajaxcall();		

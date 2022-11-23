@@ -30,7 +30,7 @@ $("#toast-reload-btn").click(function() {
 
 function viewEmlpoyee(z) {
 	$("tr").removeClass("table-primary");
-	$(z).closest("tr").addClass("table-primary");
+	//$(z).closest("tr").addClass("table-primary");
 	$empid = $(z).attr("emp-id");
 	$.ajax({
 		url : "viewEmployee?empid=" + $empid,

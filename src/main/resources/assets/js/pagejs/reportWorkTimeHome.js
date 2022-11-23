@@ -53,6 +53,12 @@ $("#travdaterangeselect").change(function() {
 	}else if ($c == "dby") {
 		$("#trav_from_date").val(moment().add(-2, 'day').format('YYYY-MM-DD'));
 		$("#trav_to_date").val(moment().add(-2, 'day').format('YYYY-MM-DD'));
+	}else if ($c == "l3d") {
+		$("#trav_from_date").val(moment().add(-3, 'day').format('YYYY-MM-DD'));
+		$("#trav_to_date").val(moment().add(-1, 'day').format('YYYY-MM-DD'));
+	}else if ($c == "n3d") {
+		$("#trav_from_date").val(moment().add(1, 'day').format('YYYY-MM-DD'));
+		$("#trav_to_date").val(moment().add(3, 'day').format('YYYY-MM-DD'));
 	}
 	
 	setDateRangeString();
@@ -304,7 +310,7 @@ function save(t,e) {
 		 		tr_id:av_id
 			  }
 		$("#modalConfirm .modal-title").html("CONFIRM");
-		$("#modalConfirm .cnfTxtMsg").html("You are going to submit time report for date: "+date);
+		$("#modalConfirm .cnfTxtMsg").html("You are going to submit time report for date "+date+"<br/>Total "+work_hour);
 		$("#modalinputData").val(JSON.stringify(data));
 		$("#modalinputTrID").val(av_id);
 		$('#modalConfirm').modal('show');

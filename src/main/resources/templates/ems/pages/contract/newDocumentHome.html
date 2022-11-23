@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+	<title>NETLIT | EMS</title>
+	<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	
+	<!-- ================== BEGIN core-css ================== -->
+	<link href="assets/css/vendor.min.css" rel="stylesheet" />
+	<link href="assets/css/app.min.css" rel="stylesheet" />
+	<link href="assets/css/netlit_ems.css" rel="stylesheet" />
+	<!-- ================== END core-css ================== -->	
+	<link href="assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+</head>
+
+<body>
+	<!-- BEGIN #app -->
+	<div id="app" class="app">
+		<div th:include="theme/header :: dynamicheaderFragment"></div>
+		<div th:include="theme/sidenav :: sidenav"></div>
+		<!-- BEGIN #content -->
+		<div id="content" class="app-content">
+			<ul class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">CONTRACT</a></li>
+				<li class="breadcrumb-item active">NEW DOCUMENT</li>
+			</ul>
+
+			<h1 class="page-header">Create new document</h1>
+			<hr/>
+			
+			<div>
+				
+				
+				<div class="row mb-4">
+					<div class="col">
+						<input type="file" onchange="setfileName()" class="form-control form-control-lg" id="document_file" />
+					</div>
+					<div class="col">
+						<select class="form-select form-select-lg">
+								<option selected>Select category</option>
+							  <option value="1">One</option>
+							  <option value="2">Two</option>
+							  <option value="3">Three</option>
+						</select>
+					</div>				
+				</div>
+				
+				<div class="row mb-4">
+					<div class="col">
+						<div class="form-group">
+						  <label class="form-label" for="document_name">Document name</label>
+						  <input type="text" name="document_name" id="document_name" class="form-control form-control-lg"/>
+						</div>
+					</div>	
+										
+				</div>
+				
+				<div class="row mb-4">
+				<p colspan="4" class="h3">Document signers </p><hr/>
+					<table class="table align-middle table-borderless">						
+						
+						<tr class="">							
+							<th>Signer</th>
+							<th>Email</th>
+							<th class="text-center">Singer profile</th>
+							<th>								
+							</th>
+						</tr>
+						
+						<tr>
+							
+							<td>
+								
+								<select onchange="setSignerProfile(event, this)" data-live-search="true" class="form-select" name="signer1_name">
+									<option value="">Select signer</option>
+									<option th:data-tokens="${e.full_name}" th:each="e: ${emps}" th:email="${e.email}" th:value="${e.empid}" th:text="${e.full_name}"></option>
+								
+								</select>							
+							</td>
+							<td><input name="signer1_email" class="form-control semail" type="email"/></td>
+							<td class="text-center">
+								<button class="sprofile btn  btn-outline-theme" disabled="disabled" onclick="viewEmlpoyee(this);">
+									<i class="fas fa-lg fa-fw fa-eye"></i> View
+								</button>
+							</td>
+							<td class="text-center">
+								<button onclick="addSigner()" class='btn  btn-outline-theme btn-add-signer '>
+									<i class="fa fa-plus"></i></button>
+							</td>
+						</tr>
+						
+						<tr  id="signerTR2" class="d-none">
+							
+							<td>
+								<select onchange="setSignerProfile(event, this)" data-live-search="true" class="form-select" name="signer1_name">
+									<option value="">Select signer</option>
+									<option th:data-tokens="${e.full_name}" th:each="e: ${emps}" th:email="${e.email}" th:value="${e.empid}" th:text="${e.full_name}"></option>
+								
+								</select>	
+							</td>
+							<td><input name="signer2_email" class="form-control semail" type="email"/></td>
+							<td class="text-center">
+								<button class="sprofile btn  btn-outline-theme" disabled="disabled" onclick="viewEmlpoyee(this);">
+									<i class="fas fa-lg fa-fw fa-eye"></i> View
+								</button>
+							</td>
+							<td class="text-center">
+								<button onclick="deleteSigner(event)" class="btn btn-outline-danger"><i class="fa fa-trash-alt"></i></button>
+							</td>
+						</tr>
+						
+						<tr id="signerTR3" class="d-none">
+							
+							<td>
+								<select onchange="setSignerProfile(event, this)" data-live-search="true" class="form-select" name="signer1_name">
+									<option value="">Select signer</option>
+									<option th:data-tokens="${e.full_name}" th:each="e: ${emps}" th:email="${e.email}" th:value="${e.empid}" th:text="${e.full_name}"></option>
+								
+								</select>	
+							</td>
+							<td><input name="signer3_email" class="form-control semail" type="email"/></td>
+							<td class="text-center">
+								<button class="sprofile btn  btn-outline-theme" disabled="disabled" onclick="viewEmlpoyee(this);">
+									<i class="fas fa-lg fa-fw fa-eye"></i> View
+								</button>
+							</td>
+							<td class="text-center">
+								<button onclick="deleteSigner(event)" class="btn btn-outline-danger"><i class="fa fa-trash-alt"></i></button>
+							</td>
+						</tr>
+						
+											
+					
+						
+					</table>
+				
+							
+				</div>
+				
+				
+				
+				<div class="row mb-4">
+					<p class="h3">Invitation settings</p>
+					<hr/>
+					<div class="col">
+						<p class="h5">Invitation type</p>
+						
+						<div class="form-check mb-4">
+						  <input class="form-check-input" checked="checked" type="radio" value="" id="invt_type" />
+						  <label class="form-check-label" for="invt_type">Email only</label>
+						</div>
+						
+						<p class="h5">Invitation is valid until</p>						
+						<div class="row mb-4">
+							<div class="col-sm-4">
+								<div class="form-check">
+								  <input class="form-check-input" type="radio" name="invt_validity" value="7" id="invt_validity" />
+								  <label class="form-check-label" for="invt_validity">7 days</label>
+								</div>
+								
+								<div class="form-check">
+								  <input checked="checked" class="form-check-input" type="radio" name="invt_validity" value="14" id="invt_validity" />
+								  <label class="form-check-label" for="invt_validity">14 days</label>
+								</div>
+								
+								<div class="form-check">
+								  <input class="form-check-input" type="radio" name="invt_validity" value="30" id="invt_validity" />
+								  <label class="form-check-label" for="invt_validity">30 days</label>
+								</div>
+								
+								<div class="form-check mb-3">
+								  <input class="form-check-input" type="radio" name="invt_validity" value="0" id="invt_validity" />
+								  <label class="form-check-label" for="invt_validity">Other</label>
+								</div>
+								<div class="form-group">
+								  <label class="form-label" for="">Invitation expire date</label>
+								  <input type="text" id="expireDate" class="form-control form-control-sm datepicker-default">
+								</div>
+							</div>
+							
+						</div>
+						
+						
+						
+					</div>
+					<div class="col">
+						<p class="h5">Email message</p>
+						
+						<select class="form-select  mb-4">
+						  <option selected>Select template</option>
+						  <option value="1">One</option>						  
+						</select>
+						
+						<textarea class="form-control mb-4" rows="3"></textarea>	
+						
+						<p class="h5">Invite as</p>						
+						<div class="">							
+								<div class="form-check">
+								  <input class="form-check-input" type="radio" name="invt_as" value="" id="invt_validity" />
+								  <label class="form-check-label" for="invt_validity">Netlit EMS</label>
+								</div>
+								
+								<div class="form-check">
+								  <input class="form-check-input" type="radio" name="invt_as" value="" id="invt_validity" />
+								  <label class="form-check-label" for="invt_validity">Myself</label>
+								</div>
+							
+						</div>			
+						
+						
+					</div>				
+				</div>
+				<hr/>
+				
+				<div class="text-center">					
+					<div >
+						<button class="btn btn-lg btn-outline-theme">Save document and send invitations</button>
+					</div>				
+				</div>
+			
+			</div>
+			
+			
+			
+		</div>
+		<!-- END #content -->
+		<div th:include="theme/theme_util :: theme_util"></div>
+		<div class="modal fade" id="viewEmployee">
+				<div class="modal-dialog modal-xl">
+					<div class="modal-content empContent">...</div>
+				</div>
+			</div>
+	</div>
+	<div th:include="theme/footer::staticFooter"></div>
+	<script src="assets/plugins/moment/min/moment.min.js"></script>
+	<script src="assets/js/pagejs/newDocumentHome.js"></script>
+	<script src="assets/js/demo/form-plugins.demo.js"></script>
+	<script src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+</body>
+</html>

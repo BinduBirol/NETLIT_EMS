@@ -284,12 +284,12 @@ public class TimeReportControllerNew {
 			
 			String emailText = "";
 			if(decision) {				
-				emailText ="You time report for date:"+av.getDate()+" has been approved for the upcoming salary!";
+				emailText ="You time report for date "+av.getDate()+" has been approved for the upcoming salary!";
 				av.setIsapproved(true);
 				av.setIsrejected(false);			
 			}else {
 				
-				emailText ="You time report for date:"+av.getDate()+" has been rejected! For further enquiry contact your nearest chief ["+chief+"].";
+				emailText ="You time report for date "+av.getDate()+" has been rejected! For further enquiry contact your nearest chief ["+chief+"].";
 				av.setIsapproved(false);
 				av.setIsrejected(true);			
 			}	
@@ -342,12 +342,12 @@ public class TimeReportControllerNew {
 		String emailText = "";
 		if(decision) {
 			msg+= "approved for ";
-			emailText ="You time report for date:"+av.getDate()+" has been approved for the upcoming salary!";
+			emailText ="You time report for date "+av.getDate()+" has been approved for the upcoming salary!";
 			av.setIsapproved(true);
 			av.setIsrejected(false);			
 		}else {
 			msg+= "rejected for ";
-			emailText ="You time report for date:"+av.getDate()+" has been rejected! For further enquiry contact your nearest chief ["+chief+"].";
+			emailText ="You time report for date "+av.getDate()+" has been rejected! For further enquiry contact your nearest chief ["+chief+"].";
 			av.setIsapproved(false);
 			av.setIsrejected(true);			
 		}	

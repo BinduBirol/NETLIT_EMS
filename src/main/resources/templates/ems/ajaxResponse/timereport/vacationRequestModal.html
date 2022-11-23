@@ -35,6 +35,7 @@
 			<select onchange="calculate();" id="avdaterangeselect"  name="status" class="form-select">
 					
 					<option value="t">Today</option>
+					<option value="n3d">Next 3 days</option>
 					<option value="tw">This Week</option>
 					<option value="nw">Next Week</option>
 					<option value="tm">This month</option>
@@ -125,6 +126,10 @@ $("#avdaterangeselect").change(function() {
 	}  else if ($c == "tw") {
 		$("#av_from_date").val(moment().format('YYYY-MM-DD'));
 		$("#av_to_date").val(moment().endOf('isoWeek').format('YYYY-MM-DD'));
+
+	}else if ($c == "n3d") {
+		$("#av_from_date").val(moment().add(1, 'days').format('YYYY-MM-DD'));
+		$("#av_to_date").val(moment().add(3, 'days').format('YYYY-MM-DD'));
 
 	}
 	setDateRangeString();
