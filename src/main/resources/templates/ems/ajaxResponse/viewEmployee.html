@@ -5,7 +5,7 @@
 										onerror="this.onerror=null; this.src='assets/img/user/user.png'"										
 										alt="User Image" />	 
 										&nbsp;<h3 class="modal-title" th:text="${userdtl.full_name}"></h3>&nbsp;&nbsp;
-		<a sec:authorize="!hasAnyAuthority('EMPLOYEE')" type="button" th:href="@{/editEmployee(empid=${userdtl.empid})}" ><i class="fa fa-edit"></i></a>
+		<a class="btn btn-outline-theme" sec:authorize="!hasAnyAuthority('EMPLOYEE')" type="button" th:href="@{/editEmployee(empid=${userdtl.empid})}" >EDIT <i class="fa fa-edit"></i></a>
 		<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 	</div>
 	<div class="modal-body">

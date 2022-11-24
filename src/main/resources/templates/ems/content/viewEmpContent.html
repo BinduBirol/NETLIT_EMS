@@ -29,7 +29,7 @@
 								
 								<div class="mb-1">
 									<i class="fa fa-registered fa-fw text-white text-opacity-50"></i> 
-									NETLIT EMS User: <span th:text="${userdtl.status}"></span> 
+									EMS User: <span th:text="${userdtl.status}"></span> 
 								</div>
 								
 
@@ -94,7 +94,7 @@
 							<div class="tab-content pt-3">
 									<div class="tab-pane fade show active" id="home">
 										<div class="profile-content-container">
-											<table class="table">
+											<table class="table table-borderless row">
 												<tr>
 													<td>Full Name:</td>
 													<td th:text="${userdtl.full_name}"></td>
@@ -165,7 +165,7 @@
 									<div class="tab-pane fade" id="personal">
 										
 										<div class="profile-content-container">
-											<table class="table">
+											<table class="table table-borderless row">
 												<tr>
 													<td>First Name:</td>
 													<td th:text="${userdtl.first_name}"></td>
@@ -207,7 +207,7 @@
 									
 									<div class="tab-pane fade" id="bank">
 										<div class="profile-content-container">
-											<table class="table">
+											<table class="table table-borderless row">
 												<tr>
 													<td>Bank Name:</td>
 													<td th:text="${userdtl.bank_name}"></td>
@@ -233,25 +233,25 @@
 									
 									<div class="tab-pane fade" id="docs">
 										<div class="profile-content-container">
-											<table class="table">
+											<table class="table table-borderless row">
 												<tr>
 													<td>CV</td>
-													<td><a class="btn btn-link" th:if="${userdtl.doc_cv != null}" th:href="|download/user?fileId=cv&userid=${userdtl.empid}|">Download</a></td>
+													<td><a class="btn btn-outline-theme btn-sm" th:if="${userdtl.doc_cv != null}" th:href="|download/user?fileId=cv&userid=${userdtl.empid}|">Download</a></td>
 												</tr>
 												
 												<tr>
 													<td>Certificate</td>
-													<td><a class="btn btn-link" th:if="${userdtl.doc_certificate != null}" th:href="|download/user?fileId=crt&userid=${userdtl.empid}|">Download</a></td>
+													<td><a class="btn btn-outline-theme btn-sm" th:if="${userdtl.doc_certificate != null}" th:href="|download/user?fileId=crt&userid=${userdtl.empid}|">Download</a></td>
 												</tr>
 												
 												<tr>
 													<td>ID copy</td>
-													<td><a class="btn btn-link" th:if="${userdtl.doc_id != null}" th:href="|download/user?fileId=id&userid=${userdtl.empid}|">Download</a></td>
+													<td><a class="btn btn-outline-theme btn-sm" th:if="${userdtl.doc_id != null}" th:href="|download/user?fileId=id&userid=${userdtl.empid}|">Download</a></td>
 												</tr>
 												
 												<tr>
 													<td>Other Documents</td>
-													<td><a class="btn btn-link" th:if="${userdtl.doc_others != null}" th:href="|download/user?fileId=others&userid=${userdtl.empid}|">Download</a></td>
+													<td><a class="btn btn-outline-theme btn-sm" th:if="${userdtl.doc_others != null}" th:href="|download/user?fileId=others&userid=${userdtl.empid}|">Download</a></td>
 												</tr>
 											
 											</table>

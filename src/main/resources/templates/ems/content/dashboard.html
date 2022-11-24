@@ -7,65 +7,112 @@
 <body>
 	<div th:fragment="dashboard">
 		<div id="content" class="app-content">
+
+			<div class="bg-white bg-opacity-25 p-4 rounded-3 mb-3">
+				<h4 class="display-6">Welcome, [[${user.full_name}]]!</h4>
+
+
+				<p>
+					We have just completed the Time Report system. Want to take a look?
+					<a href="/reportWorkTimeHome"><i class="far  fa-clock"></i></a>
+				</p>
+				<div class="mb-3 ">
+					<span
+						th:if="${user.socialMediaLinks.facebook}!='' and ${user.socialMediaLinks.facebook}!=null">
+						<a th:href="${user.socialMediaLinks.facebook}" target="_blank"><i
+							class="fab fa-facebook fa-fw fa-lg"></i></a>
+					</span> <span
+						th:if="${user.socialMediaLinks.instagram}!='' and ${user.socialMediaLinks.instagram}!=null">
+						<a th:href="${user.socialMediaLinks.instagram}" target="_blank"><i
+							class="fab fa-instagram fa-fw fa-lg"></i></a>
+					</span> <span
+						th:if="${user.socialMediaLinks.twitter}!='' and ${user.socialMediaLinks.twitter}!=null">
+						<a th:href="${user.socialMediaLinks.twitter}" target="_blank"><i
+							class="fab fa-twitter fa-fw fa-lg"></i></a>
+					</span> <span
+						th:if="${user.socialMediaLinks.linkedin}!='' and ${user.socialMediaLinks.linkedin}!=null">
+						<a th:href="${user.socialMediaLinks.linkedin}" target="_blank"><i
+							class="fab fa-linkedin fa-fw fa-lg"></i></a>
+					</span>
+				</div>
+				<a class="btn btn-outline-theme" href="/profile" role="button">Go
+					to your profile</a>
+			</div>
 			<!-- BEGIN row -->
-			
-			
-			<div class="row">
-								<div th:each="all : ${my}"  class="col-xl-3 col-lg-6">
-									<!-- BEGIN card -->
-									<div class="card mb-3">
-										<!-- BEGIN card-body -->
-										<div class="card-body">
-											<!-- BEGIN title -->
-											<div class="d-flex fw-bold small mb-3">
-												<span class="flex-grow-1"><span th:text="${all.status}"></span> </span> <a href="#"
-													data-toggle="card-expand"
-													class="text-white text-opacity-50 text-decoration-none"><i
-													class="bi bi-fullscreen"></i></a>
-											</div>
-											<!-- END title -->
-											<!-- BEGIN stat-lg -->
-											<div class="row align-items-center mb-2 ">
-												<div class="">
-													
-													<h5 class="mb-0 text-truncate"><a th:href="@{/viewProject(projectid=${all.projectid})}" class="text-decoration-none"><img width="30" height="30" class="rounded"th:src="*{'data:image/jpeg;base64,'+{all.project_image_encoded}}" onerror="this.onerror=null; this.src='assets/img/pages/project.png'"  /> [[${all.title}]]</a></h5>
-												</div>
-												<div class="col-5">
-													<div class="mt-n3 mb-n2" data-render="apexchart"
-														data-type="donut" data-title="Visitors" data-height="45"></div>
-												</div>
-											</div>
-											<!-- END stat-lg -->
-											<!-- BEGIN stat-sm -->
-											<div class="small text-white text-opacity-50 text-truncate">
-												<i class="fa fa-search fa-fw me-1"></i> Key: [[${all.projectkey}]]<br /> <i class="far fa-user fa-fw me-1"></i> 
-													Chief: <a th:emp-id="${all.creatorid}" onclick="viewEmlpoyee(this);" href="#" class="text-decoration-none">[[${all.creatorname}]]</a><br /><i class="fa fa-lock fa-fw me-1"></i> 
-												 <span th:classappend="${all.isprivate}? text-danger :text-success" th:text="${all.isprivate}? PRIVATE : OPEN"></span><br />
-												<i class="far fa-comment-alt fa-fw me-1"></i> Desc: [[${all.description}]]<br /> <i class="far fa-clock fa-fw me-1"></i>
-												Created on: [[${all.created}]]
-												
-												<br /> <i class="far fa-clock fa-fw me-1"></i>
-												Updated on:<span th:text="${all.updated==null}? ${all.created}: ${all.updated}" ></span>
-											</div>
-											<!-- END stat-sm -->
-										</div>
-										<!-- END card-body -->
 
-										<!-- BEGIN card-arrow -->
-										<div class="card-arrow">
-											<div class="card-arrow-top-left"></div>
-											<div class="card-arrow-top-right"></div>
-											<div class="card-arrow-bottom-left"></div>
-											<div class="card-arrow-bottom-right"></div>
-										</div>
-										<!-- END card-arrow -->
-									</div>
-									<!-- END card -->
+
+
+
+			<div class="row">
+
+				<div class="col-xl-4 col-lg-4">
+					<!-- BEGIN card -->
+					<div class="card mb-3">
+						<!-- BEGIN card-body -->
+						<div class="card-body">
+							<!-- BEGIN title -->
+
+							<!-- END title -->
+							<!-- BEGIN stat-lg -->
+							<div class="row align-items-center ">
+								<div class="col-7">
+									<img
+										onerror="this.onerror=null; this.src='assets/img/user/user.png'"
+										th:src="*{'data:image/jpeg;base64,'+{user.emp_image_encoded}}"
+										alt="" width="64" class=" img-fluid rounded-circle img-thumbnail  mb-2" />
 								</div>
-							</div>
 
-			<div class="row">
-				<div class="col-xl-6 col-lg-6">
+							</div>
+							<!-- END stat-lg -->
+							<!-- BEGIN stat-sm -->
+							<div class="small text-white text-opacity-50 text-truncate">
+
+
+								<div class="mb-1">
+									<i class="fa fa-user fa-fw text-white text-opacity-50"></i> <b
+										class="text-uppercase">[[${user.full_name}]]</b> [
+									[[${user.designation}]] ]
+
+
+								</div>
+
+								<div class="mb-1">
+									<i class="fa fa-phone fa-fw text-white text-opacity-50"></i> <span
+										th:text="${user.phone}"></span>&nbsp; <i
+										class="fa fa-envelope fa-fw text-white text-opacity-50"></i> <span
+										th:text="${user.email}"></span>
+
+								</div>
+
+								<div class="mb-1">
+									<i class="fab  fa-wpforms fa-fw text-white text-opacity-50"></i>
+									Contract remaining period :
+									[[${user.contact_remaining_period}]]
+								</div>
+
+								<div class="mb-1">
+									<i
+										class="fa fa-map-marker-alt fa-fw text-white text-opacity-50"></i>
+									[[${user.address_full}]]
+								</div>
+
+							</div>
+							<!-- END stat-sm -->
+						</div>
+						<!-- END card-body -->
+
+						<!-- BEGIN card-arrow -->
+						<div class="card-arrow">
+							<div class="card-arrow-top-left"></div>
+							<div class="card-arrow-top-right"></div>
+							<div class="card-arrow-bottom-left"></div>
+							<div class="card-arrow-bottom-right"></div>
+						</div>
+						<!-- END card-arrow -->
+					</div>
+					<!-- END card -->
+				</div>
+				<div class="col-xl-4 col-lg-4">
 					<div class="card">
 						<div class="card-header fw-bold small d-flex">
 							<span class="flex-grow-1">New Members</span> <a href="#"
@@ -74,35 +121,43 @@
 								class="fa fa-fw fa-expand"></i></a>
 						</div>
 						<div class="card-body ">
-							
+
 							<div class="list-group">
-							  <!-- with icon -->
-							  <div th:each="users : ${latest}"  class="list-group-item d-flex align-items-center">
-							    <div class="w-40px h-40px d-flex align-items-center justify-content-center ms-n1">
-							      <img class="ms-100 mh-100 rounded-circle" onerror="this.onerror=null; this.src='assets/img/user/user.png'" th:src="*{'data:image/jpeg;base64,'+{users.emp_image_encoded}}"/>
-							    </div>
-							    <div class="flex-fill px-3">
-							      <div class="">[[${users.full_name}]]
-							      <i th:classappend="${users.status} ? fa-user-check : fa-user-slash" class=" text-muted small fa"></i>
-							      <span th:if="${users.email==session.user.username}">[You]</span> 
-							      
-							      </div>
-							      <div class="small text-white text-opacity-50">[[${#dates.format(users.created, 'dd MMM yyyy')}]]</div>
-							    </div>
-							    <div class="dropdown">
-							         
-							    	<a href="#" data-bs-toggle="dropdown" class=" text-opacity-50">
-														<i
-																class="fa fa-ellipsis-h"></i></a>
-															<div class="dropdown-menu dropdown-menu-end">
-																<a href="#" th:emp-id="${users.empid}" onclick="viewEmlpoyee(this);" class="dropdown-item">View</a> 
-																<a th:href="@{/editEmployee(empid=${users.empid})}"
-																  class="dropdown-item">Edit</a> 
-																<a href="#" class="dropdown-item">Report</a>
-															</div>
-							    </div>
-							  </div>
-							  </div>
+								<!-- with icon -->
+								<div th:each="users : ${latest}"
+									class="list-group-item d-flex align-items-center">
+									<div
+										class="w-40px h-40px d-flex align-items-center justify-content-center ms-n1">
+										<img class="ms-100 mh-100 img-fluid rounded-circle"
+											onerror="this.onerror=null; this.src='assets/img/user/user.png'"
+											th:src="*{'data:image/jpeg;base64,'+{users.emp_image_encoded}}" />
+									</div>
+									<div class="flex-fill px-3">
+										<div class="">
+											[[${users.full_name}]] <i
+												th:classappend="${users.status} ? fa-user-check : fa-user-slash"
+												class=" text-muted small fa"></i> <span
+												th:if="${users.email==session.user.username}">[You]</span>
+
+										</div>
+										<div class="small text-white text-opacity-50">[[${#dates.format(users.created,
+											'dd MMM yyyy')}]]</div>
+									</div>
+									<div class="dropdown">
+
+										<a href="#" data-bs-toggle="dropdown" class=" text-opacity-50">
+											<i class="fa fa-ellipsis-h"></i>
+										</a>
+										<div class="dropdown-menu dropdown-menu-end">
+											<a href="#" th:emp-id="${users.empid}"
+												onclick="viewEmlpoyee(this);" class="dropdown-item">View</a>
+											<a th:href="@{/editEmployee(empid=${users.empid})}"
+												class="dropdown-item">Edit</a> <a href="#"
+												class="dropdown-item">Report</a>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 
 						<div class="card-arrow">
@@ -115,7 +170,7 @@
 					</div>
 				</div>
 				<!-- BEGIN col-3 -->
-				<div class="col-xl-6 col-lg-6">
+				<div class="col-xl-4 col-lg-4">
 
 					<div class="card">
 						<div class="card-header fw-bold small d-flex">
@@ -153,9 +208,8 @@
 				<div class="modal-dialog modal-xl">
 					<div class="modal-content empContent">...</div>
 				</div>
-			</div>			
-			
+			</div>
+
 		</div>
-		
 </body>
 </html>

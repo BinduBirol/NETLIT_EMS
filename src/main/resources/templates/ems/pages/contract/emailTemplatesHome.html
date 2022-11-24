@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="theme/header :: staticheaderFragment"></head>
+<body>
+	<!-- BEGIN #app -->
+	<div id="app" class="app">
+		<div th:include="theme/header :: dynamicheaderFragment"></div>
+		<div th:include="theme/sidenav :: sidenav"></div>
+		<!-- BEGIN #content -->
+		<div id="content" class="app-content">
+			<ul class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">CONTRACT</a></li>
+				<li class="breadcrumb-item active">EMAIL TEMPLATES</li>
+			</ul>
+
+			<h1 class="page-header">Email templates for contract signing</h1>
+			<hr />
+			
+			<div class="alert alert-primary" th:if="${(param.msg != null)}">
+			    [[${param.msg}]]
+				 </div>
+			
+			<button type="button" class="btn btn-outline-theme mb-3"
+				onclick="newTemplateModal()" >Add
+				a new template</button>
+
+
+
+
+
+
+			<table id="datatableDefault" class="table align-middle">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Name</th>
+						<th class="w-50">Message</th>
+						<th>Uses permission</th>
+						<th>Action</th>						
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr th:each="t: ${templates}">
+						<td>[[${tStat.index+1}]]</td>
+						<td>
+							<input type="hidden" class="tid" th:value="${t.id}"/>
+							<input type="hidden" class="tname" th:value="${t.name}"/>
+							<input type="hidden" class="tmsg" th:value="${t.text}"/>
+							<input type="hidden" class="tempid" th:value="${t.empid}"/>
+							[[${t.name}]]
+						</td>
+						<td style="text-align: justify;">[[${t.text}]]</td>
+						<td th:text="${t.empid==0} ? 'Everybody' : 'Myself'"></td>
+						<td>
+							<div class="btn-group">
+							  <button onclick="editTemplateModal(event,this)" type="button" class="btn btn-outline-info">Edit</button>
+							  <button onclick="deleteTemplateModal(event)" type="button" class="btn btn-outline-danger">Delete</button>							  
+							</div>
+						</td>	
+					</tr>
+				</tbody>
+			</table>
+
+
+
+
+
+			<div class="modal fade" id="templatemodal">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<form action="/doEmailTemplate" method="post">
+							<div class="modal-header">
+								<h5 class="modal-title">EMAIL TEMPLATE</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+							</div>
+							<div class="modal-body">
+
+								<div class="form-group mb-3">
+									<label class="form-label">Template name</label> <input id="name"
+										name="name" required="required" type="text"
+										class="form-control">
+										
+										<input type="hidden" disabled="disabled" name="id" id="id"/>
+								</div>
+
+								<div class="form-group mb-3">
+									<label class="form-label">Email message body</label>
+									<textarea  name="text" id="text" required="required" maxlength="1000"
+										class="form-control mb-3" rows="5"></textarea>
+								</div>
+
+								<div class="form-group mb-3">
+									<label class="form-label">Template using permission</label> <select
+										name="empid" id="empid" required="required" class="form-select mb-3">
+										<option value="0">For everybody</option>
+										<option th:value="${myid}">For myself</option>
+									</select>
+								</div>
+
+
+
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-outline-theme">Save
+									template</button>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="modal fade" id="deleteModal">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<form action="/deleteEmailTemplate" method="post">
+							<div class="modal-header">
+								<h5 class="modal-title">DELETE TEMPLATE</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+							</div>
+							<div class="modal-body">
+
+								Do you want to delete this template?
+								<input type="hidden" name="id"/>
+
+
+
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-outline-danger">Delete
+									template</button>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+		<!-- END #content -->
+		<div th:include="theme/theme_util :: theme_util"></div>
+	</div>
+	<!-- END #app -->
+	<div th:include="theme/footer::staticFooter"></div>
+	<script type="text/javascript">
+		function editTemplateModal(e,z) {
+			$target= $(e.target).closest('tr');
+			var id=$target.find(".tid").val();
+			var name=$target.find(".tname").val();
+			var text=$target.find(".tmsg").val();
+			var empid=$target.find(".tempid").val();
+			
+			var modal= $("#templatemodal");
+			modal.find("#id").val(id);
+			modal.find("#name").val(name);
+			modal.find("#text").val(text);
+			modal.find("#empid").val(empid);
+			modal.find('#id').prop('disabled', false);
+			modal.modal('show');
+		}
+		
+		function newTemplateModal() {
+			var modal= $("#templatemodal");
+			modal.find("input, textarea").val("");
+			modal.find('#id').prop('disabled', true);
+			modal.modal('show');
+		}
+		
+		function deleteTemplateModal(e) {
+			$target= $(e.target).closest('tr');
+			var id=$target.find(".tid").val();
+			var name=$target.find(".tname").val();
+			var modal= $("#deleteModal");
+			modal.find(".modal-title").text(name);
+			modal.find("input").val(id);
+			modal.modal('show');
+		}
+	
+	</script>
+
+	
+</body>
+</html>

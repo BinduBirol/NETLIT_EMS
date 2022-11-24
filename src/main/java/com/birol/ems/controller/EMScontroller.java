@@ -83,23 +83,6 @@ public class EMScontroller {
 		model.addAttribute("latest",employeeService.getLatestEmployeeList());
 		model.addAttribute("user",employeeService.getEmployeebyID(user.getId()));
 		
-		//projects
-		ArrayList<Project> allprojects =(ArrayList<Project>) projectDao.findAll();
-		ArrayList<Project> myprojects= new ArrayList<Project>();
-		
-		for(Project x: allprojects) {
-			if (x.getProject_image() != null) {
-				String imageencode = Base64.getEncoder().encodeToString(x.getProject_image());
-				x.setProject_image_encoded(imageencode);
-			}
-			if(x.getCreatorid()==user.getId()) {
-				myprojects.add(x);
-			}else {
-				for(Project_Workers pw: x.getWorkers() )
-				if(pw.getEmpid()==user.getId())myprojects.add(x);
-			}						
-		}		
-		model.addAttribute("my", myprojects);
 		
 		return new ModelAndView("homepage", model);
 	}

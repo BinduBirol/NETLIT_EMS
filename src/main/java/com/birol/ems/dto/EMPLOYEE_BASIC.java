@@ -28,6 +28,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.birol.persistence.model.Role;
 import com.sun.istack.Nullable;
 
 

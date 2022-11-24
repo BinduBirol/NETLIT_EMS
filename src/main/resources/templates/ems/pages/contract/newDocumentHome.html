@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-	<title>NETLIT | EMS</title>
+	<title>NEW DOCUMENT</title>
 	<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="description" content="" />
@@ -14,6 +14,8 @@
 	<link href="assets/css/netlit_ems.css" rel="stylesheet" />
 	<!-- ================== END core-css ================== -->	
 	<link href="assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+	<style type="text/css">
+	</style>
 </head>
 
 <body>
@@ -36,14 +38,14 @@
 				
 				<div class="row mb-4">
 					<div class="col">
-						<input type="file" onchange="setfileName()" class="form-control form-control-lg" id="document_file" />
+						<input type="file" accept="application/pdf" onchange="setfileName()" class="form-control form-control-lg" id="document_file" />
 					</div>
 					<div class="col">
-						<select class="form-select form-select-lg">
-								<option selected>Select category</option>
-							  <option value="1">One</option>
-							  <option value="2">Two</option>
-							  <option value="3">Three</option>
+						<select onchange="setfileName()" name="contract_type" id="contract_type" class="form-select form-select-lg">
+								<option value="">Select category</option>
+							  <option value="CS">Supplier contract</option>
+							  <option value="CC">Customer contract</option>
+							  <option value="CE">Employee contract</option>
 						</select>
 					</div>				
 				</div>
@@ -59,13 +61,32 @@
 				</div>
 				
 				<div class="row mb-4">
+					<div class="col">
+						<div class="form-check">
+						  <input checked="checked" class="form-check-input" type="radio" value=""  />
+						  <label class="form-check-label" for="defaultRadio1">Send documents to sign separately</label>
+						</div>
+					</div>
+					
+					<div class="col">
+						<div class="form-check">
+						  <input checked="checked" class="form-check-input" type="radio" value="" />
+						  <label class="form-check-label" >Require the signee to read the document</label>
+						</div>
+					</div>	
+										
+				</div>
+				
+				<div class="row mb-4">
 				<p colspan="4" class="h3">Document signers </p><hr/>
 					<table class="table align-middle table-borderless">						
 						
 						<tr class="">							
-							<th>Signer</th>
+							<th>Signer name</th>
 							<th>Email</th>
-							<th class="text-center">Singer profile</th>
+							<th>Phone</th>
+							<th>Company name</th>
+							<th class="text-center">Profile</th>
 							<th>								
 							</th>
 						</tr>
@@ -73,14 +94,16 @@
 						<tr>
 							
 							<td>
-								
-								<select onchange="setSignerProfile(event, this)" data-live-search="true" class="form-select" name="signer1_name">
-									<option value="">Select signer</option>
-									<option th:data-tokens="${e.full_name}" th:each="e: ${emps}" th:email="${e.email}" th:value="${e.empid}" th:text="${e.full_name}"></option>
-								
-								</select>							
+								<input placeholder="Search by name"  class="form-control " list="employees" id="employee">
+							    <datalist id="employees">							        
+							        <option  th:each="e: ${emps}" company="Netlit Solutions" th:phone="${e.phone}" th:email="${e.email}" th:data-value="${e.empid}" th:text="${e.full_name}"></option>
+							    </datalist>
+							    <input type="hidden" name="empid" id="employee-hidden">						
+															
 							</td>
-							<td><input name="signer1_email" class="form-control semail" type="email"/></td>
+							<td><input name="signer_email" class="form-control semail" type="email"/></td>
+							<td><input name="signer_phone" class="form-control sphone" type="text"/></td>
+							<td><input name="signer_company" class="form-control scompany" type="text"/></td>
 							<td class="text-center">
 								<button class="sprofile btn  btn-outline-theme" disabled="disabled" onclick="viewEmlpoyee(this);">
 									<i class="fas fa-lg fa-fw fa-eye"></i> View
@@ -95,13 +118,13 @@
 						<tr  id="signerTR2" class="d-none">
 							
 							<td>
-								<select onchange="setSignerProfile(event, this)" data-live-search="true" class="form-select" name="signer1_name">
-									<option value="">Select signer</option>
-									<option th:data-tokens="${e.full_name}" th:each="e: ${emps}" th:email="${e.email}" th:value="${e.empid}" th:text="${e.full_name}"></option>
-								
-								</select>	
+								<input placeholder="Search by name" class="form-control " list="employees" id="employee">
+							    
+							    <input type="hidden" name="empid" id="employee-hidden">			
 							</td>
 							<td><input name="signer2_email" class="form-control semail" type="email"/></td>
+							<td><input name="signer_phone" class="form-control sphone" type="text"/></td>
+							<td><input name="signer_company" class="form-control scompany" type="text"/></td>
 							<td class="text-center">
 								<button class="sprofile btn  btn-outline-theme" disabled="disabled" onclick="viewEmlpoyee(this);">
 									<i class="fas fa-lg fa-fw fa-eye"></i> View
@@ -115,13 +138,12 @@
 						<tr id="signerTR3" class="d-none">
 							
 							<td>
-								<select onchange="setSignerProfile(event, this)" data-live-search="true" class="form-select" name="signer1_name">
-									<option value="">Select signer</option>
-									<option th:data-tokens="${e.full_name}" th:each="e: ${emps}" th:email="${e.email}" th:value="${e.empid}" th:text="${e.full_name}"></option>
-								
-								</select>	
+								<input placeholder="Search by name"  class="form-control " list="employees" id="employee">							    
+							    <input type="hidden" name="empid" id="employee-hidden">	
 							</td>
 							<td><input name="signer3_email" class="form-control semail" type="email"/></td>
+							<td><input name="signer_phone" class="form-control sphone" type="text"/></td>
+							<td><input name="signer_company" class="form-control scompany" type="text"/></td>
 							<td class="text-center">
 								<button class="sprofile btn  btn-outline-theme" disabled="disabled" onclick="viewEmlpoyee(this);">
 									<i class="fas fa-lg fa-fw fa-eye"></i> View
@@ -189,12 +211,12 @@
 					<div class="col">
 						<p class="h5">Email message</p>
 						
-						<select class="form-select  mb-4">
-						  <option selected>Select template</option>
-						  <option value="1">One</option>						  
+						<select onchange="setmailmsg(this)" class="form-select  mb-4">
+						  <option value="">Custom message</option>
+						  <option th:each="t: ${email_templates}" th:msg="${t.text}" th:text="${t.name}"></option>						  
 						</select>
 						
-						<textarea class="form-control mb-4" rows="3"></textarea>	
+						<textarea id="mailbody" class="form-control mb-4" rows="4"></textarea>	
 						
 						<p class="h5">Invite as</p>						
 						<div class="">							
@@ -204,7 +226,7 @@
 								</div>
 								
 								<div class="form-check">
-								  <input class="form-check-input" type="radio" name="invt_as" value="" id="invt_validity" />
+								  <input checked="checked" class="form-check-input" type="radio" name="invt_as" value="" id="invt_validity" />
 								  <label class="form-check-label" for="invt_validity">Myself</label>
 								</div>
 							
@@ -235,9 +257,9 @@
 			</div>
 	</div>
 	<div th:include="theme/footer::staticFooter"></div>
-	<script src="assets/plugins/moment/min/moment.min.js"></script>
-	<script src="assets/js/pagejs/newDocumentHome.js"></script>
+	<script src="assets/plugins/moment/min/moment.min.js"></script>			
 	<script src="assets/js/demo/form-plugins.demo.js"></script>
 	<script src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	<script src="assets/js/pagejs/newDocumentHome.js"></script>
 </body>
 </html>

@@ -3,6 +3,7 @@ package com.birol.ems.controller;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Base64;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +62,10 @@ public class ProfileController {
 			empdtl.setSocialMediaLinks(sml);
 			//empdtl.getSocialMediaLinks().setEmpid(user.getId());
 		}
+		
+		List <EMPLOYEE_BASIC> a= (List<EMPLOYEE_BASIC>) employeeRepository.findAll();
+		model.addAttribute("my_role", user.getRoles());
+		model.addAttribute("total_users", a.size());
 		model.addAttribute("user", user);
 		model.addAttribute("userdtl", empdtl);
 		return new ModelAndView("ems/pages/profile", model);
@@ -121,7 +126,7 @@ public class ProfileController {
 		socialMediaLinkRepo.save(personal.getSocialMediaLinks());
 		empbasic.setSocialMediaLinks(personal.getSocialMediaLinks());
 		employeeRepository.save(empbasic);
-		model.addAttribute("message", "Succesfully Updated Info For " + empbasic.getFirst_name());
+		model.addAttribute("message", "Profile succesfully updated.") ;
 		model.addAttribute("class", "text-success");
 		//return new ModelAndView("theme/ajaxResponse", model);
 		return new ModelAndView("redirect:/profile", model);

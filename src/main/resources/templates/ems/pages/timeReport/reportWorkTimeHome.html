@@ -70,10 +70,10 @@ tr.hoverable:hover {
 		<div id="content" class="app-content">
 			<div class="row">
 				<div class="d-flex align-items-start">
-					<a href="#"> <img
+					<a class="" href="#"> <img
 						onerror="this.onerror=null; this.src='assets/img/user/user.png'"
 						th:src="*{'data:image/jpeg;base64,'+{userdtl.emp_image_encoded}}"
-						alt="" width="100" class="rounded" />
+						alt="" width="100" class="ms-100 mh-100 img-fluid rounded" />
 					</a>
 					<div class="ms-3">
 						<input type="hidden" id="this_user_id" th:value="${userdtl.empid}"/>

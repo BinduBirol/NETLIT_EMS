@@ -1,40 +1,48 @@
 <div th:fragment="profileContent">
 
+	
+	
 	<div id="content" class="app-content">
+	
+	<div class="alert alert-success" th:if="${(param.message != null)}">
+    [[${param.message}]]
+	 </div>
+	
 		<div class="card">
-		
-		
 			<div class="card-body p-0">
-			
-			
 				<!-- BEGIN profile -->
 				<div class="profile">
-				
 					<!-- BEGIN profile-container -->
 					<div class="profile-container">
 						<!-- BEGIN profile-sidebar -->
 						<div class="profile-sidebar">
-							<div class="desktop-sticky-top ">
-								<div class="text-center">
-									<img class="profile-img img-thumbnail" onerror="this.onerror=null; this.src='assets/img/user/user.png'"
+							<div class="desktop-sticky-top">
+								<div class="">
+									<img class="profile-img img-thumbnail"
+										onerror="this.onerror=null; this.src='assets/img/user/user.png'"
 										th:src="*{'data:image/jpeg;base64,'+{userdtl.emp_image_encoded}}"
-										alt="User Image" />
-										
-															
-								
-								<!-- profile info -->
-								<h4>[[${userdtl.full_name}]]</h4>
-								<div th:text="${userdtl.designation}"
-									class="mb-3 text-white text-opacity-50 fw-bold mt-n2">@johnsmith</div>
-									</div>
-								<p>[[${userdtl.employee_Type}]] employee.<br/>Contract remaining period: [[${userdtl.contact_remaining_period}]]</p>
-								
-								<div class="mb-1">
-									<i class="fa fa-id-card fa-fw text-white text-opacity-50"></i> <span
-										th:text="${userdtl.empid}"></span>
+										alt="" />
 								</div>
 
-								<div class="mb-1" >
+								<!-- profile info -->
+								<h4 class="">[[${userdtl.full_name}]]</h4>
+								<div class="mb-3 text-white text-opacity-50 fw-bold mt-n2 ">[[${userdtl.designation}]]</div>
+								<div class="mb-1">
+									[[${userdtl.employee_Type}]] employee.
+								</div>
+
+								<div class="mb-1">
+									<i
+										class="fas fa-fw fa-universal-access text-white text-opacity-50"></i>
+									[[${my_role}]]
+								</div>
+
+								<div class="mb-1">
+									<i class="fa fa-id-card fa-fw text-white text-opacity-50"></i>
+									Employee ID: [[${userdtl.empid}]]
+								</div>
+
+								<div class="mb-1">
 									<i class="fa fa-envelope fa-fw text-white text-opacity-50"></i>
 									<span th:text="${user.email}"></span>
 								</div>
@@ -46,461 +54,707 @@
 								<div class="mb-3">
 									<i
 										class="fa fa-map-marker-alt fa-fw text-white text-opacity-50"></i>
-									<span th:text="${userdtl.address_full}"></span>
+									[[${userdtl.address_full}]]
 								</div>
-								
+
+
 								<div class="mb-3 ">
-									<span th:if="${userdtl.socialMediaLinks.facebook}!='' and ${userdtl.socialMediaLinks.facebook}!=null">
-										<a th:href="${userdtl.socialMediaLinks.facebook}" target="_blank"><i class="fab fa-facebook fa-fw text-white text-opacity-50"></i></a>									
-									</span>
-									<span th:if="${userdtl.socialMediaLinks.instagram}!='' and ${userdtl.socialMediaLinks.instagram}!=null">
-										<a  th:href="${userdtl.socialMediaLinks.instagram}" target="_blank"><i class="fab fa-instagram fa-fw text-white text-opacity-50"></i></a>
-									</span>
-									<span th:if="${userdtl.socialMediaLinks.twitter}!='' and ${userdtl.socialMediaLinks.twitter}!=null">
-										<a th:href="${userdtl.socialMediaLinks.twitter}" target="_blank"><i class="fab fa-twitter fa-fw text-white text-opacity-50"></i></a>
-									</span>
-									<span th:if="${userdtl.socialMediaLinks.linkedin}!='' and ${userdtl.socialMediaLinks.linkedin}!=null">
-										<a th:href="${userdtl.socialMediaLinks.linkedin}" target="_blank"><i class="fab fa-linkedin fa-fw text-white text-opacity-50"></i></a>
+									<span
+										th:if="${userdtl.socialMediaLinks.facebook}!='' and ${userdtl.socialMediaLinks.facebook}!=null">
+										<a th:href="${userdtl.socialMediaLinks.facebook}"
+										target="_blank"><i
+											class="fab fa-facebook fa-fw text-white text-opacity-50"></i></a>
+									</span> <span
+										th:if="${userdtl.socialMediaLinks.instagram}!='' and ${userdtl.socialMediaLinks.instagram}!=null">
+										<a th:href="${userdtl.socialMediaLinks.instagram}"
+										target="_blank"><i
+											class="fab fa-instagram fa-fw text-white text-opacity-50"></i></a>
+									</span> <span
+										th:if="${userdtl.socialMediaLinks.twitter}!='' and ${userdtl.socialMediaLinks.twitter}!=null">
+										<a th:href="${userdtl.socialMediaLinks.twitter}"
+										target="_blank"><i
+											class="fab fa-twitter fa-fw text-white text-opacity-50"></i></a>
+									</span> <span
+										th:if="${userdtl.socialMediaLinks.linkedin}!='' and ${userdtl.socialMediaLinks.linkedin}!=null">
+										<a th:href="${userdtl.socialMediaLinks.linkedin}"
+										target="_blank"><i
+											class="fab fa-linkedin fa-fw text-white text-opacity-50"></i></a>
 									</span>
 								</div>
 
 
-								<hr class="" />
-								<!-- 
-								<div
-									style="display: flex; justify-content: flex-end; padding: 5px;">
-									<a href="#" data-toggle="card-expand"
-										class=" text-white text-opacity-50 text-decoration-none"><i
-										class="bi bi-fullscreen"></i></a>
+								<!-- people-to-follow -->
 
-								</div>
-								 -->
 
 							</div>
 						</div>
+						<!-- END profile-sidebar -->
 
 						<!-- BEGIN profile-content -->
-						<div class="profile-content p-0">	
-						
-										
-						
-							<ul class="nav nav-tabs">
-								<li class="nav-item me-1"><a href="#home"
-									class="nav-link active" data-bs-toggle="tab">Employment Info</a></li>
-								<li class="nav-item me-1"><a href="#personal"
-									class="nav-link" data-bs-toggle="tab">Personal Info</a></li>
-								<li class="nav-item me-1"><a href="#bank"
-									class="nav-link " data-bs-toggle="tab">Account Info</a></li>
-								<li class="nav-item me-1"><a href="#docs"
-									class="nav-link " data-bs-toggle="tab">Documents</a></li>
-								<li class="nav-item me-1"><a href="#edit"
-									class="nav-link " data-bs-toggle="tab">Edit</a></li>
-								<!-- 
-								<li class="nav-item me-1 dropdown"><a href="#"
-									class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-										Dropdown </a>
-									<div class="dropdown-menu">
-										<a href="#dropdown1" class="dropdown-item"
-											data-bs-toggle="tab">@fat</a> <a href="#dropdown2"
-											class="dropdown-item" data-bs-toggle="tab">@mdo</a>
-									</div>
-								</li>
-								-->							
-								
+						<div class="profile-content">
+							<ul class="profile-tab nav nav-tabs nav-tabs-v2">
+								<li class="nav-item"><a href="#profile-post"
+									class="nav-link active" data-bs-toggle="tab">
+										<div class="nav-field">INFO</div>
+
+								</a></li>
+								<li class="nav-item"><a href="#profile-followers"
+									class="nav-link" data-bs-toggle="tab">
+										<div class="nav-field">EDIT</div>
+
+								</a></li>
+
 							</ul>
-							
-							<div class="tab-content pt-3">
-									<div class="tab-pane fade show active" id="home">
-										<div class="profile-content-container">
-											<table class="table">
-												<tr>
-													<td>Full Name:</td>
-													<td th:text="${userdtl.full_name}"></td>
-												</tr>
-												
-												<tr>
-													<td>Work Phone Number:</td>
-													<td th:text="${userdtl.phone}"></td>
-												</tr>
-												
-												<tr>
-													<td>Work Email:</td>
-													<td th:text="${userdtl.email}"></td>
-												</tr>
-												
-												<tr>
-													<td>Designation:</td>
-													<td th:text="${userdtl.designation}"></td>
-												</tr>
-												
-												<tr>
-													<td>Contract Start:</td>
-													<td th:text="${userdtl.contract_start}"></td>
-												</tr>
-												
-												<tr>
-													<td>Contract End:</td>
-													<td th:text="${userdtl.contract_end}"></td>
-												</tr>												
-												
-												
-												<tr>
-													<td>Workspace:</td>
-													<td th:text="${userdtl.workspace}" ></td>
-												</tr>									
-												
-												
-												<tr>
-													<td>Nearest Chief:</td>
-													<td >
-														<a th:text="${userdtl.nearest_chief_name}" href="#" class="text-white text-decoration-none" th:emp-id="${userdtl.nearest_chief_id}" ></a>											
-													</td>
-												</tr>
-												
-												<tr>
-													<td>Employee Type:</td>
-													<td th:text="${userdtl.employee_Type}"></td>
-												</tr>
-												
-												<tr>
-													<td>Added By:</td>
-													<td th:text="${userdtl.added_by}"></td>
-												</tr>
-												
-											</table>
-										
-										</div>
-	
-									</div>
-									<div class="tab-pane fade" id="personal">
-										
-										<div class="profile-content-container">
-											<table class="table">
-												<tr>
-													<td>First Name:</td>
-													<td th:text="${userdtl.first_name}"></td>
-												</tr>
-												<tr>
-													<td>Last Name:</td>
-													<td th:text="${userdtl.last_name}"></td>
-												</tr>
-												<tr>
-													<td>Address:</td>
-													<td th:text="${userdtl.address_full}"></td>
-												</tr>
-												<tr>
-													<td>Evening Phone:</td>
-													<td th:text="${userdtl.phone_eve}"></td>
-												</tr>
-												<tr>
-													<td>Private Email:</td>
-													<td th:text="${userdtl.private_email}"></td>
-												</tr>
-												<tr>
-													<td>Closest Relative Full Description:</td>
-													<td th:text="${userdtl.closest_relative_full}"></td>
-												</tr>
-												<tr>
-													<td>Social Security Number:</td>
-													<td th:text="${userdtl.social_security_number}"></td>
-												</tr>
-												<tr>
-													<td>Gender</td>
-													<td th:text="${userdtl.sex}"></td>
-												</tr>
-												
-											</table>
-										</div>
-									
-										
-									</div>
-									
-									<div class="tab-pane fade" id="bank">
-										<div class="profile-content-container">
-											<table class="table">
-												<tr>
-													<td>Bank Name:</td>
-													<td th:text="${userdtl.bank_name}"></td>
-												</tr>
-												
-												<tr>
-													<td>Account Number:</td>
-													<td th:text="${userdtl.account_number}"></td>
-												</tr>
-												
-												<tr>
-													<td>Clearing Number:</td>
-													<td th:text="${userdtl.clearing_number}"></td>
-												</tr>
-												
-												<tr>
-													<td>Table Tax:</td>
-													<td th:text="${userdtl.table_tax}" ></td>
-												</tr>
-											</table>
-										</div>
-									</div>
-									
-									<div class="tab-pane fade" id="docs">
-										<div class="profile-content-container">
-											
-											<table class="table">
-												<tr>
-													<td>CV</td>
-													<td><a class="btn btn-link" th:if="${userdtl.doc_cv != null}" th:href="|download/user?fileId=cv&userid=${userdtl.empid}|">Download</a></td>
-												</tr>
-												
-												<tr>
-													<td>Certificate</td>
-													<td><a class="btn btn-link" th:if="${userdtl.doc_certificate != null}" th:href="|download/user?fileId=crt&userid=${userdtl.empid}|">Download</a></td>
-												</tr>
-												
-												<tr>
-													<td>ID copy</td>
-													<td><a class="btn btn-link" th:if="${userdtl.doc_id != null}" th:href="|download/user?fileId=id&userid=${userdtl.empid}|">Download</a></td>
-												</tr>
-												
-												<tr>
-													<td>Other Documents</td>
-													<td><a class="btn btn-link" th:if="${userdtl.doc_others != null}" th:href="|download/user?fileId=others&userid=${userdtl.empid}|">Download</a></td>
-												</tr>
-											
-											</table>
-											
-										</div>
-									</div>
-									<div class="tab-pane fade" id="edit">
-										<div class="profile-content-container">
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-											<div class="accordion" id="accordionExample">
-											<div class="alert alert-warning">												
-												<small class="img_size_warning">Only .pdf file allowed for CV and Certificates. Photo can be uploaded as ID copy.
-											</small>
-											</div>											
-											<form id="personalinfoform" action="savePersonalInfo" method="post" enctype='multipart/form-data'>
-											  <div class="accordion-item">
-											    <h2 class="accordion-header" id="headingOne">
-											      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-											        Edit Personal Information
-											      </button>
-											    </h2>
-											    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-											      <div class="accordion-body">
-											      	
-												<table class="table">
-													<tr>
-														<td>Profile picture</td>
-														<td><input accept="image/*" name="emp_image_m" class="form-control" type="file" onchange="previewFile(this);"/></td>
-													</tr>
-													
-													<tr>
-														<td>First Name</td>
-														<td>
-															<input class="form-control" name="first_name" th:value="${userdtl.first_name}"/>
-															<input type="hidden" class="form-control" readonly="readonly" name="empid" th:value="${userdtl.empid}"/>
-														</td>
-													</tr>
-													
-													<tr>
-														<td>Last Name</td>
-														<td><input class="form-control" name="last_name" th:value="${userdtl.last_name}"/></td>
-													</tr>
-													
-													<tr>
-														<td>Private Email</td>
-														<td><input name="private_email" type="email" class="form-control" th:value="${userdtl.private_email}"/></td>
-													</tr>
-													
-													<tr>
-														<td>Closest Relative Full Description</td>
-														<td><input name="closest_relative_full" class="form-control" th:value="${userdtl.closest_relative_full}"/></td>
-													</tr>
-													
-													<tr>
-														<td>Full Address</td>
-														<td><input name="address_full" class="form-control" th:value="${userdtl.address_full}"/></td>
-													</tr>
-													
-													<tr>
-														<td>Evening Phone</td>
-														<td><input name="phone_eve" class="form-control" th:value="${userdtl.phone_eve}"/></td>
-													</tr>
-													
-													<tr>
-														<td>Social Security Number</td>
-														<td><input name="social_security_number" placeholder="YYYYMMDD-XXXX" class="form-control" th:value="${userdtl.social_security_number}"/></td>
-													</tr>
-													
-													<tr>
-														<td>Gender</td>
-														<td><select th:field="*{userdtl.sex}" name="sex" class="form-select" >
-											                 	<option value="">Select</option>                 	
-											                 	<option value="Male">Male</option>
-											                 	<option value="Female">Female</option>
-											                 	<option value="Other">Other</option>
-											                 	
-											                 </select>
-											              </td>
-													</tr>											
-													
-													
-												</table>
-											
-											      </div>
-											    </div>
-											  </div>
-											  
-											  
-											  <div class="accordion-item">
-											  	
-											    <h2 class="accordion-header" id="headingTwo">
-											      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-											        Edit Bank Information
-											      </button>
-											    </h2>
-											    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-											      <div class="accordion-body">
-											      	<table class="table">
-														<tr>
-															<td>Bank Name</td>
-															<td><input th:value="${userdtl.bank_name}" name="bank_name" type="text" class="form-control"  placeholder="Enter Bank Name"></td>
-														</tr>
-														
-														<tr>
-															<td>Account Number</td>
-															<td><input th:value="${userdtl.account_number}" name="account_number" type="text" class="form-control"   placeholder="Enter Bank Account Number"></td>
-														</tr>
-														
-														<tr>
-															<td>Clearing Number</td>
-															<td><input th:value="${userdtl.clearing_number}" name="clearing_number" type="text" class="form-control"  placeholder="Enter Clearing Number"></td>
-														</tr>
-														
-														<tr>
-															<td>Table Tax</td>
-															<td><input th:value="${userdtl.table_tax}" name="table_tax" type="text" class="form-control"   placeholder="Enter Table Tax"></td>
-														</tr>
-														
-													</table>
-											      </div>
-											    </div>
-											  </div>
-											  
-											  <div class="accordion-item">
-											    <h2 class="accordion-header" id="headingThree">
-											      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" data-placement="top" title="Documents are required to be added by the employee. Only .pdf and .docx are allowed as a file format in CV and certificates. Files and images are allowed in  .jpeg or .png format up to 10 MB in size. By uploading the second file replaces the existing one." data-toggle="tooltip">
-											        Upload Documents&nbsp;<i  class="fas fa-lg fa-fw me-2 fa-info-circle"></i>
-											      </button>
-											    </h2>
-											    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-											      <div class="accordion-body">
-											      	<table	class="table">
-											      		<tr>
-											      			<td>CV</td>
-											      			<td><input name="doc_m_cv"  accept="application/pdf"  type="file" class="form-control"  placeholder="Enter CV"></td>
-											      		</tr>
-											      		
-											      		<tr>
-											      			<td>ID Copy</td>
-											      			<td><input name="doc_m_id"  accept="image/jpeg,image/png,application/pdf"  type="file" class="form-control"   placeholder="Enter ID copy"></td>
-											      		</tr>
-											      		
-											      		<tr>
-											      			<td>Certificate</td>
-											      			<td><input name="doc_m_crt"  accept="application/pdf"  type="file" class="form-control"   placeholder="Enter Certificate copy"></td>
-											      		</tr>
-											      		
-											      		<tr>
-											      			<td>Others</td>
-											      			<td><input name="doc_m_others"  accept="application/pdf"  type="file" class="form-control"  placeholder="Enter CV"></td>
-											      		</tr>											      		
-											      	
-											      		
-											      	</table>
-											      </div>
-											    </div>
-											  </div>
-											  
-											  <div class="accordion-item">
-											    <h2 class="accordion-header" id="headingOne">
-											      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#sml">
-											        Social Media Links
-											      </button>
-											    </h2>
-											    <div id="sml" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
-											      <div class="accordion-body">
-											      	
-											      	<table class="table">
-														<tr>
-															<td>Facebook</td>
-															<td><input th:value="${userdtl.socialMediaLinks.facebook}" name="socialMediaLinks.facebook" type="text" class="form-control"  placeholder="Enter facebook Link"></td>
-														</tr>
-														
-														<tr>
-															<td>Instagram</td>
-															<td><input th:value="${userdtl.socialMediaLinks.instagram}" name="socialMediaLinks.instagram" type="text" class="form-control"   placeholder="Enter instagram Link"></td>
-														</tr>
-														
-														<tr>
-															<td>Twitter</td>
-															<td><input th:value="${userdtl.socialMediaLinks.twitter}" name="socialMediaLinks.twitter" type="text" class="form-control"  placeholder="Enter twitter  Link"></td>
-														</tr>
-														
-														<tr>
-															<td>LinkedIn</td>
-															<td><input th:value="${userdtl.socialMediaLinks.linkedin}" name="socialMediaLinks.linkedin" type="text" class="form-control"   placeholder="Enter linkedin Link"></td>
-														</tr>
-														
-													</table>
-											      	
-											      </div>
-											    </div>
-											  </div>
-											  
-											  
-											  <br/>
-												<div>
-													<input type="submit"  class="btn btn-info form-control" value="Save Info"/>
+							<div class="profile-content-container">
+								<div class="row gx-4">
+									<div class="col-xl-8">
+										<div class="tab-content p-0">
+											<!-- BEGIN tab-pane -->
+											<div class="tab-pane fade show active" id="profile-post">
+												<div class="card mb-3">
+													<div class="card-body">
+														<!-- post header -->
+														<div class="d-flex align-items-center mb-3">
+															<a href="#"><img src="assets/img/user/profile.jpg"
+																alt="" width="50" class="rounded-circle" /></a>
+															<div class="flex-fill ps-2">
+																<div class="fw-bold">
+																	<a href="#" class="text-decoration-none">EMPLOYMENT
+																		INFO</a>
+																</div>
+
+															</div>
+														</div>
+
+
+														<table class="table table-borderless row">
+															<tr>
+																<td class="">Full Name</td>
+																<td th:text="${userdtl.full_name}"></td>
+															</tr>
+
+															<tr>
+																<td>Work Phone Number:</td>
+																<td th:text="${userdtl.phone}"></td>
+															</tr>
+
+															<tr>
+																<td>Work Email:</td>
+																<td th:text="${userdtl.email}"></td>
+															</tr>
+
+															<tr>
+																<td>Designation:</td>
+																<td th:text="${userdtl.designation}"></td>
+															</tr>
+
+															<tr>
+																<td>Contract Start:</td>
+																<td th:text="${userdtl.contract_start}"></td>
+															</tr>
+
+															<tr>
+																<td>Contract End:</td>
+																<td th:text="${userdtl.contract_end}"></td>
+															</tr>
+
+
+															<tr>
+																<td>Workspace:</td>
+																<td th:text="${userdtl.workspace}"></td>
+															</tr>
+
+
+															<tr>
+																<td>Nearest Chief:</td>
+																<td><a th:text="${userdtl.nearest_chief_name}"
+																	href="#" class="text-white text-decoration-none"
+																	th:emp-id="${userdtl.nearest_chief_id}"></a></td>
+															</tr>
+
+															<tr>
+																<td>Employee Type:</td>
+																<td th:text="${userdtl.employee_Type}"></td>
+															</tr>
+
+															<tr>
+																<td>Added By:</td>
+																<td th:text="${userdtl.added_by}"></td>
+															</tr>
+														</table>
+
+
+
+
+
+													</div>
+													<div class="card-arrow">
+														<div class="card-arrow-top-left"></div>
+														<div class="card-arrow-top-right"></div>
+														<div class="card-arrow-bottom-left"></div>
+														<div class="card-arrow-bottom-right"></div>
+													</div>
 												</div>
-											  </form>
+
+												<div class="card mb-3">
+													<div class="card-body">
+														<!-- post header -->
+														<div class="d-flex align-items-center mb-3">
+															<a href="#"><img src="assets/img/user/profile.jpg"
+																alt="" width="50" class="rounded-circle" /></a>
+															<div class="flex-fill ps-2">
+																<div class="fw-bold">
+																	<a href="#" class="text-decoration-none">PERSONAL
+																		INFO</a>
+																</div>
+
+															</div>
+														</div>
+
+
+
+														<table class="table table-borderless row">
+															<tr>
+																<td class="">First Name:</td>
+																<td th:text="${userdtl.first_name}"></td>
+															</tr>
+															<tr>
+																<td>Last Name:</td>
+																<td th:text="${userdtl.last_name}"></td>
+															</tr>
+															<tr>
+																<td>Address:</td>
+																<td th:text="${userdtl.address_full}"></td>
+															</tr>
+															<tr>
+																<td>Evening Phone:</td>
+																<td th:text="${userdtl.phone_eve}"></td>
+															</tr>
+															<tr>
+																<td>Private Email:</td>
+																<td th:text="${userdtl.private_email}"></td>
+															</tr>
+															<tr>
+																<td>Closest Relative Full Description:</td>
+																<td th:text="${userdtl.closest_relative_full}"></td>
+															</tr>
+															<tr>
+																<td>Social Security Number:</td>
+																<td th:text="${userdtl.social_security_number}"></td>
+															</tr>
+															<tr>
+																<td>Gender</td>
+																<td th:text="${userdtl.sex}"></td>
+															</tr>
+
+														</table>
+
+
+
+
+													</div>
+													<div class="card-arrow">
+														<div class="card-arrow-top-left"></div>
+														<div class="card-arrow-top-right"></div>
+														<div class="card-arrow-bottom-left"></div>
+														<div class="card-arrow-bottom-right"></div>
+													</div>
+												</div>
+
+												<div class="card mb-3">
+													<div class="card-body">
+														<!-- post header -->
+														<div class="d-flex align-items-center mb-3">
+															<a href="#"><img src="assets/img/user/profile.jpg"
+																alt="" width="50" class="rounded-circle" /></a>
+															<div class="flex-fill ps-2">
+																<div class="fw-bold">
+																	<a href="#" class="text-decoration-none">ACCOUNT
+																		INFO</a>
+																</div>
+
+															</div>
+														</div>
+
+
+
+														<table class="table table-borderless row">
+															<tr>
+																<td>Bank Name:</td>
+																<td th:text="${userdtl.bank_name}"></td>
+															</tr>
+
+															<tr>
+																<td>Account Number:</td>
+																<td th:text="${userdtl.account_number}"></td>
+															</tr>
+
+															<tr>
+																<td>Clearing Number:</td>
+																<td th:text="${userdtl.clearing_number}"></td>
+															</tr>
+
+															<tr>
+																<td>Table Tax:</td>
+																<td th:text="${userdtl.table_tax}"></td>
+															</tr>
+														</table>
+
+
+
+
+													</div>
+													<div class="card-arrow">
+														<div class="card-arrow-top-left"></div>
+														<div class="card-arrow-top-right"></div>
+														<div class="card-arrow-bottom-left"></div>
+														<div class="card-arrow-bottom-right"></div>
+													</div>
+												</div>
+
+												<div class="card mb-3">
+													<div class="card-body">
+														<!-- post header -->
+														<div class="d-flex align-items-center mb-3">
+															<a href="#"><img src="assets/img/user/profile.jpg"
+																alt="" width="50" class="rounded-circle" /></a>
+															<div class="flex-fill ps-2">
+																<div class="fw-bold">
+																	<a href="#" class="text-decoration-none">DOCUMENTS</a>
+																</div>
+
+															</div>
+														</div>
+
+
+														<table class="table table-borderless row align-middle">
+															<tr>
+																<td>CV</td>
+																<td><a class="btn btn-sm btn-outline-theme"
+																	th:if="${userdtl.doc_cv != null}"
+																	th:href="|download/user?fileId=cv&userid=${userdtl.empid}|">Download
+																		<i class="fas fa-lg fa-fw me-2 fa-download"></i>
+																</a></td>
+															</tr>
+
+															<tr>
+																<td>Certificate</td>
+																<td><a class="btn btn-sm btn-outline-theme"
+																	th:if="${userdtl.doc_certificate != null}"
+																	th:href="|download/user?fileId=crt&userid=${userdtl.empid}|">Download
+																		<i class="fas fa-lg fa-fw me-2 fa-download"></i>
+																</a></td>
+															</tr>
+
+															<tr>
+																<td>ID copy</td>
+																<td><a class="btn btn-sm btn-outline-theme"
+																	th:if="${userdtl.doc_id != null}"
+																	th:href="|download/user?fileId=id&userid=${userdtl.empid}|">Download
+																		<i class="fas fa-lg fa-fw me-2 fa-download"></i>
+																</a></td>
+															</tr>
+
+															<tr>
+																<td>Other Documents</td>
+																<td><a class="btn btn-sm btn-outline-theme"
+																	th:if="${userdtl.doc_others != null}"
+																	th:href="|download/user?fileId=others&userid=${userdtl.empid}|">Download
+																		<i class="fas fa-lg fa-fw me-2 fa-download"></i>
+																</a></td>
+															</tr>
+
+														</table>
+
+
+
+
+
+													</div>
+													<div class="card-arrow">
+														<div class="card-arrow-top-left"></div>
+														<div class="card-arrow-top-right"></div>
+														<div class="card-arrow-bottom-left"></div>
+														<div class="card-arrow-bottom-right"></div>
+													</div>
+												</div>
+
+
 											</div>
+
+											<!-- END tab-pane -->
+
+											<!-- BEGIN tab-pane -->
+											<div class="tab-pane fade" id="profile-followers">
+												<form id="personalinfoform" action="savePersonalInfo"
+													method="post" enctype='multipart/form-data'>
+													<div class="card bg-theme border-theme bg-opacity-25 mb-3">
+														<div class="card-header border-theme fw-bold ">Edit
+															Personal Information</div>
+														<div class="card-body">
+
+															<table class="table">
+																<tr>
+																	<td>Profile picture</td>
+																	<td><input accept="image/*" name="emp_image_m"
+																		class="form-control" type="file"
+																		onchange="previewFile(this);" /></td>
+																</tr>
+
+																<tr>
+																	<td>First Name</td>
+																	<td><input class="form-control" name="first_name"
+																		th:value="${userdtl.first_name}" /> <input
+																		type="hidden" class="form-control" readonly="readonly"
+																		name="empid" th:value="${userdtl.empid}" /></td>
+																</tr>
+
+																<tr>
+																	<td>Last Name</td>
+																	<td><input class="form-control" name="last_name"
+																		th:value="${userdtl.last_name}" /></td>
+																</tr>
+
+																<tr>
+																	<td>Private Email</td>
+																	<td><input name="private_email" type="email"
+																		class="form-control"
+																		th:value="${userdtl.private_email}" /></td>
+																</tr>
+
+																<tr>
+																	<td>Closest Relative Full Description</td>
+																	<td><textarea name="closest_relative_full"
+																		class="form-control"
+																		th:text="${userdtl.closest_relative_full}" ></textarea></td>
+																</tr>
+
+																<tr>
+																	<td>Full Address</td>
+																	<td><textarea name="address_full"
+																		class="form-control"
+																		th:text="${userdtl.address_full}" > </textarea></td>
+																</tr>
+
+																<tr>
+																	<td>Evening Phone</td>
+																	<td><input name="phone_eve" class="form-control"
+																		th:value="${userdtl.phone_eve}" /></td>
+																</tr>
+
+																<tr>
+																	<td>Social Security Number</td>
+																	<td><input name="social_security_number"
+																		placeholder="YYYYMMDD-XXXX" class="form-control"
+																		th:value="${userdtl.social_security_number}" /></td>
+																</tr>
+
+																<tr>
+																	<td>Gender</td>
+																	<td><select th:field="*{userdtl.sex}" name="sex"
+																		class="form-select">
+																			<option value="">Select</option>
+																			<option value="Male">Male</option>
+																			<option value="Female">Female</option>
+																			<option value="Other">Other</option>
+
+																	</select></td>
+																</tr>
+
+
+															</table>
+														</div>
+														<div class="card-arrow">
+															<div class="card-arrow-top-left"></div>
+															<div class="card-arrow-top-right"></div>
+															<div class="card-arrow-bottom-left"></div>
+															<div class="card-arrow-bottom-right"></div>
+														</div>
+													</div>
+
+													<div class="card bg-theme border-theme bg-opacity-25 mb-3">
+														<div class="card-header fw-bold border-theme">Edit
+															Bank Information</div>
+														<div class="card-body">
+															<table class="table">
+																<tr>
+																	<td>Bank Name</td>
+																	<td><input th:value="${userdtl.bank_name}"
+																		name="bank_name" type="text" class="form-control"
+																		placeholder="Enter Bank Name"></td>
+																</tr>
+
+																<tr>
+																	<td>Account Number</td>
+																	<td><input th:value="${userdtl.account_number}"
+																		name="account_number" type="text" class="form-control"
+																		placeholder="Enter Bank Account Number"></td>
+																</tr>
+
+																<tr>
+																	<td>Clearing Number</td>
+																	<td><input th:value="${userdtl.clearing_number}"
+																		name="clearing_number" type="text"
+																		class="form-control"
+																		placeholder="Enter Clearing Number"></td>
+																</tr>
+
+																<tr>
+																	<td>Table Tax</td>
+																	<td><input th:value="${userdtl.table_tax}"
+																		name="table_tax" type="text" class="form-control"
+																		placeholder="Enter Table Tax"></td>
+																</tr>
+
+															</table>
+														</div>
+														<div class="card-arrow">
+															<div class="card-arrow-top-left"></div>
+															<div class="card-arrow-top-right"></div>
+															<div class="card-arrow-bottom-left"></div>
+															<div class="card-arrow-bottom-right"></div>
+														</div>
+													</div>
+
+													<div class="card bg-theme border-theme bg-opacity-25 mb-3">
+														<div class="card-header fw-bold border-theme">Upload
+															Documents</div>
+														<div class="card-body">
+															<div class="alert alert-warning">
+																<small class="img_size_warning"> Documents are
+																	required to be added by the employee. Only .pdf and
+																	.docx are allowed as a file format in CV and
+																	certificates. Files and images are allowed in .jpeg or
+																	.png format up to 10 MB in size. By uploading the
+																	second file replaces the existing one. </small>
+															</div>
+															<table class="table">
+																<tr>
+																	<td>CV</td>
+																	<td><input name="doc_m_cv"
+																		accept="application/pdf" type="file"
+																		class="form-control" placeholder="Enter CV"></td>
+																</tr>
+
+																<tr>
+																	<td>ID Copy</td>
+																	<td><input name="doc_m_id"
+																		accept="image/jpeg,image/png,application/pdf"
+																		type="file" class="form-control"
+																		placeholder="Enter ID copy"></td>
+																</tr>
+
+																<tr>
+																	<td>Certificate</td>
+																	<td><input name="doc_m_crt"
+																		accept="application/pdf" type="file"
+																		class="form-control"
+																		placeholder="Enter Certificate copy"></td>
+																</tr>
+
+																<tr>
+																	<td>Others</td>
+																	<td><input name="doc_m_others"
+																		accept="application/pdf" type="file"
+																		class="form-control" placeholder="Enter CV"></td>
+																</tr>
+
+
+															</table>
+
+															<div class="alert alert-warning">
+																<small class="img_size_warning">Only .pdf file
+																	allowed for CV and Certificates. Photo can be uploaded
+																	as ID copy. </small>
+															</div>
+
+
+
+
+														</div>
+														<div class="card-arrow">
+															<div class="card-arrow-top-left"></div>
+															<div class="card-arrow-top-right"></div>
+															<div class="card-arrow-bottom-left"></div>
+															<div class="card-arrow-bottom-right"></div>
+														</div>
+													</div>
+
+													<div class="card bg-theme border-theme bg-opacity-25 mb-3">
+														<div class="card-header fw-bold border-theme">Social
+															Media Links</div>
+														<div class="card-body">
+															<table class="table">
+																<tr>
+																	<td>Facebook</td>
+																	<td><input
+																		th:value="${userdtl.socialMediaLinks.facebook}"
+																		name="socialMediaLinks.facebook" type="text"
+																		class="form-control" placeholder="Enter facebook Link"></td>
+																</tr>
+
+																<tr>
+																	<td>Instagram</td>
+																	<td><input
+																		th:value="${userdtl.socialMediaLinks.instagram}"
+																		name="socialMediaLinks.instagram" type="text"
+																		class="form-control"
+																		placeholder="Enter instagram Link"></td>
+																</tr>
+
+																<tr>
+																	<td>Twitter</td>
+																	<td><input
+																		th:value="${userdtl.socialMediaLinks.twitter}"
+																		name="socialMediaLinks.twitter" type="text"
+																		class="form-control" placeholder="Enter twitter  Link"></td>
+																</tr>
+
+																<tr>
+																	<td>LinkedIn</td>
+																	<td><input
+																		th:value="${userdtl.socialMediaLinks.linkedin}"
+																		name="socialMediaLinks.linkedin" type="text"
+																		class="form-control" placeholder="Enter linkedin Link"></td>
+																</tr>
+
+															</table>
+														</div>
+														<div class="card-arrow">
+															<div class="card-arrow-top-left"></div>
+															<div class="card-arrow-top-right"></div>
+															<div class="card-arrow-bottom-left"></div>
+															<div class="card-arrow-bottom-right"></div>
+														</div>
+													</div>
+
+													<div class="text-center">
+														<input type="submit" class="btn btn-outline-theme"
+															value="Save Changes" />
+													</div>
+
+												</form>
+
+
+											</div>
+											<!-- END tab-pane -->
+
+											<!-- BEGIN tab-pane -->
 											
+											<!-- END tab-pane -->
+
+											<!-- BEGIN tab-pane -->
 											
-										
+											<!-- END tab-pane -->
+										</div>
+									</div>
+									<div class="col-xl-4">
+										<div class="desktop-sticky-top d-none d-lg-block">
+											<div class="card mb-3">
+												<div class="list-group list-group-flush">
+													<div class="list-group-item fw-bold px-3 d-flex">
+														<span class="flex-fill">For your information</span> <a href="#"
+															class="text-white text-opacity-50"><i
+															class="fas fa-hand-point-down"></i></a>
+													</div>
+													<div class="list-group-item px-3">
+														<div class="text-white text-opacity-50">
+															<small><strong>Contract remaining
+									period </strong></small>
+														</div>
+														<div class="fw-bold mb-2">#Contract</div>
+														<a href="#"
+															class="card text-white text-decoration-none mb-1">
+															<div class="card-body">
+																[[${userdtl.contact_remaining_period}]]
+															</div>
+															<div class="card-arrow">
+																<div class="card-arrow-top-left"></div>
+																<div class="card-arrow-top-right"></div>
+																<div class="card-arrow-bottom-left"></div>
+																<div class="card-arrow-bottom-right"></div>
+															</div>
+														</a>
+														<div>
+															<small class="text-white text-opacity-50">Started on [[${userdtl.contract_start}]]</small>
+														</div>
+													</div>
+													<div class="list-group-item px-3">
+														<div class="fw-bold mb-2">#EditProfile</div>
+														<div class="fs-13px mb-1">
+															To keep it sharp update your informations on the EDIT tab.
+														</div>
+														<div>
+															<small class="text-white text-opacity-50"><i
+																class="fa fa-external-link-square-alt"></i> Last update:<br/>[[${userdtl.updated}]]</small>
+														</div>
+													</div>
+													<div class="list-group-item px-3">
+														
+														<div class="fw-bold mb-2">#SocialMedia</div>
+														<div class="fs-13px mb-1">
+															Update your social media links to keep connected with people outside EMS. 
+														</div>
+														<div>
+															<small class="text-white text-opacity-50"> Total [[${total_users}]] users</small>
+														</div>
+													</div>
+													<div class="list-group-item px-3">
+														
+														<div class="fw-bold mb-2">#EMSrole</div>
+														<a href="#"
+															class="card mb-1 text-white text-decoration-none">
+															<div class="card-body">
+																<div class="row no-gutters">
+																	<div class="col-md-8">
+																		<div class="fs-12px text-white text-opacity-50 mt-n1">Your EMS role</div>
+																		<div class="h-40px fs-13px overflow-hidden mb-n1">
+																		[[${my_role}]]
+																		</div>
+																	</div>
+																	<div class="col-md-4 d-flex">
+																		<div class="h-100 w-100"
+																			style="background: url(assets/img/gallery/news-2.jpg) center; background-size: cover;"></div>
+																	</div>
+																</div>
+															</div>
+															<div class="card-arrow">
+																<div class="card-arrow-top-left"></div>
+																<div class="card-arrow-top-right"></div>
+																<div class="card-arrow-bottom-left"></div>
+																<div class="card-arrow-bottom-right"></div>
+															</div>
+														</a>
+														<div>
+															<small class="text-white text-opacity-50">You are only allowed to do what your EMS role permits</small>
+														</div>
+													</div>
+													
+												</div>
+												<div class="card-arrow">
+													<div class="card-arrow-top-left"></div>
+													<div class="card-arrow-top-right"></div>
+													<div class="card-arrow-bottom-left"></div>
+													<div class="card-arrow-bottom-right"></div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
-							
+							</div>
 						</div>
-
+						<!-- END profile-content -->
 					</div>
-					<!-- END profile-sidebar -->
-
-
-
+					<!-- END profile-container -->
 				</div>
+				<!-- END profile -->
 			</div>
-			<!-- BEGIN card-arrow -->
 			<div class="card-arrow">
 				<div class="card-arrow-top-left"></div>
 				<div class="card-arrow-top-right"></div>
 				<div class="card-arrow-bottom-left"></div>
 				<div class="card-arrow-bottom-right"></div>
 			</div>
-			<!-- END card-arrow -->
 		</div>
 	</div>
 </div>
