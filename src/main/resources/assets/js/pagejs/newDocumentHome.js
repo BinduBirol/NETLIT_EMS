@@ -41,7 +41,7 @@ function deleteSigner(e){
 
 
 
-$("input[name=invt_validity]").click(function () {
+$("#invt_validity").change(function () {
 	var days= $(this).val();
 	$("#expireDate").val(moment().add(days, 'day').format('YYYY-MM-DD'));
 })

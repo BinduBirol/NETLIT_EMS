@@ -17,8 +17,7 @@
 					<a href="/reportWorkTimeHome"><i class="far  fa-clock"></i></a>
 				</p>
 
-				<a class="btn btn-outline-theme" href="/profile" role="button">Go
-					to your profile</a>
+		
 			</div>
 			<!-- BEGIN row -->
 
@@ -36,7 +35,7 @@
 						<div class="card-body">
 							<div class="d-flex fw-bold small mb-2">
 								<span class="flex-grow-1 text-uppercase"><i
-									class="fa fa-user fa-fw "></i>&nbsp;[[${user.full_name}]]&nbsp;&nbsp;
+									class="fa fa-user fa-fw "></i>&nbsp;<a class="text-decoration-none" href="/profile">[[${user.full_name}]]</a>&nbsp;&nbsp;
 
 									<span
 									th:if="${user.socialMediaLinks.facebook}!='' and ${user.socialMediaLinks.facebook}!=null">

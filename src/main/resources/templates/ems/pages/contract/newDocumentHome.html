@@ -62,14 +62,14 @@
 				
 				<div class="row mb-4">
 					<div class="col">
-						<div class="form-check">
+						<div class="form-check text-white text-opacity-50">
 						  <input checked="checked" class="form-check-input" type="radio" value=""  />
 						  <label class="form-check-label" for="defaultRadio1">Send documents to sign separately</label>
 						</div>
 					</div>
 					
-					<div class="col">
-						<div class="form-check">
+					<div  class="col">
+						<div class="form-check text-white text-opacity-50">
 						  <input checked="checked" class="form-check-input" type="radio" value="" />
 						  <label class="form-check-label" >Require the signee to read the document</label>
 						</div>
@@ -78,37 +78,37 @@
 				</div>
 				
 				<div class="row mb-4">
-				<p colspan="4" class="h3">Document signers </p><hr/>
+				<p class="h3">Document signers </p>
+				<p class="small text-warning text-opacity-50"><i class="fas fa-info-circle"></i> Signers name will be suggested from EMS employee list. Also a new signer can be assigned with a valid email address.</p>
+				<hr/>
 					<table class="table align-middle table-borderless">						
 						
 						<tr class="">							
 							<th>Signer name</th>
 							<th>Email</th>
 							<th>Phone</th>
-							<th>Company name</th>
-							<th class="text-center">Profile</th>
-							<th>								
-							</th>
+							<th>Company name</th>							
+							<th class="text-center"><i class="fa fa-plus"></i> <i class="fa fa-trash-alt"></i></th>
+									
 						</tr>
 						
 						<tr>
 							
-							<td>
+							<td class="input-group">
+								
 								<input placeholder="Search by name"  class="form-control " list="employees" id="employee">
 							    <datalist id="employees">							        
 							        <option  th:each="e: ${emps}" company="Netlit Solutions" th:phone="${e.phone}" th:email="${e.email}" th:data-value="${e.empid}" th:text="${e.full_name}"></option>
 							    </datalist>
 							    <input type="hidden" name="empid" id="employee-hidden">						
-															
+								<button class="sprofile btn  btn-link" disabled="disabled" onclick="viewEmlpoyee(this);">
+									<i class="fas fa-lg fa-fw fa-address-card"></i>
+								</button>							
 							</td>
 							<td><input name="signer_email" class="form-control semail" type="email"/></td>
 							<td><input name="signer_phone" class="form-control sphone" type="text"/></td>
 							<td><input name="signer_company" class="form-control scompany" type="text"/></td>
-							<td class="text-center">
-								<button class="sprofile btn  btn-outline-theme" disabled="disabled" onclick="viewEmlpoyee(this);">
-									<i class="fas fa-lg fa-fw fa-eye"></i> View
-								</button>
-							</td>
+							
 							<td class="text-center">
 								<button onclick="addSigner()" class='btn  btn-outline-theme btn-add-signer '>
 									<i class="fa fa-plus"></i></button>
@@ -117,19 +117,19 @@
 						
 						<tr  id="signerTR2" class="d-none">
 							
-							<td>
+							<td class="input-group">
+								
 								<input placeholder="Search by name" class="form-control " list="employees" id="employee">
 							    
-							    <input type="hidden" name="empid" id="employee-hidden">			
+							    <input type="hidden" name="empid" id="employee-hidden">	
+							    <button class="sprofile btn  btn-link" disabled="disabled" onclick="viewEmlpoyee(this);">
+									<i class="fas fa-lg fa-fw fa-address-card"></i>
+								</button>		
 							</td>
 							<td><input name="signer2_email" class="form-control semail" type="email"/></td>
 							<td><input name="signer_phone" class="form-control sphone" type="text"/></td>
 							<td><input name="signer_company" class="form-control scompany" type="text"/></td>
-							<td class="text-center">
-								<button class="sprofile btn  btn-outline-theme" disabled="disabled" onclick="viewEmlpoyee(this);">
-									<i class="fas fa-lg fa-fw fa-eye"></i> View
-								</button>
-							</td>
+							
 							<td class="text-center">
 								<button onclick="deleteSigner(event)" class="btn btn-outline-danger"><i class="fa fa-trash-alt"></i></button>
 							</td>
@@ -137,18 +137,18 @@
 						
 						<tr id="signerTR3" class="d-none">
 							
-							<td>
+							<td class="input-group">
+								
 								<input placeholder="Search by name"  class="form-control " list="employees" id="employee">							    
 							    <input type="hidden" name="empid" id="employee-hidden">	
+							    <button class="sprofile btn  btn-link" disabled="disabled" onclick="viewEmlpoyee(this);">
+									<i class="fas fa-lg fa-fw fa-address-card"></i>
+								</button>
 							</td>
 							<td><input name="signer3_email" class="form-control semail" type="email"/></td>
 							<td><input name="signer_phone" class="form-control sphone" type="text"/></td>
 							<td><input name="signer_company" class="form-control scompany" type="text"/></td>
-							<td class="text-center">
-								<button class="sprofile btn  btn-outline-theme" disabled="disabled" onclick="viewEmlpoyee(this);">
-									<i class="fas fa-lg fa-fw fa-eye"></i> View
-								</button>
-							</td>
+							
 							<td class="text-center">
 								<button onclick="deleteSigner(event)" class="btn btn-outline-danger"><i class="fa fa-trash-alt"></i></button>
 							</td>
@@ -167,56 +167,33 @@
 				<div class="row mb-4">
 					<p class="h3">Invitation settings</p>
 					<hr/>
-					<div class="col">
-						<p class="h5">Invitation type</p>
-						
-						<div class="form-check mb-4">
-						  <input class="form-check-input" checked="checked" type="radio" value="" id="invt_type" />
-						  <label class="form-check-label" for="invt_type">Email only</label>
-						</div>
-						
-						<p class="h5">Invitation is valid until</p>						
+					<div class="col-sm-4">										
 						<div class="row mb-4">
-							<div class="col-sm-4">
-								<div class="form-check">
-								  <input class="form-check-input" type="radio" name="invt_validity" value="7" id="invt_validity" />
-								  <label class="form-check-label" for="invt_validity">7 days</label>
-								</div>
+							<div class="">
+									<p class="h5">Invitation valid until</p>						
 								
-								<div class="form-check">
-								  <input checked="checked" class="form-check-input" type="radio" name="invt_validity" value="14" id="invt_validity" />
-								  <label class="form-check-label" for="invt_validity">14 days</label>
-								</div>
-								
-								<div class="form-check">
-								  <input class="form-check-input" type="radio" name="invt_validity" value="30" id="invt_validity" />
-								  <label class="form-check-label" for="invt_validity">30 days</label>
-								</div>
-								
-								<div class="form-check mb-3">
-								  <input class="form-check-input" type="radio" name="invt_validity" value="0" id="invt_validity" />
-								  <label class="form-check-label" for="invt_validity">Other</label>
-								</div>
-								<div class="form-group">
-								  <label class="form-label" for="">Invitation expire date</label>
+								<div class="form-group">								  
+								  <div class="input-group">
+								  <select id="invt_validity" class="form-select" name="invt_validity">
+									<option value="7">7 Days</option>
+									<option selected="selected" value="14">14 Days</option>
+									<option value="30">30 Days</option>
+									<option value="90">90 Days</option>
+									<option value="0">Other</option>
+									</select>
 								  <input type="text" id="expireDate" class="form-control form-control-sm datepicker-default">
+									</div>
 								</div>
 							</div>
 							
 						</div>
 						
+						<p class="h5 text-white text-opacity-50">Invitation type</p>
 						
-						
-					</div>
-					<div class="col">
-						<p class="h5">Email message</p>
-						
-						<select onchange="setmailmsg(this)" class="form-select  mb-4">
-						  <option value="">Custom message</option>
-						  <option th:each="t: ${email_templates}" th:msg="${t.text}" th:text="${t.name}"></option>						  
-						</select>
-						
-						<textarea id="mailbody" class="form-control mb-4" rows="4"></textarea>	
+						<div class="form-check mb-4 text-white text-opacity-50">
+						  <input class="form-check-input" checked="checked" type="radio" value="" id="invt_type" />
+						  <label class="form-check-label" for="invt_type">Email only</label>
+						</div>
 						
 						<p class="h5">Invite as</p>						
 						<div class="">							
@@ -231,6 +208,21 @@
 								</div>
 							
 						</div>			
+						
+						
+						
+					</div>
+					<div class="col">
+						<p class="h5">Email message</p>
+						
+						<select onchange="setmailmsg(this)" class="form-select  mb-4">
+						  <option value="">Custom message</option>
+						  <option th:each="t: ${email_templates}" th:msg="${t.text}" th:text="${t.name}"></option>						  
+						</select>
+						
+						<textarea id="mailbody" class="form-control mb-4" rows="5"></textarea>	
+						
+						
 						
 						
 					</div>				
