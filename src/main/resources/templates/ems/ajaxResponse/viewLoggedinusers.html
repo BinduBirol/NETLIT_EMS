@@ -5,9 +5,9 @@
       <img class="ms-100 mh-100 rounded-circle img-fluid" onerror="this.onerror=null; this.src='assets/img/user/user.png'" th:src="*{'data:image/jpeg;base64,'+{users.image_encoded}}"/>
     </div>
     <div class="flex-fill px-3">
-      <div class="">[[${users.fullname}]]
+      <div class="text-white text-opacity-50">[[${users.fullname}]]
       <i th:classappend="${users.isloggedin} ? text-success : text-muted" class="small fa fa-circle"></i>
-      <span th:if="${users.email==session.user.username}">[You]</span> 
+      <span class="text-white" th:if="${users.email==session.user.username}">[You]</span> 
       
       </div>
       <div class="small text-white text-opacity-50">[[${#dates.format(users.loggedin, 'dd MMM yyyy hh:mm:ss a')}]]</div>

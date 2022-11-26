@@ -54,14 +54,15 @@
 								<div id="datatable" class="mb-5">
 									
 										
-										<a href="/addEmployee" class="btn btn-outline-theme btn-sm">Add Employee</a>
+										<a href="/addEmployee" class="btn btn-outline-theme mb-3">Add Employee</a>
 										
-										<hr/>
 										
-											<table  id="datatableDefault" class="table text-nowrap w-100">
+										
+											<table  id="datatableDefault" class="table table-hover align-middle text-nowrap w-100">
 												<thead>
 													<tr>
 														<th>#</th>
+														<th></th>
 														<th>Name</th>
 														<th>Designation</th>
 														<th>Email</th>
@@ -74,6 +75,12 @@
 													
 													<tr th:classappend="${emp.status} ? normal: text-muted"  th:emp-id="${emp.empid}" th:each="emp,iterator : ${employees}">
 														<td th:text="${iterator.index+1}">57</td>
+														<td>														
+															<img class="img-fluid rounded-circle" width="30px"
+															onerror="this.onerror=null; this.src='assets/img/user/user.png'"
+															 th:src="*{'data:image/jpeg;base64,'+{emp.emp_image_encoded}}" />
+											
+														</td>
 														<td><a th:text="${emp.full_name}" href="#" class="text-white text-decoration-none" th:emp-id="${emp.empid}" onclick="viewEmlpoyee(this);"></a></td>
 														<td th:text="${emp.designation}">Customer Support</td>
 														<td class="text-white" ><a class="text-white" th:href="'mailto:' + ${emp.email}" th:text="${emp.email}"></a></td>

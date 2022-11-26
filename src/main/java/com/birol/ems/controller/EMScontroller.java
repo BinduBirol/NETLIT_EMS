@@ -12,6 +12,8 @@ import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.mail.MessagingException;
@@ -33,6 +35,7 @@ import com.birol.ems.dao.ComplaintsRepo;
 import com.birol.ems.dao.LoggedinUserRepo;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.dto.LoggedinUserDTO;
+import com.birol.ems.dto.SocialMediaLinksDTO;
 import com.birol.ems.project.dao.ProjectDao;
 import com.birol.ems.project.dto.Project;
 import com.birol.ems.project.dto.Project_Workers;
@@ -79,9 +82,16 @@ public class EMScontroller {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 		String date = simpleDateFormat.format(new Date());
 		
+		EMPLOYEE_BASIC user_emp = employeeService.getEmployeebyID(user.getId());
+		try {
+			user_emp.getSocialMediaLinks().hashCode();
+		} catch (NullPointerException e) {
+			SocialMediaLinksDTO sml= new SocialMediaLinksDTO(user.getId());
+			user_emp.setSocialMediaLinks(sml);
+		}
 	
 		model.addAttribute("latest",employeeService.getLatestEmployeeList());
-		model.addAttribute("user",employeeService.getEmployeebyID(user.getId()));
+		model.addAttribute("user",user_emp);
 		
 		
 		return new ModelAndView("homepage", model);
@@ -101,6 +111,8 @@ public class EMScontroller {
 				u.setImage_encoded(imageencode);
 			}			
 		}
+	
+		Collections.sort(luserlist, Collections.reverseOrder());
 		model.addAttribute("luserlist", luserlist);
 		return new ModelAndView("ems/ajaxResponse/viewLoggedinusers", model);
 	}

@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="tracklogin")
-public class LoggedinUserDTO {
+public class LoggedinUserDTO implements Comparable<LoggedinUserDTO>{
 	@Id
 	public long id;
 	public String email;
@@ -89,6 +89,11 @@ public class LoggedinUserDTO {
 				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
 				+ "]";
 	}
+	
+	@Override
+    public int compareTo(LoggedinUserDTO e) {
+        return getLoggedin().compareTo(e.getLoggedin());
+    }
 
 	
 }
