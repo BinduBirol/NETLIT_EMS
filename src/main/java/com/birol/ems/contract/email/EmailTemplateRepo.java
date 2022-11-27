@@ -1,4 +1,4 @@
-package com.birol.ems.contract;
+package com.birol.ems.contract.email;
 
 import java.util.ArrayList;
 

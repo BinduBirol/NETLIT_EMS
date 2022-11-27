@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.util.StringUtils;
 
+import com.birol.ems.contract.email.EmailTemplateRepo;
+import com.birol.ems.contract.email.Email_msg_DTO;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.persistence.model.User;
@@ -64,6 +67,22 @@ public class ContractController {
 		emailTemplateRepo.deleteById(id);
 		model.addAttribute("msg", "Template deleted successfuly.");
 		return new ModelAndView("redirect:/emailTemplatesHome", model);
+	}
+	
+	
+	@ResponseBody
+	@PostMapping("/saveAndSendContract")
+	public String saveAndSendContract(Authentication auth,
+			@ModelAttribute NewDocumentForSign_DTO formData) {
+		String msg="Java theke bolchi";
+		User user = (User) auth.getPrincipal();
+		NewDocumentForSign_DTO finalObj= new NewDocumentForSign_DTO();
+		try {
+			System.out.println(formData.getDoc_name());
+		}catch (Exception e) {
+			msg=e.getMessage();
+		}
+		return msg;
 	}
 
 }

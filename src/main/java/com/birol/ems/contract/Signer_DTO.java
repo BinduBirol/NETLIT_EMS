@@ -11,19 +11,21 @@ import javax.persistence.Table;
 public class Signer_DTO {
 	@Id	
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public long id;
+	public long signer_id;
 	public long contractid;
-	public long empid;
+	public long signer_empid;
 	
-	public String email;
-	public String phone;
-	public String company;
+	public String signer_name;
+	public String signer_email;
+	public String signer_phone;
+	public String signer_company;
 	public boolean issigned;
-	public long getId() {
-		return id;
+	
+	public long getSigner_id() {
+		return signer_id;
 	}
-	public void setId(long id) {
-		this.id = id;
+	public void setSigner_id(long signer_id) {
+		this.signer_id = signer_id;
 	}
 	public long getContractid() {
 		return contractid;
@@ -31,29 +33,35 @@ public class Signer_DTO {
 	public void setContractid(long contractid) {
 		this.contractid = contractid;
 	}
-	public long getEmpid() {
-		return empid;
+	public long getSigner_empid() {
+		return signer_empid;
 	}
-	public void setEmpid(long empid) {
-		this.empid = empid;
+	public void setSigner_empid(long signer_empid) {
+		this.signer_empid = signer_empid;
 	}
-	public String getEmail() {
-		return email;
+	public String getSigner_name() {
+		return signer_name;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setSigner_name(String signer_name) {
+		this.signer_name = signer_name;
 	}
-	public String getPhone() {
-		return phone;
+	public String getSigner_email() {
+		return signer_email;
 	}
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setSigner_email(String signer_email) {
+		this.signer_email = signer_email;
 	}
-	public String getCompany() {
-		return company;
+	public String getSigner_phone() {
+		return signer_phone;
 	}
-	public void setCompany(String company) {
-		this.company = company;
+	public void setSigner_phone(String signer_phone) {
+		this.signer_phone = signer_phone;
+	}
+	public String getSigner_company() {
+		return signer_company;
+	}
+	public void setSigner_company(String signer_company) {
+		this.signer_company = signer_company;
 	}
 	public boolean isIssigned() {
 		return issigned;
@@ -61,4 +69,6 @@ public class Signer_DTO {
 	public void setIssigned(boolean issigned) {
 		this.issigned = issigned;
 	}
+	
+	
 }

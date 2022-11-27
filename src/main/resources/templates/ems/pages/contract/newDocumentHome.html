@@ -34,14 +34,14 @@
 			<hr/>
 			
 			<div>
-				
+				<form class="cForm" id="doc_form" enctype='multipart/form-data' method="post">
 				
 				<div class="row mb-4">
 					<div class="col">
-						<input type="file" accept="application/pdf" onchange="setfileName()" class="form-control form-control-lg" id="document_file" />
+						<input type="file" name="document_file_m" accept="application/pdf" onchange="setfileName()" class="form-control form-control-lg" id="document_file" />
 					</div>
 					<div class="col">
-						<select onchange="setfileName()" name="contract_type" id="contract_type" class="form-select form-select-lg">
+						<select onchange="setfileName()" name="category" id="contract_type" class="form-select form-select-lg">
 								<option value="">Select category</option>
 							  <option value="CS">Supplier contract</option>
 							  <option value="CC">Customer contract</option>
@@ -54,7 +54,7 @@
 					<div class="col">
 						<div class="form-group">
 						  <label class="form-label" for="document_name">Document name</label>
-						  <input type="text" name="document_name" id="document_name" class="form-control form-control-lg"/>
+						  <input type="text" name="doc_name" id="document_name" class="form-control form-control-lg"/>
 						</div>
 					</div>	
 										
@@ -63,20 +63,20 @@
 				<div class="row mb-4">
 					<div class="col">
 						<div class="form-check text-white text-opacity-50">
-						  <input checked="checked" class="form-check-input" type="radio" value=""  />
+						  <input checked="checked" class="form-check-input" type="radio" value="0"  />
 						  <label class="form-check-label" for="defaultRadio1">Send documents to sign separately</label>
 						</div>
 					</div>
 					
 					<div  class="col">
 						<div class="form-check text-white text-opacity-50">
-						  <input checked="checked" class="form-check-input" type="radio" value="" />
+						  <input checked="checked" class="form-check-input" type="radio" value="0" />
 						  <label class="form-check-label" >Require the signee to read the document</label>
 						</div>
 					</div>	
 										
 				</div>
-				
+				</form>
 				<div class="row mb-4">
 				<p class="h3">Document signers </p>
 				<p class="small text-warning text-opacity-50"><i class="fas fa-info-circle"></i> Signers name will be suggested from EMS employee list. Also a new signer can be assigned with a valid email address.</p>
@@ -92,7 +92,7 @@
 									
 						</tr>
 						
-						<tr>
+						<tr id="signerTR1">
 							
 							<td class="input-group">
 								
@@ -163,8 +163,9 @@
 				</div>
 				
 				
-				
+				<form class="cForm" id="invite_form" enctype='multipart/form-data'>
 				<div class="row mb-4">
+					
 					<p class="h3">Invitation settings</p>
 					<hr/>
 					<div class="col-sm-4">										
@@ -174,14 +175,14 @@
 								
 								<div class="form-group">								  
 								  <div class="input-group">
-								  <select id="invt_validity" class="form-select" name="invt_validity">
+								  <select id="invt_validity" class="form-select">
 									<option value="7">7 Days</option>
 									<option selected="selected" value="14">14 Days</option>
 									<option value="30">30 Days</option>
 									<option value="90">90 Days</option>
 									<option value="0">Other</option>
 									</select>
-								  <input type="text" id="expireDate" class="form-control form-control-sm datepicker-default">
+								  <input type="text" name="valid_till_str" id="expireDate" class="form-control form-control-sm datepicker-default">
 									</div>
 								</div>
 							</div>
@@ -191,20 +192,20 @@
 						<p class="h5 text-white text-opacity-50">Invitation type</p>
 						
 						<div class="form-check mb-4 text-white text-opacity-50">
-						  <input class="form-check-input" checked="checked" type="radio" value="" id="invt_type" />
+						  <input class="form-check-input" checked="checked" type="radio" value="0" id="invt_type" />
 						  <label class="form-check-label" for="invt_type">Email only</label>
 						</div>
 						
 						<p class="h5">Invite as</p>						
 						<div class="">							
 								<div class="form-check">
-								  <input class="form-check-input" type="radio" name="invt_as" value="" id="invt_validity" />
-								  <label class="form-check-label" for="invt_validity">Netlit EMS</label>
+								  <input class="form-check-input" type="radio" name="invite_as" value="netlit" />
+								  <label class="form-check-label" for="invt_as">Netlit EMS</label>
 								</div>
 								
 								<div class="form-check">
-								  <input checked="checked" class="form-check-input" type="radio" name="invt_as" value="" id="invt_validity" />
-								  <label class="form-check-label" for="invt_validity">Myself</label>
+								  <input checked="checked" class="form-check-input" type="radio" name="invite_as" value="me" />
+								  <label class="form-check-label" >Myself</label>
 								</div>
 							
 						</div>			
@@ -216,22 +217,23 @@
 						<p class="h5">Email message</p>
 						
 						<select onchange="setmailmsg(this)" class="form-select  mb-4">
-						  <option value="">Custom message</option>
+						  <option value="0">Custom message</option>
 						  <option th:each="t: ${email_templates}" th:msg="${t.text}" th:text="${t.name}"></option>						  
 						</select>
 						
-						<textarea id="mailbody" class="form-control mb-4" rows="5"></textarea>	
-						
-						
-						
-						
-					</div>				
+						<textarea id="mailbody" name="email_message" class="form-control mb-4" rows="5"></textarea>	
+					</div>
+							
 				</div>
+				</form>	
 				<hr/>
+				<p id="validationmsg" style="display: none;" class="alert alert-warning">
+					Please check the red marked input fields and fill them up properly. Then try again.
+				</p>
 				
 				<div class="text-center">					
 					<div >
-						<button class="btn btn-lg btn-outline-theme">Save document and send invitations</button>
+						<button onclick="validateForm()" class="btn btn-lg btn-outline-theme">Save document and send invitations</button>
 					</div>				
 				</div>
 			
@@ -242,6 +244,28 @@
 		</div>
 		<!-- END #content -->
 		<div th:include="theme/theme_util :: theme_util"></div>
+		
+		<div id="contract_modal" class="modal">
+			  <div class="modal-dialog modal-dialog-centered">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title">SEND CONTRACT</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			      </div>
+			      <div class="modal-body">
+			        <p>You are going to send this contract.</p>
+			        
+			        <input id="signerData">
+			        
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+			        <button onclick="saveAndSendContract()" type="button" class="btn btn-outline-theme">SEND</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		
 		<div class="modal fade" id="viewEmployee">
 				<div class="modal-dialog modal-xl">
 					<div class="modal-content empContent">...</div>

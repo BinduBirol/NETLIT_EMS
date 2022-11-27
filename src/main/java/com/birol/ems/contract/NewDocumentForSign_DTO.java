@@ -36,7 +36,18 @@ public class NewDocumentForSign_DTO {
 	public List<Signer_DTO> signers;
 	
 	@Transient
+	public String valid_till_str;
+	@Transient
 	private MultipartFile document_file_m;
+
+	
+	public String getValid_till_str() {
+		return valid_till_str;
+	}
+
+	public void setValid_till_str(String valid_till_str) {
+		this.valid_till_str = valid_till_str;
+	}
 
 	public long getId() {
 		return id;
