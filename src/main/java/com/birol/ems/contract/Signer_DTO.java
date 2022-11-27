@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "contract_info")
+@Table(name = "contract_signer_info")
 public class Signer_DTO {
 	@Id	
 	@GeneratedValue(strategy=GenerationType.AUTO)

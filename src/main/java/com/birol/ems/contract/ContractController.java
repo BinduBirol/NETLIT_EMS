@@ -23,6 +23,7 @@ import com.birol.ems.contract.email.Email_msg_DTO;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.persistence.model.User;
+import com.google.gson.Gson;
 
 @Controller
 public class ContractController {
@@ -31,6 +32,8 @@ public class ContractController {
 	EmployeeRepository employeeRepository;
 	@Autowired
 	EmailTemplateRepo emailTemplateRepo;
+	@Autowired
+	NewDocRepo newDocRepo;
 	
 	@GetMapping("/newDocumentHome")
 	public ModelAndView newDocumentHome(Authentication auth, final ModelMap model) {
@@ -76,10 +79,31 @@ public class ContractController {
 			@ModelAttribute NewDocumentForSign_DTO formData) {
 		String msg="Java theke bolchi";
 		User user = (User) auth.getPrincipal();
-		NewDocumentForSign_DTO finalObj= new NewDocumentForSign_DTO();
-		try {
-			System.out.println(formData.getDoc_name());
+		NewDocumentForSign_DTO savedObj= new NewDocumentForSign_DTO();
+		List<Signer_DTO> signerList= new ArrayList<Signer_DTO>();
+		try {			
+			System.out.println(formData.getSigners_str().toString());
+			System.out.println(formData.getSigners_str().size());
+			
+			if(formData.getDocument_file_m().getSize()>0)formData.setDocument_file(formData.getDocument_file_m().getBytes());
+			formData.setCreator_id(user.getId());
+			formData.setCreator_name(user.getFirstName()+" "+user.getLastName());
+			savedObj=newDocRepo.save(formData);
+			
+	
+			
+			
+			for(String x:formData.getSigners_str()) {
+				System.out.println(x);
+				Gson gson = new Gson(); 
+				Signer_DTO signer = gson.fromJson(x, Signer_DTO.class);
+				signerList.add(signer);
+			}
+			
+			//System.out.println(signerList.size());
+			
 		}catch (Exception e) {
+			e.printStackTrace();
 			msg=e.getMessage();
 		}
 		return msg;

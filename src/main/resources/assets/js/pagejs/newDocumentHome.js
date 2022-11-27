@@ -1,5 +1,6 @@
 pageStart();
 var signerform= true;
+var signerarray=[];
 
 function setfileName(){
 	
@@ -66,6 +67,7 @@ function pageStart(){
 	        	$target.find(".scompany").val(company);
 	        	$target.find(".sprofile").attr("emp-id",empid);
 	        	$target.find(".sprofile").prop("disabled",false);
+	        	$target.find(".sempid").val(empid);	
 	        	if(empid==""){
 	        		$target.find(".sprofile").prop("disabled",true);
 	        	}
@@ -74,6 +76,7 @@ function pageStart(){
 	            break;
 	        }else{
 	        	$target= $input.closest('tr');
+	        	$target.find(".sempid").val(0);	
 	        	$target.find(".semail").val("");
 	        	$target.find(".sphone").val("");
 	        	$target.find(".scompany").val("");
@@ -169,7 +172,8 @@ function validateSigners(){
 	if($("#signerTR3").is(":visible")){
 		values3=validateSignersInput("#signerTR3");
 		if(!jQuery.isEmptyObject(values3))array.push(values3);
-	}	
+	}
+	signerarray= array;
 	var data= JSON.stringify(array);
 	return data;
 }
@@ -199,12 +203,20 @@ function validateSignersInput(trid){
 
 function saveAndSendContract(){	
 	var form = $('.cForm')[0];
-	var formData = new FormData(form);
-	
+	var formData = new FormData(form);	
 	
 	let formData2 = new FormData($('.cForm')[1]);	
 	for (var pair of formData2.entries()) {
 	    formData.append(pair[0], pair[1]);
+	}
+	
+	
+	for (var i = 0; i < signerarray.length; i++) {
+		  formData.append('signers_str[]', JSON.stringify(signerarray[i]));
+	}
+	
+	for (var pair of formData.entries()) {
+	    console.log(pair[0]+ ' - ' + pair[1]); 
 	}
 	
     $.ajax({

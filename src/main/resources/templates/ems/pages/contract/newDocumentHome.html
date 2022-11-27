@@ -96,11 +96,12 @@
 							
 							<td class="input-group">
 								
-								<input placeholder="Search by name"  class="form-control " list="employees" id="employee">
+								<input name="signer_name" placeholder="Search by name"  class="form-control " list="employees" id="employee">
 							    <datalist id="employees">							        
 							        <option  th:each="e: ${emps}" company="Netlit Solutions" th:phone="${e.phone}" th:email="${e.email}" th:data-value="${e.empid}" th:text="${e.full_name}"></option>
 							    </datalist>
-							    <input type="hidden" name="empid" id="employee-hidden">						
+							    <input type="hidden" name="signer_empid" class="sempid">
+							    <input type="hidden" id="employee-hidden">						
 								<button class="sprofile btn  btn-link" disabled="disabled" onclick="viewEmlpoyee(this);">
 									<i class="fas fa-lg fa-fw fa-address-card"></i>
 								</button>							
@@ -119,14 +120,14 @@
 							
 							<td class="input-group">
 								
-								<input placeholder="Search by name" class="form-control " list="employees" id="employee">
-							    
-							    <input type="hidden" name="empid" id="employee-hidden">	
+								<input name="signer_name" placeholder="Search by name" class="form-control " list="employees" id="employee">
+							    <input type="hidden" name="signer_empid" class="sempid">
+							    <input type="hidden" id="employee-hidden">	
 							    <button class="sprofile btn  btn-link" disabled="disabled" onclick="viewEmlpoyee(this);">
 									<i class="fas fa-lg fa-fw fa-address-card"></i>
 								</button>		
 							</td>
-							<td><input name="signer2_email" class="form-control semail" type="email"/></td>
+							<td><input name="signer_email" class="form-control semail" type="email"/></td>
 							<td><input name="signer_phone" class="form-control sphone" type="text"/></td>
 							<td><input name="signer_company" class="form-control scompany" type="text"/></td>
 							
@@ -138,14 +139,14 @@
 						<tr id="signerTR3" class="d-none">
 							
 							<td class="input-group">
-								
-								<input placeholder="Search by name"  class="form-control " list="employees" id="employee">							    
-							    <input type="hidden" name="empid" id="employee-hidden">	
+								<input type="hidden" name="signer_empid" class="sempid">
+								<input name="signer_name" placeholder="Search by name"  class="form-control " list="employees" id="employee">							    
+							    <input type="hidden" id="employee-hidden">	
 							    <button class="sprofile btn  btn-link" disabled="disabled" onclick="viewEmlpoyee(this);">
 									<i class="fas fa-lg fa-fw fa-address-card"></i>
 								</button>
 							</td>
-							<td><input name="signer3_email" class="form-control semail" type="email"/></td>
+							<td><input name="signer_email" class="form-control semail" type="email"/></td>
 							<td><input name="signer_phone" class="form-control sphone" type="text"/></td>
 							<td><input name="signer_company" class="form-control scompany" type="text"/></td>
 							
