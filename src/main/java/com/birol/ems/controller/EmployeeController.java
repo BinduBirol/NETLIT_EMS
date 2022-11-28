@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
@@ -131,6 +132,8 @@ public class EmployeeController {
 
 			model.addAttribute("message", "Successfully Added Info For " + emp.getFull_name());
 			model.addAttribute("class", "text-success");
+		}catch (DataIntegrityViolationException ex) {
+			model.addAttribute("message", ex.getMessage());
 		} catch (FileAlreadyExistsException fe) {
 			fe.printStackTrace();
 			model.addAttribute("message", fe.getMessage());

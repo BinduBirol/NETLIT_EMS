@@ -1,0 +1,113 @@
+<head>
+<!-- ================== BEGIN page-css ================== -->
+<link
+	href="assets/plugins/datatables.net-bs5/css/dataTables.bootstrap5.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css"
+	rel="stylesheet" />
+<link
+	href="assets/plugins/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css"
+	rel="stylesheet" />
+<link href="assets/plugins/bootstrap-table/dist/bootstrap-table.min.css"
+	rel="stylesheet" />
+<!-- ================== END page-css ================== -->
+
+</head>
+
+<table class="table table-hover " id="datatable">
+	<thead>
+		<tr>
+			<th>NAME</th>
+			<th>STATUS</th>
+			<th>SIGNERS</th>
+			<th>CREATED ON</th>
+			<th></th>
+
+		</tr>
+	</thead>
+	<tbody>
+		<tr style="vertical-align: middle;" th:each="c : ${list}">
+			<td><a href="#"
+				class="text-white text-decoration-none text-opacity-75"><i
+					th:classappend="${c.status=='pending'} ? 'text-warning' : ''"
+					class="fas fa-lg fa-fw me-2 fa-file-pdf"></i>[[${c.doc_name}]]</a></td>
+			<td class="text-uppercase">[[${c.status}]]</td>
+			<td class="">
+				<!--  <div class="row">
+					<div class="col">
+						<div class="progress">
+							<div class="progress-bar" role="progressbar"
+								th:style="'width:'+ ${c.signer_percentage} +'%'"></div>
+						</div>
+					</div>
+					<div class="col small">[[${c.signed_count}]] /
+						[[${#lists.size(c.signers)}]]</div>
+				</div>
+				--> [[${c.signed_count}]] / [[${#lists.size(c.signers)}]]
+
+			</td>
+			<td>[[${#dates.format(c.created, 'dd MMM yyyy')}]]</td>
+			<td class="text-center">
+				<button th:if="${c.status == 'pending'}"
+					class="btn btn-sm btn-outline-theme me-2">
+					<i class="far fa-fw me-2 fa-clock"></i>Send Reminder
+				</button> <a th:if="${c.status != 'pending'}" href="#"
+				data-bs-toggle="dropdown" class=" text-opacity-50"> <i
+					class="fa fa-ellipsis-h"></i></a>
+				<div class="dropdown-menu dropdown-menu-end">
+					<a href="#" class="dropdown-item"><i
+						class="fas fa-fw me-2 fa-tasks"></i></i>Monitor</a> <a
+						th:href="|download/contract?contractid=${c.id}|"
+						class="dropdown-item"><i class="fas fa-fw me-2 fa-download"></i>Download
+						pdf</a> <a th:if="${c.status != 'pending'}" href="#"
+						onclick="deleteContract(event)" class="dropdown-item"><i
+						class="fas fa-fw me-2 fa-trash-alt"></i>Delete</a>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<!-- ================== BEGIN page-js ================== -->
+<script src="assets/plugins/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="assets/js/demo/highlightjs.demo.js"></script>
+<script src="assets/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+<script
+	src="assets/plugins/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script
+	src="assets/plugins/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script
+	src="assets/plugins/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+<script
+	src="assets/plugins/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script
+	src="assets/plugins/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script
+	src="assets/plugins/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script
+	src="assets/plugins/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script
+	src="assets/plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script
+	src="assets/plugins/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+<script src="assets/plugins/bootstrap-table/dist/bootstrap-table.min.js"></script>
+<script src="assets/js/demo/table-plugins.demo.js"></script>
+<script src="assets/js/demo/sidebar-scrollspy.demo.js"></script>
+<!-- ================== END page-js ================== -->
+<script>
+	$('#datatablez')
+			.DataTable(
+					{
+						dom : "<'row mb-3'<'col-sm-4'l><'col-sm-8 text-end'<'d-flex justify-content-end'fB>>>t<'d-flex align-items-center'<'me-auto'i><'mb-0'p>>",
+						//lengthMenu: [ 50, 20, 10, 40, 50 ],
+						responsive : true,
+						buttons : [ {
+							extend : 'print',
+							className : 'btn btn-sm btn-outline-default'
+						}, {
+							extend : 'csv',
+							className : 'btn btn-sm btn-outline-default'
+						} ]
+					});
+</script>

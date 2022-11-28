@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="theme/header :: staticheaderFragment"></head>
+
+<link href="/assets/plugins/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+<link href="/assets/plugins/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
+<link href="/assets/plugins/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" />
+
+
+<body>
+	<!-- BEGIN #app -->
+	<div id="app" class="app">
+		<div th:include="theme/header :: dynamicheaderFragment"></div>
+		<div th:include="theme/sidenav :: sidenav"></div>
+		<!-- BEGIN #content -->
+		<div id="content" class="app-content">
+			<ul class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">CONTRACT</a></li>
+				<li class="breadcrumb-item active">MONITORING</li>
+			</ul>
+
+			<h1 class="page-header">Contract monitoring</h1>
+			<hr />
+			<div class="alert alert-primary" th:if="${(param.msg != null)}">
+			    [[${param.msg}]]
+			</div>
+			
+			<div class="row">
+				<div class="col ">
+					<label>New contract</label>
+					<a href="/newDocumentHome" class="btn btn-outline-default form-control"><i class="fas fa-lg fa-fw  fa-plus"></i> New Contract </a>
+				</div>
+			
+				<div class="col ">
+					<label class="custom-control-label">Contract status</label> 
+					<div class="input-group " id="status">
+						<select id="status" onc name="status" class="form-select">
+							<option value="0">Pending contracts</option>
+							<option value="1">Signed contracts</option>
+							<option value="9">All contracts</option>
+						</select> 						
+				
+					</div>					
+				</div>
+				
+
+				<div class="col ">
+					<div class="form-group">
+						<label>Contract category</label>
+						<div class="input-group " id="category">
+							<select  class="form-select">
+								<option stradd="" value="">All category</option>
+							  	<option stradd="CS" value="Supplier contract">Supplier contract</option>
+							  	<option stradd="CC" value="Customer contract">Customer contract</option>
+							  	<option stradd="CE" value="Employee contract">Employee contract</option>
+							  	<option stradd="CL" value="Lease">Lease</option>
+							  	<option stradd="CP" value="Parking contract">Parking contract</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col ">
+					<label class="custom-control-label">Expiring in</label> 
+					<div class="input-group " id="">
+						<span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
+						<select id="expiring" class="form-select">
+							<option value="all">Any time</option>
+							<option value="ty">This year</option>
+							<option value="tm">This month</option>
+							<option value="tm">This week</option>
+							<option value="nm">Next month</option>
+							<option value="nw">Next week</option>
+						</select>				
+				
+					</div>					
+				</div>
+				
+				<div class="col ">
+					<label class="custom-control-label ">Find contracts</label>
+					<button onclick="getContractTable()" type="button" class="btn btn-outline-theme form-control"><i class="fa fa-search"></i> Search</button>
+				</div>
+
+			</div>
+
+			<hr/>
+			<div id="ajaxresponse">
+				Searching for data ...
+			</div>
+
+		</div>
+		<!-- END #content -->
+		<div th:include="theme/theme_util :: theme_util"></div>
+	</div>
+	<!-- END #app -->
+	<div th:include="theme/footer::staticFooter"></div>
+	
+	<script src="assets/plugins/moment/min/moment.min.js"></script>			
+	<script src="assets/js/demo/form-plugins.demo.js"></script>
+	<script src="assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	<script src="assets/js/pagejs/contractMonitoring.js"></script>	
+</body>
+</html>

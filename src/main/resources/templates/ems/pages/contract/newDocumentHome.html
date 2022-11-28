@@ -31,7 +31,12 @@
 			</ul>
 
 			<h1 class="page-header">Create new document</h1>
+			<p id="validationmsg" style="display: none;" class="alert alert-warning">
+				<a onclick="$('.is-invalid').focus();" class="btn btn-link text-info text-decoration-none"><i class="fas fa-lg fa-fw me-2 fa-exclamation-circle"></i>Please find the red marked input fields and fill them up properly.</a> <a class="btn btn-link text-info text-decoration-none" onclick="$('#validatebtn').focus();">Try again</a>
+			</p>
 			<hr/>
+			
+			
 			
 			<div>
 				<form class="cForm" id="doc_form" enctype='multipart/form-data' method="post">
@@ -42,10 +47,12 @@
 					</div>
 					<div class="col">
 						<select onchange="setfileName()" name="category" id="contract_type" class="form-select form-select-lg">
-								<option value="">Select category</option>
-							  <option value="CS">Supplier contract</option>
-							  <option value="CC">Customer contract</option>
-							  <option value="CE">Employee contract</option>
+								<option stradd="" value="">Select category</option>
+							  <option stradd="CS" value="Supplier contract">Supplier contract</option>
+							  <option stradd="CC" value="Customer contract">Customer contract</option>
+							  <option stradd="CE" value="Employee contract">Employee contract</option>
+							  <option stradd="CL" value="Lease">Lease</option>
+							  <option stradd="CP" value="Parking contract">Parking contract</option>
 						</select>
 					</div>				
 				</div>
@@ -228,13 +235,11 @@
 				</div>
 				</form>	
 				<hr/>
-				<p id="validationmsg" style="display: none;" class="alert alert-warning">
-					Please check the red marked input fields and fill them up properly. Then try again.
-				</p>
+				
 				
 				<div class="text-center">					
 					<div >
-						<button onclick="validateForm()" class="btn btn-lg btn-outline-theme">Save document and send invitations</button>
+						<button id="validatebtn" onclick="validateContractForm()" class="btn btn-lg btn-outline-theme">Save document and send invitations</button>
 					</div>				
 				</div>
 			
@@ -256,7 +261,7 @@
 			      <div class="modal-body">
 			        <p>You are going to send this contract.</p>
 			        
-			        <input id="signerData">
+			        <input type="hidden" id="signerData">
 			        
 			      </div>
 			      <div class="modal-footer">

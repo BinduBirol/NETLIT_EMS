@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -17,29 +18,29 @@
 	</parent>
 
 	<dependencies>
-	
-	<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web-services</artifactId>
-	</dependency>
-	 
-	<dependency>
-	   <groupId>org.springframework.boot</groupId>
-	   <artifactId>spring-boot-starter-tomcat</artifactId>
-	   <scope>provided</scope>
-	</dependency>
 
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-web</artifactId>
-		    <exclusions>
-		        <exclusion>
-		            <groupId>org.springframework.boot</groupId>
-		            <artifactId>spring-boot-starter-logging</artifactId>
-		        </exclusion>
-		    </exclusions>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web-services</artifactId>
 		</dependency>
-		 
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
@@ -49,17 +50,17 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 			<version>2.2.6.RELEASE</version>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.thymeleaf.extras</groupId>
-		    <artifactId>thymeleaf-extras-springsecurity4</artifactId>
-		    <version>2.1.2.RELEASE</version>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
+			<version>2.1.2.RELEASE</version>
 		</dependency>
 
-		
+
 		<dependency>
-		  <groupId>org.springframework.boot</groupId>
-		  <artifactId>spring-boot-starter-validation</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
 		<!-- 2fa -->
@@ -75,10 +76,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
+		</dependency>
 
 		<!-- Servlet -->
 		<dependency>
@@ -86,19 +87,19 @@
 			<artifactId>jstl</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-        
-        <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>el-api</artifactId>
-            <version>${javax.el.version}</version>
-        </dependency>
-        
-        <dependency>
-		   <groupId>org.glassfish.web</groupId>
-		   <artifactId>javax.el</artifactId>
-		   <version>2.2.4</version>
+
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>el-api</artifactId>
+			<version>${javax.el.version}</version>
 		</dependency>
-        
+
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+
 		<!-- Password Validation -->
 		<dependency>
 			<groupId>org.passay</groupId>
@@ -129,41 +130,41 @@
 			<version>${guava.version}</version>
 		</dependency>
 
-        <!-- User Agent parser -->
-        <dependency>
-            <groupId>com.github.ua-parser</groupId>
-            <artifactId>uap-java</artifactId>
-            <version>${uap-java.version}</version>
-        </dependency>
+		<!-- User Agent parser -->
+		<dependency>
+			<groupId>com.github.ua-parser</groupId>
+			<artifactId>uap-java</artifactId>
+			<version>${uap-java.version}</version>
+		</dependency>
 
-        <!-- maxmind dependency -->
+		<!-- maxmind dependency -->
 
-        <dependency>
-            <groupId>com.maxmind.geoip2</groupId>
-            <artifactId>geoip2</artifactId>
-            <version>${geoip2.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>com.maxmind.geoip2</groupId>
+			<artifactId>geoip2</artifactId>
+			<version>${geoip2.version}</version>
+		</dependency>
 
 		<!-- test -->
 
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>        
-        
 		<dependency>
-		    <groupId>org.junit.platform</groupId>
-		    <artifactId>junit-platform-runner</artifactId>
-		    <scope>test</scope>
-		</dependency>		
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-runner</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>net.logstash.logback</groupId>
@@ -176,39 +177,38 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<dependency>
-            <groupId>nz.net.ultraq.thymeleaf</groupId>
-            <artifactId>thymeleaf-layout-dialect</artifactId>
-        </dependency>
-		
-		<dependency>
-		    <groupId>org.javassist</groupId>
-		    <artifactId>javassist</artifactId>
-		    <version>3.18.1-GA</version>
+			<groupId>nz.net.ultraq.thymeleaf</groupId>
+			<artifactId>thymeleaf-layout-dialect</artifactId>
 		</dependency>
-		
-		
+
 		<dependency>
-		    <groupId>com.google.code.gson</groupId>
-		    <artifactId>gson</artifactId>
-		    <version>2.10</version>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.18.1-GA</version>
 		</dependency>
-				
-		
-		
+
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.10</version>
+		</dependency>
+
+
+
 		<!-- websocket -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
 
-		
 	</dependencies>
 
 	<build>
@@ -227,23 +227,23 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
-					
+
 				</configuration>
 			</plugin>
 
 			<plugin>
-			  <groupId>org.springframework.boot</groupId>
-			  <artifactId>spring-boot-maven-plugin</artifactId>
-			  <executions>
-			    <execution>
-			      <goals>
-			        <goal>repackage</goal>
-			      </goals>
-			      <configuration>
-			        <classifier>exec</classifier>
-			      </configuration>
-			    </execution>
-			  </executions>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<classifier>exec</classifier>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
@@ -261,7 +261,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>integration</id>
@@ -292,29 +292,29 @@
 							</systemPropertyVariables>
 						</configuration>
 					</plugin>
-					
+
 					<plugin>
-					    <groupId>org.apache.maven.plugins</groupId>
-					    <artifactId>maven-resources-plugin</artifactId>					    
-					    <configuration>					      
-					      <nonFilteredFileExtensions>
-					        <nonFilteredFileExtension>mmdb</nonFilteredFileExtension>
-					      </nonFilteredFileExtensions>					     
-					    </configuration>
-					  </plugin>
-					  
-					  <plugin>
-				            <groupId>org.apache.maven.plugins</groupId>
-				            <artifactId>maven-war-plugin</artifactId>
-				            <version>3.2.0</version>
-				            <configuration>
-				                <nonFilteredFileExtensions>
-				                    <nonFilteredFileExtension>mmdb</nonFilteredFileExtension>
-				                </nonFilteredFileExtensions>
-				            </configuration>
-				        </plugin>
-					  
-					
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<configuration>
+							<nonFilteredFileExtensions>
+								<nonFilteredFileExtension>mmdb</nonFilteredFileExtension>
+							</nonFilteredFileExtensions>
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.2.0</version>
+						<configuration>
+							<nonFilteredFileExtensions>
+								<nonFilteredFileExtension>mmdb</nonFilteredFileExtension>
+							</nonFilteredFileExtensions>
+						</configuration>
+					</plugin>
+
+
 				</plugins>
 			</build>
 		</profile>
@@ -323,14 +323,14 @@
 	<properties>
 		<java-version>1.8</java-version>
 		<javax.servlet.jsp-api.version>2.3.2-b01</javax.servlet.jsp-api.version>
-        <javax.el.version>2.2</javax.el.version>
+		<javax.el.version>2.2</javax.el.version>
 		<jstl.version>1.2</jstl.version>
 		<guava.version>20.0</guava.version>
 		<passay.version>1.0</passay.version>
-        <logstash-logback-encoder.version>4.8</logstash-logback-encoder.version>
-        <aerogear.version>1.0.0</aerogear.version>
-        <uap-java.version>1.4.0</uap-java.version>
-        <geoip2.version>2.15.0</geoip2.version>
+		<logstash-logback-encoder.version>4.8</logstash-logback-encoder.version>
+		<aerogear.version>1.0.0</aerogear.version>
+		<uap-java.version>1.4.0</uap-java.version>
+		<geoip2.version>2.15.0</geoip2.version>
 	</properties>
 
 </project>

@@ -1,4 +1,4 @@
-package com.birol.ems.contract;
+package com.birol.ems.contract.signer;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

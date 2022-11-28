@@ -13,14 +13,14 @@ function setfileName(){
 		$('#document_file').removeClass("is-valid").addClass("is-invalid");
 		return;
 	}	
-	var type=$("#contract_type").val();
+	var type=$("#contract_type").find('option:selected').attr("stradd");
 	var filename = $('#document_file').val().split('\\').pop().replace(".pdf", "");
 	if(type!="")type+="_";	
 	$('#document_name').val(type+filename);
 	$('#document_file').removeClass("is-invalid").addClass("is-valid");
 }
 
-function addSigner(){	
+function addSigner(){
 	if($("#signerTR2").is(":visible")){
 		$("#signerTR3").removeClass("d-none").show(500);
 		$(".btn-add-signer").prop("disabled",true);
@@ -47,7 +47,7 @@ $("#invt_validity").change(function () {
 	$("#expireDate").val(moment().add(days, 'day').format('YYYY-MM-DD'));
 })
 
-function pageStart(){
+function pageStart(){	
 	
 	$('input[list]').on('keyup', function(e) {
 		var $input = $(e.target),			
@@ -96,19 +96,21 @@ function setmailmsg(z){
 	$("#mailbody").val(msg);
 }
 
-function validateForm(){
+function validateContractForm(){
+	signerform=true;	
+	var signerData = validateSigners();
 	var docval=validateDocument();
-	signerform=true;
-	var signerData = validateSigners();	
-	var signerval=signerform;
 	
-	if(docval && signerval){
+	if(docval && signerform){
 		$("#validationmsg").hide();		
 		$('#contract_modal .modal-title').html($("#document_name").val());
 		$('#contract_modal #signerData').val(signerData);
 		$('#contract_modal #formData').val(1);		
 		$('#contract_modal').modal('show');
 	}else{
+		$("html, body").animate({
+			scrollTop : 0
+		}, "slow");
 		$("#validationmsg").show();
 		return;
 	}
@@ -208,12 +210,8 @@ function saveAndSendContract(){
 	let formData2 = new FormData($('.cForm')[1]);	
 	for (var pair of formData2.entries()) {
 	    formData.append(pair[0], pair[1]);
-	}
-	
-	
-	for (var i = 0; i < signerarray.length; i++) {
-		  formData.append('signers_str[]', JSON.stringify(signerarray[i]));
-	}
+	}	
+	formData.append('signers_str', $("#signerData").val());
 	
 	for (var pair of formData.entries()) {
 	    console.log(pair[0]+ ' - ' + pair[1]); 
@@ -230,8 +228,10 @@ function saveAndSendContract(){
 			$("#contract_modal .btn-close").click();
 			  $('.toast-header .title').html("Response");
 			  $('.toast-body .toast-message').html(data);		
-			  $('.toast').toast('show');
-			return false;
+			  $('.toast').toast('show');			  
+			  if (data.indexOf("succesfully") >= 0){window.location.href = "/contractMonitoring?msg="+data;}
+			  
+			  return false;
 		},
 		error : function(xhr, desc, err) {
 			hideprocessview();

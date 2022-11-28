@@ -21,12 +21,15 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.birol.ems.contract.signer.Signer_DTO;
 @Entity
 @Table(name = "contract_info")
 public class NewDocumentForSign_DTO {
 	@Id	
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
+	private String status;
 	private String doc_name;
 	private String category;
 	@Lob
@@ -44,11 +47,15 @@ public class NewDocumentForSign_DTO {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Signer_DTO> signers;
 	@Transient
-	private List<String> signers_str;
+	private String signers_str;
 	@Transient
 	private String valid_till_str;
 	@Transient
 	private MultipartFile document_file_m;
+	@Transient
+	private int signer_percentage;
+	@Transient
+	private int signed_count;
 	
 	@Column(nullable = false)
 	private Date created;
@@ -62,6 +69,30 @@ public class NewDocumentForSign_DTO {
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date();
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public int getSigner_percentage() {
+		return signer_percentage;
+	}
+
+	public void setSigner_percentage(int signer_percentage) {
+		this.signer_percentage = signer_percentage;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public int getSigned_count() {
+		return signed_count;
+	}
+
+	public void setSigned_count(int signed_count) {
+		this.signed_count = signed_count;
 	}
 
 	public long getId() {
@@ -143,12 +174,13 @@ public class NewDocumentForSign_DTO {
 	public void setSigners(List<Signer_DTO> signers) {
 		this.signers = signers;
 	}
+	
 
-	public List<String> getSigners_str() {
+	public String getSigners_str() {
 		return signers_str;
 	}
 
-	public void setSigners_str(List<String> signers_str) {
+	public void setSigners_str(String signers_str) {
 		this.signers_str = signers_str;
 	}
 
