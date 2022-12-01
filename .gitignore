@@ -23,6 +23,7 @@ target/
 *.prefs
 .metadata/
 .factorypath
+bin/
 
 # Intellij
 .idea/

@@ -2,7 +2,11 @@ package com.birol.ems.timereport.re;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.IsoFields;
 import java.util.ArrayList;
@@ -39,7 +43,13 @@ import com.birol.ems.service.EmployeeService;
 import com.birol.ems.service.WSHservice;
 import com.birol.persistence.model.User;
 import com.birol.service.IUserService;
+import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
 @Controller
@@ -181,14 +191,16 @@ public class TimeReportControllerNew {
 	@RequestMapping(value = "/saveTimeReport", method = RequestMethod.POST)
 	public String saveTimeReport(@RequestPayload String str, Authentication auth,
 			final HttpServletRequest request) {
-		Gson gson = new Gson(); 
-		Time_Report_DTO av= gson.fromJson(str, Time_Report_DTO.class);;
-		
+		Gson gson = new Gson();
+		//final Gson gson = Converters.registerOffsetDateTime(new GsonBuilder()).create();		
 		String msg="";
-		User user = (User) auth.getPrincipal();
-		av.setEmpid(user.getId());
-		av.setFull_name(user.getFirstName()+" "+user.getLastName());
+		User user = (User) auth.getPrincipal();		
 		try {
+			//System.out.println(str);
+			Time_Report_DTO av= gson.fromJson(str, Time_Report_DTO.class);
+			av.setEmpid(user.getId());
+			av.setFull_name(user.getFirstName()+" "+user.getLastName());
+			
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate avDate = LocalDate.parse(av.getFrom_date(), formatter);
 			Date xdate = new SimpleDateFormat("yyyy-M-d").parse(avDate.toString());
@@ -261,8 +273,14 @@ public class TimeReportControllerNew {
 	private String doPendingTimeReportAction (Authentication auth,@RequestPayload String rg, 
 			@RequestPayload boolean ismail, @RequestPayload boolean decision) {
 		String msg="";
-		Type listType = new TypeToken<ArrayList<Time_Report_DTO>>(){}.getType();
-		List<Time_Report_DTO> dataList = new Gson().fromJson(rg, listType);
+		List<Time_Report_DTO> dataList= new ArrayList<Time_Report_DTO>();
+		try {
+			Type listType = new TypeToken<ArrayList<Time_Report_DTO>>(){}.getType();
+			dataList = new Gson().fromJson(rg, listType);
+		} catch (Exception e) {
+			msg= e.getMessage();
+			return msg;
+		}
 		
 		User creator = (User) auth.getPrincipal();		
 		
@@ -439,6 +457,42 @@ public class TimeReportControllerNew {
 		ArrayList<Time_Report_DTO> tr= new ArrayList<Time_Report_DTO>();
 		tr= time_Report_Repo.findByEmpid(user.getId());
 		return tr;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/saveTimeReportCalander", method = RequestMethod.POST)
+	public String saveTimeReportCalander(@ModelAttribute Time_Report_DTO av, Authentication auth,
+			final HttpServletRequest request) {
+		String msg="";
+		User user = (User) auth.getPrincipal();		
+		try {
+			av.setEmpid(user.getId());
+			av.setFull_name(user.getFirstName()+" "+user.getLastName());
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			LocalDate avDate = LocalDate.parse(av.getFrom_date(), formatter);
+			Date xdate = new SimpleDateFormat("yyyy-M-d").parse(avDate.toString());
+			av.setDate(avDate);
+			av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
+			av.setWeek(av.getDate().get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));			
+			ArrayList<Time_Report_DTO> existing= time_Report_Repo.findByDate(av.getDate());	
+			
+			if(existing.size()>=3) {msg="Can't report more than 3 times for same date.";return msg;}
+			
+			String trid= new String(wSHservice.generateTimeReportID(av, existing.size()+1));
+			av.setTr_id(trid);
+			if(LocalDate.now().compareTo(avDate)<0 && av.getWork_minute()>0) {
+				msg="Cant report for advance date: "+avDate;
+			}else {
+				time_Report_Repo.save(av);
+				msg="Successfully reported for date: " + av.getFrom_date();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg= e.getMessage();
+		}
+		return msg;
+		
 	}
 	
 }

@@ -14,6 +14,8 @@ public interface Time_Report_Repo extends CrudRepository<Time_Report_DTO, String
 	public ArrayList<Time_Report_DTO> findByDateAndEmpidAndIsapprovedAndIsrejected( LocalDate d, Long empid,boolean a,boolean r);
 
 	public ArrayList<Time_Report_DTO> findByEmpid(Long id);
+	
+	public ArrayList<Time_Report_DTO> findByDate(LocalDate date);
 
 	@Query(value = "SELECT * from time_report  "
 			+ " where empid = :userid and date BETWEEN STR_TO_DATE(:startDate, '%Y-%m-%d')  "

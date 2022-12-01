@@ -849,6 +849,7 @@ var FullCalendar = (function (exports) {
         return null;
     }
     function expandRecurring(eventStore, framingRange, context) {
+		
         var dateEnv = context.dateEnv, pluginHooks = context.pluginHooks, options = context.options;
         var defs = eventStore.defs, instances = eventStore.instances;
         // remove existing recurring instances
@@ -7889,7 +7890,9 @@ var FullCalendar = (function (exports) {
             var props = this.props;
             var theme = this.context.theme;
             var children = [];
-            var isOnlyButtons = true;
+            var isOnlyButtons = true;            
+            
+            
             for (var _i = 0, widgetGroup_1 = widgetGroup; _i < widgetGroup_1.length; _i++) {
                 var widget = widgetGroup_1[_i];
                 var buttonName = widget.buttonName, buttonClick = widget.buttonClick, buttonText = widget.buttonText, buttonIcon = widget.buttonIcon, buttonHint = widget.buttonHint;

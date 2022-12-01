@@ -45,32 +45,91 @@
 				<!-- BEGIN calendar-sidebar -->
 				<div class="calendar-sidebar">
 					<div class="desktop-sticky-top flex-fill h-100 ">						
-						<div style="cursor: pointer;" class="fc-event-list" id="external-events">
+						<div style="cursor: pointer;" class="fc-event-list " id="external-events">
+							<button onclick="getcalendar()" class="btn btn-outline-theme form-control mb-2">Refresh</button>
 							<div th:each="t: ${types}" th:id="${t.typeid}" class="fc-event-item">							
-								<div class="fc-event-link" data-color="#1ABD36">
-									<i class="fa fa-circle fs-8px me-2 text-success"></i> [[${t.typename}]]
+								<div class="fc-event-link" th:data-typeid="${t.typeid}"
+								th:data-work-start="${t.start}"
+								th:data-work-end="${t.end}"
+								th:data-work-intarval="${t.interval_minutes}"
+								th:data-isWorking="${t.isWorking}"
+								th:data-color ="${t.isWorking} ? '#1ABD36' : '#b8400d'"
+								>
+									<i  th:classappend ="${t.isWorking} ? 'text-success' : 'text-danger'" class="fa fa-circle fs-8px me-2 "></i> [[${t.typename}]]
 								</div>
 							</div>
-							
-							<div class="fc-event-item">							
-								<div class="fc-event-link" data-color="#ff2d55">
-									<i class="fa fa-circle fs-8px me-2 text-warning"></i> Lunch
-								</div>
-							</div>
-							
-							<div class="fc-event-item">							
-								<div class="fc-event-link" data-color="#ff2d55">
-									<i class="fa fa-circle fs-8px me-2 text-danger"></i> Work interval
-								</div>
-							</div>
-							
 						</div>
+						
 					</div>
+					
+					
+					
 				</div>
 				<!-- ENG calendar-sidebar -->
 			</div>
 			
 			<!-- end calendar -->
+			
+			<div class="modal fade" id="formModal">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<form id="insertTimeReportForm" action="/saveTimeReportCalander" method="post">
+							<div class="modal-header">
+								<h4 class="modal-title">date</h4>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+							</div>
+							<div class="modal-body">
+
+								<div class="form-group mb-3">				
+										<span class="h5" id="type-name"></span> : 
+										<span class="h5" id="total">Total hours</span>
+										<input type="hidden"  name="from_date" id="date"/>
+										<input type="hidden"  name="status" id="status"/>
+										<input type="hidden"  name="work_minute" id="totalWorkMinute"/>
+								</div>
+								
+								<div class="row">
+									<div class="col">
+										<div class="form-group mb-3">
+											<label class="form-label">Start</label> 
+											<input type="time" class="form-control dis" id="start" name="work_start">											</select>
+										</div>
+									</div>
+									<div class="col">
+										<div class="form-group mb-3">
+											<label class="form-label">Intarval (Minute)</label> 
+											<input type="number" class="form-control dis" id="intarval" name="work_interval">											</select>
+										</div>
+									</div>
+									<div class="col">
+										<div class="form-group mb-3">
+											<label class="form-label">End</label> 
+											<input type="time" class="form-control dis" id="end" name="work_end">											</select>
+										</div>
+									</div>
+								</div>
+								
+
+								<div class="form-group mb-3">
+									<label class="form-label">Description</label>
+									<textarea  name="work_desc" id="text" required="required" maxlength="1000"
+										class="form-control mb-3" rows="3"></textarea>
+								</div>
+
+							</div>
+							<div class="modal-footer">
+							<span class="text-danger" id="alert-msg"></span>
+							
+								<button type="button" class="btn btn-default"
+									data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-outline-theme">Save time report</button>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+			
 		</div>
 		<!-- END #content -->
 		<div th:include="theme/theme_util :: theme_util"></div>			
@@ -93,34 +152,22 @@
 	<!-- ================== END page-js ================== -->
 	<script type="text/javascript">
 		$(".fc-event-link").click(function() {
-			alert(1);
+        	var wbreak= $(this).attr('data-work-intarval');
+        	var wstart= $(this).attr('data-work-start');
+        	var wend= $(this).attr('data-work-end');
+        	var wisWorking= $(this).attr('data-isWorking');
+        	var txt="";
+        	txt+=$(this).html();
+        	if(wisWorking=="true"){				
+				txt+="<li>Start : "+wstart+"</li>";
+				txt+="<li>End : "+wend+"</li>";
+				txt+="<li>Intarval : "+wbreak+" Min</li>";
+			}
+			
+			$('.toast-header .title').html("Draggable time report event");
+			$('.toast-body .toast-message').html(txt);
+			$('.toast').toast('show');
 		})
-		
-		
-		function getData() {
-			
-			
-			$.get("/getTimereportsForcalendar", function(data, status){
-				var events=[];
-				for(var i=0;i<data.length;i++){
-					var value={};
-					var date = data[i].date;
-					var start = data[i].work_start;
-					var end = data[i].work_end;
-					var workdesc = data[i].work_desc;
-					
-					 value["title"] = workdesc;
-					 value["start"] = new Date();
-					 value["end"] = end;
-					 value["date"] = date;
-					 events.push(value);
-				}
-				return events;
-				//handleRenderFullcalendar(events);
-			 });
-			
-			
-		}
 		
 	</script>
 </body>

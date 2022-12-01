@@ -102,10 +102,16 @@ function viewTask(z) {
 }
 
 function minutesToHour(totalMinutes) {
-	 var hours = Math.floor(totalMinutes / 60);          
+	
+	if(totalMinutes>0){
+		 var hours = Math.floor(totalMinutes / 60);          
 	 var minutes = totalMinutes % 60;
-	 return hours+" H "+minutes+" Min"
-	return totalMinutes;
+	 return hours+" H "+minutes+" Min";
+	}else{
+		return "0 H 0 Min";
+	}
+	
+	
 }
 
 function enumerateDaysBetweenDates(startDate, endDate) {

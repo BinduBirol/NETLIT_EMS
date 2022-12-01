@@ -68,7 +68,7 @@ tr.hoverable:hover {
 		<div th:include="theme/sidenav :: sidenav"></div>
 		<!-- BEGIN #content -->
 		<div id="content" class="app-content">
-			<div class="row">
+			<div class="row ">
 				<div class="d-flex align-items-start">
 					<a class="" href="#"> <img
 						onerror="this.onerror=null; this.src='assets/img/user/user.png'"
@@ -78,19 +78,18 @@ tr.hoverable:hover {
 					<div class="ms-3">
 						<input type="hidden" id="this_user_id" th:value="${userdtl.empid}"/>
 						<span><span class="modal-title"
-							th:text="${userdtl.full_name}"></span>&nbsp;</span> <br /> Week No #<span
-							id="trweek_no"></span> <br /> <span>Extent:
+							th:text="${userdtl.full_name}"></span>&nbsp;</span> <br /> <span>Extent:
 							[[${userdtl.employee_Type}]]</span>
 							<br /> <span>Nearest Chief:
 							[[${userdtl.nearest_chief_name}]]</span>
-						<p id="travmessage"></p>
+						
 					</div>
 				</div>
 			</div>
 
 			<hr />
 			
-			<div class="row">
+			<div class="row mb-3">
 				<div class="col-12 col-sm-2">
 					<label>Future unavailability </label>
 					<button type="button" th:emp-id="${session.userdtl.empid}" onclick="applyVacation(this);" class="btn btn-outline-default form-control">Apply <i class="fas fa-lg fa-fw me-2 fa-universal-access"></i></button>
@@ -140,7 +139,7 @@ tr.hoverable:hover {
 				</div>
 
 			</div>
-			
+			Starting from week #<span id="trweek_no"></span> <span id="travmessage"></span>
 			<hr />
 			
 			<div id="getTablediv">
