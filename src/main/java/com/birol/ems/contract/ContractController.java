@@ -7,9 +7,13 @@ import java.io.OutputStream;
 import java.net.URLConnection;
 import java.security.Principal;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +49,7 @@ import com.birol.persistence.model.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
+import com.birol.ems.service.EmailService;
 
 @Controller
 public class ContractController {
@@ -57,6 +62,8 @@ public class ContractController {
 	NewDocRepo newDocRepo;
 	@Autowired
 	SignerRepo signerRepo;
+	@Autowired
+	EmailService emailService;
 	
 	@GetMapping("/newDocumentHome")
 	public ModelAndView newDocumentHome(Authentication auth, final ModelMap model) {
@@ -112,23 +119,31 @@ public class ContractController {
 		NewDocumentForSign_DTO savedObj= new NewDocumentForSign_DTO();
 		try {			
 			if(formData.getDocument_file_m().getSize()>0)formData.setDocument_file(formData.getDocument_file_m().getBytes());
-			formData.setCreator_id(user.getId());
+			
+			formData.setValid_till(LocalDate.parse(formData.getValid_till_str()));
+			if(formData.getInvite_as().equals("me")) {formData.setCreator_id(user.getId());}else {formData.setCreator_id(0);}
 			formData.setCreator_name(user.getFirstName()+" "+user.getLastName());
 			formData.setStatus("pending");
-			savedObj=newDocRepo.save(formData);
+			savedObj=newDocRepo.save(formData);			
 			
 			Gson gson = new Gson(); 
 			List<Signer_DTO> signerList = gson.fromJson(formData.getSigners_str(), new TypeToken<List<Signer_DTO>>(){}.getType());
 			for(Signer_DTO s: signerList) {
 				s.setContractid(savedObj.getId());
+				s.setSigning_password(getSigningPassword());
+				boolean mailsent = false;
+				try {
+					mailsent=emailService.sendContractSigningMail(s, formData.getEmail_message());
+				}catch (Exception e) {
+					e.printStackTrace();
+				}				
+				s.setIsmailsent(mailsent);
 				signerRepo.save(s);
 			}
-			msg="New contract invitation sent succesfully";
-			
+			msg="New contract invitation sent succesfully";					
 		}catch (Exception e) {			
 			e.printStackTrace();			
-			msg=e.getMessage();		
-		    
+			msg=e.getMessage();		    
 		}
 		return msg;
 	}
@@ -136,28 +151,28 @@ public class ContractController {
 	
 	
 	@PostMapping("/getContractTable")
-	public ModelAndView getContractTable(		@RequestPayload String from_date,
-												@RequestPayload String to_date,												
-												Authentication auth, final ModelMap model) {
+	public ModelAndView getContractTable(@RequestPayload String from_date,
+										@RequestPayload String to_date,												
+										Authentication auth, final ModelMap model) {
 		User user = (User) auth.getPrincipal();
-		List<NewDocumentForSign_DTO> contractlist= new ArrayList<NewDocumentForSign_DTO>();
+		ArrayList<NewDocumentForSign_DTO> contractlistall= new ArrayList<NewDocumentForSign_DTO>();
+		ArrayList<NewDocumentForSign_DTO> contractlist= new ArrayList<NewDocumentForSign_DTO>();
 		
-		contractlist= (List<NewDocumentForSign_DTO>) newDocRepo.findAllByOrderByCreatedDesc();
-		
+		contractlistall= (ArrayList<NewDocumentForSign_DTO>) newDocRepo.findAllByCreator_idOrderByCreatedDesc(0);
+		contractlist= (ArrayList<NewDocumentForSign_DTO>) newDocRepo.findAllByCreator_idOrderByCreatedDesc(user.getId());		
+		contractlist.addAll(contractlistall);
 		for(NewDocumentForSign_DTO s: contractlist) {
-			for(Signer_DTO sd: s.getSigners()) {
-				int c=0;
-				if(sd.issigned)c++;
-				s.setSigned_count(c);				
+			int c=0;
+			for(Signer_DTO sd: s.getSigners()) {				
+				if(sd.issigned)c++;					
 			}
-			
+			s.setSigned_count(c);
 			try{s.setSigner_percentage((100/s.getSigners().size())*s.getSigned_count());}catch (Exception e) {
 				s.setSigner_percentage(100);
 			}
 		}
-		
-		model.addAttribute("list", contractlist);
-		
+		Collections.sort(contractlist, Collections.reverseOrder());
+		model.addAttribute("list", contractlist);	
 		return new ModelAndView("ems/ajaxResponse/contract/getContractTable", model);		
 	}
 	
@@ -180,6 +195,32 @@ public class ContractController {
 			os.close();
 		}
 	}
-		
-
+	
+	@GetMapping("/contractview")
+	public ModelAndView contractview(@RequestParam("contractid") Long contractid, final ModelMap model) {		
+		NewDocumentForSign_DTO contract = new NewDocumentForSign_DTO();
+		contract=newDocRepo.findById(contractid).get();
+		int c=0;
+		for(Signer_DTO sd: contract.getSigners()) {				
+			if(sd.issigned)c++;					
+		}
+		contract.setSigned_count(c);
+		try{contract.setSigner_percentage((100*contract.getSigned_count())/contract.getSigners().size());}catch (Exception e) {
+			contract.setSigner_percentage(100);
+		}		
+		model.addAttribute("contract", contract);
+		return new ModelAndView("ems/pages/contract/contractview", model);
+	}
+	
+	protected String getSigningPassword() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 18) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+    }
 }

@@ -1,11 +1,5 @@
-/*
-Template Name: HUD - Responsive Bootstrap 5 Admin Template
-Version: 1.6.0
-Author: Sean Ngu
-Website: http://www.seantheme.com/hud/
-*/
 
-var handleRenderFullcalendar = function() {
+var handleRenderFullcalendar = function(events) {
 	// external events
 	var containerEl = document.getElementById('external-events');
   var Draggable = FullCalendarInteraction.Draggable;
@@ -27,6 +21,9 @@ var handleRenderFullcalendar = function() {
 	var day = d.getDate();
 	var today = moment().startOf('day');
 	var calendarElm = document.getElementById('calendar');
+	
+	
+	
 	var calendar = new FullCalendar.Calendar(calendarElm, {
     headerToolbar: {
       left: 'dayGridMonth,timeGridWeek,timeGridDay',
@@ -41,6 +38,30 @@ var handleRenderFullcalendar = function() {
     },
     initialView: 'dayGridMonth',
     editable: true,
+    //bindu
+    eventReceive: function(info) {
+    	//alert(info.event.title + " is being dropped on " + info.event.start.toISOString());
+    	
+   
+    	//var date = info.event.start;
+    	info.event.start.setHours(8,00,00,0);
+    	
+    	//alert(date);
+    	//info.event.setStart(date)
+    	alert(info.event.start);
+    	
+    	if (!confirm("Are you sure about this change?")) {
+          info.revert();
+        }
+    },    
+    eventClick:  function(arg) {
+    	var type= arg.event.title;
+    	var start= arg.event.start;
+    	var id= arg.event._def.defId;
+    	alert(type);
+    },
+    //ends bindu
+    
     droppable: true,
   	themeSystem: 'bootstrap',
   	eventLimit: true, // for all non-TimeGrid views
@@ -49,84 +70,14 @@ var handleRenderFullcalendar = function() {
 				eventLimit: 6 // adjust to 6 only for timeGridWeek/timeGridDay
 			}
 		},
-  	events: [{
-			title: 'Trip to London',
-			start: year + '-'+ month +'-01',
-			end: year + '-'+ month +'-05',
-			color: app.color.theme
-		},{
-			title: 'Meet with Sean Ngu',
-			start: year + '-'+ month +'-02T06:00:00',
-			color: app.color.blue
-		},{
-			title: 'Mobile Apps Brainstorming',
-			start: year + '-'+ month +'-10',
-			end: year + '-'+ month +'-12',
-			color: app.color.pink
-		},{
-			title: 'Stonehenge, Windsor Castle, Oxford',
-			start: year + '-'+ month +'-05T08:45:00',
-			end: year + '-'+ month +'-06T18:00',
-			color: app.color.indigo
-		},{
-			title: 'Paris Trip',
-			start: year + '-'+ month +'-12',
-			end: year + '-'+ month +'-16'
-		},{
-			title: 'Domain name due',
-			start: year + '-'+ month +'-15',
-			end: year + '-'+ month +'-15',
-			color: app.color.blue
-		},{
-			title: 'Cambridge Trip',
-			start: year + '-'+ month +'-19',
-			end: year + '-'+ month +'-19'
-		},{
-			title: 'Visit Apple Company',
-			start: year + '-'+ month +'-22T05:00:00',
-			color: app.color.green
-		},{
-			title: 'Exercise Class',
-			start: year + '-'+ month +'-22T07:30:00',
-			color: app.color.orange
-		},{
-			title: 'Live Recording',
-			start: year + '-'+ month +'-22T03:00:00',
-			color: app.color.blue
-		},{
-			title: 'Announcement',
-			start: year + '-'+ month +'-22T15:00:00',
-			color: app.color.red
-		},{
-			title: 'Dinner',
-			start: year + '-'+ month +'-22T18:00:00'
-		},{
-			title: 'New Android App Discussion',
-			start: year + '-'+ month +'-25T08:00:00',
-			end: year + '-'+ month +'-25T10:00:00',
-			color: app.color.red
-		},{
-			title: 'Marketing Plan Presentation',
-			start: year + '-'+ month +'-25T12:00:00',
-			end: year + '-'+ month +'-25T14:00:00',
-			color: app.color.blue
-		},{
-			title: 'Chase due',
-			start: year + '-'+ month +'-26T12:00:00',
-			color: app.color.orange
-		},{
-			title: 'Heartguard',
-			start: year + '-'+ month +'-26T08:00:00',
-			color: app.color.orange
-		},{
-			title: 'Lunch with Richard',
-			start: year + '-'+ month +'-28T14:00:00',
-			color: app.color.blue
-		},{
-			title: 'Web Hosting due',
-			start: year + '-'+ month +'-30',
-			color: app.color.blue
-		}]
+  	events: events,
+		eventDrop: function(info) {
+		    alert(info.event.title + " was dropped on " + info.event.start.toISOString());
+
+		    if (!confirm("Are you sure about this change?")) {
+		      info.revert();
+		    }
+		  }
 	});
 	
 	calendar.render();
@@ -136,5 +87,54 @@ var handleRenderFullcalendar = function() {
 /* Controller
 ------------------------------------------------ */
 $(document).ready(function() {
-	handleRenderFullcalendar();
+	$.get("/getTimereportsForcalendar", function(data, status){
+		var events=[];
+		for(var i=0;i<data.length;i++){
+			var value={};
+			var startdate = new Date(data[i].date);
+			var enddate = new Date(data[i].date);
+			var start = data[i].work_start;
+			var end = data[i].work_end;
+			var workdesc = data[i].work_desc;
+			var color = app.color.blue;
+			
+					
+			
+			
+			
+			if(data[i].work_minute>0){
+				var startHour=data[i].work_start.split(":")[0];
+				var startmin=data[i].work_start.split(":")[1];				
+				var endHour=data[i].work_end.split(":")[0];
+				var endmin=data[i].work_end.split(":")[0];			
+				
+				 startdate.setHours(startHour,startmin);
+				 enddate.setHours(endHour,endmin);
+				
+				
+				 value["title"] = workdesc;
+				 value["start"] = startdate;
+				 value["end"] = enddate;			 
+				 
+			}else{				
+				value["title"] = workdesc;
+				 value["start"] = startdate;
+				 value["allDay"] = true;
+				 //value["color"] = app.color.red;
+			}
+			
+			 if(data[i].isapproved)
+				 value["color"] = app.color.green;
+			 
+			 if(data[i].isrejected)
+				 value["color"] = app.color.red;
+			
+			
+			
+			
+			 events.push(value);
+		}
+		
+		handleRenderFullcalendar(events);
+	 });
 });

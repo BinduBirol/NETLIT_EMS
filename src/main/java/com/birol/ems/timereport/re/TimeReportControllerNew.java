@@ -426,6 +426,21 @@ public class TimeReportControllerNew {
 		return new ModelAndView("ems/ajaxResponse/timereport/getApprovedTimeReports", model);	
 	}
 	
+	@GetMapping("/calendar")
+	public ModelAndView calander(Authentication auth, ModelMap model) {
+		model.addAttribute("types", timeReportTypesRepo.findAll());
+		return new ModelAndView("ems/pages/calendar", model);
+	}
+	
+	@ResponseBody
+	@GetMapping("/getTimereportsForcalendar")
+	public ArrayList<Time_Report_DTO> getTimereportsForcalendar(Authentication auth, ModelMap model) {
+		User user = (User) auth.getPrincipal();
+		ArrayList<Time_Report_DTO> tr= new ArrayList<Time_Report_DTO>();
+		tr= time_Report_Repo.findByEmpid(user.getId());
+		return tr;
+	}
+	
 }
 
 class TotalTRDTO {

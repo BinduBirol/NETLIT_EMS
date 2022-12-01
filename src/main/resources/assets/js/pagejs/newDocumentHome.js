@@ -102,10 +102,14 @@ function validateContractForm(){
 	var docval=validateDocument();
 	
 	if(docval && signerform){
-		$("#validationmsg").hide();		
+		$("#validationmsg").hide();	
 		$('#contract_modal .modal-title').html($("#document_name").val());
-		$('#contract_modal #signerData').val(signerData);
-		$('#contract_modal #formData').val(1);		
+		$('#contract_modal #signerData').val(JSON.stringify(signerData));
+		$('#contract_modal #signerEmail').html("");
+		for(var i=0; i<signerData.length;i++){
+			$('#contract_modal #signerEmail').append("<li>"+signerData[i].signer_email+"</li>");
+		}		
+		
 		$('#contract_modal').modal('show');
 	}else{
 		$("html, body").animate({
@@ -177,7 +181,7 @@ function validateSigners(){
 	}
 	signerarray= array;
 	var data= JSON.stringify(array);
-	return data;
+	return array;
 }
 
 function validateSignersInput(trid){
@@ -203,7 +207,8 @@ function validateSignersInput(trid){
 	return values;
 }
 
-function saveAndSendContract(){	
+function saveAndSendContract(){
+	showprocessview();
 	var form = $('.cForm')[0];
 	var formData = new FormData(form);	
 	
@@ -227,10 +232,9 @@ function saveAndSendContract(){
 			hideprocessview();
 			$("#contract_modal .btn-close").click();
 			  $('.toast-header .title').html("Response");
-			  $('.toast-body .toast-message').html(data);		
+			  $('.toast-body .toast-message').html(data);
 			  $('.toast').toast('show');			  
-			  if (data.indexOf("succesfully") >= 0){window.location.href = "/contractMonitoring?msg="+data;}
-			  
+			  if (data.indexOf("succesfully") >= 0){window.location.href = "/contractMonitoring?msg="+data;}			  
 			  return false;
 		},
 		error : function(xhr, desc, err) {
@@ -240,7 +244,6 @@ function saveAndSendContract(){
 			  $('.toast-body .toast-message').html(err);		
 			  $('.toast').toast('show');
 			return false;
-
 		}
 	});
     

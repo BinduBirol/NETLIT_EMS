@@ -117,10 +117,7 @@ public class EMScontroller {
 		return new ModelAndView("ems/ajaxResponse/viewLoggedinusers", model);
 	}
 
-	@GetMapping("/calendar")
-	public ModelAndView calander(final ModelMap model) {
-		return new ModelAndView("ems/pages/calendar", model);
-	}
+	
 
 	@GetMapping("/changePassword")
 	public ModelAndView changePassword(final ModelMap model) {

@@ -14,18 +14,27 @@ public class Signer_DTO {
 	public long signer_id;
 	public long contractid;
 	public long signer_empid;
-	
+	public String signing_password;
 	public String signer_name;
 	public String signer_email;
 	public String signer_phone;
 	public String signer_company;
 	public boolean issigned;
+	public boolean ismailsent;
 	
 	public long getSigner_id() {
 		return signer_id;
 	}
 	public void setSigner_id(long signer_id) {
 		this.signer_id = signer_id;
+	}	
+	
+	
+	public String getSigning_password() {
+		return signing_password;
+	}
+	public void setSigning_password(String signing_password) {
+		this.signing_password = signing_password;
 	}
 	public long getContractid() {
 		return contractid;
@@ -69,6 +78,11 @@ public class Signer_DTO {
 	public void setIssigned(boolean issigned) {
 		this.issigned = issigned;
 	}
-	
+	public boolean isIsmailsent() {
+		return ismailsent;
+	}
+	public void setIsmailsent(boolean ismailsent) {
+		this.ismailsent = ismailsent;
+	}	
 	
 }

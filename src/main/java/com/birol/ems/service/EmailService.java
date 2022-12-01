@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import com.birol.ems.contract.signer.Signer_DTO;
 import com.birol.ems.dto.Mail;
 import com.birol.persistence.model.User;
 import com.birol.registration.OnRegistrationCompleteEvent;
@@ -90,6 +91,73 @@ public class EmailService {
 		System.out.println(env.getProperty("support.email"));
 		email.setFrom(env.getProperty("support.email"));
 		emailSender.send(email);
+	}
+	
+	public boolean sendContractSigningMail( Signer_DTO signer, String mailbody) throws MessagingException, UnsupportedEncodingException {
+		boolean issent= false;	
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message,
+                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                StandardCharsets.UTF_8.name());
+        
+        final String recipientAddress = signer.getSigner_email();
+        final String subject = "Invitation to sign a document";        
+        final String signurl= "https://ems.netlit.se" + "/signDocument.html";
+        
+        String text= "Hello "+signer.getSigner_name()+",<br/>you are invited to sign a document on Netlit EMS.<br/>";
+        text+="Copy the token bellow. You will need it to sign the document.";
+        text+="<h2 style='font-style: italic;'>"+signer.getSigning_password()+"</h2>";        
+        text+="<button><a style='text-decoration: none;padding: 10px 20px;text-align: center;display: inline-block;' href='"+signurl+"'>Accept invitation and sign the document</a></button><br/></br>";       
+        text+="Message from invitantion sender<hr/>";        
+        text+=stringToHtml(mailbody);
+        
+        helper.setText(text, true);
+        helper.setSubject(subject);
+        helper.setTo(recipientAddress);
+        helper.setFrom(env.getProperty("support.email"));
+
+        try {
+        	emailSender.send(message);
+        	issent= true;	
+		} catch (Exception e) {
+			issent= false;	
+			e.printStackTrace();
+		}
+        
+        return issent;
+    }
+	
+	public static String stringToHtml(String s) {
+	    StringBuilder builder = new StringBuilder();
+	    boolean previousWasASpace = false;
+	    for( char c : s.toCharArray() ) {
+	        if( c == ' ' ) {
+	            if( previousWasASpace ) {
+	                builder.append("&nbsp;");
+	                previousWasASpace = false;
+	                continue;
+	            }
+	            previousWasASpace = true;
+	        } else {
+	            previousWasASpace = false;
+	        }
+	        switch(c) {
+	            case '<': builder.append("&lt;"); break;
+	            case '>': builder.append("&gt;"); break;
+	            case '&': builder.append("&amp;"); break;
+	            case '"': builder.append("&quot;"); break;
+	            case '\n': builder.append("<br>"); break;
+	            // We need Tab support here, because we print StackTraces as HTML
+	            case '\t': builder.append("&nbsp; &nbsp; &nbsp;"); break;  
+	            default:
+	                if( c < 128 ) {
+	                    builder.append(c);
+	                } else {
+	                    builder.append("&#").append((int)c).append(";");
+	                }    
+	        }
+	    }
+	    return builder.toString();
 	}
 
 }

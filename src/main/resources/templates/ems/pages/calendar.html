@@ -31,8 +31,10 @@
 				
 		<!-- BEGIN #content -->
 		<div id="content" class="app-content p-0">
+			
+			
 			<!-- BEGIN calendar -->
-			<div class="calendar">
+			<div class="calendar mb-3">
 				<!-- BEGIN calendar-body -->
 				<div class="calendar-body">
 					<div data-scrollbar="true" data-height="100%" data-skip-mobile="true">
@@ -42,26 +44,32 @@
 				<!-- ENG calendar-body -->
 				<!-- BEGIN calendar-sidebar -->
 				<div class="calendar-sidebar">
-					<div class="desktop-sticky-top flex-fill h-100">
-						<div class="calendar-sidebar-title">Draggable Events:</div>
-						<div class="fc-event-list" id="external-events">
-							<div class="fc-event-item"><div class="fc-event-link" data-color="#ff2d55"><i class="fa fa-circle fs-8px me-2 text-pink"></i> Meeting</div></div>
-							<div class="fc-event-item"><div class="fc-event-link" data-color="#ff3b30"><i class="fa fa-circle fs-8px me-2 text-danger"></i> Group Discussion</div></div>
-							<div class="fc-event-item"><div class="fc-event-link" data-color="#FF9500"><i class="fa fa-circle fs-8px me-2 text-warning"></i> Brainstorming</div></div>
-							<div class="fc-event-item"><div class="fc-event-link" data-color="#FFCC00"><i class="fa fa-circle fs-8px me-2 text-yellow"></i> Presentation</div></div>
-							<div class="fc-event-item"><div class="fc-event-link" data-color="#1ABD36"><i class="fa fa-circle fs-8px me-2 text-success"></i> Holiday</div></div>
-							<div class="fc-event-item"><div class="fc-event-link" data-color="#0cd096"><i class="fa fa-circle fs-8px me-2 text-theme"></i> Sick Leave</div></div>
-							<div class="fc-event-item"><div class="fc-event-link" data-color="#30beff"><i class="fa fa-circle fs-8px me-2 text-info"></i> Overtime</div></div>
-							<div class="fc-event-item"><div class="fc-event-link" data-color="#1f6bff"><i class="fa fa-circle fs-8px me-2 text-blue"></i> Work from Home</div></div>
-							<div class="fc-event-item"><div class="fc-event-link" data-color="#640DF3"><i class="fa fa-circle fs-8px me-2 text-indigo"></i> Business Travel</div></div>
-							<div class="fc-event-item"><div class="fc-event-link" data-color="#5b2e91"><i class="fa fa-circle fs-8px me-2 text-purple"></i> Breakfast</div></div>
-							<div class="fc-event-item"><div class="fc-event-link" data-color="#869ac0"><i class="fa fa-circle fs-8px me-2 text-muted"></i> Lunch</div></div>
-							<div class="fc-event-item"><div class="fc-event-link" data-color="#869ac0"><i class="fa fa-circle fs-8px me-2 text-muted"></i> Dinner</div></div>
+					<div class="desktop-sticky-top flex-fill h-100 ">						
+						<div style="cursor: pointer;" class="fc-event-list" id="external-events">
+							<div th:each="t: ${types}" th:id="${t.typeid}" class="fc-event-item">							
+								<div class="fc-event-link" data-color="#1ABD36">
+									<i class="fa fa-circle fs-8px me-2 text-success"></i> [[${t.typename}]]
+								</div>
+							</div>
+							
+							<div class="fc-event-item">							
+								<div class="fc-event-link" data-color="#ff2d55">
+									<i class="fa fa-circle fs-8px me-2 text-warning"></i> Lunch
+								</div>
+							</div>
+							
+							<div class="fc-event-item">							
+								<div class="fc-event-link" data-color="#ff2d55">
+									<i class="fa fa-circle fs-8px me-2 text-danger"></i> Work interval
+								</div>
+							</div>
+							
 						</div>
 					</div>
 				</div>
 				<!-- ENG calendar-sidebar -->
 			</div>
+			
 			<!-- end calendar -->
 		</div>
 		<!-- END #content -->
@@ -83,5 +91,37 @@
 	<script src="assets/plugins/@fullcalendar/bootstrap/main.global.js"></script>
 	<script src="assets/js/demo/calendar.demo.js"></script>
 	<!-- ================== END page-js ================== -->
+	<script type="text/javascript">
+		$(".fc-event-link").click(function() {
+			alert(1);
+		})
+		
+		
+		function getData() {
+			
+			
+			$.get("/getTimereportsForcalendar", function(data, status){
+				var events=[];
+				for(var i=0;i<data.length;i++){
+					var value={};
+					var date = data[i].date;
+					var start = data[i].work_start;
+					var end = data[i].work_end;
+					var workdesc = data[i].work_desc;
+					
+					 value["title"] = workdesc;
+					 value["start"] = new Date();
+					 value["end"] = end;
+					 value["date"] = date;
+					 events.push(value);
+				}
+				return events;
+				//handleRenderFullcalendar(events);
+			 });
+			
+			
+		}
+		
+	</script>
 </body>
 </html>

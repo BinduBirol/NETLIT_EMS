@@ -23,9 +23,10 @@ import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.birol.ems.contract.signer.Signer_DTO;
+import com.birol.ems.dto.LoggedinUserDTO;
 @Entity
 @Table(name = "contract_info")
-public class NewDocumentForSign_DTO {
+public class NewDocumentForSign_DTO implements Comparable<NewDocumentForSign_DTO>{
 	@Id	
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
@@ -214,6 +215,11 @@ public class NewDocumentForSign_DTO {
 
 	public void setUpdated(Date updated) {
 		this.updated = updated;
-	}	
+	}
+	
+	@Override
+    public int compareTo(NewDocumentForSign_DTO e) {
+        return getCreated().compareTo(e.getCreated());
+    }
 	
 }

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="theme/header :: staticheaderFragment"></head>
+<body>
+	<!-- BEGIN #app -->
+	<div id="app" class="app">		
+		<div th:include="theme/header :: dynamicheaderFragment"></div>
+		<div th:include="theme/sidenav :: sidenav"></div>		
+		<!-- BEGIN #content -->
+		
+		<div id="content" class="app-content">
+			<ul class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">CONTRACT</a></li>
+				<li class="breadcrumb-item"><a href="/contractMonitoring">MONITORING</a></li>
+				<li class="breadcrumb-item active">MONITORING</li>
+			</ul>
+
+			<h1 class="page-header">[[${contract.doc_name}]]</h1>
+			<hr />
+			<div class="alert alert-primary" th:if="${(param.msg != null)}">
+			    [[${param.msg}]]
+			</div>
+			
+			<div class="mb-5">
+			
+			<div class="row mb-3">
+				<div class="col">
+					<i class="far fa-lg fa-fw me-2 fa-hand-point-right"></i>Document created by : <b>[[${contract.creator_name}]]</b>
+				</div>
+				
+				<div class="col">
+					<i class="far fa-lg fa-fw me-2 fa-hand-point-right"></i>Category : <b>[[${contract.category}]]</b>
+				</div>
+				
+				<div class="col">
+					<i class="far fa-lg fa-fw me-2 fa-hand-point-right"></i>Invited as : <b>[[${contract.invite_as=='me'} ? 'Myself' : 'Netlit EMS']]</b>
+				</div>				
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col">
+					<i class="far fa-lg fa-fw me-2 fa-hand-point-right"></i>Signing status : <b class="text-uppercase">[[${contract.status}]]</b>
+				</div>
+				
+				<div class="col">
+					<i class="far fa-lg fa-fw me-2 fa-hand-point-right"></i>Valid until : <b>[[${#temporals.format(contract.valid_till, 'dd MMM yyyy')}]]</b>
+				</div>
+				
+				<div class="col">
+					<i class="far fa-lg fa-fw me-2 fa-hand-point-right"></i>Created on <b>[[${#dates.format(contract.created, 'dd MMM yyyy')}]]</b>
+				</div>			
+			</div>
+				
+			</div>
+			
+			<h4>Signer Information</h4>				
+			
+			<div class="row">
+				
+				<div class="col-sm-3">
+					<div class="progress">
+						<div class="progress-bar" role="progressbar"
+							th:style="'width:'+ ${contract.signer_percentage} +'%'"></div>
+					</div>
+				</div>
+				<div class="col small">[[${contract.signed_count}]] /
+					[[${#lists.size(contract.signers)}]]</div>
+			</div>
+
+
+
+			<table class="table table-hover">
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Phone</th>
+					<th>Company</th>
+					<th>Token</th>
+					<th>Status</th>
+					<th></th>
+				</tr>
+				
+				<tr th:each="s : ${contract.signers}">
+					<td>[[${sStat.index+1}]]</td>
+					<td>[[${s.signer_name}]]</td>
+					<td>[[${s.signer_email}]]</td>
+					<td>[[${s.signer_phone}]]</td>
+					<td>[[${s.signer_company}]]</td>
+					<td class="small"><i>[[${s.signing_password}]]</i></td>
+					<td>[[${s.issigned}?'SIGNED':'PENDIG']]</td>
+					<td>
+						<a th:if="${s.issigned==false}" href="#"
+						data-bs-toggle="dropdown" class=" text-opacity-50"> <i
+							class="fa fa-ellipsis-h"></i></a>
+						
+						<div class="dropdown-menu dropdown-menu-end">
+							<a href="#" class="dropdown-item"><i class="fas fa-fw me-2 fa-edit"></i></i>Edit</a>
+							<a href="#" class="dropdown-item"><i class="fas fa-fw me-2 fa-clock"></i></i>Send reminder</a>	
+								
+						</div>
+					</td>
+				</tr>
+				
+			</table>			
+			
+		</div>
+		
+		<!-- END #content -->
+		<div th:include="theme/theme_util :: theme_util"></div>	
+	</div>
+	<!-- END #app -->	
+	<div th:include="theme/footer::staticFooter"></div>
+</body>
+</html>

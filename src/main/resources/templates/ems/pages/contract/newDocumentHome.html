@@ -32,7 +32,7 @@
 
 			<h1 class="page-header">Create new document</h1>
 			<p id="validationmsg" style="display: none;" class="alert alert-warning">
-				<a onclick="$('.is-invalid').focus();" class="btn btn-link text-info text-decoration-none"><i class="fas fa-lg fa-fw me-2 fa-exclamation-circle"></i>Please find the red marked input fields and fill them up properly.</a> <a class="btn btn-link text-info text-decoration-none" onclick="$('#validatebtn').focus();">Try again</a>
+				<i class="fas fa-lg fa-fw me-2 fa-exclamation-circle"></i>Please find the <a style="cursor: pointer;" onclick="$('.is-invalid').focus();" class="text-info text-decoration-none">red marked input fields</a> and fill them up properly. <a style="cursor: pointer;" class=" text-info text-decoration-none" onclick="$('#validatebtn').focus();">Try again</a>
 			</p>
 			<hr/>
 			
@@ -259,14 +259,15 @@
 			        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 			      </div>
 			      <div class="modal-body">
-			        <p>You are going to send this contract.</p>
-			        
+			        <p>You are going to send this contract to</p>
+			        <ul id="signerEmail">
+			        </ul>
 			        <input type="hidden" id="signerData">
 			        
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-			        <button onclick="saveAndSendContract()" type="button" class="btn btn-outline-theme">SEND</button>
+			        <button onclick="saveAndSendContract()" type="button" class="btn btn-outline-theme processview">SEND</button>
 			      </div>
 			    </div>
 			  </div>
