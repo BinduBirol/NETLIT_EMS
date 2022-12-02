@@ -475,12 +475,20 @@ public class TimeReportControllerNew {
 			av.setDate(avDate);
 			av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
 			av.setWeek(av.getDate().get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));			
-			ArrayList<Time_Report_DTO> existing= time_Report_Repo.findByDate(av.getDate());	
 			
-			if(existing.size()>=3) {msg="Can't report more than 3 times for same date.";return msg;}
+			if(av.getTr_id().isEmpty()) {
+				ArrayList<Time_Report_DTO> existing= time_Report_Repo.findByDate(av.getDate());			
+				if(existing.size()>=3) {msg="Can't report more than 3 times for same date.";return msg;}
+				boolean isob= false;
+				for(Time_Report_DTO x: existing) {
+					x.getTrTypes().isOB=isob;
+				}
+				//if(isob && )			
+				String trid= new String(wSHservice.generateTimeReportID(av, existing.size()+1));
+				av.setTr_id(trid);
+			}
 			
-			String trid= new String(wSHservice.generateTimeReportID(av, existing.size()+1));
-			av.setTr_id(trid);
+			
 			if(LocalDate.now().compareTo(avDate)<0 && av.getWork_minute()>0) {
 				msg="Cant report for advance date: "+avDate;
 			}else {

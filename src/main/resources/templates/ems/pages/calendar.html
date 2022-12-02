@@ -21,6 +21,12 @@
 	<link href="assets/plugins/@fullcalendar/list/main.min.css" rel="stylesheet" />
 	<link href="assets/plugins/@fullcalendar/bootstrap/main.min.css" rel="stylesheet" />
 	<!-- ================== END page-css ================== -->
+	
+	<style>
+		.fc-event{
+		    cursor: pointer;
+		}
+	</style>
 
 </head>
 <body>
@@ -70,10 +76,11 @@
 			
 			<!-- end calendar -->
 			
-			<div class="modal fade" id="formModal">
-				<div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content">
-						<form id="insertTimeReportForm" action="/saveTimeReportCalander" method="post">
+			
+			<div class="modal fade" id="editModal">
+				<div class="modal-dialog modal-dialog-centered ">
+					<div class="modal-content bg-opacity-25">
+						<form id="editTimeReportForm" action="/saveTimeReportCalander" method="post">
 							<div class="modal-header">
 								<h4 class="modal-title">date</h4>
 								<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -81,10 +88,20 @@
 							<div class="modal-body">
 
 								<div class="form-group mb-3">				
-										<span class="h5" id="type-name"></span> : 
-										<span class="h5" id="total">Total hours</span>
+										<div class="form-group mb-3">
+											<label class="form-label">Select a type</label> 
+											<select name="status" id="status" class="form-select">
+												<option th:each="t: ${types}" 
+												th:start="${t.typeid}"
+												th:end="${t.typeid}"
+												th:lbreak="${t.typeid}"
+												th:isworking="${t.typeid}"
+												th:value="${t.typeid}">[[${t.typename}]]</option>
+											</select>
+										</div>										
+										
 										<input type="hidden"  name="from_date" id="date"/>
-										<input type="hidden"  name="status" id="status"/>
+										<input type="hidden"  name="tr_id" id="tr_id"/>
 										<input type="hidden"  name="work_minute" id="totalWorkMinute"/>
 								</div>
 								
@@ -115,6 +132,8 @@
 									<textarea  name="work_desc" id="text" required="required" maxlength="1000"
 										class="form-control mb-3" rows="3"></textarea>
 								</div>
+								
+								<span class="h5">Total hours : </span><span class="h5" id="work_hour"></span>
 
 							</div>
 							<div class="modal-footer">
@@ -122,7 +141,7 @@
 							
 								<button type="button" class="btn btn-default"
 									data-bs-dismiss="modal">Close</button>
-								<button type="submit" class="btn btn-outline-theme">Save time report</button>
+								<button type="submit" id="submit" class="btn btn-outline-theme">Save time report</button>
 							</div>
 
 						</form>
