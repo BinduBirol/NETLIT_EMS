@@ -446,17 +446,51 @@ public class TimeReportControllerNew {
 	
 	@GetMapping("/calendar")
 	public ModelAndView calander(Authentication auth, ModelMap model) {
-		model.addAttribute("types", timeReportTypesRepo.findAll());
+		model.addAttribute("types", timeReportTypesRepo.findAllByOrderByIsWorkingDescTypeidAsc());
 		return new ModelAndView("ems/pages/calendar", model);
 	}
 	
+	
 	@ResponseBody
-	@GetMapping("/getTimereportsForcalendar")
-	public ArrayList<Time_Report_DTO> getTimereportsForcalendar(Authentication auth, ModelMap model) {
+	@GetMapping("/getTimereportEventsForcalendar")
+	public ArrayList<EventCalendarDTO> getTimereportEventsForcalendar(Authentication auth, ModelMap model) {
 		User user = (User) auth.getPrincipal();
 		ArrayList<Time_Report_DTO> tr= new ArrayList<Time_Report_DTO>();
+		ArrayList<EventCalendarDTO> events= new ArrayList<EventCalendarDTO>();
 		tr= time_Report_Repo.findByEmpid(user.getId());
-		return tr;
+		
+		for(Time_Report_DTO t:tr) {
+			EventCalendarDTO event= new EventCalendarDTO();			
+			if(t.getWork_minute()>0) {
+				LocalDateTime start= t.getDate().atTime(Integer.parseInt(t.getWork_start().split(":")[0]), Integer.parseInt(t.getWork_start().split(":")[1]));
+				LocalDateTime end= t.getDate().atTime(Integer.parseInt(t.getWork_end().split(":")[0]), Integer.parseInt(t.getWork_end().split(":")[1]));
+				event.setStart(String.valueOf(start));
+				event.setEnd(String.valueOf(end));
+			}else {
+				event.setStart(String.valueOf(t.getDate().atTime(0,0)));
+				event.setAllDay(true);
+			}	
+			event.setTitle(t.getTrTypes().getTypename());			
+			
+			event.setTypeid(t.getStatus());
+			event.setStartHour(t.getWork_start());
+			event.setEndHour(t.getWork_end());
+			event.setBreakMin(t.getWork_interval());
+			event.setTrid(t.getTr_id());
+			event.setIsapproved(t.isIsapproved());
+			event.setIsrejected(t.isIsrejected());
+			event.setWork_hour(t.getWork_hour());
+			event.setWorkdesc(t.getWork_desc());
+			event.setWork_minute(t.getWork_minute());
+			
+			event.setColor("#2874A6");
+			if(t.isIsapproved())event.setColor("#1D8348");
+			if(t.isIsrejected())event.setColor("#FF3333");
+			
+			events.add(event);
+		}	
+		
+		return events;
 	}
 	
 	@ResponseBody
@@ -464,7 +498,7 @@ public class TimeReportControllerNew {
 	public String saveTimeReportCalander(@ModelAttribute Time_Report_DTO av, Authentication auth,
 			final HttpServletRequest request) {
 		String msg="";
-		User user = (User) auth.getPrincipal();		
+		User user = (User) auth.getPrincipal();
 		try {
 			av.setEmpid(user.getId());
 			av.setFull_name(user.getFirstName()+" "+user.getLastName());
@@ -474,24 +508,22 @@ public class TimeReportControllerNew {
 			Date xdate = new SimpleDateFormat("yyyy-M-d").parse(avDate.toString());
 			av.setDate(avDate);
 			av.setDay(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(xdate));
-			av.setWeek(av.getDate().get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));			
+			av.setWeek(av.getDate().get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
 			
-			if(av.getTr_id().isEmpty()) {
-				ArrayList<Time_Report_DTO> existing= time_Report_Repo.findByDate(av.getDate());			
-				if(existing.size()>=3) {msg="Can't report more than 3 times for same date.";return msg;}
-				boolean isob= false;
-				for(Time_Report_DTO x: existing) {
-					x.getTrTypes().isOB=isob;
-				}
-				//if(isob && )			
+			ArrayList<Time_Report_DTO> existing= time_Report_Repo.findByDateAndEmpid(av.getDate(),av.getEmpid());			
+			
+			
+			if(av.getTr_id().isEmpty()) {				
+				if(existing.size()>=3) {msg="Can't report more than 3 times for same date";return msg;}
 				String trid= new String(wSHservice.generateTimeReportID(av, existing.size()+1));
 				av.setTr_id(trid);
-			}
-			
+				if(!validatebeforeNewSaveTR(av,existing)) {msg="Try a different type for "+av.getDate();return msg;}
+			}	
 			
 			if(LocalDate.now().compareTo(avDate)<0 && av.getWork_minute()>0) {
-				msg="Cant report for advance date: "+avDate;
+				msg="Cant report for advance date: "+avDate;return msg;
 			}else {
+				if(!validatebeforeOldSaveTR(av,existing)) {msg="Try a different type for "+av.getDate();return msg;}	
 				time_Report_Repo.save(av);
 				msg="Successfully reported for date: " + av.getFrom_date();
 			}
@@ -501,6 +533,24 @@ public class TimeReportControllerNew {
 		}
 		return msg;
 		
+	}
+	
+	private boolean validatebeforeNewSaveTR(Time_Report_DTO av, ArrayList<Time_Report_DTO> existing) {	
+		boolean isrgache= false;
+		for(Time_Report_DTO t: existing) {
+			if(av.getStatus()==t.getStatus())return false;
+			if(!t.getTrTypes().isOB())isrgache= true;
+		}
+		TimeReportTypesDTO type= timeReportTypesRepo.findById(av.getStatus()).get();		
+		if(isrgache && !type.isOB())return false;
+		return true;	
+	}
+	
+	private boolean validatebeforeOldSaveTR(Time_Report_DTO av, ArrayList<Time_Report_DTO> existing) {	
+		for(Time_Report_DTO t: existing) {
+			if(av.getStatus()==t.getStatus())return false;
+		}
+		return true;
 	}
 	
 }

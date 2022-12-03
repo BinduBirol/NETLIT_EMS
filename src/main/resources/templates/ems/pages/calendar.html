@@ -26,6 +26,10 @@
 		.fc-event{
 		    cursor: pointer;
 		}
+		
+		#calendar {
+		
+		}
 	</style>
 
 </head>
@@ -36,11 +40,11 @@
 		<div th:include="theme/sidenav :: sidenav"></div>
 				
 		<!-- BEGIN #content -->
-		<div id="content" class="app-content p-0">
+		<div id="content" class="app-content p-0 ">
 			
 			
 			<!-- BEGIN calendar -->
-			<div class="calendar mb-3">
+			<div class="calendar ">
 				<!-- BEGIN calendar-body -->
 				<div class="calendar-body">
 					<div data-scrollbar="true" data-height="100%" data-skip-mobile="true">
@@ -52,7 +56,7 @@
 				<div class="calendar-sidebar">
 					<div class="desktop-sticky-top flex-fill h-100 ">						
 						<div style="cursor: pointer;" class="fc-event-list " id="external-events">
-							<button onclick="getcalendar()" class="btn btn-outline-theme form-control mb-2">Refresh</button>
+							<button onclick="$('#infoModal').modal('show');" class="btn btn-outline-theme form-control mb-2">FYI</button>
 							<div th:each="t: ${types}" th:id="${t.typeid}" class="fc-event-item">							
 								<div class="fc-event-link" th:data-typeid="${t.typeid}"
 								th:data-work-start="${t.start}"
@@ -90,12 +94,12 @@
 								<div class="form-group mb-3">				
 										<div class="form-group mb-3">
 											<label class="form-label">Select a type</label> 
-											<select name="status" id="status" class="form-select">
+											<select onchange="setTimeParams()" name="status" id="status" class="form-select">
 												<option th:each="t: ${types}" 
-												th:start="${t.typeid}"
-												th:end="${t.typeid}"
-												th:lbreak="${t.typeid}"
-												th:isworking="${t.typeid}"
+												th:start="${t.start}"
+												th:end="${t.end}"
+												th:lbreak="${t.interval_minutes}"
+												th:isworking="${t.isWorking}"
 												th:value="${t.typeid}">[[${t.typename}]]</option>
 											</select>
 										</div>										
@@ -103,6 +107,7 @@
 										<input type="hidden"  name="from_date" id="date"/>
 										<input type="hidden"  name="tr_id" id="tr_id"/>
 										<input type="hidden"  name="work_minute" id="totalWorkMinute"/>
+										<input type="hidden"  name="work_hour" id="work_hour_hidden"/>
 								</div>
 								
 								<div class="row">
@@ -145,6 +150,38 @@
 							</div>
 
 						</form>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="modal fade" id="infoModal">
+				<div class="modal-dialog  modal-dialog-centered ">
+					<div class="modal-content bg-opacity-25">
+						<div class="modal-header">
+								<h4 class="modal-title">For your information</h4>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+						</div>
+						<div class="modal-body overflow-auto">
+							<ul>
+								<li>
+									<h4>Report work time</h4>
+									<p>
+										Just drag the time repor types from the right sidebar and drop it to the calendar date. You will get the time report form.
+										<img class="img-fluid" src="assets/img/timereport/create.gif"/>
+									</p>
+								</li>
+								
+								<li>
+									<h4>Edit time report</h4>
+									<p>
+										You can modify PENDING and REJECTED time reports. Just click on the time report showing on the calendar date.
+										
+									</p>
+								</li>
+							</ul>
+						</div>
+						
 					</div>
 				</div>
 			</div>
