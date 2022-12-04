@@ -64,7 +64,7 @@
 					class='form-control form-control-sm work_desc' rows='2'></textarea>
 			</td>
 			<td>
-				<span>
+					<span>
 						<button th:if="${element.value[0].isapproved and !element.value[0].isrejected}" saveaction="saveTimeReport"
 						th:tr-id="${element.value[0].tr_id}"
 						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-success'>APPROVED</button>
@@ -77,13 +77,13 @@
 					</span>
 					
 					<span>
-						<button th:if="${!element.value[0].isapproved and !element.value[0].isrejected and element.value[0].status!=0}" saveaction="saveTimeReport"
+						<button th:if="${!element.value[0].isapproved and !element.value[0].isrejected and !element.value[0].notfoundindb}" saveaction="saveTimeReport"
 						th:tr-id="${element.value[0].tr_id}"
 						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-default'>PENDING</button>
 					</span>	
 					
 					<span>
-						<button th:if="${!element.value[0].isapproved and !element.value[0].isrejected and element.value[0].status==0}" saveaction="saveTimeReport"
+						<button th:if="${!element.value[0].isapproved and !element.value[0].isrejected and element.value[0].notfoundindb}" saveaction="saveTimeReport"
 						th:tr-id="${element.value[0].tr_id}"
 						onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-theme'>SUBMIT</button>
 					</span>	
@@ -97,7 +97,7 @@
 			</td>
 		</tr>
 		
-		<tr th:classappend="${element.value[1].status==0} ? 'd-none' : ''" class="border-dark ">		
+		<tr th:classappend="${element.value[1].notfoundindb} ? 'd-none' : ''" class="border-dark ">		
 			<td>
 				<input type="hidden" class="av_id" th:value='${element.value[1].tr_id}'/>
 				<input type="hidden" class="date" th:value="${#temporals.format(element.value[1].date, 'yyyy-MM-dd')}" />
@@ -156,13 +156,13 @@
 					</span>
 					
 					<span>
-						<button th:if="${!element.value[1].isapproved and !element.value[1].isrejected and element.value[1].status!=0}" saveaction="saveTimeReport"
+						<button th:if="${!element.value[1].isapproved and !element.value[1].isrejected and !element.value[1].notfoundindb}" saveaction="saveTimeReport"
 						th:tr-id="${element.value[1].tr_id}"
 						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-default'>PENDING</button>
 					</span>	
 					
 					<span>
-						<button th:if="${!element.value[1].isapproved and !element.value[1].isrejected and element.value[1].status==0}" saveaction="saveTimeReport"
+						<button th:if="${!element.value[1].isapproved and !element.value[1].isrejected and element.value[1].notfoundindb}" saveaction="saveTimeReport"
 						th:tr-id="${element.value[1].tr_id}"
 						onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-theme'>SUBMIT</button>
 					</span>	
@@ -177,7 +177,7 @@
 			</td>
 		</tr>
 		
-		<tr th:classappend="${element.value[2].status==0} ? 'd-none' : ''" class="border-dark">
+		<tr th:classappend="${element.value[2].notfoundindb} ? 'd-none' : ''" class="border-dark">
 			<td>
 				<input type="hidden" class="av_id" th:value='${element.value[2].tr_id}'/>
 				<input type="hidden" class="date" th:value="${#temporals.format(element.value[2].date, 'yyyy-MM-dd')}" />
@@ -235,13 +235,13 @@
 					</span>
 					
 					<span>
-						<button th:if="${!element.value[2].isapproved and !element.value[2].isrejected and element.value[2].status!=0}" saveaction="saveTimeReport"
+						<button th:if="${!element.value[2].isapproved and !element.value[2].isrejected and !element.value[2].notfoundindb}" saveaction="saveTimeReport"
 						th:tr-id="${element.value[2].tr_id}"
 						disabled="disabled" onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-default'>PENDING</button>
 					</span>	
 					
 					<span>
-						<button th:if="${!element.value[2].isapproved and !element.value[2].isrejected and element.value[2].status==0}" saveaction="saveTimeReport"
+						<button th:if="${!element.value[2].isapproved and !element.value[2].isrejected and element.value[2].notfoundindb}" saveaction="saveTimeReport"
 						th:tr-id="${element.value[2].tr_id}"
 						onclick='save(this, event)' class='savebtn btn btn-sm btn-outline-theme'>SUBMIT</button>
 					</span>			

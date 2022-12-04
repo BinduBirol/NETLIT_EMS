@@ -1,4 +1,18 @@
 var mycalendar;
+
+function hexToRGB(hex, alpha) {
+    var r = parseInt(hex.slice(1, 3), 16),
+        g = parseInt(hex.slice(3, 5), 16),
+        b = parseInt(hex.slice(5, 7), 16);
+
+    if (alpha) {
+        return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
+    } else {
+        return "rgb(" + r + ", " + g + ", " + b + ")";
+    }
+}
+
+
 function formatDate(date) {
 	var d = new Date(date),
 		month = '' + (d.getMonth() + 1),
@@ -146,10 +160,13 @@ var handleRenderFullcalendar = function() {
 			var totalWorkMinute = getworkminute(info.event.extendedProps.work_start, info.event.extendedProps.work_end, info.event.extendedProps.work_intarval);
 			var totalWorkHour = minutesToHour(totalWorkMinute);
 
+			$('#editModal .modal-footer').show();
 			$('#editModal input, textarea').val("");
-			$("#alert-msg").text("");
+			$('#editModal .modal-content').css('background-color', "");
+			$("#alert-msg , #status_str").text("");
+			$('#editModal input, select,textarea').prop("disabled",false);
 			
-			$('#editModal .modal-title').text(moment(date).format("ddd, MMMM Do YYYY"));
+			$('#editModal .modal-title').text("Week #"+moment(date).format("WW dddd, MMM Do YYYY"));
 			
 			$('#editModal #date').val(formatDate(date));
 			$('#editModal #status').val(info.event.extendedProps.typeid);
@@ -184,14 +201,14 @@ var handleRenderFullcalendar = function() {
 			var shortDateFormat = 'yyyy-MM-dd';
 			var date = new Date(start);
 			
-			var RGB=arg.event.backgroundColor;
-			var bgclr="bg-primary";
-			if(data.isapproved)bgclr="bg-success";
-			if(data.isrejected)bgclr="bg-danger";
+			var bgclr=arg.event.backgroundColor;
+			
+			
+			$('#editModal .modal-content').css('background-color', hexToRGB(bgclr,.2));
 			
 			$('#editModal input, textarea').val("");
 			
-			$('#editModal .modal-title').text(moment(date).format("dddd, MMMM Do YYYY"));
+			$('#editModal .modal-title').text("Week #"+moment(date).format("WW dddd, MMM Do YYYY"));
 			
 			$('#editModal #tr_id').val(data.trid);
 			$('#editModal #status').val(data.typeid);
@@ -203,15 +220,21 @@ var handleRenderFullcalendar = function() {
 			$('#editModal #work_hour').html(minutesToHour(data.work_minute));
 			$('#editModal #work_hour_hidden').val(minutesToHour(data.work_minute));			
 			$('#editModal #text').val(data.workdesc);
-			//$('#editModal #text').val(JSON.stringify(data));
+			var status_str ="[ PENDING ]";
+			//$('#editModal #text').val(JSON.stringify(arg.event));
 			
 			if(data.isapproved){
-				$('#editModal #submit').prop("disabled",true);
+				status_str ="[ APPROVED ]";
+				$('#editModal .modal-footer').hide();				
+				$('#editModal input, select, textarea').prop("disabled",true);
 			}else{
-				$('#editModal #submit').prop("disabled",false);
+				$('#editModal .modal-footer').show();
+				$('#editModal input, select,textarea').prop("disabled",false);
 			}
-
-			$("#alert-msg").text("");
+			if(data.isrejected)status_str ="[ REJECTED ]";
+			
+			$("#editModal #status_str").text(status_str);
+			$("#editModal #alert-msg").text("");
 			$('#editModal').modal('show');
 			
 		},

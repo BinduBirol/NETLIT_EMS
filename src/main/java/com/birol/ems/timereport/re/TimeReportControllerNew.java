@@ -37,6 +37,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
+
+import com.birol.ems.datatable.PendingTRDataTable;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmployeeService;
@@ -108,16 +110,17 @@ public class TimeReportControllerNew {
 		return new ModelAndView("ems/ajaxResponse/timereport/vacationRequestModal", model);
 	}
 	
+	@ResponseBody
 	@RequestMapping(value = "/saveVacationRequest", method = RequestMethod.POST)
-	public ModelAndView saveVacationRequest(@ModelAttribute Time_Report_DTO av, ModelMap model, Authentication auth,
+	public ArrayList<String> saveVacationRequest(@ModelAttribute Time_Report_DTO av, ModelMap model, Authentication auth,
 			final HttpServletRequest request) {
+		ArrayList<String> response= new ArrayList<String>();
 		try {
 			User creator = (User) auth.getPrincipal();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate fromLocalDate = LocalDate.parse(av.getFrom_date(), formatter);
 			LocalDate toLocalDate = LocalDate.parse(av.getTo_date(), formatter);
 			List<LocalDate> dates = wSHservice.getDatesBetween(fromLocalDate, toLocalDate);			
-			String msg="";
 
 			for (LocalDate d : dates) {				
 				av.setEmpid(creator.getId());
@@ -132,17 +135,18 @@ public class TimeReportControllerNew {
 				av.setWeek(d.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
 				
 				if(d.isBefore(LocalDate.now())) {
-					  msg+="Cant set vacation request for past date "+d+". ";
-				}else {
-					msg+="Vacation requested for date "+d+". ";
-					time_Report_Repo.save(av);
+					//do naything
+				}else {					
+					time_Report_Repo.save(av);									
+					response.add(d.format(formatter));
 				}					
 			}
-			model.addAttribute("message",msg);
+			
 		} catch (Exception e) {
-			model.addAttribute("message", e.getMessage());
+			response.add(e.getMessage());
+			e.printStackTrace();
 		}
-		return new ModelAndView("theme/ajaxResponse.html", model);
+		return response;
 	}
 
 	@SuppressWarnings("null")
@@ -171,6 +175,12 @@ public class TimeReportControllerNew {
 					existing= time_Report_Repo.findById(trid).get();
 					trlist.add(existing);				
 				}catch (NoSuchElementException e) {
+					TimeReportTypesDTO type= timeReportTypesRepo.findByTypename("Regular work time");
+					tr.setNotfoundindb(true);
+					//tr.setStatus(type.getTypeid());
+					//tr.setWork_start(type.getStart());
+					//tr.setWork_end(type.getEnd());
+					//tr.setWork_interval(type.getInterval_minutes());
 					tr.setWork_minute(0);
 					tr.setWork_hour("0 H 00 Min");
 					trlist.add(tr);
@@ -491,6 +501,18 @@ public class TimeReportControllerNew {
 		}	
 		
 		return events;
+	}
+	
+	@ResponseBody
+	@GetMapping("/getPendingTRForcalendar")
+	public PendingTRDataTable  getPendingTRForcalendar(Authentication auth, ModelMap model) {
+		PendingTRDataTable pdt= new PendingTRDataTable();
+		ArrayList<Time_Report_DTO> data= (ArrayList<Time_Report_DTO>) time_Report_Repo.findAll();
+		pdt.setDraw(1);
+		pdt.setRecordsTotal(data.size());
+		pdt.setRecordsFiltered(data.size());
+		pdt.setData(data);
+		return pdt;
 	}
 	
 	@ResponseBody

@@ -83,13 +83,14 @@
 			
 			<div class="modal fade" id="editModal">
 				<div class="modal-dialog modal-dialog-centered ">
-					<div class="modal-content bg-opacity-25">
+					<div class="modal-content">
 						<form id="editTimeReportForm" action="/saveTimeReportCalander" method="post">
 							<div class="modal-header">
 								<h4 class="modal-title">date</h4>
 								<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 							</div>
 							<div class="modal-body">
+							
 
 								<div class="form-group mb-3">				
 										<div class="form-group mb-3">
@@ -114,7 +115,7 @@
 									<div class="col">
 										<div class="form-group mb-3">
 											<label class="form-label">Start</label> 
-											<input type="time" class="form-control dis" id="start" name="work_start">											</select>
+											<input onclick="this.showPicker()" type="time" class="form-control dis" id="start" name="work_start">											</select>
 										</div>
 									</div>
 									<div class="col">
@@ -126,7 +127,7 @@
 									<div class="col">
 										<div class="form-group mb-3">
 											<label class="form-label">End</label> 
-											<input type="time" class="form-control dis" id="end" name="work_end">											</select>
+											<input onclick="this.showPicker()" type="time" class="form-control dis" id="end" name="work_end">											</select>
 										</div>
 									</div>
 								</div>
@@ -139,6 +140,8 @@
 								</div>
 								
 								<span class="h5">Total hours : </span><span class="h5" id="work_hour"></span>
+								&nbsp;<span id="status_str" class="h5"></span>
+								
 
 							</div>
 							<div class="modal-footer">
@@ -157,7 +160,7 @@
 			
 			<div class="modal fade" id="infoModal">
 				<div class="modal-dialog  modal-dialog-centered ">
-					<div class="modal-content bg-opacity-25">
+					<div  class="modal-content bg-opacity-25">
 						<div class="modal-header">
 								<h4 class="modal-title">For your information</h4>
 								<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -175,8 +178,7 @@
 								<li>
 									<h4>Edit time report</h4>
 									<p>
-										You can modify PENDING and REJECTED time reports. Just click on the time report showing on the calendar date.
-										
+										You can modify PENDING and REJECTED time reports. Just click on the time report showing on the calendar date.										
 									</p>
 								</li>
 							</ul>

@@ -391,3 +391,11 @@ function validate(e){
 		return false;
 	}
 }
+
+function closeResponseModal() {
+	var from = $('#modalResponse .start').val();
+	var to = $('#modalResponse .end').val();	
+	$('#trav_from_date').val(from);
+	$('#trav_to_date').val(to);
+	$("#getTRforms").click();
+}

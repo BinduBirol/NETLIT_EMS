@@ -219,4 +219,12 @@ function actionAll(d){
 	$('#confirmDecisionmodal').modal('show');
 }
 
+function trCheckboxChange(e, z) {	
+	$target= $(e.target).closest('tr');
+	if($(z)[0].checked){
+		$target.removeClass("").addClass("bg-warning");
+	}else{
+		$target.removeClass("bg-warning").addClass("");
+	}
+}
 

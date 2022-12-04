@@ -167,13 +167,21 @@ function mySubmitFunction(e) {
 			data : $form.serialize(),			
 			success : function(data, status) {
 				hideprocessview();				
-				$('.modal').modal('hide');
-				$('.toast-header .title').html("Response");
-				$('.toast-body .toast-message').html(data);
-				$('.toast').toast('show');
-				if (data.includes("Successfully") == true) {					
-					 //location.reload();
-				}			
+				var html="Vacation requested for date<hr/>";
+				var start= data[0];
+				var end= data[data.length-1];
+				
+				for(var i=0;i<data.length;i++){
+					html+="<ul>";
+					html+= "<li> Week #"+moment(data[i], 'YYYY-MM-DD').format("WW dddd, MMM Do YYYY")+"</li>";
+					html+="</ul>";
+				}
+				
+				$('#availablitymodal').modal('hide');				
+				$('#modalResponse .cnfTxtMsg').html(html);
+				$('#modalResponse .start').val(start);
+				$('#modalResponse .end').val(end);
+				$('#modalResponse').modal('show');
 			},
 			error : function(xhr, desc, err) {				
 				hideprocessview();

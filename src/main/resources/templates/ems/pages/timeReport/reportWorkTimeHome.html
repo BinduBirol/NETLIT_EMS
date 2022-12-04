@@ -135,7 +135,7 @@ tr.hoverable:hover {
 				
 				<div class="col-12 col-sm-3">
 					<label class="custom-control-label ">Get forms</label>
-					<button onclick="getTRforms()" type="button" class="btn btn-outline-theme form-control">Show Time Parameters</button>
+					<button onclick="getTRforms()" id="getTRforms" type="button" class="btn btn-outline-theme form-control">Show Time Parameters</button>
 				</div>
 
 			</div>
@@ -176,6 +176,27 @@ tr.hoverable:hover {
 			    </div>
 			  </div>
 			</div>
+			
+			
+			<div class="modal fade" id="modalResponse">
+			  <div class="modal-dialog modal-dialog-centered">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title">RESPONSE</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			      </div>
+			      <div class="modal-body">
+			        <p class="cnfTxtMsg">Modal body text goes here.</p>
+			        <input type="hidden" class="start">
+			        <input type="hidden" class="end">		        
+			      </div>
+			      <div class="modal-footer">
+			        <button onclick="closeResponseModal()" type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>			        
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			
 	</div>
 	<!-- END #app -->
 	<div th:include="theme/footer::staticFooter"></div>

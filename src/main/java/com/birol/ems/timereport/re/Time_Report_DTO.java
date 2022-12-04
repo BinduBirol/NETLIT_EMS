@@ -54,7 +54,8 @@ public class Time_Report_DTO {
 	private String from_date;	
 	@Transient
 	private String to_date;	
-	
+	@Transient
+	private boolean notfoundindb;	
 
 	@PrePersist
 	protected void onCreate() {
@@ -241,7 +242,15 @@ public class Time_Report_DTO {
 	public void setTo_date(String to_date) {
 		this.to_date = to_date;
 	}
-	
+
+	public boolean isNotfoundindb() {
+		return notfoundindb;
+	}
+
+	public void setNotfoundindb(boolean notfoundindb) {
+		this.notfoundindb = notfoundindb;
+	}
+
 	
 
 }

@@ -8,18 +8,18 @@
 			<td colspan="10"></td>
 		</tr>
 		
-		<tr class="table-info" >
+		<tr class="table-info align-middle" >
 			<th colspan="10">
-				<h3>			
+				<h4>			
 				 [[${#temporals.format(element.key, 'E, dd MMM yyyy')}]]
-				 , Week 
-				<span th:if="${not #lists.isEmpty(element.value)}" >[[${element.value[0].week}]]</span>
+				 , Week #<span th:if="${not #lists.isEmpty(element.value)}" >[[${element.value[0].week}]]</span>
 
-				 </h3>
+				 </h4>
 			 </th>
 		</tr>
 		
 		<tr class="table-active">
+			<th><i class="fas fa-lg fa-fw fa-check"></i></th>
 			<th>#</th>
 			<th>Employee</th>
 			<th>Status</th>
@@ -28,13 +28,13 @@
 			<th>End</th>
 			<th>Break</th>
 			<th>Comment</th>
-			<th>Decision</th>
-			
+			<th>Decision</th>	
 		</tr>		
 
 	</thead>
 	<tbody>
-		<tr class="table-active" th:if="${not #lists.isEmpty(element.value)}" style="vertical-align: middle;" th:each="tr : ${element.value}" >
+		<tr class="table-active bg-opacity-25 align-middle" th:if="${not #lists.isEmpty(element.value)}" style="vertical-align: middle;" th:each="tr : ${element.value}" >
+			<td><input class="trCheckbox" onchange="trCheckboxChange(event,this)" type="checkbox" value="" /></td>
 			<td>[[${trStat.index+1}]]</td>
 			<td>
 				<a href="#" class="text-decoration-none" th:emp-id="${tr.empid}"
@@ -79,12 +79,12 @@
 			<td>
 				<textarea th:text='${tr.work_desc}' 
 					onchange='calculate(event)' name='work_desc'
-					class='form-control form-control-sm work_desc' rows='2'></textarea>
+					class='form-control form-control-sm work_desc' rows='1'></textarea>
 			</td>
 			<td th:class='${tr.tr_id}'>
 			<div class="btn-group btn-group-sm">
-				<input type="button" class="btn  btn-success decision"  value="Approve"/>
-				<input type="button" class="btn btn-danger decision"  value="Reject"/>				
+				<input type="button" class="btn  btn-outline-success decision"  value="Approve"/>
+				<input type="button" class="btn btn-outline-danger decision"  value="Reject"/>		
 			</div>
 				
 			</td>
