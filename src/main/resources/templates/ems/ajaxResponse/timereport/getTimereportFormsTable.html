@@ -34,7 +34,7 @@
 						th:interval="${at.interval_minutes}" th:text="${at.typename}">xx</option>
 				</select>
 			</td>
-			<td>
+			<td>			
 				<input type="time" th:value='${element.value[0].work_start}'	 th:disabled="${element.value[0].work_minute==0 OR element.value[0].isapproved}"
 				onchange='calculate(event)' name='work_start' onclick="this.showPicker()"
 				class='timepicker start cal form-control form-control-sm text-center absent '>
@@ -46,7 +46,7 @@
 			</td>
 			<td>
 				<input onchange='calculate(event)'				
-				th:value='${element.value[0].work_interval}' type='number' name='work_interval' th:disabled="${element.value[0].work_minute==0 OR element.value[2].isapproved}"	
+				th:value='${element.value[0].work_interval}' type='number' name='work_interval' th:disabled="${element.value[0].work_minute==0 OR element.value[0].isapproved}"	
 				class='lbreak cal form-control form-control-sm text-center absent  ' />
 			</td>
 			<td>

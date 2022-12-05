@@ -177,12 +177,16 @@ public class TimeReportControllerNew {
 				}catch (NoSuchElementException e) {
 					TimeReportTypesDTO type= timeReportTypesRepo.findByTypename("Regular work time");
 					tr.setNotfoundindb(true);
-					//tr.setStatus(type.getTypeid());
-					//tr.setWork_start(type.getStart());
-					//tr.setWork_end(type.getEnd());
-					//tr.setWork_interval(type.getInterval_minutes());
 					tr.setWork_minute(0);
 					tr.setWork_hour("0 H 00 Min");
+					if(i==1) {
+						tr.setStatus(type.getTypeid());
+						tr.setWork_start(type.getStart());
+						tr.setWork_end(type.getEnd());
+						tr.setWork_interval(type.getInterval_minutes());
+						tr.setWork_minute(480);
+						tr.setWork_hour(wSHservice.mintsTOHmConvert(480));
+					}					
 					trlist.add(tr);
 				}				
 			}

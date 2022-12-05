@@ -37,7 +37,7 @@ public class WSHservice {
 	public String mintsTOHmConvert(long t) {
 		long hours = t / 60;
 		long minutes = t % 60;		
-		return new String().format("%d Hours %02d Minutes", hours, minutes);
+		return new String().format("%d H %d Min", hours, minutes);
 	}
 
 }

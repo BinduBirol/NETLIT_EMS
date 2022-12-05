@@ -110,7 +110,7 @@ function ajaxcall(){
 		$("#daterangeselect").focus();
 		$('.toast-header .title').html("Abort!!");
 		$('.toast-body .toast-message').html("Please select a date range.");		
-		$('.toast').toast('show');
+		$('.toast').toast('show');		
 		return;
 	}
 	
@@ -121,8 +121,8 @@ function ajaxcall(){
 	}, function(data, status) {		
 		$("#ajaxresponse").html(data).hide().slideDown();		
 		var rowCount = $('#pendingtable tr').length;
-		if(rowCount==0){$("#ajaxresponse").html("<h4>No pending time reports</h4>").hide().slideDown();}
-		// $("html, body").animate({ scrollTop: $(document).height() }, 500);
+		if(rowCount==0){$("#ajaxresponse").html("<h4>No pending time reports</h4>").hide().slideDown();return;}
+		selectedRowCount();
 	});	
 }
 
@@ -140,8 +140,9 @@ function pageStartAjaxcall(){
 		$("#from_date").val(fd);
 		$("#to_date").val(td);
 		var rowCount = $('#pendingtable tr').length;		
-		if(rowCount==0){$("#ajaxresponse").html("<h4>No pending time reports</h4>").hide().slideDown();}
+		if(rowCount==0){$("#ajaxresponse").html("<h4>No pending time reports</h4>").hide().slideDown();return false;}
 		// $("html, body").animate({ scrollTop: $(document).height() }, 500);
+		selectedRowCount();
 	});	
 }
 
@@ -182,14 +183,24 @@ $(".btn-dec").click(function(e) {
 			ajaxcall();
 		}
 		
+		$("."+dataid).closest("tr").find(".trCheckbox").prop("disabled",true);
+		
 		return;
 	});	
 });
 
 function actionAll(d){
+	var numberOfChecked = $('table input:checkbox:checked').length;
+	if(numberOfChecked==0){
+		$('.toast-header .title').html("Abort!");
+		$('.toast-body .toast-message').html("Select a row first!");		
+		$('.toast').toast('show');
+		return;
+	}
+	
 	var data;
 	var array=[];
-	$("#pendingtable").find("tr").each(function(){
+	$("#pendingtable").find(".trselected").each(function(){
 		var values = {};
 		$.each($(this).find("input, select, textarea").serializeArray(), function(i, field) {
 		    values[field.name] = field.value;
@@ -204,12 +215,12 @@ function actionAll(d){
 	if(d){
 		dc=1;
 		$('#confirmDecisionmodal .modal-title').text("APPROVE ALL");
-		$('#confirmDecisionmodal .modal-body p').text("You are going APPROVE all the time reports.");
+		$('#confirmDecisionmodal .modal-body p').text("You are going to APPROVE "+numberOfChecked+" time reports.");
 		$("#confirmDecisionmodal .btn-dec").removeClass("btn-danger").addClass("btn-success").text("APPROVE ALL");
 	}else{
 		dc=0;
 		$('#confirmDecisionmodal .modal-title').text("REJECT ALL");
-		$('#confirmDecisionmodal .modal-body p').text("You are going to REJECT all the time reports.");
+		$('#confirmDecisionmodal .modal-body p').text("You are going to REJECT "+numberOfChecked+" time reports.");
 		$("#confirmDecisionmodal .btn-dec").removeClass("btn-success").addClass("btn-danger").text("REJECT ALL");
 	}	
 	$('#confirmDecisionmodal #action').val("doPendingTimeReportAction");
@@ -222,9 +233,26 @@ function actionAll(d){
 function trCheckboxChange(e, z) {	
 	$target= $(e.target).closest('tr');
 	if($(z)[0].checked){
-		$target.removeClass("").addClass("bg-warning");
+		$target.removeClass("").addClass("bg-warning trselected");		
+		$target.find(".dis").prop("disabled",false);
+		
 	}else{
-		$target.removeClass("bg-warning").addClass("");
+		$target.removeClass("bg-warning trselected").addClass("");
+		$target.find(".dis").prop("disabled",true);
+	}
+	selectedRowCount();
+}
+function selectedRowCount(){
+	var numberOfChecked = $('table input:checkbox:checked').length;
+	var totalCheckboxes = $('table input:checkbox').length;
+	var numberNotChecked = totalCheckboxes - numberOfChecked;
+	$("#rowCount").text(numberOfChecked+" Out of "+totalCheckboxes);
+	
+	if(numberOfChecked>0){
+		$(".disall").prop("disabled",false);
+	}else{
+		$(".disall").prop("disabled",true);
 	}
 }
+
 

@@ -19,7 +19,7 @@
 		</tr>
 		
 		<tr class="table-active">
-			<th><i class="fas fa-lg fa-fw fa-check"></i></th>
+			<th><i class="fas fa-lg fa-fw  fa-check-square"></i></th>
 			<th>#</th>
 			<th>Employee</th>
 			<th>Status</th>
@@ -45,9 +45,9 @@
 				<input type="hidden" class="date" th:value="${#temporals.format(tr.date, 'E, dd MMM yyyy')}"/>
 			</td>			
 			<td>
-				<select name='status' onchange='setTypeval( event,this)'
+				<select  name='status' onchange='setTypeval( event,this)' disabled="disabled"	
 				th:classappend="${tr.work_minute>0} ? 'border-success': 'border-warning'"
-				class='status  form-select form-select-sm availabilitysign border '>
+				class='status  form-select form-select-sm availabilitysign border dis'>
 					<option th:selected="${at.typeid==tr.status}"
 						th:each="at: ${trtypeALL}" th:value="${at.typeid}"
 						th:start="${at.start}" th:end="${at.end}"
@@ -56,35 +56,36 @@
 			</td>
 			<td>
 				<input type='text' th:value='${tr.work_hour}'
-				name='work_hour' readonly
-				class='work_hour form-control form-control-sm text-center  ' /> <input
+				name='work_hour' disabled="disabled"
+				class='work_hour form-control form-control-sm text-center ' /> <input
 				type="hidden" th:value='${tr.work_minute}' name='work_minute'
 				readonly class='wmint form-control form-control-sm text-center  ' />
 			</td>
 			<td>
-				<input type="time" th:value='${tr.work_start}'				
+				<input type="time" th:value='${tr.work_start}'		 disabled="disabled"		
 				onchange='calculate(event)' name='work_start' onclick="this.showPicker()"
-				class='timepicker start cal form-control form-control-sm text-center absent '>
+				class='timepicker start cal form-control form-control-sm text-center absent dis'>
 			</td>
 			<td>
-				<input th:value='${tr.work_end}' onchange='calculate(event)'				
+				<input th:value='${tr.work_end}' onchange='calculate(event)'		disabled="disabled"			
 				type="time" name='work_end' onclick="this.showPicker()"
-				class='timepicker end cal form-control form-control-sm text-center absent  '>
+				class='timepicker end cal form-control form-control-sm text-center absent  dis'>
 			</td>
 			<td>
-				<input onchange='calculate(event)'				
+				<input onchange='calculate(event)'		disabled="disabled"			
 				th:value='${tr.work_interval}' type='number' name='work_interval'
-				class='lbreak cal form-control form-control-sm text-center absent  ' />
+				class='lbreak cal form-control form-control-sm text-center absent  dis' />
 			</td>
 			<td>
-				<textarea th:text='${tr.work_desc}' 
+				<textarea th:text='${tr.work_desc}' disabled="disabled"	
 					onchange='calculate(event)' name='work_desc'
-					class='form-control form-control-sm work_desc' rows='1'></textarea>
+					class='form-control form-control-sm work_desc dis' rows='1'></textarea>
 			</td>
 			<td th:class='${tr.tr_id}'>
 			<div class="btn-group btn-group-sm">
-				<input type="button" class="btn  btn-outline-success decision"  value="Approve"/>
-				<input type="button" class="btn btn-outline-danger decision"  value="Reject"/>		
+				<button decision="Approve" class="btn btn-sm btn-outline-success decision "><i class="far fa-check-circle"></i></button>
+				<button decision="Reject" class="btn btn-sm btn-outline-danger decision "><i class="fas fa-ban"></i></button>
+			
 			</div>
 				
 			</td>
@@ -96,10 +97,10 @@
 </table>
 
 <div class="text-center ">
-
+<p class="">Selected rows :&nbsp;<span id="rowCount">0</span></p>
 <div class="btn-group">
-<button onclick="actionAll(true)" class="btn btn-outline-success">APPROVE ALL</button>
-<button onclick="actionAll(false)"  class="btn btn-outline-danger">REJECT ALL</button>
+<button disabled="disabled" onclick="actionAll(true)" class="btn btn-lg btn-outline-success disall">APPROVE SELECTED</button>
+<button disabled="disabled" onclick="actionAll(false)"  class="btn btn-lg btn-outline-danger disall">REJECT SELECTED</button>
 </div></div>
 
 
@@ -108,7 +109,10 @@
 			function(e) {
 				$target = $(e.target).closest('tr');
 				var emp = $target.find(".employee").val();
+				var total = $target.find(".work_hour").val();
 				var dataid = $target.find(".dataid").val();
+				
+				$target.find(".dis").prop("disabled",false);
 				
 				var values = {};
 				$.each($target.find("input, select, textarea").serializeArray(), function(i, field) {
@@ -121,7 +125,9 @@
 				var action = $target.find(".faction").val();
 				
 				var date = $target.find(".date").val().toUpperCase();
-				var dec = $(this).val();
+				
+				var dec = $(this).attr("decision");
+				
 				var classappend = "";
 				var d=0;
 
@@ -137,10 +143,14 @@
 				$('#confirmDecisionmodal #data').val(data);
 				$('#confirmDecisionmodal #dataid').val(dataid);
 				$('#confirmDecisionmodal #actionDecision').val(d);
+				
+				$('#confirmDecisionmodal .modal-body p').html("You are going to "+dec+" time report for "+emp+"<br/>Total hours : "+total);
+				
 				$('#confirmDecisionmodal #modal-dec').text(dec);
-				$('#confirmDecisionmodal #modal-emp').text(emp);				
-				$('#confirmDecisionmodal .modal-title').text(date);
+				//$('#confirmDecisionmodal #modal-emp').text(emp);				
+				$('#confirmDecisionmodal .modal-title').text(date);							
 				$('#confirmDecisionmodal').modal('show');
+				$target.find(".dis").prop("disabled",true);	
 			})
 </script>
 
