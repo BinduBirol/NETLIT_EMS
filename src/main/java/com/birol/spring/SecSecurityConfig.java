@@ -119,7 +119,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
             .permitAll()
                 .and()                
             .sessionManagement()
-                .invalidSessionUrl("/invalidSession.html")
+                .invalidSessionUrl("/login?message=Session expired!")
                 .maximumSessions(1).sessionRegistry(sessionRegistry()).and()
                 .sessionFixation().none()
             .and()
