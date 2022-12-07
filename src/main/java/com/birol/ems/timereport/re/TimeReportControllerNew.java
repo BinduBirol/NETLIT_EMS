@@ -283,11 +283,12 @@ public class TimeReportControllerNew {
 	}
 	
 	@ResponseBody
-	@PostMapping("/doPendingTimeReportAction")
-	private String doPendingTimeReportAction (Authentication auth,@RequestPayload String rg, 
+	@PostMapping("/doPendingSelectedTimeReportAction")
+	private String doPendingSelectedTimeReportAction (Authentication auth,@RequestPayload String rg, 
 			@RequestPayload boolean ismail, @RequestPayload boolean decision) {
-		String msg="";
+		String msg="";		
 		List<Time_Report_DTO> dataList= new ArrayList<Time_Report_DTO>();
+		List<Time_Report_DTO> dataListForMail= new ArrayList<Time_Report_DTO>();
 		try {
 			Type listType = new TypeToken<ArrayList<Time_Report_DTO>>(){}.getType();
 			dataList = new Gson().fromJson(rg, listType);
@@ -296,7 +297,7 @@ public class TimeReportControllerNew {
 			return msg;
 		}
 		
-		User creator = (User) auth.getPrincipal();		
+		User user = (User) auth.getPrincipal();		
 		
 		if (decision) {
 			msg = "Approved "+dataList.size()+" time reports.";
@@ -305,50 +306,27 @@ public class TimeReportControllerNew {
 		}
 		for(Time_Report_DTO data: dataList) {
 			Time_Report_DTO av = time_Report_Repo.findById(data.getTr_id()).get();
-			String chief= employeeRepository.findbyEmpid(av.getEmpid()).getNearest_chief_name();
 			av.setStatus(data.getStatus());
 			av.setWork_start(data.getWork_start());
 			av.setWork_end(data.getWork_end());
 			av.setWork_interval(data.getWork_interval());
 			av.setWork_minute(data.getWork_minute());
 			av.setWork_hour(data.getWork_hour());
-			av.setWork_desc(data.getWork_desc());
-			
-			String emailText = "";
+			av.setWork_desc(data.getWork_desc());			
 			if(decision) {				
-				emailText ="You time report for date "+av.getDate()+" has been approved for the upcoming salary!";
 				av.setIsapproved(true);
 				av.setIsrejected(false);			
 			}else {
-				
-				emailText ="You time report for date "+av.getDate()+" has been rejected! For further enquiry contact your nearest chief ["+chief+"].";
 				av.setIsapproved(false);
-				av.setIsrejected(true);			
-			}	
-			
-			try {			
-				time_Report_Repo.save(av);	
-				//System.out.println(emailText);
-				if(ismail) {					
-					// send mail
-					String tomail= userService.getUserByID(av.getEmpid()).get().getEmail();
-					SimpleMailMessage email = new SimpleMailMessage();
-					email.setTo(tomail);
-					email.setSubject("STATUS OF YOUR REPORTED TIME");
-					final String appUrl = "https://ems.netlit.se";				
-					email.setText(emailText);
-					email.setFrom(env.getProperty("support.email"));
-					try {
-						mailSender.send(email);
-					} catch (Exception e) {
-						msg+="\n[Unable to send mail to "+tomail+"]";
-					}
-				}			
-				
-			} catch (Exception e) {
-				msg=e.getMessage();
-			}
+				av.setIsrejected(true);
+			}			
+			try {
+				time_Report_Repo.save(av);
+				dataListForMail.add(av);
+			} catch (Exception e) {msg=e.getMessage();}
 		}
+		
+		
 		
 		return msg;
 	}
@@ -485,7 +463,6 @@ public class TimeReportControllerNew {
 				event.setAllDay(true);
 			}	
 			event.setTitle(t.getTrTypes().getTypename());			
-			
 			event.setTypeid(t.getStatus());
 			event.setStartHour(t.getWork_start());
 			event.setEndHour(t.getWork_end());

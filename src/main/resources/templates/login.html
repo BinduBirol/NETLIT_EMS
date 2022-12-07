@@ -44,7 +44,7 @@
 					<div  class="text-center text-white text-opacity-50">
 						<p class="text-warning" th:if="${message != null}" th:utext="${message}"></p>
 						<p class="text-warning" th:text="${param.message}"></p>
-						
+						<p class="text-warning" th:if="${param.logSucc}" th:utext="#{message.logoutSucc}">msg</p>						
 					</div>
 					
 					<div th:if="${error != null}" class="text-center text-white text-opacity-50">

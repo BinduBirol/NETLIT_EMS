@@ -223,7 +223,7 @@ function actionAll(d){
 		$('#confirmDecisionmodal .modal-body p').text("You are going to REJECT "+numberOfChecked+" time reports.");
 		$("#confirmDecisionmodal .btn-dec").removeClass("btn-success").addClass("btn-danger").text("REJECT ALL");
 	}	
-	$('#confirmDecisionmodal #action').val("doPendingTimeReportAction");
+	$('#confirmDecisionmodal #action').val("doPendingSelectedTimeReportAction");
 	$("#confirmDecisionmodal #dataid").val("all");
 	$('#confirmDecisionmodal #data').val(data);
 	$('#confirmDecisionmodal #actionDecision').val(dc);	

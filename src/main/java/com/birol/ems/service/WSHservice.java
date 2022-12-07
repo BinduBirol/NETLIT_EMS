@@ -2,6 +2,7 @@ package com.birol.ems.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,12 @@ public class WSHservice {
 		long hours = t / 60;
 		long minutes = t % 60;		
 		return new String().format("%d H %d Min", hours, minutes);
+	}
+	
+	public HashMap<String, List<LocalDate>> decisionTimeReportMailMessage(List<Time_Report_DTO> dataListForMail){
+		HashMap<String, List<LocalDate>> structure= new HashMap<>();
+		return structure;
+		
 	}
 
 }
