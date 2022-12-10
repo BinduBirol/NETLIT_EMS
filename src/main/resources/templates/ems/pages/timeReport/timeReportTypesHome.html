@@ -9,11 +9,11 @@
 		<!-- BEGIN #content -->
 		<div id="content" class="app-content">
 			<ul class="breadcrumb">
-				<li class="breadcrumb-item"><a href="#">CONTRACT</a></li>
-				<li class="breadcrumb-item active">EMAIL TEMPLATES</li>
+				<li class="breadcrumb-item"><a href="#">TIME REPORT MANAGEMENT</a></li>
+				<li class="breadcrumb-item active">TYPES</li>
 			</ul>
 
-			<h1 class="page-header">Email templates for contract signing</h1>
+			<h1 class="page-header">Time report types</h1>
 			<hr />
 			
 			<div class="alert alert-primary" th:if="${(param.msg != null)}">
@@ -29,33 +29,34 @@
 
 
 
-			<table id="datatableDefault" class="table align-middle">
+			<table id="datatableDefaultz" class="table table-hover align-middle">
 				<thead>
 					<tr>
 						<th>#</th>
 						<th>Name</th>
-						<th class="w-50">Message</th>
-						<th>Uses permission</th>
+						<th >Start</th>
+						<th>Ends</th>
+						<th>Interval</th>
+						<th>Type</th>
 						<th>Action</th>						
 					</tr>
 				</thead>
 				<tbody>
 
-					<tr th:each="t: ${templates}">
+					<tr th:each="t: ${types}">
 						<td>[[${tStat.index+1}]]</td>
 						<td>
-							<input type="hidden" class="tid" th:value="${t.id}"/>
-							<input type="hidden" class="tname" th:value="${t.name}"/>
-							<input type="hidden" class="tmsg" th:value="${t.text}"/>
-							<input type="hidden" class="tempid" th:value="${t.empid}"/>
-							[[${t.name}]]
+							<input type="hidden" class="tid" th:value="${t.typeid}"/>							
+							[[${t.typename}]]
 						</td>
-						<td style="text-align: justify;">[[${t.text}]]</td>
-						<td th:text="${t.empid==0} ? 'Everybody' : 'Myself'"></td>
+						<td>[[${t.start}]]</td>
+						<td>[[${t.end}]]</td>
+						<td>[[${t.interval_minutes}]] Min</td>
+						<td>[[${t.isOB}]]</td>
 						<td>
 							<div class="btn-group">
-							  <button onclick="editTemplateModal(event,this)" type="button" class="btn  btn-outline-info">Edit</button>
-							  <button onclick="deleteTemplateModal(event)" type="button" class="btn  btn-outline-danger">Delete</button>							  
+							  <button onclick="editTemplateModal(event,this)" type="button" class="btn btn-sm btn-outline-info">Edit</button>
+							  <button onclick="deleteTemplateModal(event)" type="button" class="btn btn-sm btn-outline-danger">Delete</button>							  
 							</div>
 						</td>	
 					</tr>
@@ -75,30 +76,65 @@
 								<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 							</div>
 							<div class="modal-body">
+							
 
-								<div class="form-group mb-3">
-									<label class="form-label">Template name</label> <input id="name"
-										name="name" required="required" type="text"
-										class="form-control">
+								<div class="form-group mb-3">				
+										<div class="form-group mb-3">
+											<label class="form-label">Type name</label> 
+											<input class="form-control" id="typename"/>
+										</div>										
 										
-										<input type="hidden" disabled="disabled" name="id" id="id"/>
+										<input type="hidden"  name="typeid" id="typeid"/>
+										
 								</div>
-
-								<div class="form-group mb-3">
-									<label class="form-label">Email message body</label>
-									<textarea  name="text" id="text" required="required" maxlength="1000"
-										class="form-control mb-3" rows="5"></textarea>
+								
+								<div class="row">
+									
+									<div class="col">
+										<div class="form-group mb-3">
+											<label class="form-label">Working status</label> 
+											<select class="form-select">
+												<option value="1">Present</option>
+												<option value="0">Absent</option>											
+											</select>
+										</div>
+									</div>
+									<div class="col">
+										<div class="form-group mb-3">
+											<label class="form-label">OB status</label> 
+											<select class="form-select">
+												<option value="0">Regular time</option>
+												<option value="1">Overtime</option>	
+											</select>
+										</div>
+									</div>
 								</div>
+								
 
-								<div class="form-group mb-3">
-									<label class="form-label">Template using permission</label> <select
-										name="empid" id="empid" required="required" class="form-select mb-3">
-										<option value="0">For everybody</option>
-										<option th:value="${myid}">For myself</option>
-									</select>
+								<div class="row">
+									<div class="col">
+										<div class="form-group mb-3">
+											<label class="form-label">Start</label> 
+											<input onclick="this.showPicker()" type="time" class="form-control dis" id="start" name="work_start">											</select>
+										</div>
+									</div>
+									<div class="col">
+										<div class="form-group mb-3">
+											<label class="form-label">Intarval (Minute)</label> 
+											<input type="number" class="form-control dis" id="intarval" name="work_interval">											</select>
+										</div>
+									</div>
+									<div class="col">
+										<div class="form-group mb-3">
+											<label class="form-label">End</label> 
+											<input onclick="this.showPicker()" type="time" class="form-control dis" id="end" name="work_end">											</select>
+										</div>
+									</div>
 								</div>
-
-
+								
+								<span class="h5">Total hours : </span><span class="h5" id="work_hour"></span>
+								&nbsp;<span id="status_str" class="h5"></span>
+								
 
 							</div>
 							<div class="modal-footer">

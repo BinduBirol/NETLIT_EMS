@@ -36,9 +36,7 @@ import com.birol.ems.dao.LoggedinUserRepo;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.dto.LoggedinUserDTO;
 import com.birol.ems.dto.SocialMediaLinksDTO;
-import com.birol.ems.project.dao.ProjectDao;
-import com.birol.ems.project.dto.Project;
-import com.birol.ems.project.dto.Project_Workers;
+
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EMSservice;
 import com.birol.ems.service.EmployeeService;
@@ -70,8 +68,7 @@ public class EMScontroller {
 	LoggedinUserRepo loggedinUserRepo;
 	@Autowired
 	EMSservice emsService;
-	@Autowired
-	private ProjectDao projectDao;
+
 	
 	private static final Logger logger = LoggerFactory.getLogger(EMScontroller.class);
 

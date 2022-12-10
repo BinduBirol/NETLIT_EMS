@@ -71,7 +71,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleIfNotFound("GROUP LEADER", adminPrivileges);
         
         //String name, int percentage, String start,String end, int interval, boolean isworking, boolean isob
-        createTimeReportTypeIfNotFound("Regular work time",100, "08:00","16:30",30,true,false);
+        createTimeReportTypeIfNotFound("Regular work time",100, "08:00","17:00",60,true,false);
         createTimeReportTypeIfNotFound("Sick Leave",0,"","",0,false,false);
         createTimeReportTypeIfNotFound("Vacation",0,"","",0,false,false);
         createTimeReportTypeIfNotFound("Child Care",0,"","",0,false,false);

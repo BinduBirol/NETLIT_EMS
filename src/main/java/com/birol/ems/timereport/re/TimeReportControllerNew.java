@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 
-import com.birol.ems.datatable.PendingTRDataTable;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmployeeService;
@@ -484,17 +483,7 @@ public class TimeReportControllerNew {
 		return events;
 	}
 	
-	@ResponseBody
-	@GetMapping("/getPendingTRForcalendar")
-	public PendingTRDataTable  getPendingTRForcalendar(Authentication auth, ModelMap model) {
-		PendingTRDataTable pdt= new PendingTRDataTable();
-		ArrayList<Time_Report_DTO> data= (ArrayList<Time_Report_DTO>) time_Report_Repo.findAll();
-		pdt.setDraw(1);
-		pdt.setRecordsTotal(data.size());
-		pdt.setRecordsFiltered(data.size());
-		pdt.setData(data);
-		return pdt;
-	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/saveTimeReportCalander", method = RequestMethod.POST)
@@ -536,6 +525,15 @@ public class TimeReportControllerNew {
 		}
 		return msg;
 		
+	}
+	
+	
+	@GetMapping("/timeReportTypesHome")
+	public ModelAndView timeReportTypesHome(Authentication auth, final ModelMap model) {
+		User user = (User) auth.getPrincipal();
+		ArrayList<TimeReportTypesDTO> types = timeReportTypesRepo.findAllByOrderByIsWorkingDescTypeidAsc();
+		model.addAttribute("types", types);
+		return new ModelAndView("ems/pages/timeReport/timeReportTypesHome", model);		
 	}
 	
 	private boolean validatebeforeNewSaveTR(Time_Report_DTO av, ArrayList<Time_Report_DTO> existing) {	
