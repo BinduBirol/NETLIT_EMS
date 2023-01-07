@@ -22,7 +22,7 @@
 			
 			<button type="button" class="btn btn-outline-theme mb-3"
 				onclick="newTemplateModal()" >Add
-				a new template</button>
+				a new type</button>
 
 
 
@@ -46,7 +46,15 @@
 					<tr th:each="t: ${types}">
 						<td>[[${tStat.index+1}]]</td>
 						<td>
-							<input type="hidden" class="tid" th:value="${t.typeid}"/>							
+							<input type="hidden" class="tid" th:value="${t.typeid}"/>
+							<input type="hidden" class="typename" th:value="${t.typename}"/>
+							<input type="hidden" class="start" th:value="${t.start}"/>
+							<input type="hidden" class="end" th:value="${t.end}"/>
+							<input type="hidden" class="interval_minutes" th:value="${t.interval_minutes}"/>
+							<input type="hidden" class="isOB" th:value="${t.isOB}"/>
+							<input type="hidden" class="isWorking" th:value="${t.isWorking}"/>
+							
+													
 							[[${t.typename}]]
 						</td>
 						<td>[[${t.start}]]</td>
@@ -67,12 +75,12 @@
 
 
 
-			<div class="modal fade" id="templatemodal">
+			<div class="modal fade" id="typeModal">
 				<div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content">
-						<form action="/doEmailTemplate" method="post">
+						<form action="/dotimeReportTypes" method="post">
 							<div class="modal-header">
-								<h5 class="modal-title">EMAIL TEMPLATE</h5>
+								<h5 class="modal-title">Types</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 							</div>
 							<div class="modal-body">
@@ -81,10 +89,10 @@
 								<div class="form-group mb-3">				
 										<div class="form-group mb-3">
 											<label class="form-label">Type name</label> 
-											<input class="form-control" id="typename"/>
+											<input required="required" class="form-control" name="typename" id="typename"/>
 										</div>										
 										
-										<input type="hidden"  name="typeid" id="typeid"/>
+										<input type="hidden"   name="typeid" id="typeid"/>
 										
 								</div>
 								
@@ -93,7 +101,8 @@
 									<div class="col">
 										<div class="form-group mb-3">
 											<label class="form-label">Working status</label> 
-											<select class="form-select">
+											<select required="required" onchange="disableDis(this)" id="isWorking" name="isWorking" class="form-select">
+												<option value="">Select working status</option>
 												<option value="1">Present</option>
 												<option value="0">Absent</option>											
 											</select>
@@ -102,7 +111,8 @@
 									<div class="col">
 										<div class="form-group mb-3">
 											<label class="form-label">OB status</label> 
-											<select class="form-select">
+											<select required="required" name="isOB" id="isOB" class="form-select">
+												<option value="">Select OB status</option>
 												<option value="0">Regular time</option>
 												<option value="1">Overtime</option>	
 											</select>
@@ -115,19 +125,19 @@
 									<div class="col">
 										<div class="form-group mb-3">
 											<label class="form-label">Start</label> 
-											<input onclick="this.showPicker()" type="time" class="form-control dis" id="start" name="work_start">											</select>
+											<input required="required" onclick="this.showPicker()" type="time" class="form-control dis" id="start" name="start">											</select>
 										</div>
 									</div>
 									<div class="col">
 										<div class="form-group mb-3">
 											<label class="form-label">Intarval (Minute)</label> 
-											<input type="number" class="form-control dis" id="intarval" name="work_interval">											</select>
+											<input required="required" type="number" class="form-control dis" id="interval_minutes" name="interval_minutes">											</select>
 										</div>
 									</div>
 									<div class="col">
 										<div class="form-group mb-3">
 											<label class="form-label">End</label> 
-											<input onclick="this.showPicker()" type="time" class="form-control dis" id="end" name="work_end">											</select>
+											<input required="required" onclick="this.showPicker()" type="time" class="form-control dis" id="end" name="end">											</select>
 										</div>
 									</div>
 								</div>
@@ -141,7 +151,7 @@
 								<button type="button" class="btn btn-default"
 									data-bs-dismiss="modal">Close</button>
 								<button type="submit" class="btn btn-outline-theme">Save
-									template</button>
+									TR Type</button>
 							</div>
 
 						</form>
@@ -153,15 +163,15 @@
 			<div class="modal fade" id="deleteModal">
 				<div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content">
-						<form action="/deleteEmailTemplate" method="post">
+						<form action="/deletetimeReportTypes" method="post">
 							<div class="modal-header">
-								<h5 class="modal-title">DELETE TEMPLATE</h5>
+								<h5 class="modal-title">DELETE</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 							</div>
 							<div class="modal-body">
 
-								Do you want to delete this template?
-								<input type="hidden" name="id"/>
+								Do you want to delete this type?
+								<input id="dtypeid" type="hidden" name="id"/>
 
 
 
@@ -170,7 +180,7 @@
 								<button type="button" class="btn btn-default"
 									data-bs-dismiss="modal">Close</button>
 								<button type="submit" class="btn btn-outline-danger">Delete
-									template</button>
+									TR Type</button>
 							</div>
 
 						</form>
@@ -188,37 +198,85 @@
 	<script type="text/javascript">
 		function editTemplateModal(e,z) {
 			$target= $(e.target).closest('tr');
-			var id=$target.find(".tid").val();
-			var name=$target.find(".tname").val();
-			var text=$target.find(".tmsg").val();
-			var empid=$target.find(".tempid").val();
 			
-			var modal= $("#templatemodal");
-			modal.find("#id").val(id);
-			modal.find("#name").val(name);
-			modal.find("#text").val(text);
-			modal.find("#empid").val(empid);
-			modal.find('#id').prop('disabled', false);
-			modal.modal('show');
-		}
-		
-		function newTemplateModal() {
-			var modal= $("#templatemodal");
-			modal.find("input, textarea").val("");
-			modal.find('#id').prop('disabled', true);
-			modal.modal('show');
-		}
-		
-		function deleteTemplateModal(e) {
-			$target= $(e.target).closest('tr');
 			var id=$target.find(".tid").val();
-			var name=$target.find(".tname").val();
-			var modal= $("#deleteModal");
-			modal.find(".modal-title").text(name);
-			modal.find("input").val(id);
+			var typename=$target.find(".typename").val();
+			
+			var start=$target.find(".start").val();
+			var end=$target.find(".end").val();
+			var interval_minutes=$target.find(".interval_minutes").val();
+			var isOB=$target.find(".isOB").val();	
+			var isWorking=$target.find(".isWorking").val();	
+			
+			
+			
+			var modal= $("#typeModal");
+			
+			modal.find(".modal-title").text("#"+id+" "+typename);
+			modal.find("input ,select").val("");
+			
+			modal.find("#typeid").val(id);
+			modal.find("#typename").val(typename);
+			
+			modal.find("#start").val(start);
+			modal.find("#end").val(end);
+			modal.find("#interval_minutes").val(interval_minutes);			
+			
+			if (isOB=='true') {
+				modal.find("#isOB").val(1);
+			} else {
+				modal.find("#isOB").val(0);
+			}
+			
+			if (isWorking=='true') {
+				modal.find("#isWorking").val(1);
+				modal.find(".dis").attr('disabled', false);
+				
+			} else {
+				modal.find("#isWorking").val(0);
+				modal.find(".dis").attr('disabled', true);
+			}
+
 			modal.modal('show');
 		}
-	
+
+		function newTemplateModal() {
+			
+			var modal= $("#typeModal");
+			
+			modal.find(".modal-title").text("NEW TR TYPE");
+			modal.find("input ,select").val("");
+			modal.find('input').attr('disabled', false);
+			
+			$("#typeModal #typeid").val(0);
+			
+			modal.modal('show');
+		}
+
+		function deleteTemplateModal(e) {
+			$target = $(e.target).closest('tr');
+			var id=$target.find(".tid").val();
+			var typename=$target.find(".typename").val();
+			var modal = $("#deleteModal");
+			modal.find(".modal-title").text(typename);
+			modal.find("#dtypeid").val(id);
+			modal.modal('show');
+		}
+		
+		function disableDis(z){
+			
+			var modal= $("#typeModal");
+			var isWorking= $(z).val();
+			
+			if (isWorking==1) {
+				modal.find("#isWorking").val(1);
+				modal.find(".dis").attr('disabled', false);
+				
+			} else {
+				modal.find("#isWorking").val(0);
+				modal.find(".dis").attr('disabled', true);
+			}
+		}
 	</script>
 
 	

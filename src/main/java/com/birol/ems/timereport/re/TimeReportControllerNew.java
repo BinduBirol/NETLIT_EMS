@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 
+import com.birol.ems.contract.email.Email_msg_DTO;
 import com.birol.ems.dto.EMPLOYEE_BASIC;
 import com.birol.ems.repo.EmployeeRepository;
 import com.birol.ems.service.EmployeeService;
@@ -259,18 +261,14 @@ public class TimeReportControllerNew {
 				trlist= time_Report_Repo.findByDateAndIsapprovedAndIsrejected(d,false,false);
 			}else if(emp_id.equals("me")) {
 				trlist = new ArrayList<Time_Report_DTO>();	
-				for(EMPLOYEE_BASIC x: myemps) {
-					
+				for(EMPLOYEE_BASIC x: myemps) {					
 					trlist.addAll(time_Report_Repo.findByDateAndEmpidAndIsapprovedAndIsrejected(d,x.getEmpid(),false,false));					
-				}
-													
+				}													
 			}else {
 				trlist = new ArrayList<Time_Report_DTO>();
 				trlist= time_Report_Repo.findByDateAndEmpidAndIsapprovedAndIsrejected(d,Long.parseLong(emp_id.split("-")[1]),false,false);
-			}		
-			
-			if(trlist.size()>0)map.put(d, trlist);
-			
+			}			
+			if(trlist.size()>0)map.put(d, trlist);			
 		}
 		
 		model.addAttribute("trtypeALL", timeReportTypesRepo.findAll());
@@ -536,6 +534,35 @@ public class TimeReportControllerNew {
 		return new ModelAndView("ems/pages/timeReport/timeReportTypesHome", model);		
 	}
 	
+	@PostMapping("/dotimeReportTypes")
+	public ModelAndView dotimeReportTypes(Authentication auth, final ModelMap model,@ModelAttribute TimeReportTypesDTO type) {
+		User user = (User) auth.getPrincipal();
+		try {
+			timeReportTypesRepo.save(type);
+			model.addAttribute("msg", "TR type saved successfuly.");
+		}catch (Exception e) {			
+			model.addAttribute("msg", e.getMessage());
+		}
+		
+		return new ModelAndView("redirect:/timeReportTypesHome", model);
+	}
+	
+	@PostMapping("/deletetimeReportTypes")
+	public ModelAndView deletetimeReportTypes(Authentication auth, final ModelMap model,@Payload int id) {
+		User user = (User) auth.getPrincipal();	
+		try {
+			timeReportTypesRepo.deleteById(id);
+			model.addAttribute("msg", "TR type deleted successfuly.");
+		} catch (Exception e) {
+			model.addAttribute("msg", "Can not delete this type. cause it is being used in the system.");
+		}
+		
+		return new ModelAndView("redirect:/timeReportTypesHome", model);
+	}
+	
+	
+	
+	
 	private boolean validatebeforeNewSaveTR(Time_Report_DTO av, ArrayList<Time_Report_DTO> existing) {	
 		boolean isrgache= false;
 		for(Time_Report_DTO t: existing) {
@@ -548,8 +575,8 @@ public class TimeReportControllerNew {
 	}
 	
 	private boolean validatebeforeOldSaveTR(Time_Report_DTO av, ArrayList<Time_Report_DTO> existing) {	
-		for(Time_Report_DTO t: existing) {
-			if(av.getStatus()==t.getStatus())return false;
+		for(Time_Report_DTO t: existing) {			
+			if(av.getStatus()==t.getStatus())return false;		
 		}
 		return true;
 	}
